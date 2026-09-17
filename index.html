@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#4FA8FF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+<title>Liana's Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent-h:206; --accent-s:88%;
+  --bg:#F4F8FE; --card:#FFFFFF; --text:#2B2A3A; --text-soft:#8B8A9B;
+  --accent:#4FA8FF; --accent-dk:#2E7FD6; --accent-lt:#E8F3FF;
+  --border:#E7EAF3; --radius:18px; --shadow:0 6px 18px rgba(40,50,90,.08);
+  --c-steps:#FF9F68; --c-exercise:#FF6B8B; --c-yoga:#8E7CFF; --c-stretch:#4FC7B6;
+  --c-water:#4FB4FF; --c-nutrition:#6BC06B; --c-reading:#F0B93A; --c-selfcare:#FF8FCB;
+  --c-cleaning:#8FA3B8; --c-mood:#FFCB57; --c-sugar:#EF6F76; --c-journal:#A08CFF; --c-weight:#5EC8C0;
+  --font-main:'Vazirmatn', Tahoma, sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--font-main);
+  min-height:100vh; padding-bottom:40px; transition:background .3s,color .3s;
+  position:relative; overflow-x:hidden;
+}
+h1,h2,h3{font-family:var(--font-main); margin:0;}
+button{font-family:inherit; cursor:pointer;}
+input,textarea,select{font-family:inherit;}
+.wrap{max-width:480px; margin:0 auto; padding:0 14px;}
+
+/* ---------- cute decorations (original) ---------- */
+.deco{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; opacity:0;}
+body.style-cute .deco{opacity:.5;}
+.deco span{position:absolute; font-size:28px; filter:saturate(1.1); opacity:.35;}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:20; background:var(--bg);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 14px 8px; max-width:480px; margin:0 auto; gap:8px;
+}
+.icon-btn{
+  width:40px; height:40px; border-radius:50%; border:none; background:var(--card);
+  box-shadow:var(--shadow); font-size:18px; display:flex; align-items:center; justify-content:center;
+  color:var(--text);
+}
+.app-title{font-size:26px; font-weight:700; color:var(--accent-dk); font-family:'Dancing Script','Vazirmatn',cursive; direction:ltr; unicode-bidi:isolate;}
+.week-nav{display:flex; align-items:center; gap:6px; background:var(--card); border-radius:999px; padding:4px 8px; box-shadow:var(--shadow);}
+.week-nav button{width:26px;height:26px;border:none;background:transparent;border-radius:50%;font-size:16px;color:var(--accent-dk);}
+.week-nav button:active{background:var(--accent-lt);}
+#weekLabel{font-size:12px; color:var(--text-soft); white-space:nowrap; min-width:92px; text-align:center;}
+
+/* ---------- dashboard ---------- */
+.dashboard{max-width:480px; margin:8px auto 0; padding:0 14px;}
+.dash-card{
+  background:linear-gradient(135deg, var(--accent), var(--accent-dk));
+  border-radius:var(--radius); padding:18px; color:#fff; box-shadow:var(--shadow);
+  display:flex; align-items:center; gap:16px; position:relative; overflow:hidden;
+}
+body.style-cute .dash-card{border-radius:26px;}
+.dash-ring{flex-shrink:0;}
+.dash-info{flex:1; min-width:0;}
+.dash-info .pct{font-size:26px; font-weight:800;}
+.dash-info .pct-label{font-size:12px; opacity:.9; margin-top:2px;}
+.dash-stats{display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:10px; font-size:12px; opacity:.95;}
+.dash-stats b{display:block; font-size:14px;}
+.mood-row{display:flex; gap:4px; margin-top:10px;}
+.mood-row .m{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:14px;}
+
+/* ---------- day strip ---------- */
+.day-strip{
+  display:flex; gap:8px; overflow-x:auto; padding:14px 14px 6px; max-width:480px; margin:0 auto;
+  scrollbar-width:none;
+}
+.day-strip::-webkit-scrollbar{display:none;}
+.day-chip{
+  flex:0 0 auto; width:58px; padding:8px 4px; border-radius:16px; background:var(--card);
+  box-shadow:var(--shadow); text-align:center; border:2px solid transparent; color:var(--text);
+}
+.day-chip .wd{font-size:11px; color:var(--text-soft);}
+.day-chip .dn{font-size:15px; font-weight:700; margin:3px 0;}
+.day-chip.today .dn{color:var(--accent-dk);}
+.day-chip.active{border-color:var(--accent); background:var(--accent-lt);}
+.day-chip .mini-ring{margin:2px auto 0;}
+
+/* ---------- section headers ---------- */
+.section-title{font-size:15px; font-weight:800; margin:18px 0 10px; display:flex; align-items:center; gap:6px;}
+
+/* ---------- habit cards ---------- */
+.habit-cards{max-width:480px; margin:0 auto; padding:0 14px;}
+.habit-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:14px; margin-bottom:10px; border-inline-start:5px solid var(--c);
+}
+body.style-cute .habit-card{border-radius:22px; border-inline-start-width:0; border:2px dashed color-mix(in srgb, var(--c) 55%, transparent); }
+.habit-head{display:flex; align-items:center; gap:10px;}
+.habit-emoji{width:36px;height:36px;border-radius:12px;background:var(--c);display:flex;align-items:center;justify-content:center;font-size:18px; flex-shrink:0;}
+body.style-cute .habit-emoji{border-radius:50%;}
+.habit-name{font-weight:700; font-size:14px; flex:1;}
+.habit-toggle{width:26px;height:26px;border-radius:50%;border:2px solid var(--border); background:transparent; flex-shrink:0; display:flex;align-items:center;justify-content:center; font-size:14px; color:#fff;}
+.habit-toggle.on{background:var(--c); border-color:var(--c);}
+.habit-body{margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+.mini-field{display:flex; flex-direction:column; gap:3px;}
+.mini-field label{font-size:10px; color:var(--text-soft);}
+.mini-field input, .mini-field textarea{
+  border:1.5px solid var(--border); border-radius:10px; padding:6px 8px; font-size:13px; width:100%;
+  background:var(--bg); color:var(--text);
+}
+.mini-field input[type=number]{width:78px;}
+.hint{font-size:11px; color:var(--text-soft);}
+
+/* water cups */
+.cups{display:flex; gap:6px;}
+.cup{width:26px;height:30px; cursor:pointer; opacity:.35;}
+.cup.filled{opacity:1;}
+
+/* exercise rows */
+.ex-rows{display:flex; flex-direction:column; gap:6px; width:100%;}
+.ex-row{display:flex; gap:6px;}
+.ex-row input{flex:1;}
+.ex-row input.dur{max-width:64px; flex:0 0 auto;}
+.ex-row button{border:none;background:var(--border); border-radius:8px; width:28px; color:var(--text-soft);}
+.add-ex{align-self:flex-start; border:1.5px dashed var(--c); background:transparent; border-radius:10px; padding:5px 10px; font-size:12px; color:var(--c); font-weight:700;}
+
+/* mood picker */
+.mood-picker{display:flex; gap:6px; flex-wrap:wrap;}
+.mood-opt{width:32px;height:32px;border-radius:50%; border:2px solid var(--border); background:var(--bg); font-size:16px; display:flex;align-items:center;justify-content:center;}
+.mood-opt.sel{border-color:var(--c-mood); background:#FFF3D0;}
+
+textarea.journal{width:100%; min-height:64px; resize:vertical;}
+
+/* ---------- weekly rings ---------- */
+.rings-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:480px; margin:0 auto; padding:0 14px 4px;}
+.ring-card{background:var(--card); border-radius:16px; box-shadow:var(--shadow); padding:10px 6px; text-align:center;}
+.ring-card .rlabel{font-size:11px; margin-top:6px; color:var(--text-soft); line-height:1.5;}
+.ring-card .rpct{font-size:12px; font-weight:800;}
+
+/* ---------- weekly chart ---------- */
+.weekly-chart{max-width:480px; margin:6px auto 0; padding:0 14px;}
+.chart-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px;}
+#weeklyChart{width:100%; height:auto; display:block;}
+
+/* ---------- settings sheet ---------- */
+.overlay{position:fixed; inset:0; background:rgba(20,15,35,.45); z-index:40;}
+.sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:50; background:var(--card);
+  border-radius:24px 24px 0 0; padding:16px 18px 26px; max-width:480px; margin:0 auto;
+  box-shadow:0 -10px 30px rgba(0,0,0,.2); max-height:82vh; overflow-y:auto;
+}
+.hidden{display:none !important;}
+.sheet-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+.sheet-head h2{font-size:16px;}
+.sheet-head button{border:none;background:var(--border); width:30px;height:30px;border-radius:50%; color:var(--text);}
+.set-row{margin-bottom:16px;}
+.set-row>div:first-child{font-size:12px; color:var(--text-soft); margin-bottom:8px; font-weight:700;}
+.seg{display:flex; gap:8px; flex-wrap:wrap;}
+.seg button{
+  padding:8px 14px; border-radius:12px; border:1.5px solid var(--border); background:var(--bg);
+  font-size:13px; color:var(--text); font-weight:600;
+}
+.seg button.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+.swatches{display:flex; gap:10px; flex-wrap:wrap;}
+.swatch{width:38px;height:38px;border-radius:50%; border:3px solid transparent; position:relative; display:flex; align-items:center; justify-content:center; font-size:16px;}
+.swatch.active{border-color:var(--text);}
+.pal-group{margin-bottom:10px;}
+.pal-group-title{font-size:11px; color:var(--text-soft); margin-bottom:6px;}
+.font-list{display:flex; flex-direction:column; gap:8px;}
+.font-opt{
+  border:1.5px solid var(--border); border-radius:12px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;
+  background:var(--bg);
+}
+.font-opt.active{border-color:var(--accent); background:var(--accent-lt);}
+.font-opt .fname{font-size:11px; color:var(--text-soft);}
+.font-opt .fsample{font-size:18px;}
+.switch{position:relative; width:46px; height:26px; border-radius:999px; background:var(--border); border:none; flex-shrink:0;}
+.switch.on{background:var(--accent);}
+.switch::after{content:''; position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:#fff; transition:transform .2s;}
+.switch.on::after{transform:translateX(-20px);}
+.row-between{display:flex; justify-content:space-between; align-items:center;}
+
+.empty-note{text-align:center; color:var(--text-soft); font-size:12px; padding:20px 0;}
+.meas-section{margin-top:10px;}
+.meas-toggle{
+  width:100%; display:flex; justify-content:space-between; align-items:center;
+  background:var(--accent-lt); border:1.5px dashed var(--accent); border-radius:12px; padding:9px 12px;
+  color:var(--accent-dk); font-size:12px; font-weight:700; gap:8px; text-align:right;
+}
+.meas-toggle .arrow{font-size:14px; flex-shrink:0;}
+.meas-box{margin-top:8px; background:var(--card); border-radius:14px; padding:12px; box-shadow:var(--shadow); gap:10px;}
+
+.quote-card{
+  background:linear-gradient(120deg, var(--accent-lt), var(--card));
+  border-radius:var(--radius); padding:14px 16px; margin-top:12px;
+  border-inline-start:4px solid var(--accent); box-shadow:var(--shadow);
+  font-size:13px; line-height:1.9; color:var(--text); font-weight:600;
+}
+.app-footer{
+  text-align:center; font-size:11px; color:var(--text-soft); margin-top:26px; padding-bottom:6px;
+}
+.app-footer b{color:var(--accent-dk);}
+
+/* ---------- auth screen ---------- */
+.auth-screen{
+  position:fixed; inset:0; z-index:100; background:var(--bg);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.auth-card{
+  width:100%; max-width:360px; background:var(--card); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:26px 22px; text-align:center;
+}
+.auth-card .app-title{display:block; margin-bottom:4px; font-size:28px;}
+.auth-sub{font-size:12px; color:var(--text-soft); margin-bottom:18px;}
+.auth-field{margin-bottom:12px; text-align:right;}
+.auth-field label{display:block; font-size:12px; color:var(--text-soft); margin-bottom:5px;}
+.auth-field input{
+  width:100%; border:1.5px solid var(--border); border-radius:10px; padding:10px 12px;
+  font-size:14px; background:var(--bg); color:var(--text); direction:ltr; text-align:right;
+}
+.auth-btn{
+  width:100%; border:none; border-radius:12px; padding:11px; font-size:14px; font-weight:700;
+  background:var(--accent); color:#fff; margin-top:6px;
+}
+.auth-btn:disabled{opacity:.6;}
+.auth-switch{margin-top:14px; font-size:12px; color:var(--accent-dk); font-weight:700;}
+.auth-msg{font-size:12px; margin-top:10px; min-height:16px;}
+.auth-msg.err{color:#D64550;}
+.auth-msg.ok{color:#3A9B5C;}
+.logout-btn{
+  width:100%; border:1.5px solid #D64550; color:#D64550; background:transparent;
+  border-radius:12px; padding:10px; font-size:13px; font-weight:700; margin-top:6px;
+}
+.account-email{font-size:11px; color:var(--text-soft); text-align:center; margin-bottom:6px;}
+</style>
+</head>
+<body>
+
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <span class="app-title">Liana's Planner</span>
+    <div class="auth-sub" id="authSub">وارد شو تا اطلاعاتت همیشه ذخیره بمونه</div>
+
+    <div class="auth-field">
+      <label>ایمیل</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="username">
+    </div>
+    <div class="auth-field">
+      <label>رمز عبور</label>
+      <input type="password" id="authPassword" placeholder="حداقل ۶ کاراکتر" autocomplete="current-password">
+    </div>
+
+    <button class="auth-btn" id="authSubmitBtn">ورود</button>
+    <div class="auth-switch" id="authSwitchBtn">حساب نداری؟ ثبت‌نام کن</div>
+    <div class="auth-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div class="deco" id="decoLayer"></div>
+
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="تنظیمات">⚙️</button>
+  <h1 class="app-title">Liana's Planner</h1>
+  <div class="week-nav">
+    <button id="prevWeekBtn">›</button>
+    <span id="weekLabel">—</span>
+    <button id="nextWeekBtn">‹</button>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="quote-card" id="quoteCard"></div>
+<div class="dashboard"><div class="dash-card" id="dashCard"></div></div>
+
+<div class="meas-section">
+  <button class="meas-toggle" id="measToggle">
+    <span>📏 اندازه‌های این هفته (دور شکم، بازو، ران، باسن، سینه)</span>
+    <span class="arrow">▾</span>
+  </button>
+  <div class="habit-body meas-box hidden" id="measBox">
+    <div class="mini-field"><label>دور شکم (cm)</label><input type="number" min="0" id="m_waist"></div>
+    <div class="mini-field"><label>دور بازو (cm)</label><input type="number" min="0" id="m_arm"></div>
+    <div class="mini-field"><label>دور ران (cm)</label><input type="number" min="0" id="m_thigh"></div>
+    <div class="mini-field"><label>دور باسن (cm)</label><input type="number" min="0" id="m_hip"></div>
+    <div class="mini-field"><label>دور سینه (cm)</label><input type="number" min="0" id="m_chest"></div>
+  </div>
+</div>
+
+<div class="day-strip" id="dayStrip"></div>
+
+<div class="section-title">📋 برنامه امروز</div>
+<div class="habit-cards" id="habitCards"></div>
+
+<div class="section-title">🎯 ردیاب عادت‌های هفته</div>
+<div class="rings-grid" id="ringsGrid"></div>
+
+<div class="weekly-chart">
+  <div class="section-title">📈 نمودار پیشرفت هفتگی</div>
+  <div class="chart-card"><svg id="weeklyChart" viewBox="0 0 320 170"></svg></div>
+</div>
+
+<div class="app-footer">
+  ساخته‌شده توسط <b>Liana</b> · liana.naseri.0@gmail.com
+</div>
+</div>
+
+<div class="overlay hidden" id="overlay"></div>
+<div class="sheet hidden" id="settingsSheet">
+  <div class="sheet-head"><h2>⚙️ تنظیمات ظاهر</h2><button id="closeSheet">✕</button></div>
+
+  <div class="set-row">
+    <div>حالت نمایش</div>
+    <div class="seg" id="modeSeg">
+      <button data-v="light">🌞 روشن</button>
+      <button data-v="dark">🌙 تیره</button>
+    </div>
+  </div>
+
+  <div class="set-row">
+    <div>پالت رنگی</div>
+    <div id="paletteGroups"></div>
+  </div>
+
+  <div class="set-row">
+    <div class="row-between"><span>حالت تک‌رنگ (بجای سفید، همه‌چیز از رنگ خودش)</span>
+      <button class="switch" id="monoSwitch"></button>
+    </div>
+  </div>
+
+  <div class="set-row">
+    <div>سبک تم</div>
+    <div class="seg" id="styleSeg">
+      <button data-v="simple">ساده</button>
+      <button data-v="cute">عروسکی و گل‌گلی 🎀</button>
+    </div>
+  </div>
+
+  <div class="set-row">
+    <div>فونت فارسی</div>
+    <div class="font-list" id="fontList"></div>
+  </div>
+
+  <div class="set-row">
+    <div>پروفایل سلامت (برای محاسبه BMI)</div>
+    <div class="habit-body" style="gap:10px;">
+      <div class="mini-field"><label>قد (سانتی‌متر)</label><input type="number" min="0" id="heightInput"></div>
+    </div>
+    <div class="hint">وزن روزانه رو از کارت «وزن روزانه» تو صفحه‌ی اصلی وارد کن؛ BMI خودش حساب میشه.</div>
+  </div>
+
+  <div class="set-row">
+    <div>حساب کاربری</div>
+    <div class="account-email" id="accountEmailLabel"></div>
+    <button class="logout-btn" id="logoutBtn">خروج از حساب</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= Jalali (Persian) calendar conversion ================= */
+function div(a,b){return ~~(a/b);}
+function jalCal(gy){
+  var g2j=function(gy,gm,gd){
+    var g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
+    var gy2=(gm>2)?(gy+1):gy;
+    var days=355666+(365*gy)+div(gy2+3,4)-div(gy2+99,100)+div(gy2+399,400)+gd+g_d_m[gm-1];
+    var jy=-1595+(33*div(days,12053));
+    days%=12053;
+    jy+=4*div(days,1461);
+    days%=1461;
+    if(days>365){ jy+=div(days-1,365); days=(days-1)%365; }
+    var jm, jd;
+    if(days<186){ jm=1+div(days,31); jd=1+(days%31); }
+    else{ jm=7+div(days-186,30); jd=1+((days-186)%30); }
+    return {jy:jy,jm:jm,jd:jd};
+  };
+  return g2j;
+}
+var toJalali=jalCal();
+function gregorianToJalali(date){
+  return toJalali(date.getFullYear(), date.getMonth()+1, date.getDate());
+}
+var JMONTHS=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+var WEEKDAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
+var WD_SHORT=["ش","ی","د","س","چ","پ","ج"];
+
+/* Persian index (0=Saturday..6=Friday) from JS getDay (0=Sunday..6=Saturday) */
+function persianIndex(jsDay){ return (jsDay+1)%7; }
+
+function toDateKey(d){
+  var y=d.getFullYear(), m=(d.getMonth()+1+"").padStart(2,"0"), day=(d.getDate()+"").padStart(2,"0");
+  return y+"-"+m+"-"+day;
+}
+function startOfWeek(date){
+  var d=new Date(date);
+  var pIdx=persianIndex(d.getDay());
+  d.setDate(d.getDate()-pIdx);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function addDays(date,n){ var d=new Date(date); d.setDate(d.getDate()+n); return d; }
+
+/* ================= Habit config ================= */
+var HABITS=[
+  {id:"weight",  icon:"⚖️",    name:"وزن روزانه",             color:"var(--c-weight)",  kind:"weight"},
+  {id:"steps",   icon:"🚶🏻‍♀️", name:"پیاده‌روی و قدم‌ها",   color:"var(--c-steps)",   kind:"steps"},
+  {id:"exercise",icon:"🏋🏻‍♀️", name:"ورزش",                  color:"var(--c-exercise)",kind:"exercise"},
+  {id:"yoga",    icon:"🧘🏻",   name:"یوگا",                  color:"var(--c-yoga)",    kind:"minutes"},
+  {id:"stretch", icon:"🤸🏻",   name:"کشش و موبیلیتی",       color:"var(--c-stretch)", kind:"minutes"},
+  {id:"water",   icon:"💧",    name:"نوشیدن آب",             color:"var(--c-water)",   kind:"water"},
+  {id:"nutrition",icon:"🥗",   name:"تغذیه سالم",            color:"var(--c-nutrition)",kind:"nutrition"},
+  {id:"reading", icon:"📚",    name:"مطالعه / یادگیری",      color:"var(--c-reading)", kind:"minutes"},
+  {id:"selfcare",icon:"🧴",    name:"مراقبت شخصی",           color:"var(--c-selfcare)",kind:"check"},
+  {id:"cleaning",icon:"🧹",    name:"مرتب‌کردن خانه",        color:"var(--c-cleaning)",kind:"check"},
+  {id:"sugarFree",icon:"🍬",   name:"چالش حذف قند",          color:"var(--c-sugar)",   kind:"check"},
+  {id:"mood",    icon:"🌟",    name:"خلق‌وخو",                color:"var(--c-mood)",    kind:"mood"},
+  {id:"journal", icon:"📝",    name:"یادداشت روزانه",        color:"var(--c-journal)", kind:"journal"}
+];
+var COUNTABLE=["steps","exercise","yoga","stretch","water","nutrition","reading","selfcare","cleaning","sugarFree"];
+var MOOD_OPTS=["😄","😊","🥰","🤩","😌","🙂","😐","🥱","😴","😔","😢","😭","😤","😠","😰","😟","🤒","😳","😕","🥳","🙏","💪","😇","🤗"];
+
+var PALETTE_GROUPS=[
+  {title:"رنگ‌های اصلی", ids:["blue","pink","purple","lilac","pearl"]},
+  {title:"پاستلی 🍦", ids:["pastelGreen","pastelPink","pastelYellow","pastelBlue","pastelPurple"]}
+];
+var PALETTES={
+  blue:  {h:206,s:88,label:"آبی"},
+  pink:  {h:335,s:75,label:"صورتی"},
+  purple:{h:258,s:70,label:"بنفش"},
+  lilac: {h:266,s:42,label:"یاسی"},
+  pearl: {h:282,s:16,label:"صدفی"},
+  pastelGreen: {h:130,s:42,label:"سبز پاستلی"},
+  pastelPink:  {h:340,s:50,label:"صورتی پاستلی"},
+  pastelYellow:{h:46, s:60,label:"زرد پاستلی"},
+  pastelBlue:  {h:200,s:52,label:"آبی پاستلی"},
+  pastelPurple:{h:270,s:45,label:"بنفش پاستلی"}
+};
+var FONTS=[
+  {id:"vazir",  label:"وزیر متن",  family:"'Vazirmatn', Tahoma, sans-serif"},
+  {id:"naskh",  label:"نسخ (Noto Naskh)", family:"'Noto Naskh Arabic', 'Vazirmatn', serif"},
+  {id:"kufi",   label:"کوفی (Noto Kufi)", family:"'Noto Kufi Arabic', 'Vazirmatn', sans-serif"},
+  {id:"notosans",label:"نوتو سنس عربی", family:"'Noto Sans Arabic', 'Vazirmatn', sans-serif"},
+  {id:"lalezar",label:"لاله‌زار (بامزه)",  family:"'Lalezar', 'Vazirmatn', cursive"},
+  {id:"markazi",label:"مرکزی متن",   family:"'Markazi Text', 'Vazirmatn', serif"},
+  {id:"amiri",  label:"امیری",      family:"'Amiri', 'Vazirmatn', serif"}
+];
+
+/* ================= Daily motivational quotes (365, one per day of year) ================= */
+var QUOTES=["امروز، بهترین نسخه‌ی خودت باش.", "همین امروز، به خودت افتخار کن.", "از همین لحظه، برای رویاهایت تلاش کن.", "قدم به قدم، به توانایی‌هایت ایمان داشته باش.", "آرام و مطمئن، مسیر خودت را با عشق برو.", "با لبخندی آرام، هر روز کمی بهتر شو.", "با قلبی سبک، به خودت مهربان باش.", "بدون عجله، از تلاش امروزت لذت ببر.", "با انرژی تازه، به رشدت افتخار کن.", "با امیدی روشن، زیبایی همین امروز را ببین.", "رها از نگرانی دیروز، انرژی مثبت را پخش کن.", "با تمام وجود، به ندای دلت گوش بده.", "شمرده و با آرامش، خستگی دیروز را رها کن.", "با شکرگزاری، لبخند بزن، حقش را داری.", "با شور و اشتیاق، قوی‌تر از دیروز باش.", "امروز، به خودت فرصت دوباره بده.", "همین امروز، نفس عمیق بکش و ادامه بده.", "از همین لحظه، هر قدم کوچک را جشن بگیر.", "قدم به قدم، باور کن که می‌توانی.", "آرام و مطمئن، دلت را سبک نگه دار.", "با لبخندی آرام، صبور باش، نتیجه می‌آید.", "با قلبی سبک، هر تلاشی حساب می‌شود.", "بدون عجله، زندگی را با آرامش زندگی کن.", "با انرژی تازه، به موفقیت‌های کوچکت افتخار کن.", "با امیدی روشن، با شور و شوق ادامه بده.", "رها از نگرانی دیروز، خودت را همان‌طور که هستی دوست داشته باش.", "با تمام وجود، اجازه بده امروز روز خوبی باشد.", "شمرده و با آرامش، به آینده‌ای روشن امیدوار باش.", "با شکرگزاری، با آرامش تصمیم بگیر.", "با شور و اشتیاق، قدرت درونت را باور کن.", "امروز، دل به رویاهایت بسپار.", "همین امروز، بهترین نسخه‌ی خودت باش.", "از همین لحظه، به خودت افتخار کن.", "قدم به قدم، برای رویاهایت تلاش کن.", "آرام و مطمئن، به توانایی‌هایت ایمان داشته باش.", "با لبخندی آرام، مسیر خودت را با عشق برو.", "با قلبی سبک، هر روز کمی بهتر شو.", "بدون عجله، به خودت مهربان باش.", "با انرژی تازه، از تلاش امروزت لذت ببر.", "با امیدی روشن، به رشدت افتخار کن.", "رها از نگرانی دیروز، زیبایی همین امروز را ببین.", "با تمام وجود، انرژی مثبت را پخش کن.", "شمرده و با آرامش، به ندای دلت گوش بده.", "با شکرگزاری، خستگی دیروز را رها کن.", "با شور و اشتیاق، لبخند بزن، حقش را داری.", "امروز، قوی‌تر از دیروز باش.", "همین امروز، به خودت فرصت دوباره بده.", "از همین لحظه، نفس عمیق بکش و ادامه بده.", "قدم به قدم، هر قدم کوچک را جشن بگیر.", "آرام و مطمئن، باور کن که می‌توانی.", "با لبخندی آرام، دلت را سبک نگه دار.", "با قلبی سبک، صبور باش، نتیجه می‌آید.", "بدون عجله، هر تلاشی حساب می‌شود.", "با انرژی تازه، زندگی را با آرامش زندگی کن.", "با امیدی روشن، به موفقیت‌های کوچکت افتخار کن.", "رها از نگرانی دیروز، با شور و شوق ادامه بده.", "با تمام وجود، خودت را همان‌طور که هستی دوست داشته باش.", "شمرده و با آرامش، اجازه بده امروز روز خوبی باشد.", "با شکرگزاری، به آینده‌ای روشن امیدوار باش.", "با شور و اشتیاق، با آرامش تصمیم بگیر.", "امروز، قدرت درونت را باور کن.", "همین امروز، دل به رویاهایت بسپار.", "از همین لحظه، بهترین نسخه‌ی خودت باش.", "قدم به قدم، به خودت افتخار کن.", "آرام و مطمئن، برای رویاهایت تلاش کن.", "با لبخندی آرام، به توانایی‌هایت ایمان داشته باش.", "با قلبی سبک، مسیر خودت را با عشق برو.", "بدون عجله، هر روز کمی بهتر شو.", "با انرژی تازه، به خودت مهربان باش.", "با امیدی روشن، از تلاش امروزت لذت ببر.", "رها از نگرانی دیروز، به رشدت افتخار کن.", "با تمام وجود، زیبایی همین امروز را ببین.", "شمرده و با آرامش، انرژی مثبت را پخش کن.", "با شکرگزاری، به ندای دلت گوش بده.", "با شور و اشتیاق، خستگی دیروز را رها کن.", "امروز، لبخند بزن، حقش را داری.", "همین امروز، قوی‌تر از دیروز باش.", "از همین لحظه، به خودت فرصت دوباره بده.", "قدم به قدم، نفس عمیق بکش و ادامه بده.", "آرام و مطمئن، هر قدم کوچک را جشن بگیر.", "با لبخندی آرام، باور کن که می‌توانی.", "با قلبی سبک، دلت را سبک نگه دار.", "بدون عجله، صبور باش، نتیجه می‌آید.", "با انرژی تازه، هر تلاشی حساب می‌شود.", "با امیدی روشن، زندگی را با آرامش زندگی کن.", "رها از نگرانی دیروز، به موفقیت‌های کوچکت افتخار کن.", "با تمام وجود، با شور و شوق ادامه بده.", "شمرده و با آرامش، خودت را همان‌طور که هستی دوست داشته باش.", "با شکرگزاری، اجازه بده امروز روز خوبی باشد.", "با شور و اشتیاق، به آینده‌ای روشن امیدوار باش.", "امروز، با آرامش تصمیم بگیر.", "همین امروز، قدرت درونت را باور کن.", "از همین لحظه، دل به رویاهایت بسپار.", "قدم به قدم، بهترین نسخه‌ی خودت باش.", "آرام و مطمئن، به خودت افتخار کن.", "با لبخندی آرام، برای رویاهایت تلاش کن.", "با قلبی سبک، به توانایی‌هایت ایمان داشته باش.", "بدون عجله، مسیر خودت را با عشق برو.", "با انرژی تازه، هر روز کمی بهتر شو.", "با امیدی روشن، به خودت مهربان باش.", "رها از نگرانی دیروز، از تلاش امروزت لذت ببر.", "با تمام وجود، به رشدت افتخار کن.", "شمرده و با آرامش، زیبایی همین امروز را ببین.", "با شکرگزاری، انرژی مثبت را پخش کن.", "با شور و اشتیاق، به ندای دلت گوش بده.", "امروز، خستگی دیروز را رها کن.", "همین امروز، لبخند بزن، حقش را داری.", "از همین لحظه، قوی‌تر از دیروز باش.", "قدم به قدم، به خودت فرصت دوباره بده.", "آرام و مطمئن، نفس عمیق بکش و ادامه بده.", "با لبخندی آرام، هر قدم کوچک را جشن بگیر.", "با قلبی سبک، باور کن که می‌توانی.", "بدون عجله، دلت را سبک نگه دار.", "با انرژی تازه، صبور باش، نتیجه می‌آید.", "با امیدی روشن، هر تلاشی حساب می‌شود.", "رها از نگرانی دیروز، زندگی را با آرامش زندگی کن.", "با تمام وجود، به موفقیت‌های کوچکت افتخار کن.", "شمرده و با آرامش، با شور و شوق ادامه بده.", "با شکرگزاری، خودت را همان‌طور که هستی دوست داشته باش.", "با شور و اشتیاق، اجازه بده امروز روز خوبی باشد.", "امروز، به آینده‌ای روشن امیدوار باش.", "همین امروز، با آرامش تصمیم بگیر.", "از همین لحظه، قدرت درونت را باور کن.", "قدم به قدم، دل به رویاهایت بسپار.", "آرام و مطمئن، بهترین نسخه‌ی خودت باش.", "با لبخندی آرام، به خودت افتخار کن.", "با قلبی سبک، برای رویاهایت تلاش کن.", "بدون عجله، به توانایی‌هایت ایمان داشته باش.", "با انرژی تازه، مسیر خودت را با عشق برو.", "با امیدی روشن، هر روز کمی بهتر شو.", "رها از نگرانی دیروز، به خودت مهربان باش.", "با تمام وجود، از تلاش امروزت لذت ببر.", "شمرده و با آرامش، به رشدت افتخار کن.", "با شکرگزاری، زیبایی همین امروز را ببین.", "با شور و اشتیاق، انرژی مثبت را پخش کن.", "امروز، به ندای دلت گوش بده.", "همین امروز، خستگی دیروز را رها کن.", "از همین لحظه، لبخند بزن، حقش را داری.", "قدم به قدم، قوی‌تر از دیروز باش.", "آرام و مطمئن، به خودت فرصت دوباره بده.", "با لبخندی آرام، نفس عمیق بکش و ادامه بده.", "با قلبی سبک، هر قدم کوچک را جشن بگیر.", "بدون عجله، باور کن که می‌توانی.", "با انرژی تازه، دلت را سبک نگه دار.", "با امیدی روشن، صبور باش، نتیجه می‌آید.", "رها از نگرانی دیروز، هر تلاشی حساب می‌شود.", "با تمام وجود، زندگی را با آرامش زندگی کن.", "شمرده و با آرامش، به موفقیت‌های کوچکت افتخار کن.", "با شکرگزاری، با شور و شوق ادامه بده.", "با شور و اشتیاق، خودت را همان‌طور که هستی دوست داشته باش.", "امروز، اجازه بده امروز روز خوبی باشد.", "همین امروز، به آینده‌ای روشن امیدوار باش.", "از همین لحظه، با آرامش تصمیم بگیر.", "قدم به قدم، قدرت درونت را باور کن.", "آرام و مطمئن، دل به رویاهایت بسپار.", "با لبخندی آرام، بهترین نسخه‌ی خودت باش.", "با قلبی سبک، به خودت افتخار کن.", "بدون عجله، برای رویاهایت تلاش کن.", "با انرژی تازه، به توانایی‌هایت ایمان داشته باش.", "با امیدی روشن، مسیر خودت را با عشق برو.", "رها از نگرانی دیروز، هر روز کمی بهتر شو.", "با تمام وجود، به خودت مهربان باش.", "شمرده و با آرامش، از تلاش امروزت لذت ببر.", "با شکرگزاری، به رشدت افتخار کن.", "با شور و اشتیاق، زیبایی همین امروز را ببین.", "امروز، انرژی مثبت را پخش کن.", "همین امروز، به ندای دلت گوش بده.", "از همین لحظه، خستگی دیروز را رها کن.", "قدم به قدم، لبخند بزن، حقش را داری.", "آرام و مطمئن، قوی‌تر از دیروز باش.", "با لبخندی آرام، به خودت فرصت دوباره بده.", "با قلبی سبک، نفس عمیق بکش و ادامه بده.", "بدون عجله، هر قدم کوچک را جشن بگیر.", "با انرژی تازه، باور کن که می‌توانی.", "با امیدی روشن، دلت را سبک نگه دار.", "رها از نگرانی دیروز، صبور باش، نتیجه می‌آید.", "با تمام وجود، هر تلاشی حساب می‌شود.", "شمرده و با آرامش، زندگی را با آرامش زندگی کن.", "با شکرگزاری، به موفقیت‌های کوچکت افتخار کن.", "با شور و اشتیاق، با شور و شوق ادامه بده.", "امروز، خودت را همان‌طور که هستی دوست داشته باش.", "همین امروز، اجازه بده امروز روز خوبی باشد.", "از همین لحظه، به آینده‌ای روشن امیدوار باش.", "قدم به قدم، با آرامش تصمیم بگیر.", "آرام و مطمئن، قدرت درونت را باور کن.", "با لبخندی آرام، دل به رویاهایت بسپار.", "با قلبی سبک، بهترین نسخه‌ی خودت باش.", "بدون عجله، به خودت افتخار کن.", "با انرژی تازه، برای رویاهایت تلاش کن.", "با امیدی روشن، به توانایی‌هایت ایمان داشته باش.", "رها از نگرانی دیروز، مسیر خودت را با عشق برو.", "با تمام وجود، هر روز کمی بهتر شو.", "شمرده و با آرامش، به خودت مهربان باش.", "با شکرگزاری، از تلاش امروزت لذت ببر.", "با شور و اشتیاق، به رشدت افتخار کن.", "امروز، زیبایی همین امروز را ببین.", "همین امروز، انرژی مثبت را پخش کن.", "از همین لحظه، به ندای دلت گوش بده.", "قدم به قدم، خستگی دیروز را رها کن.", "آرام و مطمئن، لبخند بزن، حقش را داری.", "با لبخندی آرام، قوی‌تر از دیروز باش.", "با قلبی سبک، به خودت فرصت دوباره بده.", "بدون عجله، نفس عمیق بکش و ادامه بده.", "با انرژی تازه، هر قدم کوچک را جشن بگیر.", "با امیدی روشن، باور کن که می‌توانی.", "رها از نگرانی دیروز، دلت را سبک نگه دار.", "با تمام وجود، صبور باش، نتیجه می‌آید.", "شمرده و با آرامش، هر تلاشی حساب می‌شود.", "با شکرگزاری، زندگی را با آرامش زندگی کن.", "با شور و اشتیاق، به موفقیت‌های کوچکت افتخار کن.", "امروز، با شور و شوق ادامه بده.", "همین امروز، خودت را همان‌طور که هستی دوست داشته باش.", "از همین لحظه، اجازه بده امروز روز خوبی باشد.", "قدم به قدم، به آینده‌ای روشن امیدوار باش.", "آرام و مطمئن، با آرامش تصمیم بگیر.", "با لبخندی آرام، قدرت درونت را باور کن.", "با قلبی سبک، دل به رویاهایت بسپار.", "بدون عجله، بهترین نسخه‌ی خودت باش.", "با انرژی تازه، به خودت افتخار کن.", "با امیدی روشن، برای رویاهایت تلاش کن.", "رها از نگرانی دیروز، به توانایی‌هایت ایمان داشته باش.", "با تمام وجود، مسیر خودت را با عشق برو.", "شمرده و با آرامش، هر روز کمی بهتر شو.", "با شکرگزاری، به خودت مهربان باش.", "با شور و اشتیاق، از تلاش امروزت لذت ببر.", "امروز، به رشدت افتخار کن.", "همین امروز، زیبایی همین امروز را ببین.", "از همین لحظه، انرژی مثبت را پخش کن.", "قدم به قدم، به ندای دلت گوش بده.", "آرام و مطمئن، خستگی دیروز را رها کن.", "با لبخندی آرام، لبخند بزن، حقش را داری.", "با قلبی سبک، قوی‌تر از دیروز باش.", "بدون عجله، به خودت فرصت دوباره بده.", "با انرژی تازه، نفس عمیق بکش و ادامه بده.", "با امیدی روشن، هر قدم کوچک را جشن بگیر.", "رها از نگرانی دیروز، باور کن که می‌توانی.", "با تمام وجود، دلت را سبک نگه دار.", "شمرده و با آرامش، صبور باش، نتیجه می‌آید.", "با شکرگزاری، هر تلاشی حساب می‌شود.", "با شور و اشتیاق، زندگی را با آرامش زندگی کن.", "امروز، به موفقیت‌های کوچکت افتخار کن.", "همین امروز، با شور و شوق ادامه بده.", "از همین لحظه، خودت را همان‌طور که هستی دوست داشته باش.", "قدم به قدم، اجازه بده امروز روز خوبی باشد.", "آرام و مطمئن، به آینده‌ای روشن امیدوار باش.", "با لبخندی آرام، با آرامش تصمیم بگیر.", "با قلبی سبک، قدرت درونت را باور کن.", "بدون عجله، دل به رویاهایت بسپار.", "با انرژی تازه، بهترین نسخه‌ی خودت باش.", "با امیدی روشن، به خودت افتخار کن.", "رها از نگرانی دیروز، برای رویاهایت تلاش کن.", "با تمام وجود، به توانایی‌هایت ایمان داشته باش.", "شمرده و با آرامش، مسیر خودت را با عشق برو.", "با شکرگزاری، هر روز کمی بهتر شو.", "با شور و اشتیاق، به خودت مهربان باش.", "امروز، از تلاش امروزت لذت ببر.", "همین امروز، به رشدت افتخار کن.", "از همین لحظه، زیبایی همین امروز را ببین.", "قدم به قدم، انرژی مثبت را پخش کن.", "آرام و مطمئن، به ندای دلت گوش بده.", "با لبخندی آرام، خستگی دیروز را رها کن.", "با قلبی سبک، لبخند بزن، حقش را داری.", "بدون عجله، قوی‌تر از دیروز باش.", "با انرژی تازه، به خودت فرصت دوباره بده.", "با امیدی روشن، نفس عمیق بکش و ادامه بده.", "رها از نگرانی دیروز، هر قدم کوچک را جشن بگیر.", "با تمام وجود، باور کن که می‌توانی.", "شمرده و با آرامش، دلت را سبک نگه دار.", "با شکرگزاری، صبور باش، نتیجه می‌آید.", "با شور و اشتیاق، هر تلاشی حساب می‌شود.", "امروز، زندگی را با آرامش زندگی کن.", "همین امروز، به موفقیت‌های کوچکت افتخار کن.", "از همین لحظه، با شور و شوق ادامه بده.", "قدم به قدم، خودت را همان‌طور که هستی دوست داشته باش.", "آرام و مطمئن، اجازه بده امروز روز خوبی باشد.", "با لبخندی آرام، به آینده‌ای روشن امیدوار باش.", "با قلبی سبک، با آرامش تصمیم بگیر.", "بدون عجله، قدرت درونت را باور کن.", "با انرژی تازه، دل به رویاهایت بسپار.", "با امیدی روشن، بهترین نسخه‌ی خودت باش.", "رها از نگرانی دیروز، به خودت افتخار کن.", "با تمام وجود، برای رویاهایت تلاش کن.", "شمرده و با آرامش، به توانایی‌هایت ایمان داشته باش.", "با شکرگزاری، مسیر خودت را با عشق برو.", "با شور و اشتیاق، هر روز کمی بهتر شو.", "امروز، به خودت مهربان باش.", "همین امروز، از تلاش امروزت لذت ببر.", "از همین لحظه، به رشدت افتخار کن.", "قدم به قدم، زیبایی همین امروز را ببین.", "آرام و مطمئن، انرژی مثبت را پخش کن.", "با لبخندی آرام، به ندای دلت گوش بده.", "با قلبی سبک، خستگی دیروز را رها کن.", "بدون عجله، لبخند بزن، حقش را داری.", "با انرژی تازه، قوی‌تر از دیروز باش.", "با امیدی روشن، به خودت فرصت دوباره بده.", "رها از نگرانی دیروز، نفس عمیق بکش و ادامه بده.", "با تمام وجود، هر قدم کوچک را جشن بگیر.", "شمرده و با آرامش، باور کن که می‌توانی.", "با شکرگزاری، دلت را سبک نگه دار.", "با شور و اشتیاق، صبور باش، نتیجه می‌آید.", "امروز، هر تلاشی حساب می‌شود.", "همین امروز، زندگی را با آرامش زندگی کن.", "از همین لحظه، به موفقیت‌های کوچکت افتخار کن.", "قدم به قدم، با شور و شوق ادامه بده.", "آرام و مطمئن، خودت را همان‌طور که هستی دوست داشته باش.", "با لبخندی آرام، اجازه بده امروز روز خوبی باشد.", "با قلبی سبک، به آینده‌ای روشن امیدوار باش.", "بدون عجله، با آرامش تصمیم بگیر.", "با انرژی تازه، قدرت درونت را باور کن.", "با امیدی روشن، دل به رویاهایت بسپار.", "رها از نگرانی دیروز، بهترین نسخه‌ی خودت باش.", "با تمام وجود، به خودت افتخار کن.", "شمرده و با آرامش، برای رویاهایت تلاش کن.", "با شکرگزاری، به توانایی‌هایت ایمان داشته باش.", "با شور و اشتیاق، مسیر خودت را با عشق برو.", "امروز، هر روز کمی بهتر شو.", "همین امروز، به خودت مهربان باش.", "از همین لحظه، از تلاش امروزت لذت ببر.", "قدم به قدم، به رشدت افتخار کن.", "آرام و مطمئن، زیبایی همین امروز را ببین.", "با لبخندی آرام، انرژی مثبت را پخش کن.", "با قلبی سبک، به ندای دلت گوش بده.", "بدون عجله، خستگی دیروز را رها کن.", "با انرژی تازه، لبخند بزن، حقش را داری.", "با امیدی روشن، قوی‌تر از دیروز باش.", "رها از نگرانی دیروز، به خودت فرصت دوباره بده.", "با تمام وجود، نفس عمیق بکش و ادامه بده.", "شمرده و با آرامش، هر قدم کوچک را جشن بگیر.", "با شکرگزاری، باور کن که می‌توانی.", "با شور و اشتیاق، دلت را سبک نگه دار.", "امروز، صبور باش، نتیجه می‌آید.", "همین امروز، هر تلاشی حساب می‌شود.", "از همین لحظه، زندگی را با آرامش زندگی کن.", "قدم به قدم، به موفقیت‌های کوچکت افتخار کن.", "آرام و مطمئن، با شور و شوق ادامه بده.", "با لبخندی آرام، خودت را همان‌طور که هستی دوست داشته باش.", "با قلبی سبک، اجازه بده امروز روز خوبی باشد.", "بدون عجله، به آینده‌ای روشن امیدوار باش.", "با انرژی تازه، با آرامش تصمیم بگیر.", "با امیدی روشن، قدرت درونت را باور کن.", "رها از نگرانی دیروز، دل به رویاهایت بسپار.", "با تمام وجود، بهترین نسخه‌ی خودت باش.", "شمرده و با آرامش، به خودت افتخار کن.", "با شکرگزاری، برای رویاهایت تلاش کن.", "با شور و اشتیاق، به توانایی‌هایت ایمان داشته باش.", "امروز، مسیر خودت را با عشق برو.", "همین امروز، هر روز کمی بهتر شو.", "از همین لحظه، به خودت مهربان باش.", "قدم به قدم، از تلاش امروزت لذت ببر.", "آرام و مطمئن، به رشدت افتخار کن.", "با لبخندی آرام، زیبایی همین امروز را ببین.", "با قلبی سبک، انرژی مثبت را پخش کن.", "بدون عجله، به ندای دلت گوش بده.", "با انرژی تازه، خستگی دیروز را رها کن.", "با امیدی روشن، لبخند بزن، حقش را داری.", "رها از نگرانی دیروز، قوی‌تر از دیروز باش.", "با تمام وجود، به خودت فرصت دوباره بده.", "شمرده و با آرامش، نفس عمیق بکش و ادامه بده.", "با شکرگزاری، هر قدم کوچک را جشن بگیر.", "با شور و اشتیاق، باور کن که می‌توانی.", "امروز، دلت را سبک نگه دار.", "همین امروز، صبور باش، نتیجه می‌آید.", "از همین لحظه، هر تلاشی حساب می‌شود.", "قدم به قدم، زندگی را با آرامش زندگی کن.", "آرام و مطمئن، به موفقیت‌های کوچکت افتخار کن."];
+function todaysQuote(){
+  var now=new Date();
+  var start=new Date(now.getFullYear(),0,0);
+  var diff=now-start;
+  var dayOfYear=Math.floor(diff/86400000);
+  return QUOTES[dayOfYear % QUOTES.length];
+}
+
+/* ================= Default state ================= */
+function emptyDay(){
+  return {
+    steps:0, weight:0,
+    exercises:[], exerciseCalories:0,
+    yoga:{done:false,minutes:0}, stretch:{done:false,minutes:0},
+    water:0,
+    nutrition:{healthy:false,calories:0,protein:0},
+    reading:{done:false,minutes:0},
+    selfcare:false, cleaning:false, sugarFree:false,
+    mood:null, journal:""
+  };
+}
+function emptyWeek(){
+  var days=[]; for(var i=0;i<7;i++){ days.push(emptyDay()); }
+  return {days:days, measurements:{waist:0,arm:0,thigh:0,hip:0,chest:0}};
+}
+function defaultState(){
+  return {
+    settings:{mode:"light", palette:"blue", mono:false, style:"simple", font:"vazir"},
+    profile:{heightCm:0, weightKg:0},
+    weeks:{}
+  };
+}
+
+var state=defaultState();
+var currentWeekStart=startOfWeek(new Date());
+var todayWeekKey=toDateKey(startOfWeek(new Date()));
+var selectedDayIndex=persianIndex(new Date().getDay());
+
+function weekKey(d){ return toDateKey(startOfWeek(d)); }
+function currentWeek(){
+  var k=weekKey(currentWeekStart);
+  if(!state.weeks[k]) state.weeks[k]=emptyWeek();
+  if(!state.weeks[k].measurements) state.weeks[k].measurements={waist:0,arm:0,thigh:0,hip:0,chest:0};
+  return state.weeks[k];
+}
+function currentDay(){ return currentWeek().days[selectedDayIndex]; }
+
+/* ================= BMI / health profile ================= */
+function latestWeight(){
+  var week=currentWeek();
+  for(var i=selectedDayIndex;i>=0;i--){
+    if(week.days[i].weight>0) return week.days[i].weight;
+  }
+  return Number(state.profile.weightKg)||0;
+}
+function computeBMI(){
+  var h=Number(state.profile.heightCm)||0, w=latestWeight();
+  if(h<=0||w<=0) return null;
+  var m=h/100;
+  return w/(m*m);
+}
+function bmiCategory(bmi){
+  if(bmi==null) return "";
+  if(bmi<18.5) return "کم‌وزن";
+  if(bmi<25) return "طبیعی";
+  if(bmi<30) return "اضافه‌وزن";
+  return "چاق";
+}
+
+/* ================= Persistence: account-based, synced to the server ================= */
+var API_BASE="https://aged-resonance-0168.adrina-parvaneh-99.workers.dev";
+var LS_KEY="fa-planner-state-v1";
+var TOKEN_KEY="fa-planner-token";
+var EMAIL_KEY="fa-planner-email";
+var saveTimer=null;
+var remoteSaveTimer=null;
+
+function loadLocal(){
+  try{ var raw=localStorage.getItem(LS_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  return null;
+}
+function saveLocal(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
+}
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(saveLocal,150);
+  clearTimeout(remoteSaveTimer);
+  remoteSaveTimer=setTimeout(saveRemote,700);
+}
+
+function mergeState(loaded){
+  if(!loaded || typeof loaded!=="object") return;
+  if(loaded.settings) state.settings=Object.assign(state.settings, loaded.settings);
+  if(loaded.profile) state.profile=Object.assign(state.profile, loaded.profile);
+  if(loaded.weeks) state.weeks=loaded.weeks;
+}
+
+/* ---- auth / remote sync ---- */
+function getToken(){ return localStorage.getItem(TOKEN_KEY); }
+function getEmail(){ return localStorage.getItem(EMAIL_KEY); }
+function setSession(token,email){
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(EMAIL_KEY, email);
+}
+function clearSession(){
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(EMAIL_KEY);
+}
+
+function apiCall(path, method, body, useAuth){
+  var headers={"Content-Type":"application/json"};
+  if(useAuth){ headers["Authorization"]="Bearer "+getToken(); }
+  return fetch(API_BASE+path,{
+    method:method,
+    headers:headers,
+    body: body ? JSON.stringify(body) : undefined
+  }).then(function(res){
+    return res.json().then(function(data){
+      return {ok:res.ok, status:res.status, data:data};
+    });
+  });
+}
+
+function saveRemote(){
+  if(!getToken()) return;
+  apiCall("/api/data","PUT",state,true).catch(function(){});
+}
+
+function loadRemote(){
+  return apiCall("/api/data","GET",null,true).then(function(r){
+    if(r.ok && r.data && r.data.data){ mergeState(r.data.data); }
+    return r;
+  });
+}
+
+function showAuthScreen(){
+  document.getElementById("authScreen").classList.remove("hidden");
+}
+function hideAuthScreen(){
+  document.getElementById("authScreen").classList.add("hidden");
+}
+function setAuthMsg(text,type){
+  var el=document.getElementById("authMsg");
+  el.textContent=text||"";
+  el.className="auth-msg"+(type?" "+type:"");
+}
+
+var authMode="login";
+function updateAuthUI(){
+  var btn=document.getElementById("authSubmitBtn");
+  var sw=document.getElementById("authSwitchBtn");
+  var sub=document.getElementById("authSub");
+  if(authMode==="login"){
+    btn.textContent="ورود";
+    sw.textContent="حساب نداری؟ ثبت‌نام کن";
+    sub.textContent="وارد شو تا اطلاعاتت همیشه ذخیره بمونه";
+  } else {
+    btn.textContent="ثبت‌نام";
+    sw.textContent="حساب داری؟ وارد شو";
+    sub.textContent="یه حساب جدید بساز";
+  }
+}
+document.getElementById("authSwitchBtn").addEventListener("click",function(){
+  authMode=(authMode==="login")?"signup":"login";
+  setAuthMsg("");
+  updateAuthUI();
+});
+document.getElementById("authSubmitBtn").addEventListener("click",function(){
+  var email=document.getElementById("authEmail").value.trim();
+  var password=document.getElementById("authPassword").value;
+  if(!email || !password){ setAuthMsg("ایمیل و رمز عبور رو وارد کن","err"); return; }
+  if(password.length<6){ setAuthMsg("رمز عبور باید حداقل ۶ کاراکتر باشه","err"); return; }
+  var btn=document.getElementById("authSubmitBtn");
+  btn.disabled=true;
+  setAuthMsg("در حال ارتباط...");
+  var path=(authMode==="login")?"/api/login":"/api/signup";
+  apiCall(path,"POST",{email:email,password:password},false).then(function(r){
+    btn.disabled=false;
+    if(!r.ok || !r.data.token){
+      var err=r.data && r.data.error;
+      var msg="مشکلی پیش اومد، دوباره امتحان کن";
+      if(err==="exists") msg="این ایمیل قبلاً ثبت‌نام شده، وارد شو";
+      if(err==="nouser") msg="حسابی با این ایمیل پیدا نشد، ثبت‌نام کن";
+      if(err==="wrongpass") msg="رمز عبور اشتباهه";
+      if(err==="invalid") msg="ایمیل یا رمز عبور معتبر نیست";
+      setAuthMsg(msg,"err");
+      return;
+    }
+    setSession(r.data.token, r.data.email);
+    setAuthMsg("خوش اومدی!","ok");
+    afterLogin();
+  }).catch(function(){
+    btn.disabled=false;
+    setAuthMsg("خطا در اتصال به سرور، دوباره امتحان کن","err");
+  });
+});
+document.getElementById("logoutBtn").addEventListener("click",function(){
+  clearSession();
+  location.reload();
+});
+
+function afterLogin(){
+  loadRemote().then(function(){
+    hideAuthScreen();
+    document.getElementById("accountEmailLabel").textContent=getEmail()||"";
+    renderAll();
+    saveLocal();
+  });
+}
+
+function initPersistence(){
+  var local=loadLocal();
+  if(local) mergeState(local);
+  if(getToken()){
+    document.getElementById("accountEmailLabel").textContent=getEmail()||"";
+    afterLogin();
+  } else {
+    showAuthScreen();
+  }
+}
+
+/* ================= Theme ================= */
+function hslCss(h,s,l){ return "hsl("+h+", "+s+"%, "+l+"%)"; }
+function applyTheme(){
+  var s=state.settings;
+  var pal=PALETTES[s.palette]||PALETTES.blue;
+  var h=pal.h, sat=pal.s;
+  var root=document.documentElement.style;
+  var accent=pal.accent || hslCss(h,sat,55);
+  var accentDk=pal.accentDk || hslCss(h,Math.min(sat+6,95),40);
+  var accentLt=hslCss(h,Math.max(sat-30,15),94);
+  root.setProperty("--accent",accent);
+  root.setProperty("--accent-dk",accentDk);
+  root.setProperty("--accent-lt",accentLt);
+  root.setProperty("--accent-h",h);
+  root.setProperty("--accent-s",sat);
+
+  var bg,card,text,border;
+  if(s.mode==="dark"){
+    if(s.mono){
+      bg=hslCss(h,Math.min(sat,55),12);
+      card=hslCss(h,Math.min(sat,50),17);
+      border=hslCss(h,Math.min(sat,40),26);
+      text=hslCss(h,20,93);
+    } else {
+      bg=hslCss(h,22,9);
+      card=hslCss(h,20,14);
+      border=hslCss(h,18,22);
+      text=hslCss(h,18,94);
+    }
+  } else {
+    if(s.mono){
+      bg=hslCss(h,Math.min(sat,60),92);
+      card=hslCss(h,Math.min(sat,45),97);
+      border=hslCss(h,Math.min(sat,40),85);
+      text=hslCss(h,35,22);
+    } else {
+      bg=hslCss(h,45,97);
+      card="#FFFFFF";
+      border=hslCss(h,30,91);
+      text="#2B2A3A";
+    }
+  }
+  root.setProperty("--bg",bg);
+  root.setProperty("--card",card);
+  root.setProperty("--border",border);
+  root.setProperty("--text",text);
+  root.setProperty("--text-soft", s.mode==="dark"?hslCss(h,15,65):hslCss(h,15,52));
+
+  var font=FONTS.find(function(f){return f.id===s.font;})||FONTS[0];
+  root.setProperty("--font-main",font.family);
+
+  document.body.classList.toggle("style-cute", s.style==="cute");
+  document.body.classList.toggle("style-simple", s.style!=="cute");
+  document.body.style.setProperty("--radius", s.style==="cute"?"24px":"18px");
+
+}
+
+function buildDeco(){
+  var layer=document.getElementById("decoLayer");
+  if(!layer) return;
+  var items=["🌸","✨","🎀","🌷","💫","🌼"];
+  var html="";
+  for(var i=0;i<14;i++){
+    var left=Math.random()*100, top=Math.random()*100, rot=Math.random()*40-20;
+    var it=items[i%items.length];
+    html+='<span style="left:'+left+'%;top:'+top+'%;transform:rotate('+rot+'deg);">'+it+'</span>';
+  }
+  layer.innerHTML=html;
+}
+
+/* ================= Rendering helpers ================= */
+function svgRing(pct,size,strokeW,colorVar,bgVar,label){
+  var r=(size-strokeW)/2, c=size/2;
+  var circ=2*Math.PI*r;
+  var offset=circ*(1-Math.max(0,Math.min(100,pct))/100);
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'">'+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+r+'" stroke="'+(bgVar||"rgba(0,0,0,.08)")+'" stroke-width="'+strokeW+'" fill="none"/>'+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+r+'" stroke="'+colorVar+'" stroke-width="'+strokeW+'" fill="none" '+
+      'stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="'+offset+'" '+
+      'transform="rotate(-90 '+c+' '+c+')" style="transition:stroke-dashoffset .4s;"/>'+
+    (label? '<text x="'+c+'" y="'+(c+4)+'" text-anchor="middle" font-size="'+(size*0.26)+'" font-weight="800" fill="currentColor">'+label+'</text>' : '')+
+    '</svg>';
+}
+
+function dayPercent(day){
+  var done=0;
+  if(day.steps>0) done++;
+  if((day.exercises && day.exercises.length>0) || day.exerciseCalories>0) done++;
+  if(day.yoga.done) done++;
+  if(day.stretch.done) done++;
+  if(day.water>=8) done++;
+  if(day.nutrition.healthy) done++;
+  if(day.reading.done) done++;
+  if(day.selfcare) done++;
+  if(day.cleaning) done++;
+  if(day.sugarFree) done++;
+  return Math.round(done/COUNTABLE.length*100);
+}
+function weekPercent(week){
+  var sum=0; week.days.forEach(function(d){ sum+=dayPercent(d); });
+  return Math.round(sum/7);
+}
+
+function renderQuote(){
+  var el=document.getElementById("quoteCard");
+  if(el) el.textContent="✦ "+todaysQuote();
+}
+
+function renderMeasurements(){
+  var m=currentWeek().measurements;
+  ["waist","arm","thigh","hip","chest"].forEach(function(f){
+    var el=document.getElementById("m_"+f);
+    if(el) el.value=m[f]||"";
+  });
+}
+function wireMeasurements(){
+  ["waist","arm","thigh","hip","chest"].forEach(function(f){
+    var el=document.getElementById("m_"+f);
+    if(el) el.onchange=function(){
+      currentWeek().measurements[f]=parseFloat(this.value)||0;
+      scheduleSave();
+    };
+  });
+  var toggle=document.getElementById("measToggle");
+  if(toggle && !toggle.dataset.wired){
+    toggle.dataset.wired="1";
+    toggle.onclick=function(){
+      var box=document.getElementById("measBox");
+      var collapsed=box.classList.toggle("hidden");
+      toggle.querySelector(".arrow").textContent=collapsed?"▾":"▴";
+    };
+  }
+}
+function renderWeekLabel(){
+  var jStart=gregorianToJalali(currentWeekStart);
+  var endDate=addDays(currentWeekStart,6);
+  var jEnd=gregorianToJalali(endDate);
+  var txt;
+  if(jStart.jm===jEnd.jm){
+    txt=jStart.jd+" تا "+jEnd.jd+" "+JMONTHS[jStart.jm-1];
+  } else {
+    txt=jStart.jd+" "+JMONTHS[jStart.jm-1]+" تا "+jEnd.jd+" "+JMONTHS[jEnd.jm-1];
+  }
+  document.getElementById("weekLabel").textContent=txt;
+}
+
+function renderDashboard(){
+  var week=currentWeek();
+  var pct=weekPercent(week);
+  var totalSteps=0, stepsCal=0, exCal=0, waterCups=0, sugarDays=0;
+  week.days.forEach(function(d){
+    totalSteps+=Number(d.steps)||0;
+    stepsCal+=Math.round((Number(d.steps)||0)*0.04);
+    exCal+=Number(d.exerciseCalories)||0;
+    waterCups+=Number(d.water)||0;
+    if(d.sugarFree) sugarDays++;
+  });
+  var moodsHtml=week.days.map(function(d){
+    return '<div class="m">'+(d.mood||"·")+'</div>';
+  }).join("");
+
+  var bmi=computeBMI();
+  var bmiHtml=bmi ? '<div><b>'+bmi.toFixed(1)+'</b>BMI ('+bmiCategory(bmi)+')</div>' : "";
+
+  var html=
+    '<div class="dash-ring">'+svgRing(pct,74,9,"#ffffff","rgba(255,255,255,.28)")+'</div>'+
+    '<div class="dash-info">'+
+      '<div class="pct">'+pct+'٪</div>'+
+      '<div class="pct-label">پیشرفت این هفته</div>'+
+      '<div class="dash-stats">'+
+        '<div><b>'+String(totalSteps)+'</b>قدم</div>'+
+        '<div><b>'+String(stepsCal+exCal)+'</b>کالری سوزانده</div>'+
+        '<div><b>'+String(waterCups)+'</b>لیوان آب</div>'+
+        '<div><b>'+sugarDays+' / ۷</b>روز بدون قند</div>'+
+        bmiHtml+
+      '</div>'+
+      '<div class="mood-row">'+moodsHtml+'</div>'+
+    '</div>';
+  document.getElementById("dashCard").innerHTML=html;
+}
+
+function renderDayStrip(){
+  var week=currentWeek();
+  var html="";
+  for(var i=0;i<7;i++){
+    var dPct=dayPercent(week.days[i]);
+    var isToday=(weekKey(currentWeekStart)===todayWeekKey && i===persianIndex(new Date().getDay()));
+    var jDate=gregorianToJalali(addDays(currentWeekStart,i));
+    html+='<div class="day-chip'+(i===selectedDayIndex?' active':'')+(isToday?' today':'')+'" data-i="'+i+'">'+
+      '<div class="wd">'+WD_SHORT[i]+'</div>'+
+      '<div class="dn">'+jDate.jd+'</div>'+
+      '<div class="mini-ring">'+svgRing(dPct,30,4,"var(--accent)")+'</div>'+
+    '</div>';
+  }
+  document.getElementById("dayStrip").innerHTML=html;
+  Array.prototype.forEach.call(document.querySelectorAll(".day-chip"),function(el){
+    el.addEventListener("click",function(){
+      selectedDayIndex=parseInt(el.getAttribute("data-i"),10);
+      renderDayStrip(); renderHabitCards();
+    });
+  });
+}
+
+function fieldHtml(kind,day,h){
+  if(kind==="weight"){
+    var bmi=computeBMI();
+    return '<div class="mini-field"><label>وزن امروز (کیلوگرم)</label><input type="number" step="0.1" min="0" data-field="weight" value="'+(day.weight||"")+'"></div>'+
+      (bmi ? '<div class="hint">BMI فعلی: '+bmi.toFixed(1)+' ('+bmiCategory(bmi)+')</div>' : '<div class="hint">برای BMI، قدت را در تنظیمات وارد کن.</div>');
+  }
+  if(kind==="steps"){
+    var kcal=Math.round((Number(day.steps)||0)*0.04);
+    return '<div class="mini-field"><label>تعداد قدم</label><input type="number" min="0" data-field="steps" value="'+day.steps+'"></div>'+
+      '<div class="hint">≈ '+kcal+' کالری</div>';
+  }
+  if(kind==="exercise"){
+    var rows=(day.exercises||[]).map(function(ex,idx){
+      return '<div class="ex-row" data-idx="'+idx+'">'+
+        '<input type="text" placeholder="نوع تمرین" data-exf="type" value="'+(ex.type||"").replace(/"/g,'&quot;')+'">'+
+        '<input type="number" class="dur" min="0" placeholder="دقیقه" data-exf="duration" value="'+(ex.duration||0)+'">'+
+        '<button data-exdel="1">✕</button>'+
+      '</div>';
+    }).join("");
+    return '<div class="ex-rows">'+rows+
+      '<button class="add-ex" data-addex="1">+ افزودن تمرین</button>'+
+      '<div class="mini-field"><label>کالری سوزانده</label><input type="number" min="0" data-field="exerciseCalories" value="'+day.exerciseCalories+'"></div>'+
+    '</div>';
+  }
+  if(kind==="minutes"){
+    var obj=day[h.id];
+    return '<div class="mini-field"><label>مدت (دقیقه)</label><input type="number" min="0" data-minf="'+h.id+'" value="'+obj.minutes+'"></div>';
+  }
+  if(kind==="water"){
+    var cups="";
+    for(var i=1;i<=8;i++){
+      cups+='<span class="cup'+(i<=day.water?' filled':'')+'" data-cup="'+i+'">'+(i<=day.water?"💧":"🥛")+'</span>';
+    }
+    return '<div class="cups">'+cups+'</div><div class="hint">'+day.water+' از ۸ لیوان</div>';
+  }
+  if(kind==="nutrition"){
+    return '<div class="mini-field"><label>کالری دریافتی</label><input type="number" min="0" data-nutf="calories" value="'+day.nutrition.calories+'"></div>'+
+      '<div class="mini-field"><label>پروتئین (گرم)</label><input type="number" min="0" data-nutf="protein" value="'+day.nutrition.protein+'"></div>';
+  }
+  if(kind==="mood"){
+    var opts=MOOD_OPTS.map(function(m){
+      return '<button class="mood-opt'+(day.mood===m?' sel':'')+'" data-mood="'+m+'">'+m+'</button>';
+    }).join("");
+    return '<div class="mood-picker">'+opts+'</div>';
+  }
+  if(kind==="journal"){
+    return '<textarea class="journal" placeholder="امروز چطور بود؟ ..." data-field="journal">'+(day.journal||"")+'</textarea>';
+  }
+  return "";
+}
+
+function isDone(h,day){
+  switch(h.id){
+    case "steps": return day.steps>0;
+    case "exercise": return (day.exercises&&day.exercises.length>0)||day.exerciseCalories>0;
+    case "yoga": return day.yoga.done;
+    case "stretch": return day.stretch.done;
+    case "water": return day.water>=8;
+    case "nutrition": return day.nutrition.healthy;
+    case "reading": return day.reading.done;
+    case "selfcare": return day.selfcare;
+    case "cleaning": return day.cleaning;
+    case "sugarFree": return day.sugarFree;
+    default: return false;
+  }
+}
+function toggleDone(h,day){
+  switch(h.id){
+    case "yoga": day.yoga.done=!day.yoga.done; break;
+    case "stretch": day.stretch.done=!day.stretch.done; break;
+    case "nutrition": day.nutrition.healthy=!day.nutrition.healthy; break;
+    case "reading": day.reading.done=!day.reading.done; break;
+    case "selfcare": day.selfcare=!day.selfcare; break;
+    case "cleaning": day.cleaning=!day.cleaning; break;
+    case "sugarFree": day.sugarFree=!day.sugarFree; break;
+  }
+}
+var HAS_TOGGLE={yoga:1,stretch:1,nutrition:1,reading:1,selfcare:1,cleaning:1,sugarFree:1};
+
+function renderHabitCards(){
+  var day=currentDay();
+  var html=HABITS.map(function(h){
+    var done=isDone(h,day);
+    var toggleBtn=HAS_TOGGLE[h.id]?
+      '<button class="habit-toggle'+(done?' on':'')+'" data-toggle="'+h.id+'">'+(done?"✓":"")+'</button>' :
+      (["steps","exercise","water","mood","journal","weight"].indexOf(h.id)>-1 ? "" :
+      '<button class="habit-toggle'+(done?' on':'')+'" data-toggle="'+h.id+'">'+(done?"✓":"")+'</button>');
+    return '<div class="habit-card" style="--c:'+h.color+'" data-habit="'+h.id+'">'+
+      '<div class="habit-head">'+
+        '<div class="habit-emoji">'+h.icon+'</div>'+
+        '<div class="habit-name">'+h.name+'</div>'+
+        toggleBtn+
+      '</div>'+
+      '<div class="habit-body">'+fieldHtml(h.kind,day,h)+'</div>'+
+    '</div>';
+  }).join("");
+  document.getElementById("habitCards").innerHTML=html;
+  wireHabitCards();
+}
+
+function wireHabitCards(){
+  var day=currentDay();
+  var root=document.getElementById("habitCards");
+
+  Array.prototype.forEach.call(root.querySelectorAll("[data-toggle]"),function(btn){
+    btn.addEventListener("click",function(){
+      var id=btn.getAttribute("data-toggle");
+      var h=HABITS.find(function(x){return x.id===id;});
+      toggleDone(h,day);
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll("input[data-field]"),function(inp){
+    inp.addEventListener("change",function(){
+      var f=inp.getAttribute("data-field");
+      day[f]=inp.type==="number"?(parseFloat(inp.value)||0):inp.value;
+      scheduleSave(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
+      if(f==="steps"||f==="weight"){ renderHabitCards(); }
+    });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll("textarea[data-field]"),function(ta){
+    ta.addEventListener("change",function(){
+      day[ta.getAttribute("data-field")]=ta.value;
+      scheduleSave();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll("input[data-minf]"),function(inp){
+    inp.addEventListener("change",function(){
+      var id=inp.getAttribute("data-minf");
+      day[id].minutes=parseFloat(inp.value)||0;
+      if(day[id].minutes>0) day[id].done=true;
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll("input[data-nutf]"),function(inp){
+    inp.addEventListener("change",function(){
+      var f=inp.getAttribute("data-nutf");
+      day.nutrition[f]=parseFloat(inp.value)||0;
+      scheduleSave(); renderDashboard(); renderRings(); renderChart();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll(".cup"),function(cupEl){
+    cupEl.addEventListener("click",function(){
+      var n=parseInt(cupEl.getAttribute("data-cup"),10);
+      day.water=(day.water===n)?n-1:n;
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll(".mood-opt"),function(mo){
+    mo.addEventListener("click",function(){
+      var m=mo.getAttribute("data-mood");
+      day.mood=(day.mood===m)?null:m;
+      scheduleSave(); renderHabitCards(); renderDashboard();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll("[data-addex]"),function(btn){
+    btn.addEventListener("click",function(){
+      day.exercises=day.exercises||[];
+      day.exercises.push({type:"",duration:0});
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderRings(); renderChart();
+    });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll(".ex-row"),function(rowEl){
+    var idx=parseInt(rowEl.getAttribute("data-idx"),10);
+    Array.prototype.forEach.call(rowEl.querySelectorAll("[data-exf]"),function(inp){
+      inp.addEventListener("change",function(){
+        var f=inp.getAttribute("data-exf");
+        day.exercises[idx][f]=(f==="duration")?(parseFloat(inp.value)||0):inp.value;
+        scheduleSave(); renderDashboard(); renderRings(); renderChart();
+      });
+    });
+    var delBtn=rowEl.querySelector("[data-exdel]");
+    if(delBtn){
+      delBtn.addEventListener("click",function(){
+        day.exercises.splice(idx,1);
+        scheduleSave(); renderHabitCards(); renderDashboard(); renderRings(); renderChart();
+      });
+    }
+  });
+}
+
+function renderRings(){
+  var week=currentWeek();
+  var html=COUNTABLE.map(function(id){
+    var h=HABITS.find(function(x){return x.id===id;});
+    var count=0;
+    week.days.forEach(function(d){ if(isDone(h,d)) count++; });
+    var pct=Math.round(count/7*100);
+    return '<div class="ring-card" style="color:'+h.color+'">'+
+      svgRing(pct,58,7,h.color)+
+      '<div class="rpct">'+pct+'٪</div>'+
+      '<div class="rlabel">'+h.icon+' '+h.name+'</div>'+
+    '</div>';
+  }).join("");
+  document.getElementById("ringsGrid").innerHTML=html;
+}
+
+function renderChart(){
+  var week=currentWeek();
+  var w=320,hgt=170,padL=26,padB=26,padT=14,padR=6;
+  var chartW=w-padL-padR, chartH=hgt-padT-padB;
+  var barW=chartW/7*0.55, gap=chartW/7;
+  var svgEl=document.getElementById("weeklyChart");
+  var bars="", labels="", grid="";
+  for(var g=0; g<=4; g++){
+    var y=padT+chartH-(g/4)*chartH;
+    grid+='<line x1="'+padL+'" y1="'+y+'" x2="'+(w-padR)+'" y2="'+y+'" stroke="var(--border)" stroke-width="1"/>';
+    grid+='<text x="'+(padL-6)+'" y="'+(y+3)+'" text-anchor="end" font-size="8" fill="var(--text-soft)">'+(g*25)+'</text>';
+  }
+  for(var i=0;i<7;i++){
+    var pct=dayPercent(week.days[i]);
+    var barH=chartH*(pct/100);
+    var x=padL+i*gap+(gap-barW)/2;
+    var y=padT+chartH-barH;
+    bars+='<rect x="'+x+'" y="'+y+'" width="'+barW+'" height="'+Math.max(barH,2)+'" rx="5" fill="var(--accent)" opacity="'+(i===selectedDayIndex?1:0.55)+'"/>';
+    labels+='<text x="'+(x+barW/2)+'" y="'+(hgt-8)+'" text-anchor="middle" font-size="9" fill="var(--text-soft)">'+WD_SHORT[i]+'</text>';
+  }
+  svgEl.setAttribute("viewBox","0 0 "+w+" "+hgt);
+  svgEl.innerHTML=grid+bars+labels;
+}
+
+/* ================= Settings sheet ================= */
+function renderSettingsSheet(){
+  var s=state.settings, p=state.profile;
+  document.querySelectorAll("#modeSeg button").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-v")===s.mode);
+  });
+  document.querySelectorAll("#styleSeg button").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-v")===s.style);
+  });
+
+  var groupsHtml=PALETTE_GROUPS.map(function(g){
+    var swHtml=g.ids.map(function(k){
+      var pal=PALETTES[k];
+      return '<button class="swatch'+(s.palette===k?' active':'')+'" data-pal="'+k+'" '+
+        'style="background:hsl('+pal.h+','+pal.s+'%,58%);" title="'+pal.label+'"></button>';
+    }).join("");
+    return '<div class="pal-group"><div class="pal-group-title">'+g.title+'</div>'+
+      '<div class="swatches">'+swHtml+'</div></div>';
+  }).join("");
+  document.getElementById("paletteGroups").innerHTML=groupsHtml;
+  document.getElementById("monoSwitch").classList.toggle("on", !!s.mono);
+
+  var fontHtml=FONTS.map(function(f){
+    return '<button class="font-opt'+(s.font===f.id?' active':'')+'" data-font="'+f.id+'">'+
+      '<span class="fname">'+f.label+'</span>'+
+      '<span class="fsample" style="font-family:'+f.family+'">پلنر فارسی من</span>'+
+    '</button>';
+  }).join("");
+  document.getElementById("fontList").innerHTML=fontHtml;
+
+  document.getElementById("heightInput").value=p.heightCm||"";
+
+  wireSettingsSheet();
+}
+function wireSettingsSheet(){
+  document.querySelectorAll("#modeSeg button").forEach(function(b){
+    b.onclick=function(){ state.settings.mode=b.getAttribute("data-v"); applyTheme(); scheduleSave(); renderSettingsSheet(); };
+  });
+  document.querySelectorAll("#styleSeg button").forEach(function(b){
+    b.onclick=function(){ state.settings.style=b.getAttribute("data-v"); applyTheme(); scheduleSave(); renderSettingsSheet(); };
+  });
+  document.querySelectorAll("[data-pal]").forEach(function(b){
+    b.onclick=function(){
+      state.settings.palette=b.getAttribute("data-pal");
+      applyTheme(); scheduleSave(); renderSettingsSheet(); renderAll();
+    };
+  });
+  document.getElementById("monoSwitch").onclick=function(){
+    state.settings.mono=!state.settings.mono; applyTheme(); scheduleSave(); renderSettingsSheet();
+  };
+  document.querySelectorAll("[data-font]").forEach(function(b){
+    b.onclick=function(){ state.settings.font=b.getAttribute("data-font"); applyTheme(); scheduleSave(); renderSettingsSheet(); };
+  });
+
+  document.getElementById("heightInput").onchange=function(){
+    state.profile.heightCm=parseFloat(this.value)||0; scheduleSave(); renderSettingsSheet(); renderDashboard(); renderHabitCards();
+  };
+}
+
+/* ================= Wiring: nav & sheet open/close ================= */
+document.getElementById("menuBtn").addEventListener("click",function(){
+  document.getElementById("overlay").classList.remove("hidden");
+  document.getElementById("settingsSheet").classList.remove("hidden");
+  renderSettingsSheet();
+});
+function closeSheet(){
+  document.getElementById("overlay").classList.add("hidden");
+  document.getElementById("settingsSheet").classList.add("hidden");
+}
+document.getElementById("closeSheet").addEventListener("click",closeSheet);
+document.getElementById("overlay").addEventListener("click",closeSheet);
+
+document.getElementById("prevWeekBtn").addEventListener("click",function(){
+  currentWeekStart=addDays(currentWeekStart,-7);
+  selectedDayIndex=0;
+  renderAll();
+});
+document.getElementById("nextWeekBtn").addEventListener("click",function(){
+  currentWeekStart=addDays(currentWeekStart,7);
+  selectedDayIndex=0;
+  renderAll();
+});
+
+/* ================= Master render ================= */
+function renderAll(){
+  applyTheme();
+  buildDeco();
+  renderWeekLabel();
+  renderQuote();
+  renderDashboard();
+  renderMeasurements();
+  wireMeasurements();
+  renderDayStrip();
+  renderHabitCards();
+  renderRings();
+  renderChart();
+}
+
+initPersistence();
+})();
+</script>
+</body>
+</html>
