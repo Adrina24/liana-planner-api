@@ -11,7 +11,7 @@
 <title>Liana's Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&family=Mirza:wght@400..700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400..700&family=Poppins:wght@400;600;700&family=Quicksand:wght@400..700&family=Caveat:wght@500..700&display=swap" rel="stylesheet">
 <style>
 :root{
   --accent-h:206; --accent-s:88%;
@@ -35,10 +35,15 @@ button{font-family:inherit; cursor:pointer;}
 input,textarea,select{font-family:inherit;}
 .wrap{max-width:480px; margin:0 auto; padding:0 14px;}
 
-/* ---------- cute decorations (original) ---------- */
+/* ---------- glass style background ---------- */
 .deco{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; opacity:0;}
-body.style-cute .deco{opacity:.5;}
-.deco span{position:absolute; font-size:28px; filter:saturate(1.1); opacity:.35;}
+body.style-glass{
+  background:
+    radial-gradient(circle at 18% 12%, hsla(var(--accent-h),var(--accent-s)%,80%,.55), transparent 55%),
+    radial-gradient(circle at 85% 88%, hsla(var(--accent-h),var(--accent-s)%,70%,.45), transparent 55%),
+    var(--bg);
+  background-attachment:fixed;
+}
 
 /* ---------- topbar ---------- */
 .topbar{
@@ -64,7 +69,11 @@ body.style-cute .deco{opacity:.5;}
   border-radius:var(--radius); padding:18px; color:#fff; box-shadow:var(--shadow);
   display:flex; align-items:center; gap:16px; position:relative; overflow:hidden;
 }
-body.style-cute .dash-card{border-radius:26px;}
+body.style-glass .dash-card{
+  background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 75%, transparent), color-mix(in srgb, var(--accent-dk) 75%, transparent));
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.35);
+}
 .dash-ring{flex-shrink:0;}
 .dash-info{flex:1; min-width:0;}
 .dash-info .pct{font-size:26px; font-weight:800;}
@@ -99,10 +108,28 @@ body.style-cute .dash-card{border-radius:26px;}
   background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
   padding:14px; margin-bottom:10px; border-inline-start:5px solid var(--c);
 }
-body.style-cute .habit-card{border-radius:22px; border-inline-start-width:0; border:2px dashed color-mix(in srgb, var(--c) 55%, transparent); }
+body.style-glass .habit-card{
+  background:color-mix(in srgb, var(--card) 45%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border:1px solid color-mix(in srgb, #fff 45%, transparent);
+  border-inline-start:5px solid var(--c);
+  box-shadow:0 8px 26px rgba(31,38,135,.12);
+}
 .habit-head{display:flex; align-items:center; gap:10px;}
 .habit-emoji{width:36px;height:36px;border-radius:12px;background:var(--c);display:flex;align-items:center;justify-content:center;font-size:18px; flex-shrink:0;}
-body.style-cute .habit-emoji{border-radius:50%;}
+body.style-glass .habit-emoji{
+  background:color-mix(in srgb, var(--c) 55%, transparent);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.4);
+}
+body.style-glass .day-chip,
+body.style-glass .chart-card,
+body.style-glass .sheet,
+body.style-glass .quote-card{
+  background:color-mix(in srgb, var(--card) 45%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border:1px solid color-mix(in srgb, #fff 45%, transparent);
+}
 .habit-name{font-weight:700; font-size:14px; flex:1;}
 .habit-toggle{width:26px;height:26px;border-radius:50%;border:2px solid var(--border); background:transparent; flex-shrink:0; display:flex;align-items:center;justify-content:center; font-size:14px; color:#fff;}
 .habit-toggle.on{background:var(--c); border-color:var(--c);}
@@ -119,6 +146,11 @@ body.style-cute .habit-emoji{border-radius:50%;}
 /* water cups */
 .cups{display:flex; gap:6px;}
 .cup{width:26px;height:30px; cursor:pointer; opacity:.35;}
+.add-cup{width:26px;height:26px; border-radius:50%; border:1.5px dashed var(--c-water); background:transparent; color:var(--c-water); font-size:15px; font-weight:800; cursor:pointer; line-height:1;}
+.font-select{
+  width:100%; border:1.5px solid var(--border); border-radius:10px; padding:10px 12px;
+  font-size:14px; background:var(--bg); color:var(--text);
+}
 .cup.filled{opacity:1;}
 
 /* exercise rows */
@@ -194,6 +226,15 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 }
 .meas-toggle .arrow{font-size:14px; flex-shrink:0;}
 .meas-box{margin-top:8px; background:var(--card); border-radius:14px; padding:12px; box-shadow:var(--shadow); gap:10px;}
+.theme-box{margin-top:8px; display:flex; flex-direction:column; gap:4px;}
+
+.greeting-card{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 4px 0; font-weight:700;
+}
+.greeting-card .g-text{font-size:15px; color:var(--text);}
+.greeting-card .g-time{font-size:12px; color:var(--text-soft); font-weight:600; text-align:left; white-space:nowrap;}
+.greeting-card .g-time b{display:block; font-size:15px; color:var(--accent-dk); font-weight:800;}
 
 .quote-card{
   background:linear-gradient(120deg, var(--accent-lt), var(--card));
@@ -274,6 +315,7 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 </header>
 
 <div class="wrap">
+<div class="greeting-card" id="greetingCard"></div>
 <div class="quote-card" id="quoteCard"></div>
 <div class="dashboard"><div class="dash-card" id="dashCard"></div></div>
 
@@ -313,6 +355,12 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 <div class="sheet hidden" id="settingsSheet">
   <div class="sheet-head"><h2>⚙️ تنظیمات ظاهر</h2><button id="closeSheet">✕</button></div>
 
+  <button class="meas-toggle" id="themeToggle">
+    <span>🎨 تم (رنگ، پس‌زمینه، سبک، فونت)</span>
+    <span class="arrow">▾</span>
+  </button>
+  <div class="theme-box hidden" id="themeBox">
+
   <div class="set-row">
     <div>حالت نمایش</div>
     <div class="seg" id="modeSeg">
@@ -336,13 +384,15 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
     <div>سبک تم</div>
     <div class="seg" id="styleSeg">
       <button data-v="simple">ساده</button>
-      <button data-v="cute">عروسکی و گل‌گلی 🎀</button>
+      <button data-v="glass">شیشه‌ای ✨</button>
     </div>
   </div>
 
   <div class="set-row">
-    <div>فونت فارسی</div>
-    <div class="font-list" id="fontList"></div>
+    <div>فونت</div>
+    <select class="font-select" id="fontSelect"></select>
+  </div>
+
   </div>
 
   <div class="set-row">
@@ -355,6 +405,7 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 
   <div class="set-row">
     <div>حساب کاربری</div>
+    <div class="mini-field"><label>نام نمایشی</label><input type="text" id="displayNameInput" placeholder="مثلاً لیانا"></div>
     <div class="account-email" id="accountEmailLabel"></div>
     <button class="logout-btn" id="logoutBtn">خروج از حساب</button>
   </div>
@@ -449,7 +500,13 @@ var FONTS=[
   {id:"notosans",label:"نوتو سنس عربی", family:"'Noto Sans Arabic', 'Vazirmatn', sans-serif"},
   {id:"lalezar",label:"لاله‌زار (بامزه)",  family:"'Lalezar', 'Vazirmatn', cursive"},
   {id:"markazi",label:"مرکزی متن",   family:"'Markazi Text', 'Vazirmatn', serif"},
-  {id:"amiri",  label:"امیری",      family:"'Amiri', 'Vazirmatn', serif"}
+  {id:"amiri",  label:"امیری",      family:"'Amiri', 'Vazirmatn', serif"},
+  {id:"mirza",  label:"خودکاری (میرزا)", family:"'Mirza', 'Vazirmatn', cursive"},
+  {id:"arefruqaa",label:"عرف رقعه (خوشنویسی)", family:"'Aref Ruqaa', 'Vazirmatn', serif"},
+  {id:"reemkufi",label:"ریم کوفی",  family:"'Reem Kufi', 'Vazirmatn', sans-serif"},
+  {id:"poppins",label:"Poppins (انگلیسی)", family:"'Poppins', 'Vazirmatn', sans-serif"},
+  {id:"quicksand",label:"Quicksand (انگلیسی)", family:"'Quicksand', 'Vazirmatn', sans-serif"},
+  {id:"caveat", label:"Caveat (دست‌نویس انگلیسی)", family:"'Caveat', 'Vazirmatn', cursive"}
 ];
 
 /* ================= Daily motivational quotes (365, one per day of year) ================= */
@@ -482,7 +539,7 @@ function emptyWeek(){
 function defaultState(){
   return {
     settings:{mode:"light", palette:"blue", mono:false, style:"simple", font:"vazir"},
-    profile:{heightCm:0, weightKg:0},
+    profile:{heightCm:0, weightKg:0, displayName:""},
     weeks:{}
   };
 }
@@ -727,24 +784,13 @@ function applyTheme(){
   var font=FONTS.find(function(f){return f.id===s.font;})||FONTS[0];
   root.setProperty("--font-main",font.family);
 
-  document.body.classList.toggle("style-cute", s.style==="cute");
-  document.body.classList.toggle("style-simple", s.style!=="cute");
-  document.body.style.setProperty("--radius", s.style==="cute"?"24px":"18px");
+  document.body.classList.toggle("style-glass", s.style==="glass");
+  document.body.classList.toggle("style-simple", s.style!=="glass");
+  document.body.style.setProperty("--radius", s.style==="glass"?"20px":"18px");
 
 }
 
-function buildDeco(){
-  var layer=document.getElementById("decoLayer");
-  if(!layer) return;
-  var items=["🌸","✨","🎀","🌷","💫","🌼"];
-  var html="";
-  for(var i=0;i<14;i++){
-    var left=Math.random()*100, top=Math.random()*100, rot=Math.random()*40-20;
-    var it=items[i%items.length];
-    html+='<span style="left:'+left+'%;top:'+top+'%;transform:rotate('+rot+'deg);">'+it+'</span>';
-  }
-  layer.innerHTML=html;
-}
+/* buildDeco removed — no more floral emoji decorations */
 
 /* ================= Rendering helpers ================= */
 function svgRing(pct,size,strokeW,colorVar,bgVar,label){
@@ -809,6 +855,29 @@ function wireMeasurements(){
     };
   }
 }
+function renderGreeting(){
+  var el=document.getElementById("greetingCard");
+  if(!el) return;
+  var now=new Date();
+  var h=now.getHours();
+  var msg;
+  if(h>=5 && h<12) msg="☀️ صبح بخیر";
+  else if(h>=12 && h<17) msg="🌤 ظهر بخیر";
+  else if(h>=17 && h<20) msg="🌇 عصر بخیر";
+  else msg="🌙 شب بخیر";
+  var name=(state.profile && state.profile.displayName) ? state.profile.displayName : "";
+  var text=name ? (msg+"، "+name) : msg;
+
+  var j=gregorianToJalali(now);
+  var wd=WEEKDAYS[persianIndex(now.getDay())];
+  var timeStr=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+  var dateStr=wd+" "+j.jd+" "+JMONTHS[j.jm-1];
+
+  el.innerHTML='<span class="g-text">'+text+'</span>'+
+    '<span class="g-time"><b>'+timeStr+'</b>'+dateStr+'</span>';
+}
+setInterval(renderGreeting,30000);
+
 function renderWeekLabel(){
   var jStart=gregorianToJalali(currentWeekStart);
   var endDate=addDays(currentWeekStart,6);
@@ -909,10 +978,12 @@ function fieldHtml(kind,day,h){
   }
   if(kind==="water"){
     var cups="";
-    for(var i=1;i<=8;i++){
+    var total=Math.max(8, day.water||0);
+    for(var i=1;i<=total;i++){
       cups+='<span class="cup'+(i<=day.water?' filled':'')+'" data-cup="'+i+'">'+(i<=day.water?"💧":"🥛")+'</span>';
     }
-    return '<div class="cups">'+cups+'</div><div class="hint">'+day.water+' از ۸ لیوان</div>';
+    cups+='<button class="add-cup" data-addcup="1">+</button>';
+    return '<div class="cups">'+cups+'</div><div class="hint">'+(day.water||0)+' لیوان (هدف: ۸)</div>';
   }
   if(kind==="nutrition"){
     return '<div class="mini-field"><label>کالری دریافتی</label><input type="number" min="0" data-nutf="calories" value="'+day.nutrition.calories+'"></div>'+
@@ -1031,6 +1102,12 @@ function wireHabitCards(){
       scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
     });
   });
+  Array.prototype.forEach.call(root.querySelectorAll(".add-cup"),function(addEl){
+    addEl.addEventListener("click",function(){
+      day.water=(day.water||0)+1;
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
+    });
+  });
 
   Array.prototype.forEach.call(root.querySelectorAll(".mood-opt"),function(mo){
     mo.addEventListener("click",function(){
@@ -1129,14 +1206,12 @@ function renderSettingsSheet(){
   document.getElementById("monoSwitch").classList.toggle("on", !!s.mono);
 
   var fontHtml=FONTS.map(function(f){
-    return '<button class="font-opt'+(s.font===f.id?' active':'')+'" data-font="'+f.id+'">'+
-      '<span class="fname">'+f.label+'</span>'+
-      '<span class="fsample" style="font-family:'+f.family+'">پلنر فارسی من</span>'+
-    '</button>';
+    return '<option value="'+f.id+'"'+(s.font===f.id?' selected':'')+'>'+f.label+'</option>';
   }).join("");
-  document.getElementById("fontList").innerHTML=fontHtml;
+  document.getElementById("fontSelect").innerHTML=fontHtml;
 
   document.getElementById("heightInput").value=p.heightCm||"";
+  document.getElementById("displayNameInput").value=p.displayName||"";
 
   wireSettingsSheet();
 }
@@ -1156,13 +1231,27 @@ function wireSettingsSheet(){
   document.getElementById("monoSwitch").onclick=function(){
     state.settings.mono=!state.settings.mono; applyTheme(); scheduleSave(); renderSettingsSheet();
   };
-  document.querySelectorAll("[data-font]").forEach(function(b){
-    b.onclick=function(){ state.settings.font=b.getAttribute("data-font"); applyTheme(); scheduleSave(); renderSettingsSheet(); };
-  });
+  document.getElementById("fontSelect").onchange=function(){
+    state.settings.font=this.value; applyTheme(); scheduleSave(); renderSettingsSheet();
+  };
 
   document.getElementById("heightInput").onchange=function(){
     state.profile.heightCm=parseFloat(this.value)||0; scheduleSave(); renderSettingsSheet(); renderDashboard(); renderHabitCards();
   };
+
+  document.getElementById("displayNameInput").onchange=function(){
+    state.profile.displayName=this.value.trim(); scheduleSave(); renderGreeting();
+  };
+
+  var themeToggle=document.getElementById("themeToggle");
+  if(themeToggle && !themeToggle.dataset.wired){
+    themeToggle.dataset.wired="1";
+    themeToggle.onclick=function(){
+      var box=document.getElementById("themeBox");
+      var collapsed=box.classList.toggle("hidden");
+      themeToggle.querySelector(".arrow").textContent=collapsed?"▾":"▴";
+    };
+  }
 }
 
 /* ================= Wiring: nav & sheet open/close ================= */
@@ -1192,7 +1281,8 @@ document.getElementById("nextWeekBtn").addEventListener("click",function(){
 /* ================= Master render ================= */
 function renderAll(){
   applyTheme();
-  buildDeco();
+  
+  renderGreeting();
   renderWeekLabel();
   renderQuote();
   renderDashboard();
