@@ -117,7 +117,7 @@ body.style-glass .hm-item, body.style-glass .hm-btn, body.style-glass .hm-add, b
   backdrop-filter:blur(12px) saturate(160%); -webkit-backdrop-filter:blur(12px) saturate(160%);
   box-shadow:var(--g-shadow), inset 0 1px 0 rgba(255,255,255,.35);
 }
-body.style-glass .add-ex, body.style-glass .add-cup{ background:var(--g-fill); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+body.style-glass .add-ex, body.style-glass .add-cup, body.style-glass .remove-cup{ background:var(--g-fill); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
 body.style-glass .logout-btn{ border-color:rgba(214,69,80,.7); }
 body.style-glass .seg button.active{
   background:linear-gradient(135deg, var(--accent), var(--accent-dk)); border-color:transparent; color:#fff;
@@ -234,6 +234,7 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 .cups.tight{gap:4px;}
 .cup{width:var(--cw,26px);height:30px; cursor:pointer; opacity:.35;}
 .add-cup{width:var(--cw,26px);height:26px; border-radius:50%; border:1.5px dashed var(--c-water); background:transparent; color:var(--c-water); font-size:15px; font-weight:800; cursor:pointer; line-height:1;}
+.remove-cup{width:var(--cw,26px);height:26px; border-radius:50%; border:1.5px dashed #D64550; background:transparent; color:#D64550; font-size:15px; font-weight:800; cursor:pointer; line-height:1;}
 .font-select{
   width:100%; border:1.5px solid var(--border); border-radius:10px; padding:10px 12px;
   font-size:14px; background:var(--bg); color:var(--text);
@@ -243,7 +244,7 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 .cups + .hint{flex-basis:100%;}
 .cups.compact{flex-wrap:wrap; gap:2px 4px; min-height:30px; align-content:center;}
 .cups.compact .cup{width:var(--cs); height:var(--cs); font-size:calc(var(--cs) - 3px); line-height:var(--cs); display:flex; align-items:center; justify-content:center;}
-.cups.compact .add-cup{width:var(--cs); height:var(--cs); font-size:calc(var(--cs) - 4px); border-width:1px;}
+.cups.compact .add-cup, .cups.compact .remove-cup{width:var(--cs); height:var(--cs); font-size:calc(var(--cs) - 4px); border-width:1px;}
 #sugarSeg button.active::before{content:"✓ ";}
 
 /* exercise rows */
@@ -1188,11 +1189,12 @@ function fieldHtml(kind,day,h){
   }
   if(kind==="water"){
     var cups="";
-    var total=Math.max(8, day.waterSlots||0, day.water||0);
+    var total=Math.max(8, day.water||0);
     for(var i=1;i<=total;i++){
       cups+='<span class="cup'+(i<=day.water?' filled':'')+'" data-cup="'+i+'">'+(i<=day.water?"💧":"🥛")+'</span>';
     }
     cups+='<button class="add-cup" data-addcup="1">+</button>';
+    cups+='<button class="remove-cup" data-removecup="1">−</button>';
     return '<div class="cups">'+cups+'</div><div class="hint">'+(day.water||0)+' لیوان (هدف: ۸)</div>';
   }
   if(kind==="nutrition"){
@@ -1288,8 +1290,9 @@ function fitCups(){
     el.classList.remove("compact","tight"); el.style.removeProperty("--cs"); el.style.removeProperty("width"); el.style.removeProperty("--cw");
     var body=el.parentElement; if(!body) return;
     var W=body.clientWidth; if(!W) return;
-    var n=el.children.length;                  // drops + the "+" button
-    if(n-1<=8){                                // up to 8 drops: normal size, one row
+    var n=el.children.length;                  // drops + the "+" and "−" buttons
+    var ndrops=el.querySelectorAll(".cup").length;
+    if(ndrops<=8){                             // up to 8 drops: normal size, one row
       if(n*26+(n-1)*6<=W) return;
       var cw=Math.floor((W-(n-1)*4)/n);        // very narrow phone: squeeze the row slightly instead of changing layout
       if(cw>=18){ el.style.setProperty("--cw",Math.min(26,cw)+"px"); el.classList.add("tight"); return; }
@@ -1374,10 +1377,16 @@ function wireHabitCards(){
   });
   Array.prototype.forEach.call(root.querySelectorAll(".add-cup"),function(addEl){
     addEl.addEventListener("click",function(){
-      // "+" only adds one more EMPTY drop; tapping a drop is what records a glass
-      var tot=Math.max(8, day.waterSlots||0, day.water||0);
-      day.waterSlots=tot+1;
-      scheduleSave(); renderHabitCards();
+      // "+" records one more glass right away (adds a filled drop)
+      day.water=(day.water||0)+1;
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
+    });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll(".remove-cup"),function(remEl){
+    remEl.addEventListener("click",function(){
+      // "−" undoes the last glass, e.g. if you tapped "+" by mistake
+      day.water=Math.max(0,(day.water||0)-1);
+      scheduleSave(); renderHabitCards(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
     });
   });
 
