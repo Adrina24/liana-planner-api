@@ -242,9 +242,7 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 .cup.filled{opacity:1;}
 /* many cups: shrink them into two rows (only when one row would overflow), card height stays the same */
 .cups + .hint{flex-basis:100%;}
-.cups.compact{flex-wrap:wrap; gap:2px 4px; min-height:30px; align-content:center;}
-.cups.compact .cup{width:var(--cs); height:var(--cs); font-size:calc(var(--cs) - 3px); line-height:var(--cs); display:flex; align-items:center; justify-content:center;}
-.cups.compact .add-cup, .cups.compact .remove-cup{width:var(--cs); height:var(--cs); font-size:calc(var(--cs) - 4px); border-width:1px;}
+.cups.wrap{flex-wrap:wrap; gap:8px 6px;}
 #sugarSeg button.active::before{content:"✓ ";}
 
 /* exercise rows */
@@ -261,6 +259,8 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 .mood-opt.sel{border-color:var(--c-mood); background:#FFF3D0;}
 
 textarea.journal{width:100%; min-height:64px; resize:vertical;}
+.mini-field.full{width:100%; flex-basis:100%;}
+.mini-field textarea.read-note{min-height:52px; resize:vertical; line-height:1.7;}
 
 /* ---------- weekly rings ---------- */
 .rings-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:480px; margin:0 auto; padding:0 14px 4px;}
@@ -371,6 +371,36 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .hm-actions button{flex:1; padding:10px; border-radius:12px; font-size:13px; font-weight:800; border:1.5px solid var(--border); background:var(--card); color:var(--text);}
 .hm-actions button.primary{background:var(--accent); border-color:var(--accent); color:#fff;}
 
+/* ---------- calendar (Jalali / Gregorian) ---------- */
+.cal-head{display:flex; align-items:center; gap:6px; margin:12px 0 8px;}
+.cal-title{flex:1; text-align:center; line-height:1.5; min-width:0;}
+.cal-title b{display:block; font-size:15px; font-weight:800;}
+.cal-title span{display:block; font-size:11px; color:var(--text-soft);}
+.cal-nav{width:34px; height:34px; border-radius:50%; border:none; background:var(--border); color:var(--text); font-size:16px; flex-shrink:0; display:flex; align-items:center; justify-content:center; padding:0;}
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
+.cal-wd{text-align:center; font-size:11px; font-weight:700; color:var(--text-soft); padding:4px 0;}
+.cal-day{position:relative; aspect-ratio:1/1.08; border-radius:12px; border:1.5px solid var(--border); background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:0; min-width:0;}
+.cal-day .p{font-size:15px; font-weight:800; line-height:1.1;}
+.cal-day .s{font-size:9px; color:var(--text-soft); line-height:1;}
+.cal-day.fri .p{color:#D64550;}
+.cal-day.today{border-color:var(--accent);}
+.cal-day.today .p{color:var(--accent-dk);}
+.cal-day.sel{background:var(--accent); border-color:var(--accent);}
+.cal-day.sel .p, .cal-day.sel .s{color:#fff;}
+.cal-day .dot{position:absolute; bottom:3px; width:5px; height:5px; border-radius:50%; background:var(--accent);}
+.cal-day.sel .dot{background:#fff;}
+.cal-hint{font-size:11px; color:var(--text-soft); text-align:center; margin-top:10px;}
+body.style-glass .cal-day, body.style-glass .cal-nav{
+  background:var(--g-fill); border:1.5px solid var(--g-line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+}
+body.style-glass .cal-day.today{ border-color:var(--accent); }
+body.style-glass .cal-day.sel{
+  background:linear-gradient(135deg, var(--accent), var(--accent-dk)); border-color:transparent;
+  box-shadow:0 6px 16px hsla(var(--accent-h),90%,50%,.4), inset 0 1px 0 rgba(255,255,255,.4);
+}
+
 /* ---------- auth screen ---------- */
 .auth-screen{
   position:fixed; inset:0; z-index:100; background:var(--bg);
@@ -404,7 +434,7 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .account-email{font-size:11px; color:var(--text-soft); text-align:center; margin-bottom:6px;}
 </style>
 </head>
-<body>
+<body class="style-glass">
 
 <div class="auth-screen hidden" id="authScreen">
   <div class="auth-card">
@@ -475,6 +505,25 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 </div>
 </div>
 
+<div class="overlay hidden" id="calOverlay"></div>
+<div class="sheet hidden" id="calSheet">
+  <div class="sheet-head"><h2>📅 تقویم</h2><button id="closeCal">✕</button></div>
+  <div class="seg" id="calModeSeg">
+    <button data-v="jalali">شمسی</button>
+    <button data-v="gregorian">میلادی</button>
+  </div>
+  <div class="cal-head">
+    <button class="cal-nav" data-cal="-12" aria-label="سال قبل">»</button>
+    <button class="cal-nav" data-cal="-1" aria-label="ماه قبل">›</button>
+    <div class="cal-title"><b id="calTitle"></b><span id="calSub"></span></div>
+    <button class="cal-nav" data-cal="1" aria-label="ماه بعد">‹</button>
+    <button class="cal-nav" data-cal="12" aria-label="سال بعد">«</button>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-hint">روی هر روز بزن تا برنامه‌ی همون روز باز بشه · نقطه‌ی زیر تاریخ یعنی اون روز فعالیتی ثبت شده</div>
+  <button type="button" class="hm-add" id="calTodayBtn">برو به امروز</button>
+</div>
+
 <div class="overlay hidden" id="overlay"></div>
 <div class="sheet hidden" id="settingsSheet">
   <div class="sheet-head"><h2><img class="st-icon" data-icon="settings" alt="">تنظیمات</h2><button id="closeSheet">✕</button></div>
@@ -524,6 +573,11 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
     <span class="arrow">▾</span>
   </button>
   <div class="theme-box hidden" id="habitsBox"><div id="habitMgr"></div></div>
+
+  <button class="meas-toggle" id="calOpenBtn" style="margin-top:10px;">
+    <span>📅 تقویم شمسی و میلادی (رفتن به یه تاریخ دیگه)</span>
+    <span class="arrow">‹</span>
+  </button>
 
   <div class="set-row hidden" id="sugarRow" style="margin-top:16px;">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="sugarFree" alt="" style="width:26px;height:26px;"><span>چالش قند</span></div>
@@ -578,6 +632,33 @@ var toJalali=jalCal();
 function gregorianToJalali(date){
   return toJalali(date.getFullYear(), date.getMonth()+1, date.getDate());
 }
+function jalaliToGregorian(jy,jm,jd){
+  jy+=1595;
+  var days=-355668+(365*jy)+(div(jy,33))*8+div(((jy%33)+3),4)+jd+((jm<7)?(jm-1)*31:((jm-7)*30)+186);
+  var gy=400*div(days,146097);
+  days%=146097;
+  if(days>36524){
+    gy+=100*div(--days,36524);
+    days%=36524;
+    if(days>=365) days++;
+  }
+  gy+=4*div(days,1461);
+  days%=1461;
+  if(days>365){
+    gy+=div(days-1,365);
+    days=(days-1)%365;
+  }
+  var gd=days+1;
+  var sal=[0,31,((gy%4===0 && gy%100!==0)||(gy%400===0))?29:28,31,30,31,30,31,31,30,31,30,31];
+  var gm;
+  for(gm=0;gm<13;gm++){
+    if(gd<=sal[gm]) break;
+    gd-=sal[gm];
+  }
+  return {gy:gy,gm:gm,gd:gd};
+}
+var GMONTHS=["ژانویه","فوریه","مارس","آوریل","مه","ژوئن","ژوئیه","اوت","سپتامبر","اکتبر","نوامبر","دسامبر"];
+function faDigits(n){ return String(n).replace(/\d/g,function(d){ return "۰۱۲۳۴۵۶۷۸۹".charAt(d); }); }
 var JMONTHS=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
 var WEEKDAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
 var WD_SHORT=["ش","ی","د","س","چ","پ","ج"];
@@ -709,7 +790,7 @@ function emptyDay(){
     yoga:{done:false,minutes:0}, stretch:{done:false,minutes:0},
     water:0,
     nutrition:{healthy:false,calories:0,protein:0},
-    reading:{done:false,minutes:0},
+    reading:{done:false,minutes:0,note:""},
     selfcare:false, cleaning:false, sugarFree:false,
     sleepHours:0,
     mood:null, journal:"",
@@ -722,7 +803,7 @@ function emptyWeek(){
 }
 function defaultState(){
   return {
-    settings:{mode:"light", palette:"blue", mono:false, style:"simple", font:"vazir", sugarMode:"full", sugarLimit:3},
+    settings:{mode:"light", palette:"blue", mono:false, style:"glass", font:"vazir", sugarMode:"full", sugarLimit:3, calMode:"jalali"},
     profile:{heightCm:0, weightKg:0, displayName:""},
     habitCfg:defaultHabitCfg(),
     weeks:{}
@@ -828,7 +909,12 @@ function saveRemote(){
 
 function loadRemote(){
   return apiCall("/api/data","GET",null,true).then(function(r){
-    if(r.ok && r.data && r.data.data){ mergeState(r.data.data); }
+    if(r.ok && r.data && r.data.data){
+      var rs=r.data.data.settings;
+      mergeState(r.data.data);
+      // data saved before the glass default existed → let the one-time switch run again
+      if(!rs || !rs.glassDefault) state.settings.glassDefault=false;
+    }
     return r;
   });
 }
@@ -908,6 +994,7 @@ function showOfflineOption(){
   b.className="auth-switch";
   b.textContent="ادامه بدون اتصال (فقط روی همین دستگاه ذخیره میشه)";
   b.onclick=function(){
+    applyGlassDefaultOnce();
     hideAuthScreen();
     document.getElementById("accountEmailLabel").textContent="حالت بدون اتصال — اطلاعات فقط روی همین دستگاه";
     renderAll();
@@ -916,8 +1003,18 @@ function showOfflineOption(){
   document.getElementById("authMsg").insertAdjacentElement("afterend",b);
 }
 
+/* glass is the default theme: switch previously-saved accounts to it once (later manual choices are respected) */
+function applyGlassDefaultOnce(){
+  if(!state.settings.glassDefault){
+    state.settings.style="glass";
+    state.settings.glassDefault=true;
+    scheduleSave();
+  }
+}
+
 function afterLogin(){
   loadRemote().then(function(){
+    applyGlassDefaultOnce();
     hideAuthScreen();
     document.getElementById("accountEmailLabel").textContent=getEmail()||"";
     renderAll();
@@ -1164,25 +1261,31 @@ function fieldHtml(kind,day,h){
   }
   if(kind==="steps"){
     var kcal=Math.round((Number(day.steps)||0)*0.04);
-    return '<div class="mini-field"><label>تعداد قدم</label><input type="number" min="0" data-field="steps" value="'+day.steps+'"></div>'+
+    return '<div class="mini-field"><label>تعداد قدم</label><input type="number" min="0" data-field="steps" value="'+(day.steps||"")+'"></div>'+
       '<div class="hint">≈ '+kcal+' کالری</div>';
   }
   if(kind==="exercise"){
     var rows=(day.exercises||[]).map(function(ex,idx){
       return '<div class="ex-row" data-idx="'+idx+'">'+
         '<input type="text" placeholder="نوع تمرین" data-exf="type" value="'+(ex.type||"").replace(/"/g,'&quot;')+'">'+
-        '<input type="number" class="dur" min="0" placeholder="دقیقه" data-exf="duration" value="'+(ex.duration||0)+'">'+
+        '<input type="number" class="dur" min="0" placeholder="دقیقه" data-exf="duration" value="'+(ex.duration||"")+'">'+
         '<button data-exdel="1">✕</button>'+
       '</div>';
     }).join("");
     return '<div class="ex-rows">'+rows+
       '<button class="add-ex" data-addex="1">+ افزودن تمرین</button>'+
-      '<div class="mini-field"><label>کالری سوزانده</label><input type="number" min="0" data-field="exerciseCalories" value="'+day.exerciseCalories+'"></div>'+
+      '<div class="mini-field"><label>کالری سوزانده</label><input type="number" min="0" data-field="exerciseCalories" value="'+(day.exerciseCalories||"")+'"></div>'+
     '</div>';
   }
   if(kind==="minutes"){
     var obj=day[h.id];
-    return '<div class="mini-field"><label>مدت (دقیقه)</label><input type="number" min="0" data-minf="'+h.id+'" value="'+obj.minutes+'"></div>';
+    var minutesHtml='<div class="mini-field"><label>مدت (دقیقه)</label><input type="number" min="0" data-minf="'+h.id+'" value="'+(obj.minutes||"")+'"></div>';
+    if(h.id==="reading"){
+      // extra box: what was read today
+      minutesHtml+='<div class="mini-field full"><label>چی مطالعه کردی؟</label>'+
+        '<textarea class="read-note" rows="2" placeholder="مثلاً اسم کتاب یا مقاله، شماره صفحه‌ها، یه نکته‌ی جالب..." data-readnote="1">'+esc(obj.note||"")+'</textarea></div>';
+    }
+    return minutesHtml;
   }
   if(kind==="sleep"){
     return '<div class="mini-field"><label>خواب مفید (ساعت) ✨</label><input type="number" step="0.5" min="0" max="24" placeholder="مثلاً ۶.۵" data-field="sleepHours" value="'+(day.sleepHours||"")+'"></div>';
@@ -1198,8 +1301,8 @@ function fieldHtml(kind,day,h){
     return '<div class="cups">'+cups+'</div><div class="hint">'+(day.water||0)+' لیوان (هدف: ۸)</div>';
   }
   if(kind==="nutrition"){
-    return '<div class="mini-field"><label>کالری دریافتی</label><input type="number" min="0" data-nutf="calories" value="'+day.nutrition.calories+'"></div>'+
-      '<div class="mini-field"><label>پروتئین (گرم)</label><input type="number" min="0" data-nutf="protein" value="'+day.nutrition.protein+'"></div>';
+    return '<div class="mini-field"><label>کالری دریافتی</label><input type="number" min="0" data-nutf="calories" value="'+(day.nutrition.calories||"")+'"></div>'+
+      '<div class="mini-field"><label>پروتئین (گرم)</label><input type="number" min="0" data-nutf="protein" value="'+(day.nutrition.protein||"")+'"></div>';
   }
   if(kind==="mood"){
     var opts=MOOD_OPTS.map(function(m){
@@ -1287,7 +1390,7 @@ function renderHabitCards(){
 }
 function fitCups(){
   Array.prototype.forEach.call(document.querySelectorAll("#habitCards .cups"),function(el){
-    el.classList.remove("compact","tight"); el.style.removeProperty("--cs"); el.style.removeProperty("width"); el.style.removeProperty("--cw");
+    el.classList.remove("wrap","tight"); el.style.removeProperty("width"); el.style.removeProperty("--cw");
     var body=el.parentElement; if(!body) return;
     var W=body.clientWidth; if(!W) return;
     var n=el.children.length;                  // drops + the "+" and "−" buttons
@@ -1297,12 +1400,7 @@ function fitCups(){
       var cw=Math.floor((W-(n-1)*4)/n);        // very narrow phone: squeeze the row slightly instead of changing layout
       if(cw>=18){ el.style.setProperty("--cw",Math.min(26,cw)+"px"); el.classList.add("tight"); return; }
     }
-    var cols=Math.max(8,Math.ceil(n/2));       // first row keeps 8, the rest goes to the second row
-    var sz=Math.floor((W-(cols-1)*4)/cols);
-    sz=Math.max(9,Math.min(14,sz));            // two rows of 14px = same height as one normal row
-    el.style.setProperty("--cs",sz+"px");
-    el.style.width=(cols*sz+(cols-1)*4+1)+"px";   // split evenly into two rows
-    el.classList.add("compact");
+    el.classList.add("wrap");                  // 9+ drops: keep the normal size and wrap onto a new row (card grows taller)
   });
 }
 window.addEventListener("resize",fitCups);
@@ -1332,6 +1430,14 @@ function wireHabitCards(){
   Array.prototype.forEach.call(root.querySelectorAll("textarea[data-field]"),function(ta){
     ta.addEventListener("change",function(){
       day[ta.getAttribute("data-field")]=ta.value;
+      scheduleSave();
+    });
+  });
+
+  Array.prototype.forEach.call(root.querySelectorAll("textarea[data-readnote]"),function(ta){
+    ta.addEventListener("input",function(){
+      day.reading=day.reading||{done:false,minutes:0};
+      day.reading.note=ta.value;
       scheduleSave();
     });
   });
@@ -1836,6 +1942,124 @@ document.getElementById("nextWeekBtn").addEventListener("click",function(){
   currentWeekStart=addDays(currentWeekStart,7);
   selectedDayIndex=0;
   renderAll();
+});
+
+/* ================= Calendar (Jalali / Gregorian) ================= */
+var calY=0, calM=0;
+function calMode(){ return state.settings.calMode==="gregorian" ? "gregorian" : "jalali"; }
+function calSetFromDate(d){
+  if(calMode()==="jalali"){ var j=gregorianToJalali(d); calY=j.jy; calM=j.jm; }
+  else { calY=d.getFullYear(); calM=d.getMonth()+1; }
+}
+function calRefDate(){            // a date in the middle of the month currently shown
+  if(calMode()==="jalali"){ var g=jalaliToGregorian(calY,calM,15); return new Date(g.gy,g.gm-1,g.gd); }
+  return new Date(calY,calM-1,15);
+}
+function calMonthStart(){
+  if(calMode()==="jalali"){
+    var g=jalaliToGregorian(calY,calM,1);
+    var first=new Date(g.gy,g.gm-1,g.gd);
+    var ny=(calM===12)?calY+1:calY, nm=(calM===12)?1:calM+1;
+    var g2=jalaliToGregorian(ny,nm,1);
+    var len=Math.round((new Date(g2.gy,g2.gm-1,g2.gd)-first)/86400000);
+    return {first:first,len:len};
+  }
+  return {first:new Date(calY,calM-1,1), len:new Date(calY,calM,0).getDate()};
+}
+function dayHasData(d){
+  try{
+    var wk=state.weeks[weekKey(d)];
+    if(!wk || !wk.days) return false;
+    var day=wk.days[persianIndex(d.getDay())];
+    return !!day && dayPercent(day)>0;
+  }catch(e){ return false; }
+}
+function calOtherRange(first,last){   // the month(s) of the other calendar that this month overlaps
+  if(calMode()==="jalali"){
+    var a=first.getMonth(), b=last.getMonth(), ya=first.getFullYear(), yb=last.getFullYear();
+    if(a===b) return GMONTHS[a]+" "+ya;
+    if(ya===yb) return GMONTHS[a]+" – "+GMONTHS[b]+" "+ya;
+    return GMONTHS[a]+" "+ya+" – "+GMONTHS[b]+" "+yb;
+  }
+  var ja=gregorianToJalali(first), jb=gregorianToJalali(last);
+  if(ja.jm===jb.jm) return JMONTHS[ja.jm-1]+" "+faDigits(ja.jy);
+  if(ja.jy===jb.jy) return JMONTHS[ja.jm-1]+" – "+JMONTHS[jb.jm-1]+" "+faDigits(ja.jy);
+  return JMONTHS[ja.jm-1]+" "+faDigits(ja.jy)+" – "+JMONTHS[jb.jm-1]+" "+faDigits(jb.jy);
+}
+function renderCalendar(){
+  var mode=calMode();
+  Array.prototype.forEach.call(document.querySelectorAll("#calModeSeg button"),function(b){
+    b.classList.toggle("active", b.getAttribute("data-v")===mode);
+  });
+  var mi=calMonthStart(), first=mi.first, len=mi.len;
+  var last=addDays(first,len-1);
+  document.getElementById("calTitle").textContent = (mode==="jalali")
+    ? JMONTHS[calM-1]+" "+faDigits(calY)
+    : GMONTHS[calM-1]+" "+calY;
+  document.getElementById("calSub").textContent = calOtherRange(first,last);
+
+  var todayKey=toDateKey(new Date());
+  var selKey=toDateKey(addDays(currentWeekStart,selectedDayIndex));
+  var html="", i;
+  for(i=0;i<7;i++) html+='<div class="cal-wd">'+WD_SHORT[i]+'</div>';
+  var offset=persianIndex(first.getDay());
+  for(i=0;i<offset;i++) html+='<div></div>';
+  for(i=0;i<len;i++){
+    var d=addDays(first,i), key=toDateKey(d), j=gregorianToJalali(d);
+    var pr=(mode==="jalali")?faDigits(j.jd):d.getDate();
+    var sc=(mode==="jalali")?d.getDate():faDigits(j.jd);
+    var cls="cal-day"+(persianIndex(d.getDay())===6?" fri":"")+(key===todayKey?" today":"")+(key===selKey?" sel":"");
+    html+='<button type="button" class="'+cls+'" data-d="'+key+'"><span class="p">'+pr+'</span><span class="s">'+sc+'</span>'+
+      (dayHasData(d)?'<i class="dot"></i>':'')+'</button>';
+  }
+  document.getElementById("calGrid").innerHTML=html;
+}
+function calShift(n){
+  calM+=n;
+  while(calM>12){ calM-=12; calY++; }
+  while(calM<1){ calM+=12; calY--; }
+  var lo=(calMode()==="jalali")?1200:1800, hi=(calMode()==="jalali")?1600:2200;
+  calY=Math.max(lo,Math.min(hi,calY));
+  renderCalendar();
+}
+function openCalendar(){
+  calSetFromDate(addDays(currentWeekStart,selectedDayIndex));
+  document.getElementById("calOverlay").classList.remove("hidden");
+  document.getElementById("calSheet").classList.remove("hidden");
+  renderCalendar();
+}
+function closeCalendar(){
+  document.getElementById("calOverlay").classList.add("hidden");
+  document.getElementById("calSheet").classList.add("hidden");
+}
+function goToDate(d){
+  currentWeekStart=startOfWeek(d);
+  selectedDayIndex=persianIndex(d.getDay());
+  closeCalendar();
+  renderAll();
+  var chip=document.querySelector(".day-chip.active");
+  if(chip && chip.scrollIntoView) chip.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+}
+document.getElementById("calOpenBtn").addEventListener("click",function(){ closeSheet(); openCalendar(); });
+document.getElementById("closeCal").addEventListener("click",closeCalendar);
+document.getElementById("calOverlay").addEventListener("click",closeCalendar);
+document.getElementById("calTodayBtn").addEventListener("click",function(){ goToDate(new Date()); });
+Array.prototype.forEach.call(document.querySelectorAll("#calModeSeg button"),function(b){
+  b.addEventListener("click",function(){
+    var ref=calRefDate();                       // keep showing the same month when switching calendars
+    state.settings.calMode=b.getAttribute("data-v");
+    calSetFromDate(ref);
+    scheduleSave();
+    renderCalendar();
+  });
+});
+Array.prototype.forEach.call(document.querySelectorAll("[data-cal]"),function(b){
+  b.addEventListener("click",function(){ calShift(parseInt(b.getAttribute("data-cal"),10)); });
+});
+document.getElementById("calGrid").addEventListener("click",function(e){
+  var el=e.target.closest("[data-d]"); if(!el) return;
+  var p=el.getAttribute("data-d").split("-");
+  goToDate(new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10)));
 });
 
 /* ================= Master render ================= */
