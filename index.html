@@ -401,6 +401,74 @@ body.style-glass .cal-day.sel{
   box-shadow:0 6px 16px hsla(var(--accent-h),90%,50%,.4), inset 0 1px 0 rgba(255,255,255,.4);
 }
 
+
+/* ---------- reports (monthly / yearly) ---------- */
+.ring-card{cursor:pointer; transition:transform .15s;}
+.ring-card:active{transform:scale(.96);}
+.rep-entry{display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:480px; margin:0 auto; padding:0 14px;}
+.rep-tile{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px 12px; border-radius:var(--radius);
+  border:1.5px solid var(--border); background:var(--card); box-shadow:var(--shadow); color:var(--text); text-align:right; transition:transform .15s;}
+.rep-tile:active{transform:scale(.97);}
+.rep-tile b{display:block; font-size:13px; font-weight:800;}
+.rep-tile span{display:block; font-size:11px; color:var(--text-soft); margin-top:2px;}
+.rep-tile svg{flex-shrink:0;}
+.rep-hint{margin:-4px 2px 8px;}
+
+.rep-modal{position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:calc(100% - 24px); max-width:440px; max-height:90vh; overflow-y:auto;
+  z-index:55; background:var(--card); border-radius:28px; padding:16px 16px 22px; box-shadow:0 20px 60px rgba(0,0,0,.35);
+  animation:repIn .3s cubic-bezier(.2,.8,.2,1); scrollbar-width:none;}
+.rep-modal::-webkit-scrollbar{display:none;}
+@keyframes repIn{from{opacity:0; transform:translate(-50%,-46%) scale(.95);} to{opacity:1; transform:translate(-50%,-50%) scale(1);}}
+.rep-modal .sheet-head{margin-bottom:10px;}
+.rep-ic{display:inline-flex; align-items:center;}
+.rep-ic img{width:26px; height:26px; object-fit:contain;}
+#repKindSeg{margin-bottom:2px;}
+#repKindSeg button{flex:1;}
+.rep-hero{position:relative; margin:4px auto 0; max-width:340px;}
+.rep-hero::before{content:""; position:absolute; inset:16%; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, var(--glow,var(--accent)) 0%, transparent 66%); opacity:.26; filter:blur(16px);}
+.rep-hero svg{position:relative; width:100%; height:auto; display:block; overflow:visible;}
+.rep-cap{text-align:center; font-size:10.5px; color:var(--text-soft); margin-top:2px;}
+.ra{transform-origin:170px 170px; animation:repBloom .6s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes repBloom{from{opacity:0; transform:scale(.55);} to{opacity:1; transform:scale(1);}}
+@media (prefers-reduced-motion:reduce){ .ra, .rep-modal{animation:none !important;} }
+.rep-pills{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:14px;}
+.rep-pill{border-radius:16px; padding:10px 12px; background:var(--bg); border:1.5px solid var(--border);}
+.rep-pill.wide{grid-column:1/-1;}
+.rep-pill b{display:block; font-size:15px; font-weight:800; line-height:1.5;}
+.rep-pill span{display:block; font-size:10.5px; color:var(--text-soft);}
+.rep-h{font-size:12px; font-weight:800; color:var(--text-soft); margin:18px 2px 8px;}
+.rep-mosaic svg{width:100%; height:auto; display:block;}
+.rep-rows{display:flex; flex-direction:column; gap:8px;}
+.rep-row{display:flex; align-items:center; gap:10px; width:100%; padding:8px 10px; border-radius:14px; border:1.5px solid var(--border);
+  background:var(--bg); color:var(--text); text-align:right;}
+.rep-row .ic{width:24px; height:24px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:18px;}
+.rep-row .ic img{width:24px; height:24px; object-fit:contain;}
+.rep-row .nm{width:92px; flex-shrink:0; font-size:12px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.rep-row .bar{flex:1; height:8px; border-radius:99px; background:rgba(127,127,127,.18); overflow:hidden; min-width:0;}
+.rep-row .bar i{display:block; height:100%; border-radius:99px; background:var(--c); box-shadow:0 0 10px var(--c);}
+.rep-row .pc{width:40px; text-align:left; font-size:12px; font-weight:800; flex-shrink:0;}
+.rep-mcal{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
+.rep-mcal .wd{text-align:center; font-size:10px; font-weight:700; color:var(--text-soft);}
+.rep-mcal .dd{aspect-ratio:1; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;
+  color:var(--text-soft); background:rgba(127,127,127,.11);}
+.rep-mcal .dd.on{background:var(--c); color:#fff; box-shadow:0 4px 10px -2px var(--c);}
+.rep-mcal .dd.today{outline:2px solid var(--accent); outline-offset:1px;}
+.rep-mcal .dd.fut{opacity:.35;}
+.rep-backchip{border:1.5px solid var(--border); background:var(--bg); color:var(--accent-dk); border-radius:999px; padding:5px 12px; font-size:12px; font-weight:800; margin:2px 0 4px;}
+
+body.style-glass .rep-modal{
+  background:rgba(255,255,255,.56); backdrop-filter:blur(30px) saturate(180%); -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border:1.5px solid rgba(255,255,255,.66); box-shadow:0 24px 70px rgba(31,38,135,.32), inset 0 1px 0 rgba(255,255,255,.7);
+}
+body.style-glass.mode-dark .rep-modal{ background:rgba(26,22,42,.72); border-color:rgba(255,255,255,.16); box-shadow:0 24px 70px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08); }
+body.style-glass .rep-tile, body.style-glass .rep-pill, body.style-glass .rep-row, body.style-glass .rep-backchip{
+  background:var(--g-fill); border:1.5px solid var(--g-line);
+  backdrop-filter:blur(12px) saturate(160%); -webkit-backdrop-filter:blur(12px) saturate(160%);
+  box-shadow:var(--g-shadow), inset 0 1px 0 rgba(255,255,255,.35);
+}
+body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, body.style-glass .rep-modal .rep-backchip{ backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.35); }
+
 /* ---------- auth screen ---------- */
 .auth-screen{
   position:fixed; inset:0; z-index:100; background:var(--bg);
@@ -493,6 +561,7 @@ body.style-glass .cal-day.sel{
 <div class="habit-cards" id="habitCards"></div>
 
 <div class="section-title"><img class="st-icon" data-icon="tracker" alt="">ردیاب عادت‌های هفته</div>
+<div class="hint rep-hint">روی هر عادت بزن تا گزارش ماهانه و سالانه‌ش باز بشه</div>
 <div class="rings-grid" id="ringsGrid"></div>
 
 <div class="weekly-chart">
@@ -500,9 +569,29 @@ body.style-glass .cal-day.sel{
   <div class="chart-card"><svg id="weeklyChart" viewBox="0 0 320 170"></svg></div>
 </div>
 
+<div class="section-title"><img class="st-icon" data-icon="chart" alt="">گزارش ماهانه و سالانه (همه‌ی عادت‌ها)</div>
+<div class="rep-entry" id="repEntry"></div>
+
 <div class="app-footer">
   ساخته‌شده توسط <b>Liana</b> · liana.naseri.0@gmail.com
 </div>
+</div>
+
+<div class="overlay hidden" id="repOverlay"></div>
+<div class="rep-modal hidden" id="repModal" role="dialog" aria-modal="true">
+  <div class="sheet-head"><h2 id="repTtl"></h2><button id="repClose" aria-label="بستن">✕</button></div>
+  <div class="seg" id="repKindSeg">
+    <button data-v="month">گزارش ماهانه</button>
+    <button data-v="year">گزارش سالانه</button>
+  </div>
+  <div class="cal-head">
+    <button class="cal-nav" data-repnav="-12" aria-label="سال قبل">»</button>
+    <button class="cal-nav" data-repnav="-1" id="repPrevM" aria-label="ماه قبل">›</button>
+    <div class="cal-title"><b id="repTitle"></b><span id="repSub"></span></div>
+    <button class="cal-nav" data-repnav="1" id="repNextM" aria-label="ماه بعد">‹</button>
+    <button class="cal-nav" data-repnav="12" aria-label="سال بعد">«</button>
+  </div>
+  <div id="repBody"></div>
 </div>
 
 <div class="overlay hidden" id="calOverlay"></div>
@@ -1222,6 +1311,7 @@ function renderDashboard(){
       moodsHtml+
     '</div>';
   document.getElementById("dashCard").innerHTML=html;
+  renderReportEntry();
 }
 
 function renderDayStrip(){
@@ -1537,7 +1627,7 @@ function renderRings(){
     var count=0;
     week.days.forEach(function(d){ if(isDone(h,d)) count++; });
     var pct=Math.round(count/7*100);
-    return '<div class="ring-card" style="color:'+h.color+'">'+
+    return '<div class="ring-card" data-hid="'+esc(h.id)+'" role="button" style="color:'+h.color+'">'+
       svgRing(pct,58,7,h.color)+
       '<div class="rpct">'+pct+'٪</div>'+
       '<div class="rlabel">'+((h.iconKey&&ICONS[h.iconKey])?'<img class="rl-icon" src="'+ICONS[h.iconKey]+'" alt="">':esc(h.icon))+' '+esc(h.name)+'</div>'+
@@ -1955,17 +2045,17 @@ function calRefDate(){            // a date in the middle of the month currently
   if(calMode()==="jalali"){ var g=jalaliToGregorian(calY,calM,15); return new Date(g.gy,g.gm-1,g.gd); }
   return new Date(calY,calM-1,15);
 }
-function calMonthStart(){
-  if(calMode()==="jalali"){
-    var g=jalaliToGregorian(calY,calM,1);
+function monthBounds(mode,y,m){          // first day + number of days of a Jalali / Gregorian month
+  if(mode==="jalali"){
+    var g=jalaliToGregorian(y,m,1);
     var first=new Date(g.gy,g.gm-1,g.gd);
-    var ny=(calM===12)?calY+1:calY, nm=(calM===12)?1:calM+1;
+    var ny=(m===12)?y+1:y, nm=(m===12)?1:m+1;
     var g2=jalaliToGregorian(ny,nm,1);
-    var len=Math.round((new Date(g2.gy,g2.gm-1,g2.gd)-first)/86400000);
-    return {first:first,len:len};
+    return {first:first, len:Math.round((new Date(g2.gy,g2.gm-1,g2.gd)-first)/86400000)};
   }
-  return {first:new Date(calY,calM-1,1), len:new Date(calY,calM,0).getDate()};
+  return {first:new Date(y,m-1,1), len:new Date(y,m,0).getDate()};
 }
+function calMonthStart(){ return monthBounds(calMode(),calY,calM); }
 function dayHasData(d){
   try{
     var wk=state.weeks[weekKey(d)];
@@ -2060,6 +2150,428 @@ document.getElementById("calGrid").addEventListener("click",function(e){
   var el=e.target.closest("[data-d]"); if(!el) return;
   var p=el.getAttribute("data-d").split("-");
   goToDate(new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10)));
+});
+
+/* ================= Reports: monthly & yearly, all habits or a single habit ================= */
+var REP={habit:null, kind:"month", y:0, m:0, fromAll:false};
+var repUid=0;
+function f1(n){ return Math.round(n*10)/10; }
+function fnum(n){
+  n=Number(n)||0;
+  var parts=String(Math.abs(n)>=100?Math.round(n):Math.round(n*10)/10).split(".");
+  parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  return faDigits(parts.join(".")).replace(/,/g,"٬").replace(/\./g,"٫");
+}
+function fpct(v){ return faDigits(Math.round(v*100))+"٪"; }
+function repMonthName(mode,m){ return (mode==="jalali"?JMONTHS:GMONTHS)[m-1]; }
+function repYearStr(mode,y){ return mode==="jalali"?faDigits(y):String(y); }
+function repNum(mode,n){ return mode==="jalali"?faDigits(n):String(n); }
+
+function dayRec(d){
+  var wk=state.weeks[weekKey(d)];
+  if(!wk || !wk.days) return null;
+  return wk.days[persianIndex(d.getDay())]||null;
+}
+function safeDone(h,rec){ try{ return !!isDone(h,rec); }catch(e){ return false; } }
+function metricInfo(h){
+  if(h.custom) return h.kind==="customCount" ? {unit:h.unit||"",mode:"sum"} : null;
+  var m={steps:{unit:"قدم",mode:"sum"}, exercise:{unit:"کالری",mode:"sum"}, yoga:{unit:"دقیقه",mode:"sum"},
+         stretch:{unit:"دقیقه",mode:"sum"}, reading:{unit:"دقیقه",mode:"sum"}, water:{unit:"لیوان",mode:"sum"},
+         sleep:{unit:"ساعت",mode:"avg"}, nutrition:{unit:"کالری",mode:"avg"}};
+  return m[h.id]||null;
+}
+function metricValue(h,rec){
+  if(!rec) return 0;
+  var v=0;
+  try{
+    if(h.custom) v=(rec.custom||{})[h.id];
+    else switch(h.id){
+      case "steps": v=rec.steps; break;
+      case "exercise": v=rec.exerciseCalories; break;
+      case "yoga": v=rec.yoga&&rec.yoga.minutes; break;
+      case "stretch": v=rec.stretch&&rec.stretch.minutes; break;
+      case "reading": v=rec.reading&&rec.reading.minutes; break;
+      case "water": v=rec.water; break;
+      case "sleep": v=rec.sleepHours; break;
+      case "nutrition": v=rec.nutrition&&rec.nutrition.calories; break;
+    }
+  }catch(e){}
+  return Number(v)||0;
+}
+function currentStreak(h){          // consecutive done days up to today (a not-yet-done today doesn't break it)
+  var d=new Date(); d.setHours(0,0,0,0);
+  var rec=dayRec(d);
+  if(!(rec && safeDone(h,rec))) d=addDays(d,-1);
+  var n=0;
+  for(var i=0;i<800;i++){
+    rec=dayRec(d);
+    if(rec && safeDone(h,rec)){ n++; d=addDays(d,-1); } else break;
+  }
+  return n;
+}
+
+/* the first day that has anything recorded: earlier days are "before you started", not "missed" */
+function recTouched(rec){
+  try{
+    if(dayPercent(rec)>0) return true;
+    if(rec.mood) return true;
+    if(rec.journal && String(rec.journal).trim()) return true;
+    if(Number(rec.weight)>0) return true;
+    if(rec.reading && rec.reading.note && String(rec.reading.note).trim()) return true;
+  }catch(e){}
+  return false;
+}
+function repFirstKey(){
+  var keys=Object.keys(state.weeks||{}).sort();
+  for(var k=0;k<keys.length;k++){
+    var wk=state.weeks[keys[k]]; if(!wk || !wk.days) continue;
+    var p=keys[k].split("-"), start=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));
+    for(var i=0;i<7;i++){ if(wk.days[i] && recTouched(wk.days[i])) return toDateKey(addDays(start,i)); }
+  }
+  return null;
+}
+
+/* collects every number a report needs for one month or one whole year */
+function buildPeriod(habitId,kind,y,m,light){
+  var mode=calMode(), todayKey=toDateKey(new Date());
+  var single=habitId?getHabit(habitId):null;
+  var list=single?[single]:getCountable();
+  var mList=(kind==="year")?[1,2,3,4,5,6,7,8,9,10,11,12]:[m];
+  var P={mode:mode,single:single,list:list,kind:kind,y:y,months:[],days:[],elapsed:0,sum:0,active:0,perfect:0,doneDays:0,
+         bestDay:null,bestMonth:null,bestStreak:0,metricTotal:0,metricDays:0,maxVal:0,rank:[],pct:null};
+  var streak=0, firstKey=repFirstKey();
+  mList.forEach(function(mm){
+    var mb=monthBounds(mode,y,mm);
+    var md={m:mm,first:mb.first,len:mb.len,items:[],elapsed:0,sum:0,pct:null};
+    for(var i=0;i<mb.len;i++){
+      var d=addDays(mb.first,i), key=toDateKey(d), fut=key>todayKey;
+      var future=fut || !firstKey || key<firstKey;      // "future" here = not counted (upcoming, or before tracking began)
+      var rec=future?null:dayRec(d);
+      var v=0, val=0, done=false;
+      if(rec){
+        if(single){ done=safeDone(single,rec); v=done?1:0; val=metricValue(single,rec); }
+        else { var hd=0; list.forEach(function(h){ if(safeDone(h,rec)) hd++; }); v=list.length?hd/list.length:0; }
+      }
+      var it={d:d,key:key,n:i+1,future:future,fut:fut,today:key===todayKey,v:v,done:done,val:val,rec:rec,bar:v};
+      md.items.push(it); P.days.push(it);
+      if(!future){
+        md.elapsed++; md.sum+=v; P.elapsed++; P.sum+=v;
+        if(v>0) P.active++;
+        if(v>=0.999) P.perfect++;
+        if(done){ P.doneDays++; streak++; if(streak>P.bestStreak) P.bestStreak=streak; } else streak=0;
+        if(val>0){ P.metricTotal+=val; P.metricDays++; if(val>P.maxVal) P.maxVal=val; }
+        if(v>0 && (!P.bestDay || v>P.bestDay.v)) P.bestDay=it;
+      }
+    }
+    md.pct=md.elapsed?md.sum/md.elapsed:null;
+    if(md.pct>0 && (!P.bestMonth || md.pct>P.bestMonth.pct)) P.bestMonth=md;
+    P.months.push(md);
+  });
+  P.pct=P.elapsed?P.sum/P.elapsed:null;
+  if(single){                        // bar height of each day for the single-habit charts
+    P.days.forEach(function(it){
+      if(it.future) return;
+      if(P.maxVal>0) it.bar = it.val>0 ? 0.28+0.72*it.val/P.maxVal : (it.done?0.5:0);
+      else it.bar = it.done?1:0;
+    });
+  } else if(!light){
+    list.forEach(function(h){
+      var dn=0; P.days.forEach(function(it){ if(it.rec && safeDone(h,it.rec)) dn++; });
+      P.rank.push({h:h,done:dn,pct:P.elapsed?dn/P.elapsed:0});
+    });
+    P.rank.sort(function(a,b){ return b.pct-a.pct; });
+  }
+  return P;
+}
+
+function repColors(single){
+  if(single) return {lo:"stop-color:"+single.color+";stop-color:color-mix(in srgb,"+single.color+" 55%,#fff)", hi:"stop-color:"+single.color, base:single.color};
+  return {lo:"stop-color:hsl(calc(var(--accent-h) + 45),92%,76%)", hi:"stop-color:hsl(calc(var(--accent-h) - 12),90%,52%)", base:"var(--accent)"};
+}
+
+/* radial "day wheel": one bar per day, growing outward from the centre */
+function svgWheel(items,col,big,small,mode){
+  var uid="rw"+(++repUid), c=170, r0=66, r1=126, n=items.length, step=2*Math.PI/n;
+  var sw=Math.max(4,Math.min(9,2*Math.PI*(r0+2)/n*0.56));
+  var tracks="", bars="", labels="", marks="";
+  for(var i=0;i<n;i++){
+    var it=items[i], a=-Math.PI/2+i*step, ca=Math.cos(a), sa=Math.sin(a);
+    var xs=c+(r0+2)*ca, ys=c+(r0+2)*sa;
+    tracks+='<line x1="'+f1(xs)+'" y1="'+f1(ys)+'" x2="'+f1(c+r1*ca)+'" y2="'+f1(c+r1*sa)+'" stroke="currentColor" stroke-opacity="'+(it.future?.035:.07)+'" stroke-width="'+f1(sw)+'" stroke-linecap="round"/>';
+    if(!it.future){
+      if(it.bar>0){
+        var L=(r1-r0-2)*Math.max(.1,it.bar);
+        bars+='<line class="ra" style="animation-delay:'+(i*16)+'ms" x1="'+f1(xs)+'" y1="'+f1(ys)+'" x2="'+f1(c+(r0+2+L)*ca)+'" y2="'+f1(c+(r0+2+L)*sa)+'" stroke="url(#'+uid+'g)" stroke-width="'+f1(sw)+'" stroke-linecap="round"/>';
+      } else {
+        bars+='<circle cx="'+f1(xs)+'" cy="'+f1(ys)+'" r="1.7" fill="currentColor" fill-opacity=".3"/>';
+      }
+    }
+    if(it.today) marks+='<circle cx="'+f1(c+(r1+8)*ca)+'" cy="'+f1(c+(r1+8)*sa)+'" r="3" style="fill:var(--accent)"/>';
+    if(it.n===1 || it.n%5===0){
+      labels+='<text x="'+f1(c+(r1+21)*ca)+'" y="'+f1(c+(r1+21)*sa)+'" text-anchor="middle" dominant-baseline="central" font-size="9" style="fill:var(--text-soft)">'+repNum(mode,it.n)+'</text>';
+    }
+  }
+  return '<svg viewBox="0 0 340 340" style="color:var(--text)" role="img">'+
+    '<defs><radialGradient id="'+uid+'g" gradientUnits="userSpaceOnUse" cx="'+c+'" cy="'+c+'" r="'+r1+'">'+
+      '<stop offset="'+(r0/r1).toFixed(3)+'" style="'+col.lo+'"/><stop offset="1" style="'+col.hi+'"/></radialGradient>'+
+    '<filter id="'+uid+'f" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="4"/></filter></defs>'+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+f1(r0+2+(r1-r0-2)*.5)+'" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2 5"/>'+
+    tracks+
+    '<g filter="url(#'+uid+'f)" opacity=".5">'+bars+'</g><g>'+bars+'</g>'+marks+labels+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+(r0-9)+'" fill="currentColor" fill-opacity=".05" stroke="currentColor" stroke-opacity=".1"/>'+
+    '<text x="'+c+'" y="'+(c+3)+'" text-anchor="middle" font-size="'+(big.length>3?28:34)+'" font-weight="800" fill="currentColor">'+big+'</text>'+
+    '<text x="'+c+'" y="'+(c+26)+'" text-anchor="middle" font-size="10.5" style="fill:var(--text-soft)">'+small+'</text>'+
+  '</svg>';
+}
+
+function petalPath(c,rIn,rOut,a0,a1,ins){   // rounded-corner sector: inset here, the stroke (same colour) gives it back
+  var ri=rIn+ins, ro=Math.max(ri,rOut-ins), da=ins/ri, b0=a0+da, b1=a1-da;
+  function P(r,a){ return f1(c+r*Math.cos(a))+" "+f1(c+r*Math.sin(a)); }
+  return "M"+P(ro,b0)+" A"+f1(ro)+" "+f1(ro)+" 0 0 1 "+P(ro,b1)+" L"+P(ri,b1)+" A"+f1(ri)+" "+f1(ri)+" 0 0 0 "+P(ri,b0)+" Z";
+}
+/* "rose" chart: 12 petals, one per month, longer petal = better month */
+function svgRose(vals,col,big,small,mode,curM){
+  var uid="rr"+(++repUid), c=170, rIn=52, R=122, ext=R-rIn-10, step=2*Math.PI/12, ins=4;
+  var petals="", labels="", vlabels="";
+  for(var i=0;i<12;i++){
+    var v=vals[i], a=-Math.PI/2+i*step, a0=a-step/2+.035, a1=a+step/2-.035;
+    var sty='style="animation-delay:'+(i*45)+'ms"';
+    if(v==null || v<=0){
+      var o=(v==null)?.05:.13;
+      petals+='<path class="ra" '+sty+' d="'+petalPath(c,rIn,rIn+10,a0,a1,ins)+'" fill="currentColor" fill-opacity="'+o+'" stroke="currentColor" stroke-opacity="'+o+'" stroke-width="'+(ins*2)+'" stroke-linejoin="round"/>';
+    } else {
+      var ro=rIn+10+ext*v;
+      petals+='<path class="ra" '+sty+' d="'+petalPath(c,rIn,ro,a0,a1,ins)+'" fill="url(#'+uid+'g)" stroke="url(#'+uid+'g)" stroke-width="'+(ins*2)+'" stroke-linejoin="round"/>';
+      vlabels+='<text x="'+f1(c+(ro+11)*Math.cos(a))+'" y="'+f1(c+(ro+11)*Math.sin(a))+'" text-anchor="middle" dominant-baseline="central" font-size="8.5" font-weight="800" fill="currentColor">'+fpct(v)+'</text>';
+    }
+    var isCur=(i+1===curM);
+    labels+='<text x="'+f1(c+(R+27)*Math.cos(a))+'" y="'+f1(c+(R+27)*Math.sin(a))+'" text-anchor="middle" dominant-baseline="central" font-size="9.5" font-weight="'+(isCur?800:600)+'" style="fill:'+(isCur?'var(--accent-dk)':'var(--text-soft)')+'">'+repMonthName(mode,i+1)+'</text>';
+  }
+  return '<svg viewBox="0 0 340 340" style="color:var(--text)" role="img">'+
+    '<defs><radialGradient id="'+uid+'g" gradientUnits="userSpaceOnUse" cx="'+c+'" cy="'+c+'" r="'+R+'">'+
+      '<stop offset="'+(rIn/R).toFixed(3)+'" style="'+col.lo+'"/><stop offset="1" style="'+col.hi+'"/></radialGradient>'+
+    '<filter id="'+uid+'f" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="5"/></filter></defs>'+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+f1(rIn+10+ext*.5)+'" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="2 5"/>'+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+R+'" fill="none" stroke="currentColor" stroke-opacity=".10" stroke-dasharray="2 5"/>'+
+    '<g filter="url(#'+uid+'f)" opacity=".45">'+petals+'</g><g>'+petals+'</g>'+vlabels+labels+
+    '<circle cx="'+c+'" cy="'+c+'" r="'+(rIn-8)+'" fill="currentColor" fill-opacity=".05" stroke="currentColor" stroke-opacity=".1"/>'+
+    '<text x="'+c+'" y="'+(c+2)+'" text-anchor="middle" font-size="'+(big.length>3?26:30)+'" font-weight="800" fill="currentColor">'+big+'</text>'+
+    '<text x="'+c+'" y="'+(c+22)+'" text-anchor="middle" font-size="9.5" style="fill:var(--text-soft)">'+small+'</text>'+
+  '</svg>';
+}
+
+/* year mosaic: one small tile per day, 12 rows (months) x up to 31 columns */
+function svgMosaic(months,base,mode){
+  var W=340, X=284, x0=4, pitch=(X-x0)/31, cw=pitch-2.1, rowP=13, ch=9.6, top=16, H=top+12*rowP+4;
+  var out='<svg viewBox="0 0 '+W+' '+H+'" style="color:var(--text);direction:ltr" role="img">';
+  [1,5,10,15,20,25,30].forEach(function(dn){
+    out+='<text x="'+f1(X-(dn-1)*pitch-cw/2)+'" y="9" text-anchor="middle" font-size="8" style="fill:var(--text-soft)">'+repNum(mode,dn)+'</text>';
+  });
+  months.forEach(function(md,r){
+    var y=top+r*rowP;
+    out+='<text x="'+(W-2)+'" y="'+f1(y+ch/2)+'" text-anchor="end" dominant-baseline="central" font-size="9" style="fill:var(--text-soft)">'+repMonthName(mode,md.m)+'</text>';
+    md.items.forEach(function(it,i){
+      var x=X-i*pitch-cw, fill, op;
+      if(it.future){ fill="currentColor"; op=.04; }
+      else if(it.bar>0){ fill=base; op=(.28+.72*it.bar).toFixed(2); }
+      else { fill="currentColor"; op=.09; }
+      out+='<rect x="'+f1(x)+'" y="'+y+'" width="'+f1(cw)+'" height="'+ch+'" rx="2.4" fill="'+fill+'" fill-opacity="'+op+'"'+
+        (it.today?' stroke="var(--accent)" stroke-width="1.2"':'')+'/>';
+    });
+  });
+  return out+'</svg>';
+}
+
+function repRankHtml(P){
+  return '<div class="rep-rows">'+P.rank.map(function(r){
+    var h=r.h;
+    return '<button type="button" class="rep-row" style="--c:'+h.color+'" data-hid="'+esc(h.id)+'">'+
+      '<span class="ic">'+hmIcon(h)+'</span><span class="nm">'+esc(h.name)+'</span>'+
+      '<span class="bar"><i style="width:'+Math.max(2,Math.round(r.pct*100))+'%"></i></span>'+
+      '<span class="pc">'+fpct(r.pct)+'</span></button>';
+  }).join("")+'</div>';
+}
+function repMiniCal(P){
+  var md=P.months[0], off=persianIndex(md.first.getDay());
+  var html='<div class="rep-mcal" style="--c:'+P.single.color+'">', i;
+  for(i=0;i<7;i++) html+='<div class="wd">'+WD_SHORT[i]+'</div>';
+  for(i=0;i<off;i++) html+='<div></div>';
+  md.items.forEach(function(it){
+    html+='<div class="dd'+(it.done?' on':'')+(it.today?' today':'')+(it.future?' fut':'')+'">'+repNum(P.mode,it.n)+'</div>';
+  });
+  return html+'</div>';
+}
+function repPill(value,label){ return {v:value,l:label}; }
+
+function renderReport(){
+  var P=buildPeriod(REP.habit,REP.kind,REP.y,REP.m);
+  if(REP.habit && !P.single){ REP.habit=null; REP.fromAll=false; P=buildPeriod(null,REP.kind,REP.y,REP.m); }
+  var mode=P.mode, single=P.single, col=repColors(single), isYear=(REP.kind==="year");
+
+  // header
+  document.getElementById("repTtl").innerHTML = single
+    ? '<span class="rep-ic">'+hmIcon(single)+'</span>'+esc(single.name)
+    : '<span class="rep-ic"><img src="'+ICONS.chart+'" alt=""></span>همه‌ی عادت‌ها';
+  Array.prototype.forEach.call(document.querySelectorAll("#repKindSeg button"),function(b){
+    b.classList.toggle("active", b.getAttribute("data-v")===REP.kind);
+  });
+  document.getElementById("repPrevM").classList.toggle("hidden",isYear);
+  document.getElementById("repNextM").classList.toggle("hidden",isYear);
+  var first=P.months[0].first, lastM=P.months[P.months.length-1], last=addDays(lastM.first,lastM.len-1);
+  var title, sub;
+  if(isYear){
+    title=repYearStr(mode,REP.y);
+    if(mode==="jalali"){ var g1=first.getFullYear(), g2=last.getFullYear(); sub=(g1===g2?g1:g1+" – "+g2)+" میلادی"; }
+    else { var j1=gregorianToJalali(first).jy, j2=gregorianToJalali(last).jy; sub=(j1===j2?faDigits(j1):faDigits(j1)+" – "+faDigits(j2))+" شمسی"; }
+  } else {
+    title=repMonthName(mode,REP.m)+" "+repYearStr(mode,REP.y);
+    sub=calOtherRange(first,last);
+  }
+  document.getElementById("repTitle").textContent=title;
+  document.getElementById("repSub").textContent=sub;
+
+  var html="";
+  if(single && REP.fromAll) html+='<button type="button" class="rep-backchip" data-rep="all">› همه‌ی عادت‌ها</button>';
+  if(!single && !P.list.length){
+    document.getElementById("repBody").innerHTML='<div class="empty-note">عادتی برای گزارش نیست 🌱</div>'; return;
+  }
+  if(P.elapsed===0){
+    var allFut=P.days.every(function(x){ return x.fut; });
+    document.getElementById("repBody").innerHTML=html+(allFut
+      ? '<div class="empty-note">این بازه هنوز شروع نشده ✨<br>با فلش‌های بالا برو به زمان‌های قبل</div>'
+      : '<div class="empty-note">تو این بازه هنوز چیزی ثبت نکرده بودی 🌱<br>با فلش‌های بالا بین بازه‌ها بگرد</div>');
+    return;
+  }
+
+  // hero chart
+  var now=new Date(), curM=0;
+  if(isYear){
+    var cj=(mode==="jalali")?gregorianToJalali(now):{jy:now.getFullYear(),jm:now.getMonth()+1};
+    if(cj.jy===REP.y) curM=cj.jm;
+  }
+  var bigTxt=fpct(P.pct), smallTxt;
+  if(single) smallTxt=faDigits(P.doneDays)+" از "+faDigits(P.elapsed)+" روز";
+  else smallTxt=isYear?"میانگین سال":"میانگین ماه";
+  var hero;
+  if(isYear){
+    hero=svgRose(P.months.map(function(md){ return md.pct; }),col,bigTxt,smallTxt,mode,curM);
+  } else {
+    hero=svgWheel(P.days,col,bigTxt,smallTxt,mode);
+  }
+  html+='<div class="rep-hero" style="--glow:'+col.base+'">'+hero+'</div>'+
+    '<div class="rep-cap">'+(isYear?"هر گلبرگ یه ماهه؛ هرچی بلندتر، ماه پرانرژی‌تر":"هر خط یه روزه؛ هرچی بلندتر، روز پربارتر")+'</div>';
+
+  // stat pills
+  var pills=[], unitTxt="";
+  if(single){
+    var mi=metricInfo(single);
+    pills.push(repPill(faDigits(P.doneDays)+" از "+faDigits(P.elapsed),"روز انجام‌شده"));
+    pills.push(repPill(faDigits(P.bestStreak)+" روز","بهترین رشته"));
+    pills.push(repPill(faDigits(currentStreak(single))+" روز","رشته‌ی فعلی (تا امروز)"));
+    if(mi){
+      var u=mi.unit?" "+esc(mi.unit):"";
+      if(mi.mode==="sum"){
+        pills.push(repPill(fnum(P.metricTotal)+u,"مجموع"));
+        pills.push(repPill(fnum(P.metricDays?P.metricTotal/P.metricDays:0)+u,"میانگین روزهای فعال"));
+      } else {
+        pills.push(repPill(fnum(P.metricDays?P.metricTotal/P.metricDays:0)+u,"میانگین روزهای ثبت‌شده"));
+      }
+    } else {
+      pills.push(repPill(fnum(P.doneDays/P.elapsed*7)+" روز","میانگین در هفته"));
+    }
+    if(isYear && P.bestMonth) pills.push(repPill(repMonthName(mode,P.bestMonth.m)+" — "+fpct(P.bestMonth.pct),"بهترین ماه"));
+  } else {
+    pills.push(repPill(faDigits(P.active)+" از "+faDigits(P.elapsed),"روز فعال"));
+    pills.push(repPill(faDigits(P.perfect)+" روز","روز کامل (همه‌ی عادت‌ها)"));
+    if(isYear){
+      pills.push(repPill(P.bestMonth?repMonthName(mode,P.bestMonth.m)+" — "+fpct(P.bestMonth.pct):"—","بهترین ماه"));
+    } else {
+      pills.push(repPill(P.bestDay?repNum(mode,P.bestDay.n)+" "+repMonthName(mode,REP.m)+" — "+fpct(P.bestDay.v):"—","بهترین روز"));
+    }
+    pills.push(repPill(fnum(P.sum*P.list.length/P.elapsed)+" از "+faDigits(P.list.length),"عادت انجام‌شده در هر روز"));
+  }
+  html+='<div class="rep-pills">'+pills.map(function(pl,i){
+    return '<div class="rep-pill'+((i===pills.length-1 && pills.length%2)?' wide':'')+'"><b>'+pl.v+'</b><span>'+pl.l+'</span></div>';
+  }).join("")+'</div>';
+
+  // second chart
+  if(isYear){
+    html+='<div class="rep-h">نقشه‌ی روزهای سال</div><div class="rep-mosaic">'+svgMosaic(P.months,col.base,mode)+'</div>';
+  } else if(single){
+    html+='<div class="rep-h">روزهای انجام‌شده</div>'+repMiniCal(P);
+  }
+  if(!single){
+    html+='<div class="rep-h">پیشرفت هر عادت — برای گزارش کامل روش بزن</div>'+repRankHtml(P);
+  }
+  document.getElementById("repBody").innerHTML=html;
+}
+
+function repMinYear(){ return calMode()==="jalali"?1200:1800; }
+function repMaxYear(){ return calMode()==="jalali"?1600:2200; }
+function repShift(n){
+  if(REP.kind==="year"){ REP.y+=(n>0?1:-1); }
+  else {
+    REP.m+=n;
+    while(REP.m>12){ REP.m-=12; REP.y++; }
+    while(REP.m<1){ REP.m+=12; REP.y--; }
+  }
+  REP.y=Math.max(repMinYear(),Math.min(repMaxYear(),REP.y));
+  renderReport();
+}
+function openReport(habitId,kind){
+  var mode=calMode(), now=new Date();
+  REP.habit=habitId||null; REP.kind=(kind==="year")?"year":"month"; REP.fromAll=false;
+  if(mode==="jalali"){ var j=gregorianToJalali(now); REP.y=j.jy; REP.m=j.jm; }
+  else { REP.y=now.getFullYear(); REP.m=now.getMonth()+1; }
+  document.getElementById("repOverlay").classList.remove("hidden");
+  var modal=document.getElementById("repModal");
+  modal.classList.remove("hidden"); modal.scrollTop=0;
+  renderReport();
+}
+function closeReport(){
+  document.getElementById("repOverlay").classList.add("hidden");
+  document.getElementById("repModal").classList.add("hidden");
+}
+function repGoHabit(id){
+  REP.habit=id||null; REP.fromAll=!!id;
+  var modal=document.getElementById("repModal");
+  renderReport(); modal.scrollTop=0;
+}
+
+/* the two tiles on the main page: current month / current year, all habits */
+function renderReportEntry(){
+  var el=document.getElementById("repEntry"); if(!el) return;
+  var mode=calMode(), now=new Date(), y, m;
+  if(mode==="jalali"){ var j=gregorianToJalali(now); y=j.jy; m=j.jm; } else { y=now.getFullYear(); m=now.getMonth()+1; }
+  var mp=buildPeriod(null,"month",y,m,true), yp=buildPeriod(null,"year",y,m,true);
+  function tile(kind,title,sub,P){
+    var pc=P.pct==null?0:Math.round(P.pct*100);
+    return '<button type="button" class="rep-tile" data-rep="'+kind+'"><div><b>'+title+'</b><span>'+sub+'</span></div>'+
+      svgRing(pc,46,6,"var(--accent)","rgba(127,127,127,.2)",faDigits(pc))+'</button>';
+  }
+  el.innerHTML=tile("month","گزارش ماهانه",repMonthName(mode,m)+" "+repYearStr(mode,y),mp)+
+               tile("year","گزارش سالانه","سال "+repYearStr(mode,y),yp);
+}
+
+document.getElementById("repEntry").addEventListener("click",function(e){
+  var b=e.target.closest("[data-rep]"); if(b) openReport(null,b.getAttribute("data-rep"));
+});
+document.getElementById("ringsGrid").addEventListener("click",function(e){
+  var c=e.target.closest("[data-hid]"); if(c) openReport(c.getAttribute("data-hid"),"month");
+});
+document.getElementById("repClose").addEventListener("click",closeReport);
+document.getElementById("repOverlay").addEventListener("click",closeReport);
+Array.prototype.forEach.call(document.querySelectorAll("#repKindSeg button"),function(b){
+  b.addEventListener("click",function(){ REP.kind=b.getAttribute("data-v"); document.getElementById("repModal").scrollTop=0; renderReport(); });
+});
+Array.prototype.forEach.call(document.querySelectorAll("[data-repnav]"),function(b){
+  b.addEventListener("click",function(){ repShift(parseInt(b.getAttribute("data-repnav"),10)); });
+});
+document.getElementById("repBody").addEventListener("click",function(e){
+  var back=e.target.closest("[data-rep=all]");
+  if(back){ repGoHabit(null); return; }
+  var row=e.target.closest("[data-hid]");
+  if(row) repGoHabit(row.getAttribute("data-hid"));
 });
 
 /* ================= Master render ================= */
