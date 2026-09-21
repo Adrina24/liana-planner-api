@@ -166,7 +166,7 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 .sheet-head h2{display:flex; align-items:center; gap:8px;}
 .sheet-head h2 .st-icon{width:26px;height:26px;}
 .rl-icon{width:20px;height:20px;object-fit:contain;vertical-align:-4px;}
-.app-title{font-size:26px; font-weight:700; color:var(--accent-dk); font-family:'Dancing Script','Vazirmatn',cursive; direction:ltr; unicode-bidi:isolate;}
+.app-title{font-size:22px; line-height:1.2; font-weight:700; color:var(--accent-dk); font-family:'Dancing Script','Vazirmatn',cursive; direction:ltr; unicode-bidi:isolate;}
 .week-nav{display:flex; align-items:center; gap:6px; background:var(--card); border-radius:999px; padding:4px 8px; box-shadow:var(--shadow);}
 .week-nav button{width:26px;height:26px;border:none;background:transparent;border-radius:50%;font-size:16px;color:var(--accent-dk);}
 .week-nav button:active{background:var(--accent-lt);}
@@ -243,7 +243,7 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 /* many cups: shrink them into two rows (only when one row would overflow), card height stays the same */
 .cups + .hint{flex-basis:100%;}
 .cups.wrap{flex-wrap:wrap; gap:8px 6px;}
-#sugarSeg button.active::before{content:"✓ ";}
+#sugarSeg button.active::before, #weightSeg button.active::before{content:"✓ ";}
 
 /* exercise rows */
 .ex-rows{display:flex; flex-direction:column; gap:6px; width:100%;}
@@ -266,7 +266,11 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .rings-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:480px; margin:0 auto; padding:0 14px 4px;}
 .ring-card{background:var(--card); border-radius:16px; box-shadow:var(--shadow); padding:10px 6px; text-align:center;}
 .ring-card .rlabel{font-size:11px; margin-top:6px; color:var(--text-soft); line-height:1.5;}
-.ring-card .rpct{font-size:12px; font-weight:800;}
+.ring-card .rpct{font-size:12px; font-weight:800; margin-top:2px;}
+.ring-card .rwrap{position:relative; width:66px; height:66px; margin:0 auto;}
+.ring-card .rwrap svg{display:block;}
+.ring-card .rico{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:26px; line-height:1; pointer-events:none;}
+.ring-card .rico img{width:34px; height:34px; object-fit:contain; display:block;}
 
 /* ---------- weekly chart ---------- */
 .weekly-chart{max-width:480px; margin:6px auto 0; padding:0 14px;}
@@ -284,6 +288,9 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .sheet-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
 .sheet-head h2{font-size:16px;}
 .sheet-head button{border:none;background:var(--border); width:30px;height:30px;border-radius:50%; color:var(--text);}
+.head-actions{display:flex; align-items:center; gap:8px;}
+.head-actions .mode-circle{width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center;}
+.mode-circle img{width:24px; height:24px; object-fit:contain; display:block;}
 .set-row{margin-bottom:16px;}
 .set-row>div:first-child{font-size:12px; color:var(--text-soft); margin-bottom:8px; font-weight:700;}
 .seg{display:flex; gap:8px; flex-wrap:wrap;}
@@ -340,6 +347,9 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
   text-align:center; font-size:11px; color:var(--text-soft); margin-top:26px; padding-bottom:6px;
 }
 .app-footer b{color:var(--accent-dk);}
+.app-footer .script{font-family:'Dancing Script','Vazirmatn',cursive; direction:ltr; unicode-bidi:isolate; font-size:19px; font-weight:600; line-height:1.5;}
+.app-footer .af-mail{color:var(--text-soft);}
+.app-footer .af-dot{margin:0 2px;}
 
 
 /* ---------- habit manager (settings) ---------- */
@@ -383,18 +393,27 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:0; min-width:0;}
 .cal-day .p{font-size:15px; font-weight:800; line-height:1.1;}
 .cal-day .s{font-size:9px; color:var(--text-soft); line-height:1;}
-.cal-day.fri .p{color:#D64550;}
+.cal-day.hol{background:rgba(214,69,80,.10); border-color:rgba(214,69,80,.38);}
 .cal-day.today{border-color:var(--accent);}
 .cal-day.today .p{color:var(--accent-dk);}
+.cal-day.fri .p, .cal-day.hol .p{color:#D64550;}
+body.mode-dark .cal-day.fri .p, body.mode-dark .cal-day.hol .p{color:#FF7A86;}
 .cal-day.sel{background:var(--accent); border-color:var(--accent);}
-.cal-day.sel .p, .cal-day.sel .s{color:#fff;}
+.cal-day.sel .p, .cal-day.sel .s, body.mode-dark .cal-day.sel .p{color:#fff;}
 .cal-day .dot{position:absolute; bottom:3px; width:5px; height:5px; border-radius:50%; background:var(--accent);}
 .cal-day.sel .dot{background:#fff;}
+.cal-hols{margin-top:12px; display:flex; flex-direction:column; gap:5px;}
+.cal-hol{display:flex; align-items:baseline; gap:8px; font-size:12px; line-height:1.7;}
+.cal-hol i{width:7px; height:7px; border-radius:50%; background:#D64550; flex-shrink:0;}
+.cal-hol b{color:#D64550; font-weight:800; flex-shrink:0;}
+body.mode-dark .cal-hol b{color:#FF7A86;}
+.cal-hols-note{font-size:10.5px; color:var(--text-soft); margin-top:2px;}
 .cal-hint{font-size:11px; color:var(--text-soft); text-align:center; margin-top:10px;}
 body.style-glass .cal-day, body.style-glass .cal-nav{
   background:var(--g-fill); border:1.5px solid var(--g-line);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
 }
+body.style-glass .cal-day.hol{ background:rgba(214,69,80,.16); border-color:rgba(214,69,80,.42); }
 body.style-glass .cal-day.today{ border-color:var(--accent); }
 body.style-glass .cal-day.sel{
   background:linear-gradient(135deg, var(--accent), var(--accent-dk)); border-color:transparent;
@@ -469,6 +488,62 @@ body.style-glass .rep-tile, body.style-glass .rep-pill, body.style-glass .rep-ro
 }
 body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, body.style-glass .rep-modal .rep-backchip{ backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.35); }
 
+/* ---------- first-open splash: the half-empty page is never shown ---------- */
+body:not(.ready) .topbar, body:not(.ready) .wrap{visibility:hidden;}
+.boot-splash{position:fixed; inset:0; z-index:90; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:24px; text-align:center;}
+body:not(.booting) .boot-splash{display:none;}
+.boot-splash .app-title{font-size:40px; line-height:1.3; opacity:0; transition:opacity .35s;}
+body.fonts-ok .boot-splash .app-title{opacity:1;}
+.bs-dots{display:flex; gap:9px; align-items:center; height:14px;}
+.bs-dots i{width:10px; height:10px; border-radius:50%; background:var(--accent); animation:bsPulse 1.1s ease-in-out infinite;}
+.bs-dots i:nth-child(2){animation-delay:.15s;}
+.bs-dots i:nth-child(3){animation-delay:.3s;}
+@keyframes bsPulse{0%,80%,100%{transform:scale(.55); opacity:.4;} 40%{transform:scale(1); opacity:1;}}
+.bs-msg{font-size:14px; font-weight:700; color:var(--text);}
+.bs-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+.bs-actions button{border:none; border-radius:16px; padding:10px 18px; font-size:13px; font-weight:700; background:var(--accent); color:#fff;}
+.bs-actions button.ghost{background:var(--card); color:var(--text); border:1.5px solid var(--border);}
+@keyframes bootIn{from{opacity:0;} to{opacity:1;}}
+body.ready .wrap, body.ready .topbar{animation:bootIn .4s ease-out;}
+@media (prefers-reduced-motion:reduce){ .bs-dots i, body.ready .wrap, body.ready .topbar{animation:none !important;} }
+
+/* ---------- weight & measurements trend ---------- */
+.wt-card{padding:14px 12px 12px;}
+.wt-pills{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;}
+.wt-pill{border:none; border-radius:99px; padding:6px 12px; font-size:12px; font-weight:700; background:var(--border); color:var(--text-soft); transition:background .15s, transform .15s;}
+.wt-pill:active{transform:scale(.95);}
+.wt-pill.active{background:var(--wc,var(--accent)); color:#fff; box-shadow:0 4px 12px rgba(0,0,0,.14);}
+.wt-chart{margin-top:2px; position:relative;}
+.wt-tip{position:absolute; padding:4px 11px; border-radius:99px; color:#fff; font-size:11px; font-weight:700; white-space:nowrap; pointer-events:none; box-shadow:0 4px 12px rgba(0,0,0,.18);}
+.wt-chart svg{width:100%; height:auto; display:block; direction:ltr; overflow:visible;}
+.wt-chart text{fill:var(--text-soft); font-family:inherit;}
+.wt-chart .wt-line{fill:none; stroke-linecap:round; stroke-linejoin:round;}
+.wt-anim .wt-line{stroke-dasharray:1; animation:wtDraw 1s cubic-bezier(.3,.7,.2,1) both;}
+.wt-anim .wt-area, .wt-anim .wt-dots{animation:wtFade .9s ease-out .25s both;}
+@keyframes wtDraw{from{stroke-dashoffset:1;} to{stroke-dashoffset:0;}}
+@keyframes wtFade{from{opacity:0;} to{opacity:1;}}
+.wt-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px;}
+.wt-chip{border-radius:14px; padding:9px 4px; text-align:center; background:var(--bg); border:1.5px solid var(--border);}
+.wt-chip b{display:block; font-size:15px; font-weight:800; color:var(--text);}
+.wt-chip b small{font-size:10px; font-weight:600; color:var(--text-soft);}
+.wt-chip span{display:block; font-size:10.5px; color:var(--text-soft); margin-top:2px; line-height:1.5;}
+.wt-empty{text-align:center; padding:26px 10px; font-size:13px; color:var(--text-soft); line-height:1.9;}
+.wt-hint{font-size:10.5px; color:var(--text-soft); text-align:center; margin-top:8px;}
+body.style-glass .wt-pill{background:var(--g-fill); border:1.5px solid var(--g-line); color:var(--text);}
+body.style-glass .wt-pill.active{background:var(--wc,var(--accent)); border-color:transparent; color:#fff;}
+body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-line); box-shadow:inset 0 1px 0 rgba(255,255,255,.35);}
+@media (prefers-reduced-motion:reduce){ .wt-anim .wt-line, .wt-anim .wt-area, .wt-anim .wt-dots{animation:none !important;} }
+
+#weightHint, #bmiHint{margin-top:6px;}
+
+/* ---------- backup ---------- */
+.bk-msg{line-height:1.9;}
+.bk-msg.err{color:#D64550;}
+.bk-msg.ok{color:var(--accent-dk);}
+.bk-actions{display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;}
+.bk-actions button{border:none; border-radius:14px; padding:9px 16px; font-size:12.5px; font-weight:700; background:var(--accent); color:#fff;}
+.bk-actions button.ghost{background:var(--card); color:var(--text); border:1.5px solid var(--border);}
+
 /* ---------- auth screen ---------- */
 .auth-screen{
   position:fixed; inset:0; z-index:100; background:var(--bg);
@@ -502,7 +577,17 @@ body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, bod
 .account-email{font-size:11px; color:var(--text-soft); text-align:center; margin-bottom:6px;}
 </style>
 </head>
-<body class="style-glass">
+<body class="style-glass booting">
+
+<div class="boot-splash" id="bootSplash">
+  <span class="app-title">Liana's Planner</span>
+  <div class="bs-dots" id="bsDots"><i></i><i></i><i></i></div>
+  <div class="bs-msg hidden" id="bsMsg"></div>
+  <div class="bs-actions hidden" id="bsActions">
+    <button type="button" id="bsRetry">تلاش دوباره</button>
+    <button type="button" id="bsOffline" class="ghost">ادامه بدون اتصال</button>
+  </div>
+</div>
 
 <div class="auth-screen hidden" id="authScreen">
   <div class="auth-card">
@@ -543,10 +628,11 @@ body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, bod
 
 <div class="meas-section">
   <button class="meas-toggle" id="measToggle">
-    <span class="lbl"><img class="st-icon" data-icon="measure" alt="">اندازه‌های این هفته (دور شکم، بازو، ران، باسن، سینه)</span>
+    <span class="lbl"><img class="st-icon" data-icon="measure" alt=""><span id="measLabelText">اندازه‌های این هفته (دور شکم، بازو، ران، باسن، سینه)</span></span>
     <span class="arrow">▾</span>
   </button>
   <div class="habit-body meas-box hidden" id="measBox">
+    <div class="mini-field hidden" id="m_weightField"><label>وزن این هفته (کیلوگرم)</label><input type="number" step="0.1" min="0" id="m_weight"><div class="hint" id="measBmiHint"></div></div>
     <div class="mini-field"><label>دور شکم (cm)</label><input type="number" min="0" id="m_waist"></div>
     <div class="mini-field"><label>دور بازو (cm)</label><input type="number" min="0" id="m_arm"></div>
     <div class="mini-field"><label>دور ران (cm)</label><input type="number" min="0" id="m_thigh"></div>
@@ -569,11 +655,19 @@ body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, bod
   <div class="chart-card"><svg id="weeklyChart" viewBox="0 0 320 170"></svg></div>
 </div>
 
+<div class="weekly-chart">
+  <div class="section-title"><img class="st-icon" data-icon="measure" alt="">روند وزن و اندازه‌ها</div>
+  <div class="chart-card wt-card" id="wtCard"></div>
+</div>
+
 <div class="section-title"><img class="st-icon" data-icon="chart" alt="">گزارش ماهانه و سالانه (همه‌ی عادت‌ها)</div>
 <div class="rep-entry" id="repEntry"></div>
 
 <div class="app-footer">
-  ساخته‌شده توسط <b>Liana</b> · liana.naseri.0@gmail.com
+  <span class="af-by">ساخته‌شده توسط</span>
+  <b class="script">Liana</b>
+  <span class="af-dot">·</span>
+  <span class="script af-mail">liana.naseri.0@gmail.com</span>
 </div>
 </div>
 
@@ -609,27 +703,22 @@ body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, bod
     <button class="cal-nav" data-cal="12" aria-label="سال بعد">«</button>
   </div>
   <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-hols" id="calHols"></div>
   <div class="cal-hint">روی هر روز بزن تا برنامه‌ی همون روز باز بشه · نقطه‌ی زیر تاریخ یعنی اون روز فعالیتی ثبت شده</div>
   <button type="button" class="hm-add" id="calTodayBtn">برو به امروز</button>
 </div>
 
 <div class="overlay hidden" id="overlay"></div>
 <div class="sheet hidden" id="settingsSheet">
-  <div class="sheet-head"><h2><img class="st-icon" data-icon="settings" alt="">تنظیمات</h2><button id="closeSheet">✕</button></div>
+  <div class="sheet-head"><h2><img class="st-icon" data-icon="settings" alt="">تنظیمات</h2>
+    <div class="head-actions"><button id="calOpenBtn" class="mode-circle" aria-label="تقویم"><img id="calIconImg" alt="📅"></button><button id="modeCircle" class="mode-circle" aria-label="روشن / تیره"><img id="modeIconImg" alt=""></button><button id="closeSheet">✕</button></div>
+  </div>
 
   <button class="meas-toggle" id="themeToggle">
     <span>🎨 تم (رنگ، پس‌زمینه، سبک، فونت)</span>
     <span class="arrow">▾</span>
   </button>
   <div class="theme-box hidden" id="themeBox">
-
-  <div class="set-row">
-    <div>حالت نمایش</div>
-    <div class="seg" id="modeSeg">
-      <button data-v="light"><img class="ui-icon-sm" id="sunIconImg" alt="🌞"> روشن</button>
-      <button data-v="dark"><img class="ui-icon-sm" id="moonIconImg" alt="🌙"> تیره</button>
-    </div>
-  </div>
 
   <div class="set-row">
     <div>پالت رنگی</div>
@@ -663,11 +752,6 @@ body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, bod
   </button>
   <div class="theme-box hidden" id="habitsBox"><div id="habitMgr"></div></div>
 
-  <button class="meas-toggle" id="calOpenBtn" style="margin-top:10px;">
-    <span>📅 تقویم شمسی و میلادی (رفتن به یه تاریخ دیگه)</span>
-    <span class="arrow">‹</span>
-  </button>
-
   <div class="set-row hidden" id="sugarRow" style="margin-top:16px;">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="sugarFree" alt="" style="width:26px;height:26px;"><span>چالش قند</span></div>
     <div class="seg" id="sugarSeg">
@@ -683,7 +767,25 @@ body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, bod
     <div class="habit-body" style="gap:10px;">
       <div class="mini-field"><label>قد (سانتی‌متر)</label><input type="number" min="0" id="heightInput"></div>
     </div>
-    <div class="hint">وزن روزانه رو از کارت «وزن روزانه» تو صفحه‌ی اصلی وارد کن؛ BMI خودش حساب میشه.</div>
+    <div class="row-between" style="justify-content:flex-start; gap:8px; margin-top:14px; margin-bottom:8px; font-size:13px; font-weight:700;"><img class="st-icon" data-icon="weight" alt="" style="width:24px;height:24px;"><span>ثبت وزن</span></div>
+    <div class="seg" id="weightSeg">
+      <button data-v="daily">وزن روزانه</button>
+      <button data-v="weekly">وزن هفتگی</button>
+    </div>
+    <div class="hint" id="weightHint"></div>
+    <div class="hint" id="bmiHint"></div>
+  </div>
+
+  <div class="set-row" id="backupRow">
+    <div>💾 پشتیبان‌گیری</div>
+    <div class="seg bk-seg">
+      <button type="button" id="bkDownload">⬇️ دانلود فایل</button>
+      <button type="button" id="bkShare" class="hidden">📤 ارسال به Drive، تلگرام...</button>
+      <button type="button" id="bkRestore">♻️ بازیابی از فایل</button>
+    </div>
+    <input type="file" id="bkFile" accept=".json,application/json" class="hidden">
+    <div class="hint" id="bkLast"></div>
+    <div class="hint bk-msg" id="bkMsg"></div>
   </div>
 
   <div class="set-row">
@@ -854,8 +956,7 @@ var ICONS={
 var QUOTES=["امروز، بهترین نسخه‌ی خودت باش.", "همین امروز، به خودت افتخار کن.", "از همین لحظه، برای رویاهایت تلاش کن.", "قدم به قدم، به توانایی‌هایت ایمان داشته باش.", "آرام و مطمئن، مسیر خودت را با عشق برو.", "با لبخندی آرام، هر روز کمی بهتر شو.", "با قلبی سبک، به خودت مهربان باش.", "بدون عجله، از تلاش امروزت لذت ببر.", "با انرژی تازه، به رشدت افتخار کن.", "با امیدی روشن، زیبایی همین امروز را ببین.", "رها از نگرانی دیروز، انرژی مثبت را پخش کن.", "با تمام وجود، به ندای دلت گوش بده.", "شمرده و با آرامش، خستگی دیروز را رها کن.", "با شکرگزاری، لبخند بزن، حقش را داری.", "با شور و اشتیاق، قوی‌تر از دیروز باش.", "امروز، به خودت فرصت دوباره بده.", "همین امروز، نفس عمیق بکش و ادامه بده.", "از همین لحظه، هر قدم کوچک را جشن بگیر.", "قدم به قدم، باور کن که می‌توانی.", "آرام و مطمئن، دلت را سبک نگه دار.", "با لبخندی آرام، صبور باش، نتیجه می‌آید.", "با قلبی سبک، هر تلاشی حساب می‌شود.", "بدون عجله، زندگی را با آرامش زندگی کن.", "با انرژی تازه، به موفقیت‌های کوچکت افتخار کن.", "با امیدی روشن، با شور و شوق ادامه بده.", "رها از نگرانی دیروز، خودت را همان‌طور که هستی دوست داشته باش.", "با تمام وجود، اجازه بده امروز روز خوبی باشد.", "شمرده و با آرامش، به آینده‌ای روشن امیدوار باش.", "با شکرگزاری، با آرامش تصمیم بگیر.", "با شور و اشتیاق، قدرت درونت را باور کن.", "امروز، دل به رویاهایت بسپار.", "همین امروز، بهترین نسخه‌ی خودت باش.", "از همین لحظه، به خودت افتخار کن.", "قدم به قدم، برای رویاهایت تلاش کن.", "آرام و مطمئن، به توانایی‌هایت ایمان داشته باش.", "با لبخندی آرام، مسیر خودت را با عشق برو.", "با قلبی سبک، هر روز کمی بهتر شو.", "بدون عجله، به خودت مهربان باش.", "با انرژی تازه، از تلاش امروزت لذت ببر.", "با امیدی روشن، به رشدت افتخار کن.", "رها از نگرانی دیروز، زیبایی همین امروز را ببین.", "با تمام وجود، انرژی مثبت را پخش کن.", "شمرده و با آرامش، به ندای دلت گوش بده.", "با شکرگزاری، خستگی دیروز را رها کن.", "با شور و اشتیاق، لبخند بزن، حقش را داری.", "امروز، قوی‌تر از دیروز باش.", "همین امروز، به خودت فرصت دوباره بده.", "از همین لحظه، نفس عمیق بکش و ادامه بده.", "قدم به قدم، هر قدم کوچک را جشن بگیر.", "آرام و مطمئن، باور کن که می‌توانی.", "با لبخندی آرام، دلت را سبک نگه دار.", "با قلبی سبک، صبور باش، نتیجه می‌آید.", "بدون عجله، هر تلاشی حساب می‌شود.", "با انرژی تازه، زندگی را با آرامش زندگی کن.", "با امیدی روشن، به موفقیت‌های کوچکت افتخار کن.", "رها از نگرانی دیروز، با شور و شوق ادامه بده.", "با تمام وجود، خودت را همان‌طور که هستی دوست داشته باش.", "شمرده و با آرامش، اجازه بده امروز روز خوبی باشد.", "با شکرگزاری، به آینده‌ای روشن امیدوار باش.", "با شور و اشتیاق، با آرامش تصمیم بگیر.", "امروز، قدرت درونت را باور کن.", "همین امروز، دل به رویاهایت بسپار.", "از همین لحظه، بهترین نسخه‌ی خودت باش.", "قدم به قدم، به خودت افتخار کن.", "آرام و مطمئن، برای رویاهایت تلاش کن.", "با لبخندی آرام، به توانایی‌هایت ایمان داشته باش.", "با قلبی سبک، مسیر خودت را با عشق برو.", "بدون عجله، هر روز کمی بهتر شو.", "با انرژی تازه، به خودت مهربان باش.", "با امیدی روشن، از تلاش امروزت لذت ببر.", "رها از نگرانی دیروز، به رشدت افتخار کن.", "با تمام وجود، زیبایی همین امروز را ببین.", "شمرده و با آرامش، انرژی مثبت را پخش کن.", "با شکرگزاری، به ندای دلت گوش بده.", "با شور و اشتیاق، خستگی دیروز را رها کن.", "امروز، لبخند بزن، حقش را داری.", "همین امروز، قوی‌تر از دیروز باش.", "از همین لحظه، به خودت فرصت دوباره بده.", "قدم به قدم، نفس عمیق بکش و ادامه بده.", "آرام و مطمئن، هر قدم کوچک را جشن بگیر.", "با لبخندی آرام، باور کن که می‌توانی.", "با قلبی سبک، دلت را سبک نگه دار.", "بدون عجله، صبور باش، نتیجه می‌آید.", "با انرژی تازه، هر تلاشی حساب می‌شود.", "با امیدی روشن، زندگی را با آرامش زندگی کن.", "رها از نگرانی دیروز، به موفقیت‌های کوچکت افتخار کن.", "با تمام وجود، با شور و شوق ادامه بده.", "شمرده و با آرامش، خودت را همان‌طور که هستی دوست داشته باش.", "با شکرگزاری، اجازه بده امروز روز خوبی باشد.", "با شور و اشتیاق، به آینده‌ای روشن امیدوار باش.", "امروز، با آرامش تصمیم بگیر.", "همین امروز، قدرت درونت را باور کن.", "از همین لحظه، دل به رویاهایت بسپار.", "قدم به قدم، بهترین نسخه‌ی خودت باش.", "آرام و مطمئن، به خودت افتخار کن.", "با لبخندی آرام، برای رویاهایت تلاش کن.", "با قلبی سبک، به توانایی‌هایت ایمان داشته باش.", "بدون عجله، مسیر خودت را با عشق برو.", "با انرژی تازه، هر روز کمی بهتر شو.", "با امیدی روشن، به خودت مهربان باش.", "رها از نگرانی دیروز، از تلاش امروزت لذت ببر.", "با تمام وجود، به رشدت افتخار کن.", "شمرده و با آرامش، زیبایی همین امروز را ببین.", "با شکرگزاری، انرژی مثبت را پخش کن.", "با شور و اشتیاق، به ندای دلت گوش بده.", "امروز، خستگی دیروز را رها کن.", "همین امروز، لبخند بزن، حقش را داری.", "از همین لحظه، قوی‌تر از دیروز باش.", "قدم به قدم، به خودت فرصت دوباره بده.", "آرام و مطمئن، نفس عمیق بکش و ادامه بده.", "با لبخندی آرام، هر قدم کوچک را جشن بگیر.", "با قلبی سبک، باور کن که می‌توانی.", "بدون عجله، دلت را سبک نگه دار.", "با انرژی تازه، صبور باش، نتیجه می‌آید.", "با امیدی روشن، هر تلاشی حساب می‌شود.", "رها از نگرانی دیروز، زندگی را با آرامش زندگی کن.", "با تمام وجود، به موفقیت‌های کوچکت افتخار کن.", "شمرده و با آرامش، با شور و شوق ادامه بده.", "با شکرگزاری، خودت را همان‌طور که هستی دوست داشته باش.", "با شور و اشتیاق، اجازه بده امروز روز خوبی باشد.", "امروز، به آینده‌ای روشن امیدوار باش.", "همین امروز، با آرامش تصمیم بگیر.", "از همین لحظه، قدرت درونت را باور کن.", "قدم به قدم، دل به رویاهایت بسپار.", "آرام و مطمئن، بهترین نسخه‌ی خودت باش.", "با لبخندی آرام، به خودت افتخار کن.", "با قلبی سبک، برای رویاهایت تلاش کن.", "بدون عجله، به توانایی‌هایت ایمان داشته باش.", "با انرژی تازه، مسیر خودت را با عشق برو.", "با امیدی روشن، هر روز کمی بهتر شو.", "رها از نگرانی دیروز، به خودت مهربان باش.", "با تمام وجود، از تلاش امروزت لذت ببر.", "شمرده و با آرامش، به رشدت افتخار کن.", "با شکرگزاری، زیبایی همین امروز را ببین.", "با شور و اشتیاق، انرژی مثبت را پخش کن.", "امروز، به ندای دلت گوش بده.", "همین امروز، خستگی دیروز را رها کن.", "از همین لحظه، لبخند بزن، حقش را داری.", "قدم به قدم، قوی‌تر از دیروز باش.", "آرام و مطمئن، به خودت فرصت دوباره بده.", "با لبخندی آرام، نفس عمیق بکش و ادامه بده.", "با قلبی سبک، هر قدم کوچک را جشن بگیر.", "بدون عجله، باور کن که می‌توانی.", "با انرژی تازه، دلت را سبک نگه دار.", "با امیدی روشن، صبور باش، نتیجه می‌آید.", "رها از نگرانی دیروز، هر تلاشی حساب می‌شود.", "با تمام وجود، زندگی را با آرامش زندگی کن.", "شمرده و با آرامش، به موفقیت‌های کوچکت افتخار کن.", "با شکرگزاری، با شور و شوق ادامه بده.", "با شور و اشتیاق، خودت را همان‌طور که هستی دوست داشته باش.", "امروز، اجازه بده امروز روز خوبی باشد.", "همین امروز، به آینده‌ای روشن امیدوار باش.", "از همین لحظه، با آرامش تصمیم بگیر.", "قدم به قدم، قدرت درونت را باور کن.", "آرام و مطمئن، دل به رویاهایت بسپار.", "با لبخندی آرام، بهترین نسخه‌ی خودت باش.", "با قلبی سبک، به خودت افتخار کن.", "بدون عجله، برای رویاهایت تلاش کن.", "با انرژی تازه، به توانایی‌هایت ایمان داشته باش.", "با امیدی روشن، مسیر خودت را با عشق برو.", "رها از نگرانی دیروز، هر روز کمی بهتر شو.", "با تمام وجود، به خودت مهربان باش.", "شمرده و با آرامش، از تلاش امروزت لذت ببر.", "با شکرگزاری، به رشدت افتخار کن.", "با شور و اشتیاق، زیبایی همین امروز را ببین.", "امروز، انرژی مثبت را پخش کن.", "همین امروز، به ندای دلت گوش بده.", "از همین لحظه، خستگی دیروز را رها کن.", "قدم به قدم، لبخند بزن، حقش را داری.", "آرام و مطمئن، قوی‌تر از دیروز باش.", "با لبخندی آرام، به خودت فرصت دوباره بده.", "با قلبی سبک، نفس عمیق بکش و ادامه بده.", "بدون عجله، هر قدم کوچک را جشن بگیر.", "با انرژی تازه، باور کن که می‌توانی.", "با امیدی روشن، دلت را سبک نگه دار.", "رها از نگرانی دیروز، صبور باش، نتیجه می‌آید.", "با تمام وجود، هر تلاشی حساب می‌شود.", "شمرده و با آرامش، زندگی را با آرامش زندگی کن.", "با شکرگزاری، به موفقیت‌های کوچکت افتخار کن.", "با شور و اشتیاق، با شور و شوق ادامه بده.", "امروز، خودت را همان‌طور که هستی دوست داشته باش.", "همین امروز، اجازه بده امروز روز خوبی باشد.", "از همین لحظه، به آینده‌ای روشن امیدوار باش.", "قدم به قدم، با آرامش تصمیم بگیر.", "آرام و مطمئن، قدرت درونت را باور کن.", "با لبخندی آرام، دل به رویاهایت بسپار.", "با قلبی سبک، بهترین نسخه‌ی خودت باش.", "بدون عجله، به خودت افتخار کن.", "با انرژی تازه، برای رویاهایت تلاش کن.", "با امیدی روشن، به توانایی‌هایت ایمان داشته باش.", "رها از نگرانی دیروز، مسیر خودت را با عشق برو.", "با تمام وجود، هر روز کمی بهتر شو.", "شمرده و با آرامش، به خودت مهربان باش.", "با شکرگزاری، از تلاش امروزت لذت ببر.", "با شور و اشتیاق، به رشدت افتخار کن.", "امروز، زیبایی همین امروز را ببین.", "همین امروز، انرژی مثبت را پخش کن.", "از همین لحظه، به ندای دلت گوش بده.", "قدم به قدم، خستگی دیروز را رها کن.", "آرام و مطمئن، لبخند بزن، حقش را داری.", "با لبخندی آرام، قوی‌تر از دیروز باش.", "با قلبی سبک، به خودت فرصت دوباره بده.", "بدون عجله، نفس عمیق بکش و ادامه بده.", "با انرژی تازه، هر قدم کوچک را جشن بگیر.", "با امیدی روشن، باور کن که می‌توانی.", "رها از نگرانی دیروز، دلت را سبک نگه دار.", "با تمام وجود، صبور باش، نتیجه می‌آید.", "شمرده و با آرامش، هر تلاشی حساب می‌شود.", "با شکرگزاری، زندگی را با آرامش زندگی کن.", "با شور و اشتیاق، به موفقیت‌های کوچکت افتخار کن.", "امروز، با شور و شوق ادامه بده.", "همین امروز، خودت را همان‌طور که هستی دوست داشته باش.", "از همین لحظه، اجازه بده امروز روز خوبی باشد.", "قدم به قدم، به آینده‌ای روشن امیدوار باش.", "آرام و مطمئن، با آرامش تصمیم بگیر.", "با لبخندی آرام، قدرت درونت را باور کن.", "با قلبی سبک، دل به رویاهایت بسپار.", "بدون عجله، بهترین نسخه‌ی خودت باش.", "با انرژی تازه، به خودت افتخار کن.", "با امیدی روشن، برای رویاهایت تلاش کن.", "رها از نگرانی دیروز، به توانایی‌هایت ایمان داشته باش.", "با تمام وجود، مسیر خودت را با عشق برو.", "شمرده و با آرامش، هر روز کمی بهتر شو.", "با شکرگزاری، به خودت مهربان باش.", "با شور و اشتیاق، از تلاش امروزت لذت ببر.", "امروز، به رشدت افتخار کن.", "همین امروز، زیبایی همین امروز را ببین.", "از همین لحظه، انرژی مثبت را پخش کن.", "قدم به قدم، به ندای دلت گوش بده.", "آرام و مطمئن، خستگی دیروز را رها کن.", "با لبخندی آرام، لبخند بزن، حقش را داری.", "با قلبی سبک، قوی‌تر از دیروز باش.", "بدون عجله، به خودت فرصت دوباره بده.", "با انرژی تازه، نفس عمیق بکش و ادامه بده.", "با امیدی روشن، هر قدم کوچک را جشن بگیر.", "رها از نگرانی دیروز، باور کن که می‌توانی.", "با تمام وجود، دلت را سبک نگه دار.", "شمرده و با آرامش، صبور باش، نتیجه می‌آید.", "با شکرگزاری، هر تلاشی حساب می‌شود.", "با شور و اشتیاق، زندگی را با آرامش زندگی کن.", "امروز، به موفقیت‌های کوچکت افتخار کن.", "همین امروز، با شور و شوق ادامه بده.", "از همین لحظه، خودت را همان‌طور که هستی دوست داشته باش.", "قدم به قدم، اجازه بده امروز روز خوبی باشد.", "آرام و مطمئن، به آینده‌ای روشن امیدوار باش.", "با لبخندی آرام، با آرامش تصمیم بگیر.", "با قلبی سبک، قدرت درونت را باور کن.", "بدون عجله، دل به رویاهایت بسپار.", "با انرژی تازه، بهترین نسخه‌ی خودت باش.", "با امیدی روشن، به خودت افتخار کن.", "رها از نگرانی دیروز، برای رویاهایت تلاش کن.", "با تمام وجود، به توانایی‌هایت ایمان داشته باش.", "شمرده و با آرامش، مسیر خودت را با عشق برو.", "با شکرگزاری، هر روز کمی بهتر شو.", "با شور و اشتیاق، به خودت مهربان باش.", "امروز، از تلاش امروزت لذت ببر.", "همین امروز، به رشدت افتخار کن.", "از همین لحظه، زیبایی همین امروز را ببین.", "قدم به قدم، انرژی مثبت را پخش کن.", "آرام و مطمئن، به ندای دلت گوش بده.", "با لبخندی آرام، خستگی دیروز را رها کن.", "با قلبی سبک، لبخند بزن، حقش را داری.", "بدون عجله، قوی‌تر از دیروز باش.", "با انرژی تازه، به خودت فرصت دوباره بده.", "با امیدی روشن، نفس عمیق بکش و ادامه بده.", "رها از نگرانی دیروز، هر قدم کوچک را جشن بگیر.", "با تمام وجود، باور کن که می‌توانی.", "شمرده و با آرامش، دلت را سبک نگه دار.", "با شکرگزاری، صبور باش، نتیجه می‌آید.", "با شور و اشتیاق، هر تلاشی حساب می‌شود.", "امروز، زندگی را با آرامش زندگی کن.", "همین امروز، به موفقیت‌های کوچکت افتخار کن.", "از همین لحظه، با شور و شوق ادامه بده.", "قدم به قدم، خودت را همان‌طور که هستی دوست داشته باش.", "آرام و مطمئن، اجازه بده امروز روز خوبی باشد.", "با لبخندی آرام، به آینده‌ای روشن امیدوار باش.", "با قلبی سبک، با آرامش تصمیم بگیر.", "بدون عجله، قدرت درونت را باور کن.", "با انرژی تازه، دل به رویاهایت بسپار.", "با امیدی روشن، بهترین نسخه‌ی خودت باش.", "رها از نگرانی دیروز، به خودت افتخار کن.", "با تمام وجود، برای رویاهایت تلاش کن.", "شمرده و با آرامش، به توانایی‌هایت ایمان داشته باش.", "با شکرگزاری، مسیر خودت را با عشق برو.", "با شور و اشتیاق، هر روز کمی بهتر شو.", "امروز، به خودت مهربان باش.", "همین امروز، از تلاش امروزت لذت ببر.", "از همین لحظه، به رشدت افتخار کن.", "قدم به قدم، زیبایی همین امروز را ببین.", "آرام و مطمئن، انرژی مثبت را پخش کن.", "با لبخندی آرام، به ندای دلت گوش بده.", "با قلبی سبک، خستگی دیروز را رها کن.", "بدون عجله، لبخند بزن، حقش را داری.", "با انرژی تازه، قوی‌تر از دیروز باش.", "با امیدی روشن، به خودت فرصت دوباره بده.", "رها از نگرانی دیروز، نفس عمیق بکش و ادامه بده.", "با تمام وجود، هر قدم کوچک را جشن بگیر.", "شمرده و با آرامش، باور کن که می‌توانی.", "با شکرگزاری، دلت را سبک نگه دار.", "با شور و اشتیاق، صبور باش، نتیجه می‌آید.", "امروز، هر تلاشی حساب می‌شود.", "همین امروز، زندگی را با آرامش زندگی کن.", "از همین لحظه، به موفقیت‌های کوچکت افتخار کن.", "قدم به قدم، با شور و شوق ادامه بده.", "آرام و مطمئن، خودت را همان‌طور که هستی دوست داشته باش.", "با لبخندی آرام، اجازه بده امروز روز خوبی باشد.", "با قلبی سبک، به آینده‌ای روشن امیدوار باش.", "بدون عجله، با آرامش تصمیم بگیر.", "با انرژی تازه، قدرت درونت را باور کن.", "با امیدی روشن، دل به رویاهایت بسپار.", "رها از نگرانی دیروز، بهترین نسخه‌ی خودت باش.", "با تمام وجود، به خودت افتخار کن.", "شمرده و با آرامش، برای رویاهایت تلاش کن.", "با شکرگزاری، به توانایی‌هایت ایمان داشته باش.", "با شور و اشتیاق، مسیر خودت را با عشق برو.", "امروز، هر روز کمی بهتر شو.", "همین امروز، به خودت مهربان باش.", "از همین لحظه، از تلاش امروزت لذت ببر.", "قدم به قدم، به رشدت افتخار کن.", "آرام و مطمئن، زیبایی همین امروز را ببین.", "با لبخندی آرام، انرژی مثبت را پخش کن.", "با قلبی سبک، به ندای دلت گوش بده.", "بدون عجله، خستگی دیروز را رها کن.", "با انرژی تازه، لبخند بزن، حقش را داری.", "با امیدی روشن، قوی‌تر از دیروز باش.", "رها از نگرانی دیروز، به خودت فرصت دوباره بده.", "با تمام وجود، نفس عمیق بکش و ادامه بده.", "شمرده و با آرامش، هر قدم کوچک را جشن بگیر.", "با شکرگزاری، باور کن که می‌توانی.", "با شور و اشتیاق، دلت را سبک نگه دار.", "امروز، صبور باش، نتیجه می‌آید.", "همین امروز، هر تلاشی حساب می‌شود.", "از همین لحظه، زندگی را با آرامش زندگی کن.", "قدم به قدم، به موفقیت‌های کوچکت افتخار کن.", "آرام و مطمئن، با شور و شوق ادامه بده.", "با لبخندی آرام، خودت را همان‌طور که هستی دوست داشته باش.", "با قلبی سبک، اجازه بده امروز روز خوبی باشد.", "بدون عجله، به آینده‌ای روشن امیدوار باش.", "با انرژی تازه، با آرامش تصمیم بگیر.", "با امیدی روشن، قدرت درونت را باور کن.", "رها از نگرانی دیروز، دل به رویاهایت بسپار.", "با تمام وجود، بهترین نسخه‌ی خودت باش.", "شمرده و با آرامش، به خودت افتخار کن.", "با شکرگزاری، برای رویاهایت تلاش کن.", "با شور و اشتیاق، به توانایی‌هایت ایمان داشته باش.", "امروز، مسیر خودت را با عشق برو.", "همین امروز، هر روز کمی بهتر شو.", "از همین لحظه، به خودت مهربان باش.", "قدم به قدم، از تلاش امروزت لذت ببر.", "آرام و مطمئن، به رشدت افتخار کن.", "با لبخندی آرام، زیبایی همین امروز را ببین.", "با قلبی سبک، انرژی مثبت را پخش کن.", "بدون عجله، به ندای دلت گوش بده.", "با انرژی تازه، خستگی دیروز را رها کن.", "با امیدی روشن، لبخند بزن، حقش را داری.", "رها از نگرانی دیروز، قوی‌تر از دیروز باش.", "با تمام وجود، به خودت فرصت دوباره بده.", "شمرده و با آرامش، نفس عمیق بکش و ادامه بده.", "با شکرگزاری، هر قدم کوچک را جشن بگیر.", "با شور و اشتیاق، باور کن که می‌توانی.", "امروز، دلت را سبک نگه دار.", "همین امروز، صبور باش، نتیجه می‌آید.", "از همین لحظه، هر تلاشی حساب می‌شود.", "قدم به قدم، زندگی را با آرامش زندگی کن.", "آرام و مطمئن، به موفقیت‌های کوچکت افتخار کن."];
 function setUiIcons(){
   var s1=document.getElementById("settingsIconImg"); if(s1) s1.src=ICONS.settings;
-  var s2=document.getElementById("sunIconImg"); if(s2) s2.src=ICONS.sun;
-  var s3=document.getElementById("moonIconImg"); if(s3) s3.src=ICONS.moon;
+  var s4=document.getElementById("calIconImg"); if(s4) s4.src=ICONS.today;
   Array.prototype.forEach.call(document.querySelectorAll("img[data-icon]"),function(img){
     var src=ICONS[img.getAttribute("data-icon")];
     if(src) img.src=src;
@@ -888,11 +989,11 @@ function emptyDay(){
 }
 function emptyWeek(){
   var days=[]; for(var i=0;i<7;i++){ days.push(emptyDay()); }
-  return {days:days, measurements:{waist:0,arm:0,thigh:0,hip:0,chest:0}};
+  return {days:days, measurements:{weight:0,waist:0,arm:0,thigh:0,hip:0,chest:0}};
 }
 function defaultState(){
   return {
-    settings:{mode:"light", palette:"blue", mono:false, style:"glass", font:"vazir", sugarMode:"full", sugarLimit:3, calMode:"jalali"},
+    settings:{mode:"light", palette:"blue", mono:false, style:"glass", font:"vazir", sugarMode:"full", sugarLimit:3, calMode:"jalali", weightMode:"daily"},
     profile:{heightCm:0, weightKg:0, displayName:""},
     habitCfg:defaultHabitCfg(),
     weeks:{}
@@ -908,13 +1009,23 @@ function weekKey(d){ return toDateKey(startOfWeek(d)); }
 function currentWeek(){
   var k=weekKey(currentWeekStart);
   if(!state.weeks[k]) state.weeks[k]=emptyWeek();
-  if(!state.weeks[k].measurements) state.weeks[k].measurements={waist:0,arm:0,thigh:0,hip:0,chest:0};
+  if(!state.weeks[k].measurements) state.weeks[k].measurements={weight:0,waist:0,arm:0,thigh:0,hip:0,chest:0};
   return state.weeks[k];
 }
 function currentDay(){ return currentWeek().days[selectedDayIndex]; }
 
 /* ================= BMI / health profile ================= */
+function weightMode(){ return state.settings.weightMode==="weekly" ? "weekly" : "daily"; }
 function latestWeight(){
+  if(weightMode()==="weekly"){            // newest weekly weight up to the week being viewed
+    var cur=weekKey(currentWeekStart), keys=Object.keys(state.weeks||{}).sort();
+    for(var i=keys.length-1;i>=0;i--){
+      if(keys[i]>cur) continue;
+      var mm=state.weeks[keys[i]] && state.weeks[keys[i]].measurements;
+      if(mm && Number(mm.weight)>0) return Number(mm.weight);
+    }
+    return Number(state.profile.weightKg)||0;
+  }
   var week=currentWeek();
   for(var i=selectedDayIndex;i>=0;i--){
     if(week.days[i].weight>0) return week.days[i].weight;
@@ -942,6 +1053,7 @@ var TOKEN_KEY="fa-planner-token";
 var EMAIL_KEY="fa-planner-email";
 var saveTimer=null;
 var remoteSaveTimer=null;
+var offlineOnly=false;      // true when the server couldn't be reached: nothing is pushed, so newer data on the server is never overwritten
 
 function loadLocal(){
   try{ var raw=localStorage.getItem(LS_KEY); if(raw) return JSON.parse(raw); }catch(e){}
@@ -992,12 +1104,18 @@ function apiCall(path, method, body, useAuth){
 }
 
 function saveRemote(){
-  if(!getToken()) return;
+  if(!getToken() || offlineOnly) return;
   apiCall("/api/data","PUT",state,true).catch(function(){});
 }
 
+function withTimeout(promise,ms){
+  return new Promise(function(resolve,reject){
+    var t=setTimeout(function(){ reject(new Error("timeout")); },ms);
+    promise.then(function(v){ clearTimeout(t); resolve(v); }, function(e){ clearTimeout(t); reject(e); });
+  });
+}
 function loadRemote(){
-  return apiCall("/api/data","GET",null,true).then(function(r){
+  return withTimeout(apiCall("/api/data","GET",null,true),12000).then(function(r){
     if(r.ok && r.data && r.data.data){
       var rs=r.data.data.settings;
       mergeState(r.data.data);
@@ -1082,13 +1200,7 @@ function showOfflineOption(){
   b.id="authOfflineBtn";
   b.className="auth-switch";
   b.textContent="ادامه بدون اتصال (فقط روی همین دستگاه ذخیره میشه)";
-  b.onclick=function(){
-    applyGlassDefaultOnce();
-    hideAuthScreen();
-    document.getElementById("accountEmailLabel").textContent="حالت بدون اتصال — اطلاعات فقط روی همین دستگاه";
-    renderAll();
-    saveLocal();
-  };
+  b.onclick=continueOffline;
   document.getElementById("authMsg").insertAdjacentElement("afterend",b);
 }
 
@@ -1101,24 +1213,59 @@ function applyGlassDefaultOnce(){
   }
 }
 
+/* page becomes visible only once real data has been rendered */
+function markReady(){
+  document.body.classList.add("ready");
+  document.body.classList.remove("booting");
+}
+function showBootError(){
+  document.getElementById("bsDots").classList.add("hidden");
+  var m=document.getElementById("bsMsg");
+  m.textContent="اتصال به سرور برقرار نشد";
+  m.classList.remove("hidden");
+  document.getElementById("bsActions").classList.remove("hidden");
+}
+function resetBootUI(){
+  document.getElementById("bsDots").classList.remove("hidden");
+  document.getElementById("bsMsg").classList.add("hidden");
+  document.getElementById("bsActions").classList.add("hidden");
+}
+function continueOffline(){
+  offlineOnly=true;
+  applyGlassDefaultOnce();
+  hideAuthScreen();
+  document.getElementById("accountEmailLabel").textContent="حالت بدون اتصال — اطلاعات فقط روی همین دستگاه";
+  renderAll();
+  saveLocal();
+  markReady();
+}
+function finishBoot(){
+  applyGlassDefaultOnce();
+  hideAuthScreen();
+  document.getElementById("accountEmailLabel").textContent=getEmail()||"";
+  renderAll();
+  saveLocal();
+  markReady();
+}
 function afterLogin(){
-  loadRemote().then(function(){
-    applyGlassDefaultOnce();
-    hideAuthScreen();
-    document.getElementById("accountEmailLabel").textContent=getEmail()||"";
-    renderAll();
-    saveLocal();
+  loadRemote().then(finishBoot, function(){
+    if(document.body.classList.contains("booting")) showBootError();
+    else { setAuthMsg("خطا در اتصال به سرور، دوباره امتحان کن","err"); showOfflineOption(); }
   });
 }
+document.getElementById("bsRetry").addEventListener("click",function(){ resetBootUI(); afterLogin(); });
+document.getElementById("bsOffline").addEventListener("click",continueOffline);
 
 function initPersistence(){
   var local=loadLocal();
   if(local) mergeState(local);
+  applyTheme();                       // saved colours right from the very first paint (splash included)
   if(getToken()){
     document.getElementById("accountEmailLabel").textContent=getEmail()||"";
     afterLogin();
   } else {
     showAuthScreen();
+    document.body.classList.remove("booting");
   }
 }
 
@@ -1214,18 +1361,30 @@ function renderQuote(){
 }
 
 function renderMeasurements(){
-  var m=currentWeek().measurements;
-  ["waist","arm","thigh","hip","chest"].forEach(function(f){
+  var m=currentWeek().measurements, weekly=(weightMode()==="weekly");
+  ["weight","waist","arm","thigh","hip","chest"].forEach(function(f){
     var el=document.getElementById("m_"+f);
     if(el) el.value=m[f]||"";
   });
+  var wf=document.getElementById("m_weightField"); if(wf) wf.classList.toggle("hidden",!weekly);
+  var lt=document.getElementById("measLabelText");
+  if(lt) lt.textContent = weekly ? "وزن و اندازه‌های این هفته" : "اندازه‌های این هفته (دور شکم، بازو، ران، باسن، سینه)";
+  var bh=document.getElementById("measBmiHint");
+  if(bh){ var bmi=weekly?computeBMI():null; bh.textContent = !weekly ? "" : (bmi ? "BMI فعلی: "+bmi.toFixed(1)+" ("+bmiCategory(bmi)+")" : "برای BMI، قدت را در تنظیمات وارد کن."); }
+}
+function openMeasBox(){
+  var box=document.getElementById("measBox"), t=document.getElementById("measToggle");
+  if(box) box.classList.remove("hidden");
+  var a=t && t.querySelector(".arrow"); if(a) a.textContent="▴";
 }
 function wireMeasurements(){
-  ["waist","arm","thigh","hip","chest"].forEach(function(f){
+  ["weight","waist","arm","thigh","hip","chest"].forEach(function(f){
     var el=document.getElementById("m_"+f);
     if(el) el.onchange=function(){
       currentWeek().measurements[f]=parseFloat(this.value)||0;
       scheduleSave();
+      if(f==="weight"){ renderDashboard(); renderMeasurements(); }     // BMI follows the new weight
+      renderWeightChart(true);
     };
   });
   var toggle=document.getElementById("measToggle");
@@ -1515,6 +1674,7 @@ function wireHabitCards(){
       day[f]=inp.type==="number"?(parseFloat(inp.value)||0):inp.value;
       scheduleSave(); renderDashboard(); renderDayStrip(); renderRings(); renderChart();
       if(f==="steps"||f==="weight"||f==="sleepHours"){ renderHabitCards(); }
+      if(f==="weight") renderWeightChart(true);
     });
   });
   Array.prototype.forEach.call(root.querySelectorAll("textarea[data-field]"),function(ta){
@@ -1628,9 +1788,9 @@ function renderRings(){
     week.days.forEach(function(d){ if(isDone(h,d)) count++; });
     var pct=Math.round(count/7*100);
     return '<div class="ring-card" data-hid="'+esc(h.id)+'" role="button" style="color:'+h.color+'">'+
-      svgRing(pct,58,7,h.color)+
+      '<div class="rwrap">'+svgRing(pct,66,7,h.color)+'<div class="rico">'+hmIcon(h)+'</div></div>'+
       '<div class="rpct">'+pct+'٪</div>'+
-      '<div class="rlabel">'+((h.iconKey&&ICONS[h.iconKey])?'<img class="rl-icon" src="'+ICONS[h.iconKey]+'" alt="">':esc(h.icon))+' '+esc(h.name)+'</div>'+
+      '<div class="rlabel">'+esc(h.name)+'</div>'+
     '</div>';
   }).join("");
   if(!list.length) html='<div class="empty-note" style="grid-column:1/-1;">عادتی برای نمایش نیست</div>';
@@ -1664,9 +1824,8 @@ function renderChart(){
 /* ================= Settings sheet ================= */
 function renderSettingsSheet(){
   var s=state.settings, p=state.profile;
-  document.querySelectorAll("#modeSeg button").forEach(function(b){
-    b.classList.toggle("active", b.getAttribute("data-v")===s.mode);
-  });
+  var mIcon=document.getElementById("modeIconImg");
+  if(mIcon) mIcon.src=(s.mode==="dark")?ICONS.moon:ICONS.sun;
   document.querySelectorAll("#styleSeg button").forEach(function(b){
     b.classList.toggle("active", b.getAttribute("data-v")===s.style);
   });
@@ -1691,6 +1850,16 @@ function renderSettingsSheet(){
   document.getElementById("heightInput").value=p.heightCm||"";
   document.getElementById("displayNameInput").value=p.displayName||"";
 
+  document.querySelectorAll("#weightSeg button").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-v")===weightMode());
+  });
+  renderBackupInfo();
+  document.getElementById("weightHint").textContent = weightMode()==="weekly"
+    ? "وزن هفته‌ای یک بار، کنار اندازه‌ها تو بخش «اندازه‌های این هفته» ثبت میشه و کارت وزن روزانه از برنامه‌ی امروز برداشته میشه."
+    : "وزن هر روز تو کارت «وزن روزانه» توی برنامه‌ی امروز ثبت میشه.";
+  document.getElementById("bmiHint").textContent = weightMode()==="weekly"
+    ? "وزن هفتگی رو تو بخش «اندازه‌های این هفته» وارد کن؛ BMI خودش حساب میشه."
+    : "وزن روزانه رو از کارت «وزن روزانه» تو صفحه‌ی اصلی وارد کن؛ BMI خودش حساب میشه.";
   document.querySelectorAll("#sugarSeg button").forEach(function(b){
     b.classList.toggle("active", b.getAttribute("data-v")===sugarMode());
   });
@@ -1707,6 +1876,14 @@ function updateSugarRow(){
   if(row) row.classList.toggle("hidden", !getHabits().some(function(h){return h.id==="sugarFree";}));
 }
 function wireSettingsSheet(){
+  document.querySelectorAll("#weightSeg button").forEach(function(b){
+    b.onclick=function(){
+      var v=b.getAttribute("data-v");
+      if(weightMode()===v) return;
+      state.settings.weightMode=v; scheduleSave(); renderSettingsSheet(); renderAll();
+      if(v==="weekly") openMeasBox();       // show where the weight went
+    };
+  });
   document.querySelectorAll("#sugarSeg button").forEach(function(b){
     b.onclick=function(){ state.settings.sugarMode=b.getAttribute("data-v"); scheduleSave(); renderSettingsSheet(); renderAll(); };
   });
@@ -1716,9 +1893,10 @@ function wireSettingsSheet(){
     state.settings.sugarLimit=isNaN(v)?3:Math.max(0,v);
     scheduleSave(); renderAll();
   };
-  document.querySelectorAll("#modeSeg button").forEach(function(b){
-    b.onclick=function(){ state.settings.mode=b.getAttribute("data-v"); applyTheme(); scheduleSave(); renderSettingsSheet(); };
-  });
+  document.getElementById("modeCircle").onclick=function(){
+    state.settings.mode=(state.settings.mode==="dark")?"light":"dark";
+    applyTheme(); scheduleSave(); renderSettingsSheet();
+  };
   document.querySelectorAll("#styleSeg button").forEach(function(b){
     b.onclick=function(){ state.settings.style=b.getAttribute("data-v"); applyTheme(); scheduleSave(); renderSettingsSheet(); };
   });
@@ -1804,6 +1982,7 @@ function buildHabits(includeHidden){
   var cfg=habitCfg();
   var list=[];
   DEFAULT_HABITS.forEach(function(d){
+    if(d.id==="weight" && weightMode()==="weekly") return;     // weekly weight lives in "measurements" instead
     var hidden=cfg.hidden.indexOf(d.id)>-1;
     if(hidden && !includeHidden) return;
     var ov=cfg.overrides[d.id]||{};
@@ -2076,6 +2255,21 @@ function calOtherRange(first,last){   // the month(s) of the other calendar that
   if(ja.jy===jb.jy) return JMONTHS[ja.jm-1]+" – "+JMONTHS[jb.jm-1]+" "+faDigits(ja.jy);
   return JMONTHS[ja.jm-1]+" "+faDigits(ja.jy)+" – "+JMONTHS[jb.jm-1]+" "+faDigits(jb.jy);
 }
+/* official holidays (besides Fridays): fixed solar-calendar ones every year + the religious ones of the official 1405 calendar */
+var HOL_FIXED={"1-1":"عید نوروز","1-2":"عید نوروز","1-3":"عید نوروز","1-4":"عید نوروز","1-12":"روز جمهوری اسلامی","1-13":"روز طبیعت (سیزده‌به‌در)",
+  "3-14":"رحلت امام خمینی (ره)","3-15":"قیام ۱۵ خرداد","11-22":"پیروزی انقلاب اسلامی","12-29":"روز ملی شدن صنعت نفت"};
+var HOL_RELIGIOUS={
+  1405:{"1-1":"عید سعید فطر","1-2":"عید سعید فطر","1-25":"شهادت امام جعفر صادق (ع)","3-6":"عید سعید قربان","3-14":"عید سعید غدیر خم",
+    "4-3":"تاسوعای حسینی","4-4":"عاشورای حسینی","5-13":"اربعین حسینی","5-21":"رحلت پیامبر اکرم (ص) و شهادت امام حسن مجتبی (ع)",
+    "5-22":"شهادت امام رضا (ع)","5-30":"شهادت امام حسن عسکری (ع)","6-8":"میلاد پیامبر اکرم (ص) و امام جعفر صادق (ع)",
+    "8-22":"شهادت حضرت زهرا (س)","10-2":"ولادت امام علی (ع)","10-16":"مبعث پیامبر اکرم (ص)","11-4":"ولادت امام زمان (عج) و نیمه شعبان",
+    "12-9":"شهادت امام علی (ع)","12-19":"عید سعید فطر","12-20":"تعطیل به مناسبت عید سعید فطر"}
+};
+function holidayName(jy,jm,jd){
+  var k=jm+"-"+jd, a=HOL_FIXED[k], b=(HOL_RELIGIOUS[jy]||{})[k];
+  if(a && b) return b+" · "+a;
+  return a||b||null;
+}
 function renderCalendar(){
   var mode=calMode();
   Array.prototype.forEach.call(document.querySelectorAll("#calModeSeg button"),function(b){
@@ -2090,7 +2284,7 @@ function renderCalendar(){
 
   var todayKey=toDateKey(new Date());
   var selKey=toDateKey(addDays(currentWeekStart,selectedDayIndex));
-  var html="", i;
+  var html="", i, hols=[];
   for(i=0;i<7;i++) html+='<div class="cal-wd">'+WD_SHORT[i]+'</div>';
   var offset=persianIndex(first.getDay());
   for(i=0;i<offset;i++) html+='<div></div>';
@@ -2098,11 +2292,16 @@ function renderCalendar(){
     var d=addDays(first,i), key=toDateKey(d), j=gregorianToJalali(d);
     var pr=(mode==="jalali")?faDigits(j.jd):d.getDate();
     var sc=(mode==="jalali")?d.getDate():faDigits(j.jd);
-    var cls="cal-day"+(persianIndex(d.getDay())===6?" fri":"")+(key===todayKey?" today":"")+(key===selKey?" sel":"");
+    var hn=holidayName(j.jy,j.jm,j.jd);
+    if(hn) hols.push('<div class="cal-hol"><i></i><b>'+((mode==="jalali")?faDigits(j.jd)+" "+JMONTHS[j.jm-1]:d.getDate()+" "+GMONTHS[d.getMonth()])+'</b><span>'+hn+'</span></div>');
+    var cls="cal-day"+(persianIndex(d.getDay())===6?" fri":"")+(hn?" hol":"")+(key===todayKey?" today":"")+(key===selKey?" sel":"");
     html+='<button type="button" class="'+cls+'" data-d="'+key+'"><span class="p">'+pr+'</span><span class="s">'+sc+'</span>'+
       (dayHasData(d)?'<i class="dot"></i>':'')+'</button>';
   }
   document.getElementById("calGrid").innerHTML=html;
+  var y1=gregorianToJalali(first).jy, y2=gregorianToJalali(last).jy;
+  var note=(HOL_RELIGIOUS[y1] && HOL_RELIGIOUS[y2]) ? "" : '<div class="cal-hols-note">تعطیلات مذهبی (قمری) این سال هنوز اضافه نشده؛ فقط جمعه‌ها و تعطیلات ثابت قرمز شدن.</div>';
+  document.getElementById("calHols").innerHTML=hols.join("")+note;
 }
 function calShift(n){
   calM+=n;
@@ -2575,6 +2774,268 @@ document.getElementById("repBody").addEventListener("click",function(e){
 });
 
 /* ================= Master render ================= */
+/* ================= Weight & measurements trend ================= */
+var WT_METRICS=[
+  {id:"weight", name:"وزن",      unit:"کیلو", color:"var(--c-weight)", step:.5},
+  {id:"waist",  name:"دور شکم",  unit:"cm",   color:"#FF8FB1", step:1},
+  {id:"arm",    name:"دور بازو", unit:"cm",   color:"#FFB25C", step:1},
+  {id:"thigh",  name:"دور ران",  unit:"cm",   color:"#9B8CFF", step:1},
+  {id:"hip",    name:"دور باسن", unit:"cm",   color:"#4FC3F7", step:1},
+  {id:"chest",  name:"دور سینه", unit:"cm",   color:"#6FD08C", step:1}
+];
+var WT={metric:null, range:"8w", sel:-1};
+function wtDateLabel(d){
+  if(calMode()==="jalali"){ var j=gregorianToJalali(d); return faDigits(j.jd)+" "+JMONTHS[j.jm-1]; }
+  return d.getDate()+" "+GMONTHS[d.getMonth()];
+}
+/* every recorded value of one metric: daily weights, weekly weights and weekly measurements, oldest first */
+function wtCollect(metric,today){
+  var pts=[];
+  Object.keys(state.weeks||{}).forEach(function(k){
+    var wk=state.weeks[k]; if(!wk) return;
+    var p=k.split("-"), start=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));
+    var mid=addDays(start,3); if(mid>today) mid=new Date(today);
+    if(metric==="weight"){
+      var daily=false;
+      (wk.days||[]).forEach(function(day,i){
+        if(day && Number(day.weight)>0){ daily=true; var dd=addDays(start,i); if(dd<=today) pts.push({d:dd,v:Number(day.weight)}); }
+      });
+      var mw=wk.measurements && Number(wk.measurements.weight);
+      if(!daily && mw>0) pts.push({d:mid,v:mw});
+    } else {
+      var mv=wk.measurements && Number(wk.measurements[metric]);
+      if(mv>0) pts.push({d:mid,v:mv});
+    }
+  });
+  pts.sort(function(a,b){ return a.d-b.d; });
+  return pts;
+}
+function wtDownsample(pts){            // long ranges: one averaged point per week
+  if(pts.length<=70) return pts;
+  var groups={}, order=[];
+  pts.forEach(function(p){
+    var k=toDateKey(startOfWeek(p.d));
+    if(!groups[k]){ groups[k]={sum:0,n:0,d:addDays(startOfWeek(p.d),3)}; order.push(k); }
+    groups[k].sum+=p.v; groups[k].n++;
+  });
+  return order.map(function(k){ return {d:groups[k].d, v:groups[k].sum/groups[k].n}; });
+}
+function wtSmooth(P){                  // monotone cubic curve: smooth, never overshoots the data
+  var n=P.length; if(n<2) return "";
+  if(n===2) return "M"+f1(P[0].x)+" "+f1(P[0].y)+"L"+f1(P[1].x)+" "+f1(P[1].y);
+  var dx=[],m=[],t=[],i;
+  for(i=0;i<n-1;i++){ dx[i]=(P[i+1].x-P[i].x)||1e-6; m[i]=(P[i+1].y-P[i].y)/dx[i]; }
+  t[0]=m[0]; t[n-1]=m[n-2];
+  for(i=1;i<n-1;i++){ t[i]=(m[i-1]*m[i]<=0)?0:(m[i-1]+m[i])/2; }
+  for(i=0;i<n-1;i++){
+    if(m[i]===0){ t[i]=0; t[i+1]=0; continue; }
+    var a=t[i]/m[i], b=t[i+1]/m[i], sq=a*a+b*b;
+    if(sq>9){ var k=3/Math.sqrt(sq); t[i]=k*a*m[i]; t[i+1]=k*b*m[i]; }
+  }
+  var d="M"+f1(P[0].x)+" "+f1(P[0].y);
+  for(i=0;i<n-1;i++){
+    var h=dx[i]/3;
+    d+="C"+f1(P[i].x+h)+" "+f1(P[i].y+t[i]*h)+" "+f1(P[i+1].x-h)+" "+f1(P[i+1].y-t[i+1]*h)+" "+f1(P[i+1].x)+" "+f1(P[i+1].y);
+  }
+  return d;
+}
+function wtChartSvg(pts,M,startD,today){
+  var W=340,H=214,L=40,R=16,T=20,B=30, pw=W-L-R, ph=H-T-B;
+  var vals=pts.map(function(p){return p.v;}), vmin=Math.min.apply(null,vals), vmax=Math.max.apply(null,vals);
+  var span=vmax-vmin, pad=span>0?span*0.3:Math.max(vmin*0.03,M.step);
+  var lo=Math.floor((vmin-pad)/M.step)*M.step, hi=Math.ceil((vmax+pad)/M.step)*M.step;
+  if(hi-lo<M.step*3) hi=lo+M.step*3;
+  var tspan=(today-startD)||1;
+  function X(d){ return L+((d-startD)/tspan)*pw; }
+  function Y(v){ return T+ph-((v-lo)/(hi-lo))*ph; }
+  var c=M.color, grid="", g, i;
+  for(g=0;g<=3;g++){
+    var gv=lo+(hi-lo)*g/3, gy=Y(gv);
+    grid+='<line x1="'+L+'" y1="'+f1(gy)+'" x2="'+(W-R)+'" y2="'+f1(gy)+'" stroke="currentColor" stroke-opacity=".12" stroke-dasharray="3 5"/>'+
+          '<text x="'+(L-7)+'" y="'+f1(gy+3)+'" text-anchor="end" font-size="9">'+fnum(gv)+'</text>';
+  }
+  var xl="";
+  for(i=0;i<=4;i++){
+    var td=new Date(startD.getTime()+tspan*i/4);
+    xl+='<text x="'+f1(L+pw*i/4)+'" y="'+(H-8)+'" text-anchor="'+(i===0?"start":(i===4?"end":"middle"))+'" font-size="8.5">'+wtDateLabel(td)+'</text>';
+  }
+  var P=pts.map(function(p){ return {x:X(p.d),y:Y(p.v)}; });
+  var line=wtSmooth(P), area="", dots="", hit="", tip="";
+  if(P.length>1) area=line+"L"+f1(P[P.length-1].x)+" "+(T+ph)+"L"+f1(P[0].x)+" "+(T+ph)+"Z";
+  var many=P.length>40;
+  for(i=0;i<P.length;i++){
+    var last=(i===P.length-1);
+    if(!many || last) dots+='<circle cx="'+f1(P[i].x)+'" cy="'+f1(P[i].y)+'" r="'+(last?5:3.2)+'" fill="'+(last?c:"var(--card)")+'" stroke="'+c+'" stroke-width="'+(last?2.5:2)+'"/>';
+  }
+  WT.xs=P.map(function(q){ return q.x; });
+  hit='<rect data-whit="1" x="'+L+'" y="'+(T-8)+'" width="'+pw+'" height="'+(ph+16)+'" fill="transparent" style="cursor:pointer"/>';
+  var lp=P[P.length-1];
+  var halo='<circle cx="'+f1(lp.x)+'" cy="'+f1(lp.y)+'" r="10" fill="'+c+'" opacity=".2"/>';
+  var sel=(WT.sel>=0 && WT.sel<pts.length)?WT.sel:pts.length-1;
+  var sp=P[sel], sv=pts[sel];
+  WT.tip={x:sp.x, y:sp.y, W:W, H:H, label:fnum(sv.v)+" "+M.unit+" · "+wtDateLabel(sv.d)};
+  tip='<line x1="'+f1(sp.x)+'" y1="'+f1(sp.y)+'" x2="'+f1(sp.x)+'" y2="'+(T+ph)+'" stroke="'+c+'" stroke-opacity=".45" stroke-dasharray="2 4"/>'+
+      '<circle cx="'+f1(sp.x)+'" cy="'+f1(sp.y)+'" r="6.5" fill="var(--card)" stroke="'+c+'" stroke-width="3"/>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="نمودار روند">'+
+    '<defs><linearGradient id="wtG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:'+c+';stop-opacity:.42"/><stop offset="1" style="stop-color:'+c+';stop-opacity:0"/></linearGradient>'+
+    '<filter id="wtGlow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+    grid+xl+
+    (area?'<path class="wt-area" d="'+area+'" fill="url(#wtG)"/>':'')+
+    (line?'<path class="wt-line" pathLength="1" d="'+line+'" stroke="'+c+'" stroke-width="3.2" filter="url(#wtGlow)"/>':'')+
+    '<g class="wt-dots">'+halo+dots+'</g>'+tip+hit+'</svg>';
+}
+function renderWeightChart(noAnim){
+  var host=document.getElementById("wtCard"); if(!host) return;
+  var today=new Date(); today.setHours(0,0,0,0);
+  var all={}; WT_METRICS.forEach(function(m){ all[m.id]=wtCollect(m.id,today); });
+  if(!WT.metric){
+    var firstWith=WT_METRICS.filter(function(m){ return all[m.id].length; })[0];
+    WT.metric=all.weight.length?"weight":(firstWith?firstWith.id:"weight");
+  }
+  var M=WT_METRICS.filter(function(m){ return m.id===WT.metric; })[0]||WT_METRICS[0];
+  var days=(WT.range==="8w")?56:(WT.range==="3m"?92:365);
+  var startD=addDays(today,-days);
+  var pts=wtDownsample(all[M.id].filter(function(p){ return p.d>=startD && p.d<=today; }));
+
+  var html='<div class="wt-pills">'+WT_METRICS.map(function(m){
+    return '<button type="button" class="wt-pill'+(m.id===M.id?' active':'')+'" data-wm="'+m.id+'" style="--wc:'+m.color+'">'+m.name+'</button>';
+  }).join("")+'</div>'+
+  '<div class="wt-pills">'+[["8w","۸ هفته"],["3m","۳ ماه"],["1y","۱ سال"]].map(function(r){
+    return '<button type="button" class="wt-pill'+(r[0]===WT.range?' active':'')+'" data-wr="'+r[0]+'">'+r[1]+'</button>';
+  }).join("")+'</div>';
+
+  if(!pts.length){
+    var where=(M.id==="weight" && weightMode()==="daily") ? "وزنت رو از کارت «وزن روزانه» توی برنامه‌ی امروز وارد کن." : "این مقدار رو از بخش «اندازه‌های این هفته» بالای صفحه وارد کن.";
+    html+='<div class="wt-empty">🌱 تو این بازه هنوز «'+M.name+'» ثبت نکردی.<br>'+where+'</div>';
+  } else {
+    var svgHtml=wtChartSvg(pts,M,startD,today), T2=WT.tip;
+    var below=T2.y<44, lp=Math.min(80,Math.max(20,T2.x/T2.W*100));
+    html+='<div class="wt-chart'+(noAnim?'':' wt-anim')+'">'+svgHtml+
+      '<div class="wt-tip" style="left:'+lp.toFixed(1)+'%;top:'+(T2.y/T2.H*100).toFixed(1)+'%;background:'+M.color+';transform:translate(-50%,'+(below?'45%':'-135%')+')">'+T2.label+'</div></div>';
+    var first=pts[0], last=pts[pts.length-1], mn=Math.min.apply(null,pts.map(function(p){return p.v;}));
+    var diff=last.v-first.v, ch;
+    if(pts.length<2) ch='<b>—</b><span>تغییر<br>در این بازه</span>';
+    else if(Math.abs(diff)<0.05) ch='<b>ثابت</b><span>تغییر<br>در این بازه</span>';
+    else ch='<b>'+(diff<0?'↓ ':'↑ ')+fnum(Math.abs(diff))+' <small>'+M.unit+'</small></b><span>تغییر<br>در این بازه</span>';
+    html+='<div class="wt-stats">'+
+      '<div class="wt-chip"><b>'+fnum(last.v)+' <small>'+M.unit+'</small></b><span>آخرین ثبت<br>'+wtDateLabel(last.d)+'</span></div>'+
+      '<div class="wt-chip">'+ch+'</div>'+
+      '<div class="wt-chip"><b>'+fnum(mn)+' <small>'+M.unit+'</small></b><span>کمترین<br>در این بازه</span></div>'+
+    '</div><div class="wt-hint">روی هر نقطه بزن تا مقدارش رو ببینی</div>';
+  }
+  host.innerHTML=html;
+}
+document.getElementById("wtCard").addEventListener("click",function(e){
+  var t=e.target.closest("[data-wm],[data-wr],[data-whit]"); if(!t) return;
+  var noAnim=false;
+  if(t.hasAttribute("data-wm")){ WT.metric=t.getAttribute("data-wm"); WT.sel=-1; }
+  else if(t.hasAttribute("data-wr")){ WT.range=t.getAttribute("data-wr"); WT.sel=-1; }
+  else {                                   // tap on the chart: pick the point nearest to the finger
+    var svg=t.ownerSVGElement, r=svg.getBoundingClientRect();
+    var vx=(e.clientX-r.left)/r.width*340, best=0, bd=1e9;
+    (WT.xs||[]).forEach(function(x,i){ var dd=Math.abs(x-vx); if(dd<bd){ bd=dd; best=i; } });
+    WT.sel=(WT.sel===best)?-1:best; noAnim=true;
+  }
+  renderWeightChart(noAnim);
+});
+
+/* ================= Backup: download / share a file, restore from a file ================= */
+var LS_LAST_BACKUP="fa-planner-last-backup";
+var bkPending=null, bkUndoData=null;
+function backupFileName(){
+  var d=new Date();
+  return "planner-backup-"+d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")+".json";
+}
+function backupText(){ return JSON.stringify({app:"lianas-planner", version:1, exportedAt:new Date().toISOString(), data:state}); }
+function bkMsg(html,type){
+  var el=document.getElementById("bkMsg"); if(!el) return;
+  el.className="hint bk-msg"+(type?" "+type:"");
+  el.innerHTML=html;
+}
+function bkDateTxt(d){ var j=gregorianToJalali(d); return faDigits(j.jd)+" "+JMONTHS[j.jm-1]+" "+faDigits(j.jy); }
+function renderBackupInfo(){
+  var el=document.getElementById("bkLast"); if(!el) return;
+  var iso=null; try{ iso=localStorage.getItem(LS_LAST_BACKUP); }catch(e){}
+  el.textContent = iso ? "آخرین پشتیبان: "+bkDateTxt(new Date(iso)) : "هنوز پشتیبانی نگرفتی.";
+}
+function noteBackupDone(){ try{ localStorage.setItem(LS_LAST_BACKUP,new Date().toISOString()); }catch(e){} renderBackupInfo(); }
+function downloadBackup(){
+  var blob=new Blob([backupText()],{type:"application/json"});
+  var url=URL.createObjectURL(blob), a=document.createElement("a");
+  a.href=url; a.download=backupFileName(); document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },1500);
+  noteBackupDone();
+  bkMsg("فایل پشتیبان ساخته شد؛ معمولاً تو پوشه‌ی Downloads گوشی ذخیره میشه. برای امنیت بیشتر یه کپی هم تو Drive یا تلگرام نگه دار.","ok");
+}
+function shareBackup(){
+  var file=new File([backupText()],backupFileName(),{type:"application/json"});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    navigator.share({files:[file], title:"پشتیبان Liana's Planner"}).then(function(){
+      noteBackupDone(); bkMsg("پشتیبان فرستاده شد ✓","ok");
+    }).catch(function(e){ if(!e || e.name!=="AbortError") downloadBackup(); });
+  } else downloadBackup();
+}
+function backupLooksValid(obj){
+  if(!obj || obj.app!=="lianas-planner" || !obj.data || typeof obj.data!=="object" || !obj.data.weeks || typeof obj.data.weeks!=="object") return false;
+  var ok=true;
+  Object.keys(obj.data.weeks).forEach(function(k){
+    var w=obj.data.weeks[k];
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(k) || !w || !Array.isArray(w.days) || w.days.length!==7) ok=false;
+  });
+  return ok;
+}
+function handleBackupFile(file){
+  var reader=new FileReader();
+  reader.onload=function(){
+    var obj=null; try{ obj=JSON.parse(reader.result); }catch(e){}
+    if(!backupLooksValid(obj)){ bkPending=null; bkMsg("این فایل یه پشتیبان سالم از Liana's Planner نیست.","err"); return; }
+    bkPending=obj;
+    var n=Object.keys(obj.data.weeks).length;
+    var when=obj.exportedAt?bkDateTxt(new Date(obj.exportedAt)):"";
+    bkMsg("این پشتیبان"+(when?" مربوط به "+when:"")+" شامل اطلاعات "+faDigits(n)+" هفته‌ست. با بازیابی، همه‌ی اطلاعات فعلی با اون جایگزین میشه."+
+      '<div class="bk-actions"><button type="button" id="bkConfirm">بله، بازیابی کن</button><button type="button" id="bkCancel" class="ghost">انصراف</button></div>');
+  };
+  reader.readAsText(file);
+}
+function replaceStateWith(data){
+  state=defaultState(); mergeState(data);
+  state.settings.glassDefault=true;
+  saveLocal(); scheduleSave();
+  renderAll(); renderSettingsSheet();
+}
+function applyRestore(){
+  if(!bkPending) return;
+  bkUndoData=JSON.stringify(state);
+  var data=bkPending.data; bkPending=null;
+  replaceStateWith(data);
+  bkMsg('بازیابی انجام شد ✓<div class="bk-actions"><button type="button" id="bkUndo" class="ghost">برگردوندن به قبل از بازیابی</button></div>',"ok");
+}
+function undoRestore(){
+  if(!bkUndoData) return;
+  var old=JSON.parse(bkUndoData); bkUndoData=null;
+  replaceStateWith(old);
+  bkMsg("اطلاعات به حالت قبل از بازیابی برگشت ✓","ok");
+}
+document.getElementById("bkDownload").addEventListener("click",downloadBackup);
+document.getElementById("bkShare").addEventListener("click",shareBackup);
+document.getElementById("bkRestore").addEventListener("click",function(){ document.getElementById("bkFile").click(); });
+document.getElementById("bkFile").addEventListener("change",function(){
+  var f=this.files && this.files[0]; if(f) handleBackupFile(f);
+  this.value="";
+});
+document.getElementById("bkMsg").addEventListener("click",function(e){
+  var id=e.target && e.target.id;
+  if(id==="bkConfirm") applyRestore();
+  else if(id==="bkCancel"){ bkPending=null; bkMsg(""); }
+  else if(id==="bkUndo") undoRestore();
+});
+(function(){   // the "send to Drive / Telegram..." button only where the phone supports sharing files
+  try{
+    var t=new File(["{}"],"a.json",{type:"application/json"});
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[t]})) document.getElementById("bkShare").classList.remove("hidden");
+  }catch(e){}
+})();
+
 function renderAll(){
   applyTheme();
   
@@ -2588,11 +3049,30 @@ function renderAll(){
   renderHabitCards();
   renderRings();
   renderChart();
+  renderWeightChart();
 }
 
 wireHabitManager();
 initPersistence();
 })();
+</script>
+<script>
+/* show the splash title only once its pretty font is ready (no fallback-font flash) */
+(function(){
+  var done=false;
+  function show(){ if(!done){ done=true; document.body.classList.add("fonts-ok"); } }
+  try{ document.fonts.load("40px 'Dancing Script'").then(show,show); }catch(e){ show(); }
+  setTimeout(show,1500);
+})();
+/* safety net: if something unexpected stops the app from starting, never leave an endless loader */
+setTimeout(function(){
+  var m=document.getElementById("bsMsg");
+  if(document.body.classList.contains("booting") && m && m.classList.contains("hidden")){
+    document.getElementById("bsDots").classList.add("hidden");
+    m.textContent="یه مشکلی پیش اومد. صفحه رو دوباره باز کن.";
+    m.classList.remove("hidden");
+  }
+},25000);
 </script>
 </body>
 </html>
