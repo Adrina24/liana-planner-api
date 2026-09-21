@@ -488,6 +488,19 @@ body.style-glass .rep-tile, body.style-glass .rep-pill, body.style-glass .rep-ro
 }
 body.style-glass .rep-modal .rep-pill, body.style-glass .rep-modal .rep-row, body.style-glass .rep-modal .rep-backchip{ backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:inset 0 1px 0 rgba(255,255,255,.35); }
 
+/* ---------- health profile text options + body-path modal ---------- */
+/* these two dialogs open on top of the settings sheet, so closing them leaves settings open */
+#wtOverlay, #repOverlay{z-index:54;}
+.hp-links{margin-top:12px; display:flex; flex-direction:column;}
+.hp-link{display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:none; border-top:1px dashed var(--border);
+  padding:12px 2px; color:var(--accent-dk); font-size:13px; font-weight:700; text-align:right;}
+.hp-link:active{opacity:.6;}
+.hp-link .arrow{font-size:16px; color:var(--text-soft);}
+body.style-glass.mode-dark .hp-link{color:var(--accent);}
+.meas-box .meas-weight .hint{line-height:1.7; max-width:100%;}
+html body .wt-modal .wt-card, html body.style-glass.mode-dark .wt-modal .wt-card{background:transparent !important; box-shadow:none !important; border:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; padding:4px 0 0;}
+html body .wt-modal .wt-card::before{display:none !important;}
+
 /* ---------- first-open splash: the half-empty page is never shown ---------- */
 body:not(.ready) .topbar, body:not(.ready) .wrap{visibility:hidden;}
 .boot-splash{position:fixed; inset:0; z-index:90; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:24px; text-align:center;}
@@ -632,12 +645,12 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
     <span class="arrow">▾</span>
   </button>
   <div class="habit-body meas-box hidden" id="measBox">
-    <div class="mini-field hidden" id="m_weightField"><label>وزن این هفته (کیلوگرم)</label><input type="number" step="0.1" min="0" id="m_weight"><div class="hint" id="measBmiHint"></div></div>
     <div class="mini-field"><label>دور شکم (cm)</label><input type="number" min="0" id="m_waist"></div>
     <div class="mini-field"><label>دور بازو (cm)</label><input type="number" min="0" id="m_arm"></div>
     <div class="mini-field"><label>دور ران (cm)</label><input type="number" min="0" id="m_thigh"></div>
     <div class="mini-field"><label>دور باسن (cm)</label><input type="number" min="0" id="m_hip"></div>
     <div class="mini-field"><label>دور سینه (cm)</label><input type="number" min="0" id="m_chest"></div>
+    <div class="mini-field meas-weight hidden" id="m_weightField"><label>وزن این هفته (کیلوگرم)</label><input type="number" step="0.1" min="0" id="m_weight"><div class="hint" id="measBmiHint"></div></div>
   </div>
 </div>
 
@@ -654,14 +667,6 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
   <div class="section-title"><img class="st-icon" data-icon="chart" alt="">نمودار پیشرفت هفتگی</div>
   <div class="chart-card"><svg id="weeklyChart" viewBox="0 0 320 170"></svg></div>
 </div>
-
-<div class="weekly-chart">
-  <div class="section-title"><img class="st-icon" data-icon="measure" alt="">روند وزن و اندازه‌ها</div>
-  <div class="chart-card wt-card" id="wtCard"></div>
-</div>
-
-<div class="section-title"><img class="st-icon" data-icon="chart" alt="">گزارش ماهانه و سالانه (همه‌ی عادت‌ها)</div>
-<div class="rep-entry" id="repEntry"></div>
 
 <div class="app-footer">
   <span class="af-by">ساخته‌شده توسط</span>
@@ -686,6 +691,12 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
     <button class="cal-nav" data-repnav="12" aria-label="سال بعد">«</button>
   </div>
   <div id="repBody"></div>
+</div>
+
+<div class="overlay hidden" id="wtOverlay"></div>
+<div class="rep-modal wt-modal hidden" id="wtModal" role="dialog" aria-modal="true">
+  <div class="sheet-head"><h2><img class="st-icon" data-icon="measure" alt="">مسیر تغییرات بدن</h2><button id="wtClose" aria-label="بستن">✕</button></div>
+  <div class="chart-card wt-card" id="wtCard"></div>
 </div>
 
 <div class="overlay hidden" id="calOverlay"></div>
@@ -774,6 +785,10 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
     </div>
     <div class="hint" id="weightHint"></div>
     <div class="hint" id="bmiHint"></div>
+    <div class="hp-links">
+      <button type="button" class="hp-link" id="openBodyPath"><span>📈 مسیر تغییرات بدن</span><span class="arrow">‹</span></button>
+      <button type="button" class="hp-link" id="openReports"><span>📊 گزارش ماهانه و سالانه</span><span class="arrow">‹</span></button>
+    </div>
   </div>
 
   <div class="set-row" id="backupRow">
@@ -1470,7 +1485,6 @@ function renderDashboard(){
       moodsHtml+
     '</div>';
   document.getElementById("dashCard").innerHTML=html;
-  renderReportEntry();
 }
 
 function renderDayStrip(){
@@ -2737,24 +2751,6 @@ function repGoHabit(id){
   renderReport(); modal.scrollTop=0;
 }
 
-/* the two tiles on the main page: current month / current year, all habits */
-function renderReportEntry(){
-  var el=document.getElementById("repEntry"); if(!el) return;
-  var mode=calMode(), now=new Date(), y, m;
-  if(mode==="jalali"){ var j=gregorianToJalali(now); y=j.jy; m=j.jm; } else { y=now.getFullYear(); m=now.getMonth()+1; }
-  var mp=buildPeriod(null,"month",y,m,true), yp=buildPeriod(null,"year",y,m,true);
-  function tile(kind,title,sub,P){
-    var pc=P.pct==null?0:Math.round(P.pct*100);
-    return '<button type="button" class="rep-tile" data-rep="'+kind+'"><div><b>'+title+'</b><span>'+sub+'</span></div>'+
-      svgRing(pc,46,6,"var(--accent)","rgba(127,127,127,.2)",faDigits(pc))+'</button>';
-  }
-  el.innerHTML=tile("month","گزارش ماهانه",repMonthName(mode,m)+" "+repYearStr(mode,y),mp)+
-               tile("year","گزارش سالانه","سال "+repYearStr(mode,y),yp);
-}
-
-document.getElementById("repEntry").addEventListener("click",function(e){
-  var b=e.target.closest("[data-rep]"); if(b) openReport(null,b.getAttribute("data-rep"));
-});
 document.getElementById("ringsGrid").addEventListener("click",function(e){
   var c=e.target.closest("[data-hid]"); if(c) openReport(c.getAttribute("data-hid"),"month");
 });
@@ -2938,6 +2934,21 @@ document.getElementById("wtCard").addEventListener("click",function(e){
   }
   renderWeightChart(noAnim);
 });
+
+/* ---- body path + reports: text options in the health profile ---- */
+function openBodyPath(){
+  document.getElementById("wtOverlay").classList.remove("hidden");
+  var m=document.getElementById("wtModal"); m.classList.remove("hidden"); m.scrollTop=0;
+  renderWeightChart();
+}
+function closeBodyPath(){
+  document.getElementById("wtOverlay").classList.add("hidden");
+  document.getElementById("wtModal").classList.add("hidden");
+}
+document.getElementById("wtClose").addEventListener("click",closeBodyPath);
+document.getElementById("wtOverlay").addEventListener("click",closeBodyPath);
+document.getElementById("openBodyPath").addEventListener("click",openBodyPath);
+document.getElementById("openReports").addEventListener("click",function(){ openReport(null,"month"); });
 
 /* ================= Backup: download / share a file, restore from a file ================= */
 var LS_LAST_BACKUP="fa-planner-last-backup";
