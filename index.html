@@ -3562,16 +3562,16 @@ function sendChatMessage(){
     if(r.ok && r.data && r.data.reply){
       state.chatHistory=state.chatHistory.concat([{role:"assistant",content:r.data.reply}]);
     }else{
-      state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"یه مشکلی پیش اومد، دوباره امتحان کن."}]);
+      state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"[DEBUG] status="+r.status+" body="+JSON.stringify(r.data)}]);
     }
     if(state.chatHistory.length>CHAT_HISTORY_LIMIT){
       state.chatHistory=state.chatHistory.slice(-CHAT_HISTORY_LIMIT);
     }
     renderChat();
     flushSave();
-  }).catch(function(){
+  }).catch(function(err){
     typingEl.remove();
-    state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"اتصال برقرار نشد. یه بار دیگه امتحان کن."}]);
+    state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"[DEBUG] "+(err && err.message ? err.message : String(err))}]);
     renderChat();
     flushSave();
   }).finally(function(){
