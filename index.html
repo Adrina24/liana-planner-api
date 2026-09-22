@@ -342,6 +342,32 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .sheet-head h2{font-size:16px;}
 .sheet-head button{border:none;background:var(--border); width:30px;height:30px;border-radius:50%; color:var(--text);}
 .head-actions{display:flex; align-items:center; gap:8px;}
+
+/* ---------- AI chat (Liana) ---------- */
+.chat-fab{
+  position:fixed; left:16px; bottom:16px; z-index:45;
+  width:56px; height:56px; border-radius:50%; border:none;
+  background:linear-gradient(135deg, var(--accent), var(--accent-dk));
+  box-shadow:0 6px 18px rgba(40,50,90,.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; color:#fff;
+}
+.chat-sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:55; background:var(--card);
+  border-radius:24px 24px 0 0; padding:14px 14px 16px; max-width:480px; margin:0 auto;
+  box-shadow:0 -10px 30px rgba(0,0,0,.2); height:78vh; display:flex; flex-direction:column;
+}
+.chat-msgs{flex:1; overflow-y:auto; padding:10px 2px; display:flex; flex-direction:column; gap:8px;}
+.chat-bubble{max-width:82%; padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.8; white-space:pre-wrap; word-break:break-word;}
+.chat-bubble.user{align-self:flex-end; background:linear-gradient(135deg, var(--accent), var(--accent-dk)); color:#fff; border-bottom-left-radius:4px;}
+.chat-bubble.ai{align-self:flex-start; background:var(--accent-lt); color:var(--text); border-bottom-right-radius:4px;}
+.chat-bubble.err{align-self:flex-start; background:#FBE3E3; color:#9C3A3A;}
+.chat-bubble.typing{opacity:.65; font-style:italic;}
+.chat-empty{color:var(--text-soft); font-size:13px; text-align:center; padding:24px 10px;}
+.chat-input-row{display:flex; gap:8px; margin-top:10px;}
+.chat-input-row input{flex:1; border:1.5px solid var(--border); border-radius:14px; padding:10px 14px; font-size:14px; background:var(--bg); color:var(--text);}
+.chat-input-row button{border:none; border-radius:14px; padding:0 18px; background:linear-gradient(135deg, var(--accent), var(--accent-dk)); color:#fff; font-weight:700;}
+.chat-input-row button:disabled{opacity:.6;}
 .head-actions .mode-circle{width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center;}
 .mode-circle img{width:24px; height:24px; object-fit:contain; display:block;}
 .set-row{margin-bottom:16px;}
@@ -889,6 +915,20 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
   </div>
 </div>
 
+<button class="chat-fab" id="chatFab" aria-label="چت با لیانا">💬</button>
+<div class="overlay hidden" id="chatOverlay"></div>
+<div class="chat-sheet hidden" id="chatSheet">
+  <div class="sheet-head">
+    <h2>💬 لیانا</h2>
+    <button id="closeChatSheet">✕</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs"></div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="به لیانا بگو..." autocomplete="off">
+    <button id="chatSendBtn">ارسال</button>
+  </div>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -1133,7 +1173,8 @@ function defaultState(){
     profile:{heightCm:0, weightKg:0, displayName:""},
     habitCfg:defaultHabitCfg(),
     medPlans:[],
-    weeks:{}
+    weeks:{},
+    chatHistory:[]
   };
 }
 
@@ -1228,6 +1269,7 @@ function mergeState(loaded){
   if(loaded.habitCfg) state.habitCfg=Object.assign(defaultHabitCfg(), loaded.habitCfg);
   if(Array.isArray(loaded.medPlans)) state.medPlans=loaded.medPlans;
   if(loaded.weeks) state.weeks=loaded.weeks;
+  if(Array.isArray(loaded.chatHistory)) state.chatHistory=loaded.chatHistory;
 }
 
 /* ---- auth / remote sync ---- */
@@ -3445,7 +3487,116 @@ function renderAll(){
   renderWeightChart();
 }
 
+/* ================= AI chat (Liana) ================= */
+var CHAT_HISTORY_LIMIT=40;   // messages kept in state (persisted)
+var CHAT_CONTEXT_LIMIT=12;   // messages actually sent to the model as context
+var chatSending=false;
+
+function escapeHtml(s){
+  return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+  });
+}
+
+function renderChat(){
+  var wrap=document.getElementById("chatMsgs");
+  if(!wrap) return;
+  var hist=state.chatHistory||[];
+  if(!hist.length){
+    wrap.innerHTML='<div class="chat-empty">سلام! من لیانام 👋 هر سوالی داری بپرس.</div>';
+  }else{
+    wrap.innerHTML=hist.map(function(m){
+      var cls = m.role==="user" ? "user" : "ai";
+      return '<div class="chat-bubble '+cls+'">'+escapeHtml(m.content)+'</div>';
+    }).join("");
+  }
+  wrap.scrollTop=wrap.scrollHeight;
+}
+
+function openChat(){
+  document.getElementById("chatOverlay").classList.remove("hidden");
+  document.getElementById("chatSheet").classList.remove("hidden");
+  renderChat();
+  setTimeout(function(){ var i=document.getElementById("chatInput"); if(i) i.focus(); },50);
+}
+function closeChat(){
+  document.getElementById("chatOverlay").classList.add("hidden");
+  document.getElementById("chatSheet").classList.add("hidden");
+}
+
+function sendChatMessage(){
+  if(chatSending) return;
+  var input=document.getElementById("chatInput");
+  var text=(input.value||"").trim();
+  if(!text) return;
+  if(!getToken()){
+    state.chatHistory=(state.chatHistory||[]).concat([
+      {role:"user",content:text},
+      {role:"assistant",content:"برای استفاده از چت اول باید وارد حسابت بشی."}
+    ]);
+    renderChat();
+    input.value="";
+    return;
+  }
+
+  input.value="";
+  chatSending=true;
+  document.getElementById("chatSendBtn").disabled=true;
+
+  state.chatHistory=(state.chatHistory||[]).concat([{role:"user",content:text}]);
+  renderChat();
+
+  var wrap=document.getElementById("chatMsgs");
+  var typingEl=document.createElement("div");
+  typingEl.className="chat-bubble ai typing";
+  typingEl.textContent="در حال نوشتن...";
+  wrap.appendChild(typingEl);
+  wrap.scrollTop=wrap.scrollHeight;
+
+  var contextMsgs=state.chatHistory.slice(-CHAT_CONTEXT_LIMIT).map(function(m){
+    return {role:m.role, content:m.content};
+  });
+
+  apiCall("/api/chat","POST",{messages:contextMsgs},true).then(function(r){
+    typingEl.remove();
+    if(r.ok && r.data && r.data.reply){
+      state.chatHistory=state.chatHistory.concat([{role:"assistant",content:r.data.reply}]);
+    }else{
+      state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"یه مشکلی پیش اومد، دوباره امتحان کن."}]);
+    }
+    if(state.chatHistory.length>CHAT_HISTORY_LIMIT){
+      state.chatHistory=state.chatHistory.slice(-CHAT_HISTORY_LIMIT);
+    }
+    renderChat();
+    flushSave();
+  }).catch(function(){
+    typingEl.remove();
+    state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"اتصال برقرار نشد. یه بار دیگه امتحان کن."}]);
+    renderChat();
+    flushSave();
+  }).finally(function(){
+    chatSending=false;
+    document.getElementById("chatSendBtn").disabled=false;
+  });
+}
+
+function wireChat(){
+  var fab=document.getElementById("chatFab");
+  var overlay=document.getElementById("chatOverlay");
+  var closeBtn=document.getElementById("closeChatSheet");
+  var sendBtn=document.getElementById("chatSendBtn");
+  var input=document.getElementById("chatInput");
+  if(fab) fab.addEventListener("click",openChat);
+  if(overlay) overlay.addEventListener("click",closeChat);
+  if(closeBtn) closeBtn.addEventListener("click",closeChat);
+  if(sendBtn) sendBtn.addEventListener("click",sendChatMessage);
+  if(input) input.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){ e.preventDefault(); sendChatMessage(); }
+  });
+}
+
 wireHabitManager();
+wireChat();
 initPersistence();
 })();
 </script>
