@@ -368,6 +368,22 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .chat-input-row input{flex:1; border:1.5px solid var(--border); border-radius:14px; padding:10px 14px; font-size:14px; background:var(--bg); color:var(--text);}
 .chat-input-row button{border:none; border-radius:14px; padding:0 18px; background:linear-gradient(135deg, var(--accent), var(--accent-dk)); color:#fff; font-weight:700;}
 .chat-input-row button:disabled{opacity:.6;}
+.mic-btn{background:var(--border)!important; color:var(--text)!important; padding:0 14px!important; font-size:16px;}
+.mic-btn.recording{background:linear-gradient(135deg,#ff6b6b,#e84545)!important; color:#fff!important; animation:micPulse 1.1s infinite;}
+@keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(232,69,69,.5);}70%{box-shadow:0 0 0 10px rgba(232,69,69,0);}100%{box-shadow:0 0 0 0 rgba(232,69,69,0);}}
+.chat-head-actions button.active{background:var(--accent); color:#fff;}
+.chat-head-actions{display:flex; gap:6px;}
+.chat-head-actions button{border:none;background:var(--border); width:30px;height:30px;border-radius:50%; color:var(--text); font-size:14px;}
+.chat-list-panel{position:absolute; top:64px; left:14px; right:14px; bottom:78px; background:var(--card); z-index:5; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.18); padding:10px; overflow-y:auto;}
+.chat-list-panel.hidden{display:none;}
+.chat-list-title{font-size:13px; color:var(--text-soft); margin-bottom:8px; padding:0 4px;}
+.chat-list-item{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; margin-bottom:6px; background:var(--bg);}
+.chat-list-item.active{background:var(--accent-lt);}
+.chat-list-item .clt-main{flex:1; min-width:0; cursor:pointer;}
+.chat-list-item .clt-title{font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.chat-list-item .clt-time{font-size:11px; color:var(--text-soft); margin-top:2px;}
+.chat-list-item .clt-del{border:none;background:transparent;color:#c0392b;font-size:15px;padding:2px 6px;flex-shrink:0;}
+.chat-list-empty{color:var(--text-soft); font-size:13px; text-align:center; padding:20px 10px;}
 .head-actions .mode-circle{width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center;}
 .mode-circle img{width:24px; height:24px; object-fit:contain; display:block;}
 .set-row{margin-bottom:16px;}
@@ -919,12 +935,22 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
 <div class="overlay hidden" id="chatOverlay"></div>
 <div class="chat-sheet hidden" id="chatSheet">
   <div class="sheet-head">
+    <div class="chat-head-actions">
+      <button id="chatHistoryBtn" title="چت‌های قبلی">🕘</button>
+      <button id="newChatBtn" title="چت جدید">➕</button>
+      <button id="voiceModeBtn" title="خوندن جواب‌ها با صدا">🔈</button>
+    </div>
     <h2>💬 لیانا</h2>
     <button id="closeChatSheet">✕</button>
+  </div>
+  <div class="chat-list-panel hidden" id="chatListPanel">
+    <div class="chat-list-title">چت‌های قبلی</div>
+    <div class="chat-list" id="chatList"></div>
   </div>
   <div class="chat-msgs" id="chatMsgs"></div>
   <div class="chat-input-row">
     <input type="text" id="chatInput" placeholder="به لیانا بگو..." autocomplete="off">
+    <button id="chatMicBtn" class="mic-btn" title="صحبت با میکروفون">🎤</button>
     <button id="chatSendBtn">ارسال</button>
   </div>
 </div>
@@ -1174,7 +1200,8 @@ function defaultState(){
     habitCfg:defaultHabitCfg(),
     medPlans:[],
     weeks:{},
-    chatHistory:[]
+    chats:{},
+    activeChatId:null
   };
 }
 
@@ -1191,6 +1218,13 @@ function currentWeek(){
   return state.weeks[k];
 }
 function currentDay(){ return currentWeek().days[selectedDayIndex]; }
+function getDayByDate(dateObj){
+  var wk=weekKey(dateObj);
+  if(!state.weeks[wk]) state.weeks[wk]=emptyWeek();
+  if(!state.weeks[wk].measurements) state.weeks[wk].measurements={weight:0,waist:0,arm:0,thigh:0,hip:0,chest:0};
+  var idx=persianIndex(dateObj.getDay());
+  return {week:state.weeks[wk], day:state.weeks[wk].days[idx]};
+}
 
 /* ================= BMI / health profile ================= */
 function weightMode(){ return state.settings.weightMode==="weekly" ? "weekly" : "daily"; }
@@ -1269,7 +1303,15 @@ function mergeState(loaded){
   if(loaded.habitCfg) state.habitCfg=Object.assign(defaultHabitCfg(), loaded.habitCfg);
   if(Array.isArray(loaded.medPlans)) state.medPlans=loaded.medPlans;
   if(loaded.weeks) state.weeks=loaded.weeks;
-  if(Array.isArray(loaded.chatHistory)) state.chatHistory=loaded.chatHistory;
+  if(loaded.chats && typeof loaded.chats==="object" && Object.keys(loaded.chats).length){
+    state.chats=loaded.chats;
+    state.activeChatId=(loaded.activeChatId && loaded.chats[loaded.activeChatId]) ? loaded.activeChatId : null;
+  }else if(Array.isArray(loaded.chatHistory) && loaded.chatHistory.length){
+    var migId=genChatId();
+    var t=Date.now();
+    state.chats={}; state.chats[migId]={id:migId,title:"چت جدید",messages:loaded.chatHistory,createdAt:t,updatedAt:t};
+    state.activeChatId=migId;
+  }
 }
 
 /* ---- auth / remote sync ---- */
@@ -3487,10 +3529,69 @@ function renderAll(){
   renderWeightChart();
 }
 
-/* ================= AI chat (Liana) ================= */
-var CHAT_HISTORY_LIMIT=40;   // messages kept in state (persisted)
+/* ================= AI chat (Liana) — multi-session ================= */
+var CHAT_HISTORY_LIMIT=40;   // messages kept per chat (persisted)
 var CHAT_CONTEXT_LIMIT=12;   // messages actually sent to the model as context
 var chatSending=false;
+var voiceModeOn=false;
+var speechRec=null;
+var isRecording=false;
+
+function getSpeechRecCtor(){ return window.SpeechRecognition || window.webkitSpeechRecognition || null; }
+
+function speakText(text){
+  if(!voiceModeOn) return;
+  if(!window.speechSynthesis) return;
+  var clean=String(text||"")
+    .replace(/\[\[ACTION\]\][\s\S]*?\[\[\/ACTION\]\]/g,"")
+    .replace(/[✅⭐👋💬🎤🔈]/g,"")
+    .trim();
+  if(!clean) return;
+  try{
+    window.speechSynthesis.cancel();
+    var utter=new SpeechSynthesisUtterance(clean);
+    utter.lang="fa-IR";
+    var voices=window.speechSynthesis.getVoices();
+    var faVoice=voices.find(function(v){ return /fa/i.test(v.lang); });
+    if(faVoice) utter.voice=faVoice;
+    window.speechSynthesis.speak(utter);
+  }catch(e){}
+}
+
+function toggleVoiceMode(){
+  voiceModeOn=!voiceModeOn;
+  var btn=document.getElementById("voiceModeBtn");
+  if(btn){ btn.textContent=voiceModeOn?"🔊":"🔈"; btn.classList.toggle("active",voiceModeOn); }
+  if(!voiceModeOn && window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+function startVoiceInput(){
+  var Ctor=getSpeechRecCtor();
+  var micBtn=document.getElementById("chatMicBtn");
+  if(!Ctor){
+    var chat0=activeChat();
+    chat0.messages=(chat0.messages||[]).concat([{role:"assistant",content:"مرورگرت از ورودی صوتی پشتیبانی نمی‌کنه. از کروم روی اندروید استفاده کن."}]);
+    chat0.updatedAt=Date.now();
+    renderChat();
+    return;
+  }
+  if(isRecording){ if(speechRec) speechRec.stop(); return; }
+  speechRec=new Ctor();
+  speechRec.lang="fa-IR";
+  speechRec.interimResults=false;
+  speechRec.maxAlternatives=1;
+  isRecording=true;
+  if(micBtn) micBtn.classList.add("recording");
+  speechRec.onresult=function(ev){
+    var transcript=ev.results && ev.results[0] && ev.results[0][0] ? ev.results[0][0].transcript : "";
+    var input=document.getElementById("chatInput");
+    if(input && transcript){ input.value=transcript; sendChatMessage(); }
+  };
+  speechRec.onerror=function(){ isRecording=false; if(micBtn) micBtn.classList.remove("recording"); };
+  speechRec.onend=function(){ isRecording=false; if(micBtn) micBtn.classList.remove("recording"); };
+  try{ speechRec.start(); }catch(e){ isRecording=false; if(micBtn) micBtn.classList.remove("recording"); }
+}
+
 
 function escapeHtml(s){
   return String(s==null?"":s).replace(/[&<>"']/g, function(c){
@@ -3498,10 +3599,291 @@ function escapeHtml(s){
   });
 }
 
+function genChatId(){ return "c"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+function ensureActiveChat(){
+  if(!state.chats || typeof state.chats!=="object") state.chats={};
+  if(state.activeChatId && state.chats[state.activeChatId]) return;
+  var ids=Object.keys(state.chats);
+  if(ids.length){
+    ids.sort(function(a,b){ return (state.chats[b].updatedAt||0)-(state.chats[a].updatedAt||0); });
+    state.activeChatId=ids[0];
+  }else{
+    var id=genChatId(), t=Date.now();
+    state.chats[id]={id:id, title:"چت جدید", messages:[], createdAt:t, updatedAt:t};
+    state.activeChatId=id;
+  }
+}
+function activeChat(){ ensureActiveChat(); return state.chats[state.activeChatId]; }
+
+function fmtChatTime(ts){
+  try{
+    var d=new Date(ts||Date.now());
+    return d.toLocaleDateString("fa-IR",{month:"short",day:"numeric"})+" "+d.toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  }catch(e){ return ""; }
+}
+
+/* finds past chats whose content overlaps with the current question, and returns
+   their relevant full text so the model can answer using older conversations */
+function buildOldChatsContext(queryText, excludeId){
+  var chats=state.chats||{};
+  var ids=Object.keys(chats).filter(function(id){
+    return id!==excludeId && chats[id] && chats[id].messages && chats[id].messages.length;
+  });
+  if(!ids.length) return "";
+  var stop=["که","این","آن","برای","از","با","به","در","را","هم","یک","می","است","بود","تا","یا","و","اگه","اگر","خیلی","چی","چیو","چیه","بگو","کن","کنم","شد","شده","هستم","هستی","داره","دارم","بودم","رو","چه","چرا","کجا","کی","یعنی"];
+  function tokenize(t){
+    return String(t||"").toLowerCase().replace(/[^\u0600-\u06FFa-z0-9\s]/g," ").split(/\s+/)
+      .filter(function(w){ return w.length>=2 && stop.indexOf(w)===-1; });
+  }
+  var qTokens=tokenize(queryText);
+  if(!qTokens.length) return "";
+  var scored=ids.map(function(id){
+    var c=chats[id];
+    var text=c.messages.map(function(m){ return m.content; }).join(" ");
+    var counts={};
+    tokenize(text).forEach(function(w){ counts[w]=(counts[w]||0)+1; });
+    var score=0;
+    qTokens.forEach(function(w){ if(counts[w]) score+=counts[w]; });
+    return {id:id, score:score, chat:c};
+  }).filter(function(s){ return s.score>0; })
+    .sort(function(a,b){ return b.score-a.score; })
+    .slice(0,2);
+  if(!scored.length) return "";
+  var parts=scored.map(function(s){
+    var title=s.chat.title||"چت";
+    var body=s.chat.messages.slice(-24).map(function(m){
+      return (m.role==="user"?"کاربر: ":"لیانا: ")+m.content;
+    }).join("\n");
+    return "### "+title+"\n"+body;
+  });
+  return parts.join("\n\n").slice(0,3500);
+}
+
+function parseActionDate(s){
+  if(typeof s==="string" && /^\d{4}-\d{2}-\d{2}$/.test(s)){
+    var p=s.split("-");
+    var d=new Date(parseInt(p[0],10),parseInt(p[1],10)-1,parseInt(p[2],10));
+    if(!isNaN(d.getTime())) return d;
+  }
+  return new Date();
+}
+function findHabitByNameOrId(nameOrId){
+  var cfg=habitCfg();
+  var all=DEFAULT_HABITS.concat(cfg.custom);
+  var q=(nameOrId||"").trim();
+  var byId=all.find(function(h){ return h.id===q; });
+  if(byId) return byId;
+  return all.find(function(h){
+    var n=(h.name||"");
+    return n===q || n.indexOf(q)>-1 || (q && q.indexOf(n)>-1);
+  });
+}
+function findMedByNameOrId(nameOrId){
+  var q=(nameOrId||"").trim();
+  var list=medPlans();
+  var byId=list.find(function(p){ return p.id===q; });
+  if(byId) return byId;
+  return list.find(function(p){
+    var n=(p.name||"");
+    return n===q || n.indexOf(q)>-1 || (q && q.indexOf(n)>-1);
+  });
+}
+/* Every day-level field the AI is allowed to set, with type-safe setters — this is the
+   whitelist that keeps "let the AI do anything" from turning into "let the AI write
+   arbitrary state": every field it can touch is named and typed here, nothing else. */
+var DAY_FIELD_SETTERS={
+  "weight":function(d,v){ d.weight=Number(v)||0; },
+  "steps":function(d,v){ d.steps=Number(v)||0; },
+  "exerciseCalories":function(d,v){ d.exerciseCalories=Number(v)||0; },
+  "water":function(d,v){ d.water=Number(v)||0; },
+  "sleepHours":function(d,v){ d.sleepHours=Number(v)||0; },
+  "mood":function(d,v){ d.mood=(v==null?null:String(v)); },
+  "journal":function(d,v){ d.journal=String(v||""); },
+  "selfcare":function(d,v){ d.selfcare=!!v; },
+  "cleaning":function(d,v){ d.cleaning=!!v; },
+  "sugarFree":function(d,v){ d.sugarFree=!!v; },
+  "clothesTidy":function(d,v){ d.clothesTidy=!!v; },
+  "bedMaking":function(d,v){ d.bedMaking=!!v; },
+  "yoga.done":function(d,v){ d.yoga=d.yoga||{}; d.yoga.done=!!v; },
+  "yoga.minutes":function(d,v){ d.yoga=d.yoga||{}; d.yoga.minutes=Number(v)||0; },
+  "stretch.done":function(d,v){ d.stretch=d.stretch||{}; d.stretch.done=!!v; },
+  "stretch.minutes":function(d,v){ d.stretch=d.stretch||{}; d.stretch.minutes=Number(v)||0; },
+  "reading.done":function(d,v){ d.reading=d.reading||{}; d.reading.done=!!v; },
+  "reading.minutes":function(d,v){ d.reading=d.reading||{}; d.reading.minutes=Number(v)||0; },
+  "reading.note":function(d,v){ d.reading=d.reading||{}; d.reading.note=String(v||""); },
+  "nutrition.healthy":function(d,v){ d.nutrition=d.nutrition||{}; d.nutrition.healthy=!!v; },
+  "nutrition.calories":function(d,v){ d.nutrition=d.nutrition||{}; d.nutrition.calories=Number(v)||0; },
+  "nutrition.protein":function(d,v){ d.nutrition=d.nutrition||{}; d.nutrition.protein=Number(v)||0; },
+  "toothbrush.morning":function(d,v){ d.toothbrush=d.toothbrush||{}; d.toothbrush.morning=!!v; },
+  "toothbrush.noon":function(d,v){ d.toothbrush=d.toothbrush||{}; d.toothbrush.noon=!!v; },
+  "toothbrush.night":function(d,v){ d.toothbrush=d.toothbrush||{}; d.toothbrush.night=!!v; },
+  "toothbrush.simple":function(d,v){ d.toothbrush=d.toothbrush||{}; d.toothbrush.simple=!!v; }
+};
+var MEASUREMENT_FIELDS=["weight","waist","arm","thigh","hip","chest"];
+/* Executes a structured action the AI asked for (created via the [[ACTION]] block
+   in its reply) against the real app data, the same way the UI's own buttons would. */
+function applyAction(action){
+  if(!action || typeof action!=="object" || !action.type) return {ok:false,msg:""};
+  try{
+    switch(action.type){
+      case "add_habit": {
+        var name=(action.name||"").trim();
+        if(!name) return {ok:false,msg:"اسم عادت مشخص نبود."};
+        var cfg=habitCfg();
+        var kind=action.kind==="count" ? "count" : "check";
+        cfg.custom.push({
+          id:newHabitId(), name:name, icon:"⭐", star:nextStar(),
+          color:HABIT_COLORS[cfg.custom.length%HABIT_COLORS.length],
+          kind:kind, unit:(action.unit||"").trim(), goal:parseFloat(action.goal)||0
+        });
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ عادت «"+name+"» ساخته شد."};
+      }
+      case "update_habit": {
+        var h5=findHabitByNameOrId(action.habit);
+        if(!h5) return {ok:false,msg:"عادتی به اسم «"+(action.habit||"")+"» پیدا نکردم."};
+        var cfg5=habitCfg();
+        if(h5.custom){
+          var c5=cfg5.custom.find(function(x){ return x.id===h5.id; });
+          if(c5){
+            if(action.name) c5.name=String(action.name).trim();
+            if(action.unit!=null) c5.unit=String(action.unit).trim();
+            if(action.goal!=null) c5.goal=parseFloat(action.goal)||0;
+          }
+        }else if(action.name){
+          var ov5=cfg5.overrides[h5.id]=cfg5.overrides[h5.id]||{};
+          ov5.name=String(action.name).trim();
+        }
+        if(action.hidden===true && cfg5.hidden.indexOf(h5.id)<0) cfg5.hidden.push(h5.id);
+        if(action.hidden===false) cfg5.hidden=cfg5.hidden.filter(function(x){ return x!==h5.id; });
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ عادت «"+h5.name+"» بروزرسانی شد."};
+      }
+      case "delete_habit": {
+        var h6=findHabitByNameOrId(action.habit);
+        if(!h6) return {ok:false,msg:"عادتی به اسم «"+(action.habit||"")+"» پیدا نکردم."};
+        if(h6.custom){
+          habitCfg().custom=habitCfg().custom.filter(function(x){ return x.id!==h6.id; });
+          flushSave(); if(typeof renderAll==="function") renderAll();
+          return {ok:true,msg:"✅ عادت «"+h6.name+"» حذف شد."};
+        }
+        var cfg6=habitCfg();
+        if(cfg6.hidden.indexOf(h6.id)<0) cfg6.hidden.push(h6.id);
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"عادت‌های پیش‌فرض کامل حذف نمی‌شن، ولی «"+h6.name+"» رو مخفی کردم."};
+      }
+      case "add_medication": {
+        var mname=(action.name||"").trim();
+        if(!mname) return {ok:false,msg:"اسم دارو مشخص نبود."};
+        var freq=["daily","eod","custom"].indexOf(action.freq)>-1 ? action.freq : "daily";
+        var days=Array.isArray(action.days) ? action.days.filter(function(n){ return n>=0 && n<=6; }) : [];
+        medPlans().push({id:newMedId(), name:mname, time:action.time||"", freq:freq, days:days, anchor:toDateKey(new Date())});
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ داروی «"+mname+"» به لیست اضافه شد."};
+      }
+      case "update_medication": {
+        var p7=findMedByNameOrId(action.medication);
+        if(!p7) return {ok:false,msg:"دارویی به اسم «"+(action.medication||"")+"» پیدا نکردم."};
+        if(action.name) p7.name=String(action.name).trim();
+        if(action.time!=null) p7.time=String(action.time);
+        if(["daily","eod","custom"].indexOf(action.freq)>-1) p7.freq=action.freq;
+        if(Array.isArray(action.days)) p7.days=action.days.filter(function(n){ return n>=0 && n<=6; });
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ داروی «"+p7.name+"» بروزرسانی شد."};
+      }
+      case "delete_medication": {
+        var p8=findMedByNameOrId(action.medication);
+        if(!p8) return {ok:false,msg:"دارویی به اسم «"+(action.medication||"")+"» پیدا نکردم."};
+        state.medPlans=medPlans().filter(function(x){ return x.id!==p8.id; });
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ داروی «"+p8.name+"» حذف شد."};
+      }
+      case "set_day_field": {
+        var setter=DAY_FIELD_SETTERS[action.field];
+        if(!setter) return {ok:false,msg:"این فیلد («"+(action.field||"")+"») رو نمی‌شناسم."};
+        var fd=parseActionDate(action.date), rF=getDayByDate(fd);
+        setter(rF.day, action.value);
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ برای "+toDateKey(fd)+" ثبت شد."};
+      }
+      case "set_measurement": {
+        if(MEASUREMENT_FIELDS.indexOf(action.field)<0) return {ok:false,msg:"این اندازه‌گیری («"+(action.field||"")+"») رو نمی‌شناسم."};
+        var mmd=parseActionDate(action.date), rM=getDayByDate(mmd);
+        rM.week.measurements[action.field]=Number(action.value)||0;
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ اندازه‌گیری هفته‌ی "+toDateKey(mmd)+" ثبت شد."};
+      }
+      case "log_weight": {
+        var w=parseFloat(action.weight);
+        if(!w || w<=0) return {ok:false,msg:"عدد وزن مشخص نبود."};
+        var wd=parseActionDate(action.date), r1=getDayByDate(wd);
+        if(weightMode()==="weekly"){ r1.week.measurements.weight=w; } else { r1.day.weight=w; }
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ وزن "+w+" کیلوگرم برای "+toDateKey(wd)+" ثبت شد."};
+      }
+      case "set_mood": {
+        var md=parseActionDate(action.date), r2=getDayByDate(md);
+        r2.day.mood=action.mood || r2.day.mood;
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ حال‌وهوای "+toDateKey(md)+" ثبت شد."};
+      }
+      case "set_journal": {
+        var text=(action.text||"").trim();
+        if(!text) return {ok:false,msg:"متن یادداشت خالی بود."};
+        var jd=parseActionDate(action.date), r3=getDayByDate(jd);
+        r3.day.journal=text;
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ یادداشت "+toDateKey(jd)+" ذخیره شد."};
+      }
+      case "check_habit": {
+        var h=findHabitByNameOrId(action.habit);
+        if(!h) return {ok:false,msg:"عادتی به اسم «"+(action.habit||"")+"» پیدا نکردم."};
+        var cd=parseActionDate(action.date), r4=getDayByDate(cd);
+        if(h.custom){
+          r4.day.custom=r4.day.custom||{};
+          if(h.kind==="customCount"){ r4.day.custom[h.id]=parseFloat(action.value)||0; }
+          else { r4.day.custom[h.id]=(action.done!==false); }
+        }else{
+          var boolFields={selfcare:1,cleaning:1,sugarFree:1,clothesTidy:1,bedMaking:1};
+          if(boolFields[h.id]){ r4.day[h.id]=(action.done!==false); }
+          else return {ok:false,msg:"این عادت («"+h.name+"») رو با اکشن set_day_field ثبت کن."};
+        }
+        flushSave(); if(typeof renderAll==="function") renderAll();
+        return {ok:true,msg:"✅ «"+h.name+"» برای "+toDateKey(cd)+" ثبت شد."};
+      }
+      default:
+        return {ok:false,msg:""};
+    }
+  }catch(e){
+    return {ok:false,msg:"یه مشکلی موقع انجام این کار پیش اومد."};
+  }
+}
+/* Finds [[ACTION]]{...}[[/ACTION]] blocks in the model's reply, executes each one
+   against the real app data, and swaps the raw block for a human-readable result
+   so the chat bubble reads naturally either way. */
+function runActionsInReply(text){
+  var out=String(text||"");
+  var re=/\[\[ACTION\]\]([\s\S]*?)\[\[\/ACTION\]\]/g;
+  var count=0;
+  out=out.replace(re,function(full,jsonStr){
+    count++;
+    if(count>5) return "";
+    var cleaned=jsonStr.replace(/```json|```/g,"").trim();
+    var action=null;
+    try{ action=JSON.parse(cleaned); }catch(e){}
+    if(!action) return "";
+    var r=applyAction(action);
+    return r.msg || (r.ok?"":"نتونستم این کارو انجام بدم.");
+  });
+  return out.replace(/[ \t]+\n/g,"\n").replace(/\n{3,}/g,"\n\n").trim();
+}
+
+
 function renderChat(){
   var wrap=document.getElementById("chatMsgs");
   if(!wrap) return;
-  var hist=state.chatHistory||[];
+  var hist=activeChat().messages||[];
   if(!hist.length){
     wrap.innerHTML='<div class="chat-empty">سلام! من لیانام 👋 هر سوالی داری بپرس.</div>';
   }else{
@@ -3513,15 +3895,86 @@ function renderChat(){
   wrap.scrollTop=wrap.scrollHeight;
 }
 
+function renderChatList(){
+  var wrap=document.getElementById("chatList");
+  if(!wrap) return;
+  var chats=state.chats||{};
+  var ids=Object.keys(chats).sort(function(a,b){ return (chats[b].updatedAt||0)-(chats[a].updatedAt||0); });
+  if(!ids.length){
+    wrap.innerHTML='<div class="chat-list-empty">هنوز چتی نداری.</div>';
+    return;
+  }
+  wrap.innerHTML=ids.map(function(id){
+    var c=chats[id];
+    var cls="chat-list-item"+(id===state.activeChatId?" active":"");
+    return '<div class="'+cls+'" data-id="'+id+'">'
+      +'<div class="clt-main" data-id="'+id+'">'
+        +'<div class="clt-title">'+escapeHtml(c.title||"چت جدید")+'</div>'
+        +'<div class="clt-time">'+fmtChatTime(c.updatedAt)+'</div>'
+      +'</div>'
+      +'<button class="clt-del" data-id="'+id+'" title="حذف">🗑</button>'
+    +'</div>';
+  }).join("");
+  Array.prototype.forEach.call(wrap.querySelectorAll(".clt-main"),function(el){
+    el.addEventListener("click",function(){ switchChat(el.getAttribute("data-id")); });
+  });
+  Array.prototype.forEach.call(wrap.querySelectorAll(".clt-del"),function(el){
+    el.addEventListener("click",function(ev){ ev.stopPropagation(); deleteChat(el.getAttribute("data-id")); });
+  });
+}
+
+function newChat(){
+  var id=genChatId(), t=Date.now();
+  state.chats[id]={id:id, title:"چت جدید", messages:[], createdAt:t, updatedAt:t};
+  state.activeChatId=id;
+  closeChatList();
+  renderChat();
+  scheduleSave();
+  setTimeout(function(){ var i=document.getElementById("chatInput"); if(i) i.focus(); },50);
+}
+function switchChat(id){
+  if(!state.chats[id]) return;
+  state.activeChatId=id;
+  closeChatList();
+  renderChat();
+  scheduleSave();
+}
+function deleteChat(id){
+  if(!state.chats[id]) return;
+  if(!confirm("این چت پاک بشه؟")) return;
+  delete state.chats[id];
+  if(state.activeChatId===id) state.activeChatId=null;
+  ensureActiveChat();
+  renderChatList();
+  renderChat();
+  scheduleSave();
+}
+function toggleChatList(){
+  var panel=document.getElementById("chatListPanel");
+  if(!panel) return;
+  if(panel.classList.contains("hidden")){
+    renderChatList();
+    panel.classList.remove("hidden");
+  }else{
+    panel.classList.add("hidden");
+  }
+}
+function closeChatList(){
+  var panel=document.getElementById("chatListPanel");
+  if(panel) panel.classList.add("hidden");
+}
+
 function openChat(){
   document.getElementById("chatOverlay").classList.remove("hidden");
   document.getElementById("chatSheet").classList.remove("hidden");
+  ensureActiveChat();
   renderChat();
   setTimeout(function(){ var i=document.getElementById("chatInput"); if(i) i.focus(); },50);
 }
 function closeChat(){
   document.getElementById("chatOverlay").classList.add("hidden");
   document.getElementById("chatSheet").classList.add("hidden");
+  closeChatList();
 }
 
 function sendChatMessage(){
@@ -3529,11 +3982,14 @@ function sendChatMessage(){
   var input=document.getElementById("chatInput");
   var text=(input.value||"").trim();
   if(!text) return;
+  var chat=activeChat();
+
   if(!getToken()){
-    state.chatHistory=(state.chatHistory||[]).concat([
+    chat.messages=(chat.messages||[]).concat([
       {role:"user",content:text},
       {role:"assistant",content:"برای استفاده از چت اول باید وارد حسابت بشی."}
     ]);
+    chat.updatedAt=Date.now();
     renderChat();
     input.value="";
     return;
@@ -3543,7 +3999,11 @@ function sendChatMessage(){
   chatSending=true;
   document.getElementById("chatSendBtn").disabled=true;
 
-  state.chatHistory=(state.chatHistory||[]).concat([{role:"user",content:text}]);
+  if(!chat.messages.length && chat.title==="چت جدید"){
+    chat.title=text.slice(0,40);
+  }
+  chat.messages=(chat.messages||[]).concat([{role:"user",content:text}]);
+  chat.updatedAt=Date.now();
   renderChat();
 
   var wrap=document.getElementById("chatMsgs");
@@ -3553,25 +4013,32 @@ function sendChatMessage(){
   wrap.appendChild(typingEl);
   wrap.scrollTop=wrap.scrollHeight;
 
-  var contextMsgs=state.chatHistory.slice(-CHAT_CONTEXT_LIMIT).map(function(m){
+  var contextMsgs=chat.messages.slice(-CHAT_CONTEXT_LIMIT).map(function(m){
     return {role:m.role, content:m.content};
   });
+  var oldContext=buildOldChatsContext(text, chat.id);
+  var todayG=toDateKey(new Date());
+  var todayJ; try{ var jt=gregorianToJalali(new Date()); todayJ=jt.jy+"/"+jt.jm+"/"+jt.jd; }catch(e){ todayJ=""; }
 
-  apiCall("/api/chat","POST",{messages:contextMsgs},true).then(function(r){
+  apiCall("/api/chat","POST",{messages:contextMsgs, context:oldContext, todayGregorian:todayG, todayJalali:todayJ},true).then(function(r){
     typingEl.remove();
     if(r.ok && r.data && r.data.reply){
-      state.chatHistory=state.chatHistory.concat([{role:"assistant",content:r.data.reply}]);
+      var finalText=runActionsInReply(r.data.reply) || "انجام شد.";
+      speakText(finalText);
+      chat.messages=chat.messages.concat([{role:"assistant",content:finalText}]);
     }else{
-      state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"[DEBUG] status="+r.status+" body="+JSON.stringify(r.data)}]);
+      chat.messages=chat.messages.concat([{role:"assistant",content:"یه مشکلی پیش اومد، دوباره امتحان کن."}]);
     }
-    if(state.chatHistory.length>CHAT_HISTORY_LIMIT){
-      state.chatHistory=state.chatHistory.slice(-CHAT_HISTORY_LIMIT);
+    if(chat.messages.length>CHAT_HISTORY_LIMIT){
+      chat.messages=chat.messages.slice(-CHAT_HISTORY_LIMIT);
     }
+    chat.updatedAt=Date.now();
     renderChat();
     flushSave();
-  }).catch(function(err){
+  }).catch(function(){
     typingEl.remove();
-    state.chatHistory=state.chatHistory.concat([{role:"assistant",content:"[DEBUG] "+(err && err.message ? err.message : String(err))}]);
+    chat.messages=chat.messages.concat([{role:"assistant",content:"اتصال برقرار نشد. یه بار دیگه امتحان کن."}]);
+    chat.updatedAt=Date.now();
     renderChat();
     flushSave();
   }).finally(function(){
@@ -3586,14 +4053,24 @@ function wireChat(){
   var closeBtn=document.getElementById("closeChatSheet");
   var sendBtn=document.getElementById("chatSendBtn");
   var input=document.getElementById("chatInput");
+  var historyBtn=document.getElementById("chatHistoryBtn");
+  var newBtn=document.getElementById("newChatBtn");
+  var voiceBtn=document.getElementById("voiceModeBtn");
+  var micBtn=document.getElementById("chatMicBtn");
   if(fab) fab.addEventListener("click",openChat);
   if(overlay) overlay.addEventListener("click",closeChat);
   if(closeBtn) closeBtn.addEventListener("click",closeChat);
   if(sendBtn) sendBtn.addEventListener("click",sendChatMessage);
+  if(historyBtn) historyBtn.addEventListener("click",toggleChatList);
+  if(newBtn) newBtn.addEventListener("click",newChat);
+  if(voiceBtn) voiceBtn.addEventListener("click",toggleVoiceMode);
+  if(micBtn) micBtn.addEventListener("click",startVoiceInput);
+  if(!getSpeechRecCtor() && micBtn) micBtn.style.display="none";
   if(input) input.addEventListener("keydown",function(e){
     if(e.key==="Enter"){ e.preventDefault(); sendChatMessage(); }
   });
 }
+
 
 wireHabitManager();
 wireChat();
