@@ -3796,6 +3796,20 @@ function applyAction(action){
     return {ok:false,msg:"یه مشکلی موقع انجام این کار پیش اومد."};
   }
 }
+/* Best-effort JSON.parse for an action block: models occasionally malform the
+   braces/quotes (or get cut off), so try a couple of light repairs before giving up. */
+function tryParseAction(str){
+  if(!str) return null;
+  var s=String(str).trim();
+  try{ return JSON.parse(s); }catch(e){}
+  var start=s.indexOf("{");
+  var body = start>-1 ? s.slice(start) : ("{"+s);
+  var end=body.lastIndexOf("}");
+  var candidate = end>-1 ? body.slice(0,end+1) : (body+"}");
+  try{ return JSON.parse(candidate); }catch(e){}
+  try{ return JSON.parse(body+"}"); }catch(e){}
+  return null;
+}
 /* Finds [[ACTION]]{...}[[/ACTION]] blocks in the model's reply, executes each one
    against the real app data, and swaps the raw block for a human-readable result
    so the chat bubble reads naturally either way. */
@@ -3807,12 +3821,25 @@ function runActionsInReply(text){
     count++;
     if(count>5) return "";
     var cleaned=jsonStr.replace(/```json|```/g,"").trim();
-    var action=null;
-    try{ action=JSON.parse(cleaned); }catch(e){}
-    if(!action) return "";
+    var action=tryParseAction(cleaned);
+    if(!action) return "این کار درست انجام نشد، لطفاً دوباره امتحان کن.";
     var r=applyAction(action);
     return r.msg || (r.ok?"":"نتونستم این کارو انجام بدم.");
   });
+  /* an [[ACTION]] that never got a closing tag (e.g. the reply got cut off mid-way) —
+     strip it entirely so the user never sees raw/broken JSON in the chat */
+  var openIdx=out.indexOf("[[ACTION]]");
+  if(openIdx>-1){
+    var tail=out.slice(openIdx+"[[ACTION]]".length);
+    var cleaned2=tail.replace(/```json|```/g,"").trim();
+    var action2=tryParseAction(cleaned2);
+    var replacement="این کار درست انجام نشد، لطفاً دوباره امتحان کن.";
+    if(action2){
+      var r2=applyAction(action2);
+      replacement=r2.msg || (r2.ok?"":"نتونستم این کارو انجام بدم.");
+    }
+    out=out.slice(0,openIdx)+replacement;
+  }
   return out.replace(/[ \t]+\n/g,"\n").replace(/\n{3,}/g,"\n\n").trim();
 }
 
