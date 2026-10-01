@@ -15,6 +15,7 @@
 <style>
 :root{
   --accent-h:206; --accent-s:88%;
+  --rep-lo:hsl(calc(var(--accent-h) + 45),92%,76%); --rep-hi:hsl(calc(var(--accent-h) - 12),90%,52%);
   --bg:#F4F8FE; --card:#FFFFFF; --text:#2B2A3A; --text-soft:#8B8A9B;
   --accent:#4FA8FF; --accent-dk:#2E7FD6; --accent-lt:#E8F3FF;
   --border:#E7EAF3; --radius:18px; --shadow:0 6px 18px rgba(40,50,90,.08);
@@ -820,6 +821,189 @@ body.style-glass .wt-chip{background:var(--g-fill); border:1.5px solid var(--g-l
   border-radius:12px; padding:10px; font-size:13px; font-weight:700; margin-top:6px;
 }
 .account-email{font-size:11px; color:var(--text-soft); text-align:center; margin-bottom:6px;}
+
+/* =====================================================================
+   WHITE THEMES — سفید و صورتی / سبز / آبی / گرافیتی
+   Active only while <body> has .theme-white (set by applyTheme for the white palettes).
+   Nothing below touches the other palettes. Colours come from the same CSS variables
+   (--accent, --bg, --card, --border ...) so any new section inherits the theme automatically.
+   ===================================================================== */
+body.theme-white{
+  --tw-shadow:0 1px 2px rgba(16,24,40,.05), 0 6px 18px rgba(16,24,40,.06);
+  --shadow:var(--tw-shadow);
+  --tw-lb:0%;
+  --rep-lo:color-mix(in srgb, var(--accent) 42%, #fff);
+  --rep-hi:var(--accent);
+  /* habit colours: one muted tonal family around the theme hue instead of a rainbow */
+  --c-steps:     hsl(calc(var(--accent-h) + 0),  var(--tw-sat), calc(50% + var(--tw-lb)));
+  --c-exercise:  hsl(calc(var(--accent-h) - 14), var(--tw-sat), calc(46% + var(--tw-lb)));
+  --c-yoga:      hsl(calc(var(--accent-h) + 22), var(--tw-sat), calc(56% + var(--tw-lb)));
+  --c-stretch:   hsl(calc(var(--accent-h) + 36), var(--tw-sat), calc(50% + var(--tw-lb)));
+  --c-water:     hsl(calc(var(--accent-h) - 28), var(--tw-sat), calc(54% + var(--tw-lb)));
+  --c-nutrition: hsl(calc(var(--accent-h) + 50), var(--tw-sat), calc(46% + var(--tw-lb)));
+  --c-reading:   hsl(calc(var(--accent-h) - 42), var(--tw-sat), calc(50% + var(--tw-lb)));
+  --c-selfcare:  hsl(calc(var(--accent-h) + 10), var(--tw-sat), calc(60% + var(--tw-lb)));
+  --c-cleaning:  hsl(calc(var(--accent-h) - 8),  var(--tw-sat), calc(40% + var(--tw-lb)));
+  --c-mood:      hsl(calc(var(--accent-h) + 28), var(--tw-sat), calc(58% + var(--tw-lb)));
+  --c-sugar:     hsl(calc(var(--accent-h) - 20), var(--tw-sat), calc(48% + var(--tw-lb)));
+  --c-journal:   hsl(calc(var(--accent-h) + 44), var(--tw-sat), calc(54% + var(--tw-lb)));
+  --c-weight:    hsl(calc(var(--accent-h) - 34), var(--tw-sat), calc(46% + var(--tw-lb)));
+  --c-sleep:     hsl(calc(var(--accent-h) + 60), var(--tw-sat), calc(44% + var(--tw-lb)));
+  --c-meds:      hsl(calc(var(--accent-h) + 4),  var(--tw-sat), calc(50% + var(--tw-lb)));
+  --c-clothesTidy:hsl(calc(var(--accent-h) - 48),var(--tw-sat), calc(52% + var(--tw-lb)));
+  --c-bedMaking: hsl(calc(var(--accent-h) + 16), var(--tw-sat), calc(42% + var(--tw-lb)));
+  --c-toothbrush:hsl(calc(var(--accent-h) + 40), var(--tw-sat), calc(48% + var(--tw-lb)));
+}
+body.theme-white.mode-dark{
+  --tw-shadow:0 1px 2px rgba(0,0,0,.55);
+  --tw-lb:10%;
+}
+
+/* ---------- page background ---------- */
+body.theme-white{ background:var(--bg); }
+body.theme-white.style-glass{
+  background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 6%, var(--bg)) 0, var(--bg) 380px) fixed;
+  --g-fill:rgba(255,255,255,.92); --g-fill-hi:#fff; --g-line:var(--border); --g-shadow:0 1px 2px rgba(16,24,40,.05);
+}
+body.theme-white.style-glass.mode-dark{
+  background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 9%, var(--bg)) 0, var(--bg) 380px) fixed;
+  --g-fill:rgba(255,255,255,.045); --g-fill-hi:rgba(255,255,255,.10); --g-line:var(--border); --g-shadow:none;
+}
+
+/* ---------- surfaces: flat white cards, hairline border, soft shadow (no frosted colour) ---------- */
+html body.theme-white.style-glass :is(.chart-card,.sheet,.ring-card,.icon-btn,.week-nav,.meas-box,.font-opt,.auth-card,.greeting-card,.cc-box,.day-chip){
+  background:var(--card) !important;
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  border:1px solid var(--border);
+  box-shadow:var(--tw-shadow);
+}
+html body.theme-white.style-glass :is(.dash-card,.habit-card,.day-chip,.chart-card,.sheet,.quote-card,.ring-card,.cc-box)::before{ display:none; }
+html body.theme-white.style-glass .sheet{ box-shadow:0 -12px 40px rgba(16,24,40,.16); border-radius:18px 18px 0 0; }
+html body.theme-white .day-chip, html body.theme-white .ring-card{ border-radius:12px; }
+html body.theme-white.style-glass .font-opt.active, html body.theme-white .font-opt.active{ border-color:var(--accent); background:var(--accent-lt) !important; }
+
+html body.theme-white.style-glass .habit-card, html body.theme-white .habit-card{
+  background:var(--card) !important;
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  border:1px solid var(--border);
+  border-inline-start:4px solid var(--c);
+  box-shadow:var(--tw-shadow);
+}
+html body.theme-white.style-glass .quote-card, html body.theme-white .quote-card{
+  background:var(--accent-lt) !important;
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  border:1px solid var(--border);
+  border-inline-start:3px solid var(--accent);
+  box-shadow:none;
+}
+/* hero progress card: one solid accent block on the white page */
+html body.theme-white .dash-card, html body.theme-white.style-glass .dash-card{
+  background:var(--accent) !important;
+  background-image:linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, #000)) !important;
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  border:none; color:#fff; box-shadow:var(--tw-shadow);
+}
+
+/* ---------- topbar / overlays / auth ---------- */
+html body.theme-white.style-glass .topbar{
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+html body.theme-white.style-glass .overlay, html body.theme-white.style-glass .cc-overlay{
+  background:rgba(16,24,40,.42); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+}
+html body.theme-white.style-glass .auth-screen{ background:var(--bg); -webkit-backdrop-filter:none; backdrop-filter:none; }
+
+/* ---------- buttons, chips, inputs: flat accent, no glossy gradient / glow ---------- */
+html body.theme-white.style-glass :is(.seg button.active, .cal-day.sel, .auth-btn){
+  background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:none;
+}
+html body.theme-white.style-glass .cc-actions .cc-ok{ background:#D64550; border-color:#D64550; box-shadow:none; }
+html body.theme-white.style-glass .day-chip.active{ background:var(--accent-lt) !important; border-color:var(--accent); box-shadow:none; }
+html body.theme-white.style-glass input:focus, html body.theme-white.style-glass textarea:focus, html body.theme-white.style-glass select:focus{
+  border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+html body.theme-white .mood-opt.sel{ background:var(--accent-lt); border-color:var(--accent); }
+html body.theme-white.style-glass .mood-opt.sel{ background:var(--accent-lt); border-color:var(--accent); }
+html body.theme-white .seg button, html body.theme-white .meas-toggle, html body.theme-white .hm-btn{ border-radius:10px; }
+html body.theme-white .meas-toggle{ border-style:solid; }
+
+/* theme picker: two-tone circles (half white, half the theme colour) */
+.swatch.two{ box-shadow:inset 0 0 0 1px rgba(127,127,127,.38); }
+.swatch.two.active{ box-shadow:none; }
+
+/* ---------- Liana chat: calm, flat, no glow or sparkles ---------- */
+html body.theme-white .chat-fab{
+  border:1px solid var(--border); background:var(--card); color:var(--accent);
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  box-shadow:0 6px 18px rgba(16,24,40,.18), 0 1px 3px rgba(16,24,40,.10);
+}
+html body.theme-white.mode-dark .chat-fab{ color:var(--accent-dk); background:var(--card); border-color:var(--border); }
+html body.theme-white .chat-fab::before{ display:none; }
+html body.theme-white .chat-fab::after{ border-color:color-mix(in srgb, var(--accent) 45%, transparent); }
+html body.theme-white .chat-fab svg{ filter:none; }
+
+html body.theme-white .chat-sheet{
+  background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, var(--bg)) 0, var(--bg) 46%);
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  border-inline:1px solid var(--border);
+  box-shadow:0 0 40px rgba(16,24,40,.12);
+}
+html body.theme-white .liana-halo{ background:radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent) 0%, transparent 70%); }
+html body.theme-white .liana-aura{
+  opacity:.18;
+  background:conic-gradient(from 0deg, color-mix(in srgb, var(--accent) 60%, #fff), color-mix(in srgb, var(--accent) 25%, #fff), color-mix(in srgb, var(--accent) 60%, #fff));
+}
+html body.theme-white .liana-sparks{ display:none; }
+html body.theme-white .liana-img{ filter:drop-shadow(0 10px 16px rgba(16,24,40,.22)); }
+html body.theme-white .liana-welcome span, html body.theme-white.mode-dark .liana-welcome span{ text-shadow:none; color:var(--text); }
+
+html body.theme-white .chat-ibtn{
+  background:var(--card); border:1px solid var(--border); box-shadow:0 1px 2px rgba(16,24,40,.06);
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+}
+html body.theme-white .chat-bubble{ -webkit-backdrop-filter:none; backdrop-filter:none; }
+html body.theme-white .chat-bubble::before, html body.theme-white .chat-bubble.ai::after{ display:none; }
+html body.theme-white .chat-bubble.ai{
+  background:var(--card); border:1px solid var(--border); border-radius:16px 16px 4px 16px; box-shadow:0 1px 2px rgba(16,24,40,.05);
+}
+html body.theme-white .chat-bubble.user{
+  background:var(--accent); color:#fff; border-radius:16px 16px 16px 4px; box-shadow:none;
+}
+html body.theme-white .chat-bubble.err{
+  background:#FDECEE; color:#9C2F3A; border:1px solid #F5C6CB; border-radius:16px 16px 4px 16px; box-shadow:none;
+}
+html body.theme-white.mode-dark .chat-bubble.err{ background:rgba(214,69,80,.16); color:#FFB3BA; border-color:rgba(214,69,80,.35); }
+html body.theme-white .chat-dots i{ background:var(--accent); box-shadow:none; }
+html body.theme-white .chat-status::before{ box-shadow:none; }
+html body.theme-white .chat-sheet[data-state="talking"] .chat-status::before{ box-shadow:none; }
+
+html body.theme-white :is(.chat-empty,.chat-reply-bar,.chat-input-row,.chat-list-panel){
+  background:var(--card); border:1px solid var(--border); box-shadow:0 1px 3px rgba(16,24,40,.07);
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+}
+html body.theme-white .chat-input-row{ border-radius:22px; }
+html body.theme-white .chat-reply-bar, html body.theme-white .chat-reply-quote{ border-right:3px solid var(--accent); }
+html body.theme-white .chat-reply-quote{ background:var(--accent-lt); border-top:1px solid var(--border); border-bottom:1px solid var(--border); border-left:1px solid var(--border); }
+html body.theme-white .chat-input-row button{ background:var(--accent); border:none; box-shadow:none; }
+html body.theme-white .chat-list-panel{ box-shadow:0 16px 40px rgba(16,24,40,.18); }
+html body.theme-white .chat-list-item{ background:var(--bg); border:1px solid var(--border); }
+html body.theme-white .chat-list-item.active{ background:var(--accent-lt); border-color:var(--accent); }
+
+/* ---------- reports / calendars / modals ---------- */
+html body.theme-white.style-glass .rep-modal{
+  background:var(--card); border:1px solid var(--border); border-radius:20px;
+  -webkit-backdrop-filter:none; backdrop-filter:none; box-shadow:0 24px 60px rgba(16,24,40,.24);
+}
+html body.theme-white:not(.style-glass) .rep-modal{ border-radius:20px; }
+html body.theme-white .rep-hero::before{ opacity:.12; }
+html body.theme-white .rep-row .bar i, html body.theme-white .rep-mcal .dd.on{ box-shadow:none; }
+html body.theme-white .wt-pill.active{ box-shadow:none; }
+html body.theme-white.style-glass .wt-pill.active{ box-shadow:none; }
+
+/* dark white-themes: icons keep a soft shadow only in light mode */
+html body.theme-white.mode-dark :is(.ui-icon,.st-icon,.habit-emoji img){ filter:none; }
 </style>
 </head>
 <body class="style-glass booting">
@@ -1221,10 +1405,18 @@ var COUNTABLE=["steps","exercise","yoga","stretch","water","nutrition","reading"
 var MOOD_OPTS=["😄","😊","🥰","🤩","😌","🙂","😐","🥱","😴","😔","😢","😭","😤","😠","😰","😟","🤒","😳","😕","🥳","🙏","💪","😇","🤗"];
 
 var PALETTE_GROUPS=[
+  {title:"تم‌های سفید", ids:["wPink","wGreen","wBlue","wGraphite"]},
   {title:"رنگ‌های اصلی", ids:["blue","pink","purple","lilac","pearl"]},
   {title:"پاستلی 🍦", ids:["pastelGreen","pastelPink","pastelYellow","pastelBlue","pastelPurple"]}
 ];
 var PALETTES={
+  /* white themes: white is the dominant colour, the hue is only used as an accent.
+     ac/adk = accent + dark accent (light mode), dac/dadk = same for dark mode,
+     ls/ds = surface tint saturation (light / dark), tsat = saturation of the habit colours */
+  wPink:    {h:342,s:55,label:"سفید و صورتی",  white:true, ac:"#C1456D",adk:"#9E2F53",dac:"#E0708F",dadk:"#F2A3BA", ls:38,ds:16,tsat:40},
+  wGreen:   {h:158,s:60,label:"سفید و سبز",    white:true, ac:"#1F8A66",adk:"#16694D",dac:"#3DB98C",dadk:"#7FD9B7", ls:32,ds:14,tsat:36},
+  wBlue:    {h:217,s:68,label:"سفید و آبی",    white:true, ac:"#2F63C8",adk:"#214B9C",dac:"#5B8DEF",dadk:"#9DBBF7", ls:42,ds:18,tsat:42},
+  wGraphite:{h:220,s:12,label:"سفید و گرافیتی",white:true, ac:"#3F4652",adk:"#262B34",dac:"#6B7586",dadk:"#C3C9D4", ls:8, ds:8, tsat:18},
   blue:  {h:206,s:88,label:"آبی"},
   pink:  {h:335,s:75,label:"صورتی"},
   purple:{h:258,s:70,label:"بنفش"},
@@ -1674,6 +1866,7 @@ function initPersistence(){
 
 /* ================= Theme ================= */
 function hslCss(h,s,l){ return "hsl("+h+", "+s+"%, "+l+"%)"; }
+function hslHex(h,s,l){ s/=100; l/=100; var a=s*Math.min(l,1-l); function f(n){ var k=(n+h/30)%12; var c=l-a*Math.max(-1,Math.min(k-3,Math.min(9-k,1))); return ("0"+Math.round(255*c).toString(16)).slice(-2); } return "#"+f(0)+f(8)+f(4); }
 function applyTheme(){
   var s=state.settings;
   var pal=PALETTES[s.palette]||PALETTES.blue;
@@ -1682,6 +1875,12 @@ function applyTheme(){
   var accent=pal.accent || hslCss(h,sat,55);
   var accentDk=pal.accentDk || hslCss(h,Math.min(sat+6,95),40);
   var accentLt = s.mode==="dark" ? hslCss(h,Math.max(sat-20,15),24) : hslCss(h,Math.max(sat-30,15),94);
+  var white=!!pal.white, isDark=(s.mode==="dark");
+  if(white){
+    accent  = isDark ? pal.dac  : pal.ac;
+    accentDk= isDark ? pal.dadk : pal.adk;
+    accentLt= isDark ? hslCss(h,pal.ds+6,17) : hslCss(h,pal.ls+2,95);
+  }
   root.setProperty("--accent",accent);
   root.setProperty("--accent-dk",accentDk);
   root.setProperty("--accent-lt",accentLt);
@@ -1689,7 +1888,14 @@ function applyTheme(){
   root.setProperty("--accent-s",sat);
 
   var bg,card,text,border;
-  if(s.mode==="dark"){
+  if(white){
+    /* white themes ignore the single-colour mode: surfaces are white (or near-black) with a barely-there tint */
+    if(isDark){
+      bg=hslCss(h,pal.ds,8); card=hslCss(h,pal.ds,12); border=hslCss(h,pal.ds,21); text=hslCss(h,10,94);
+    } else {
+      bg=hslCss(h,pal.ls,98); card="#FFFFFF"; border=hslCss(h,Math.min(pal.ls,16),90); text=hslCss(h,22,14);
+    }
+  } else if(s.mode==="dark"){
     if(s.mono){
       bg=hslCss(h,Math.min(sat,55),12);
       card=hslCss(h,Math.min(sat,50),17);
@@ -1718,7 +1924,8 @@ function applyTheme(){
   root.setProperty("--card",card);
   root.setProperty("--border",border);
   root.setProperty("--text",text);
-  root.setProperty("--text-soft", s.mode==="dark"?hslCss(h,15,65):hslCss(h,15,52));
+  root.setProperty("--text-soft", white ? (isDark?hslCss(h,Math.min(pal.ds,10),64):hslCss(h,Math.min(pal.ls,12),44)) : (s.mode==="dark"?hslCss(h,15,65):hslCss(h,15,52)));
+  root.setProperty("--tw-sat", (pal.tsat||40)+"%");
 
   var font=FONTS.find(function(f){return f.id===s.font;})||FONTS[0];
   root.setProperty("--font-main",font.family);
@@ -1726,7 +1933,15 @@ function applyTheme(){
   document.body.classList.toggle("style-glass", s.style==="glass");
   document.body.classList.toggle("style-simple", s.style!=="glass");
   document.body.classList.toggle("mode-dark", s.mode==="dark");
-  document.body.style.setProperty("--radius", s.style==="glass"?"20px":"18px");
+  document.body.style.setProperty("--radius", white ? "14px" : (s.style==="glass"?"20px":"18px"));
+  document.body.classList.toggle("theme-white", white);
+
+  /* browser bar colour follows the white themes; other palettes keep the original value */
+  var tc=document.querySelector('meta[name="theme-color"]');
+  if(tc){
+    if(!tc.hasAttribute("data-orig")) tc.setAttribute("data-orig", tc.getAttribute("content")||"");
+    tc.setAttribute("content", white ? (isDark?hslHex(h,pal.ds,8):hslHex(h,pal.ls,98)) : tc.getAttribute("data-orig"));
+  }
 
 }
 
@@ -2389,6 +2604,10 @@ function renderSettingsSheet(){
   var groupsHtml=PALETTE_GROUPS.map(function(g){
     var swHtml=g.ids.map(function(k){
       var pal=PALETTES[k];
+      if(pal.white){
+        return '<button class="swatch two'+(s.palette===k?' active':'')+'" data-pal="'+k+'" '+
+          'style="background:linear-gradient(90deg,#fff 50%,'+pal.ac+' 50%) border-box;" title="'+pal.label+'" aria-label="'+pal.label+'"></button>';
+      }
       return '<button class="swatch'+(s.palette===k?' active':'')+'" data-pal="'+k+'" '+
         'style="background:hsl('+pal.h+','+pal.s+'%,58%);" title="'+pal.label+'"></button>';
     }).join("");
@@ -2397,6 +2616,7 @@ function renderSettingsSheet(){
   }).join("");
   document.getElementById("paletteGroups").innerHTML=groupsHtml;
   document.getElementById("monoSwitch").classList.toggle("on", !!s.mono);
+  (function(){ var mr=document.getElementById("monoSwitch").closest(".set-row"); var pp=PALETTES[s.palette]||PALETTES.blue; if(mr) mr.style.display=pp.white?"none":""; })();
 
   var fontHtml=FONTS.map(function(f){
     return '<option value="'+f.id+'"'+(s.font===f.id?' selected':'')+'>'+f.label+'</option>';
@@ -3112,7 +3332,7 @@ function buildPeriod(habitId,kind,y,m,light){
 
 function repColors(single){
   if(single) return {lo:"stop-color:"+single.color+";stop-color:color-mix(in srgb,"+single.color+" 55%,#fff)", hi:"stop-color:"+single.color, base:single.color};
-  return {lo:"stop-color:hsl(calc(var(--accent-h) + 45),92%,76%)", hi:"stop-color:hsl(calc(var(--accent-h) - 12),90%,52%)", base:"var(--accent)"};
+  return {lo:"stop-color:var(--rep-lo)", hi:"stop-color:var(--rep-hi)", base:"var(--accent)"};
 }
 
 /* radial "day wheel": one bar per day, growing outward from the centre */
