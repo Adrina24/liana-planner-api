@@ -6458,7 +6458,7 @@ setTimeout(function(){
   P.forEach(function(p){ var c=VAR[p.id]||{}; p.n=c.n||1; p.sides=c.sides; p.hold=c.hold||6; p.intro=c.intro; });
   function img(p,i){ return "yoga/"+p.id+(p.n>1?"-"+(i+1):"")+".webp"; }
   function thumb(p){ return "yoga/thumbs/"+p.id+".webp"; }
-  function vi(p,e){ if(p.n<2) return 0; if(p.sides) return Math.min(p.n-1,Math.floor(e/(p.sec/p.n))); var k=Math.floor(e/p.hold); return p.intro?(k<1?0:1+((k-1)%(p.n-1))):k%p.n; }
+  function vi(p,k){ if(p.n<2) return 0; return p.intro?(k<1?0:1+((k-1)%(p.n-1))):k%p.n; }
   var GROUPS=[["breath","تنفس و تمرکز"],["upper","گردن، شانه و دست"],["back","کمر و ستون فقرات"],["legs","پا و باسن"],["relax","شل‌سازی پایانی"]];
   function TM(){ if(typeof state==="undefined") return null; if(!state.timer||typeof state.timer!=="object") state.timer={}; return state.timer; }
   function custom(){ var t=TM(), c=t&&t.yoga; if(!c||c.day!==key()||!Array.isArray(c.ids)) return null; var l=c.ids.map(function(id){ return BY[id]; }).filter(Boolean); return l.length?l:null; }
@@ -6682,7 +6682,7 @@ setTimeout(function(){
     E.steps=[].slice.call(root.querySelectorAll(".yg-steps i")); E.main=root.querySelector(".yg-main"); E.stage=null; pose();
   }
   function pose(){
-    if(done){ E.stage=null; E.main.innerHTML='<div class="yg-end"><em>🌿</em><b>آفرین، تمومش کردی</b><span>'+fd(list.length)+' حرکت آرامش برای امروز. حالا چند نفس عمیق بکش.</span><div class="yg-row" style="margin-top:18px"><button type="button" data-y="again">دوباره از اول</button><button type="button" data-y="back">برگشت</button></div></div>'; steps(); return; }
+    if(done){ clearInterval(vt); E.stage=null; E.main.innerHTML='<div class="yg-end"><em>🌿</em><b>آفرین، تمومش کردی</b><span>'+fd(list.length)+' حرکت آرامش برای امروز. حالا چند نفس عمیق بکش.</span><div class="yg-row" style="margin-top:18px"><button type="button" data-y="again">دوباره از اول</button><button type="button" data-y="back">برگشت</button></div></div>'; steps(); return; }
     var p=list[idx], i;
     if(!E.stage){
       E.main.innerHTML='<div class="yg-stage"><svg class="yg-aura" viewBox="0 0 300 300" aria-hidden="true"><defs><radialGradient id="ygG1"><stop offset=".6" style="stop-color:var(--accent);stop-opacity:0"/><stop offset=".86" style="stop-color:var(--accent);stop-opacity:.3"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:0"/></radialGradient><radialGradient id="ygG2"><stop offset=".6" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:0"/><stop offset=".86" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:.26"/><stop offset="1" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:0"/></radialGradient><filter id="ygB1" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter><filter id="ygB2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs><path class="fl fa a3" fill="url(#ygG2)" filter="url(#ygB1)"/><path class="fl fa a2" fill="url(#ygG1)" filter="url(#ygB2)"/><path class="fl fa a1" fill="url(#ygG1)"/></svg><div class="yg-fig"><em>🧘🏻‍♀️</em></div></div><div class="yg-time"><span class="tv"></span><span class="tl"></span></div><div class="yg-info"></div><div class="yg-ctl"><button type="button" class="yg-sk" data-y="prev">قبلی</button><button type="button" class="yg-go" data-y="go"></button><button type="button" class="yg-sk" data-y="next"></button></div><div class="yg-row"><button type="button" data-y="snd">🎧 آوای آرامش</button><button type="button" data-y="auto">رفتن خودکار به حرکت بعد</button></div>';
@@ -6692,7 +6692,7 @@ setTimeout(function(){
     }
     /* old angles fade out softly while the new pose's angles are added underneath */
     [].forEach.call(E.fig.querySelectorAll(".yg-img"),function(o){ o.classList.remove("on"); o.classList.add("out"); setTimeout(function(){ o.remove(); },2600); });
-    cur=-1;
+    cur=-1; clearInterval(vt); vs=0; if(p.n>1) vt=setInterval(function(){ if(!root.offsetParent) return; vs++; setVar(Y.vi(p,vs)); },3000);
     for(i=0;i<p.n;i++){ var im=new Image(); im.className="yg-img"; im.alt=p.en; im.decoding="async"; im.setAttribute("data-v",i); im.onerror=function(){ this.remove(); }; im.onload=function(){ E.fig.classList.add("has"); }; im.src=Y.img(p,i); E.fig.appendChild(im); }
     void E.fig.offsetWidth; setVar(0);
     E.info.innerHTML='<div class="yg-name">'+p.fa+'</div><div class="yg-en">'+p.en+'</div><div class="yg-desc">'+p.desc+'</div>';
@@ -6705,7 +6705,7 @@ setTimeout(function(){
   function steps(){ E.steps.forEach(function(s,i){ s.className=done||i<idx?"d":(i===idx?"c":""); }); }
   function paint(){
     if(done||!E.tv) return; var p=list[idx];
-    E.tv.textContent=fmt(left); E.go.textContent=run?"❚❚":"▶"; if(run||left<p.sec) setVar(Y.vi(p,p.sec-left));
+    E.tv.textContent=fmt(left); E.go.textContent=run?"❚❚":"▶";
     E.tl.textContent=run?((tt%10)<4?"دم…":"بازدم…"):(left<p.sec?"متوقف شد":"برای شروع بزن");
   }
   function draw(){ if(!E.a||!E.a[0]) return; var s=1+(run?.045*Math.sin(tt*.63):.015*Math.sin(tt*.4)); for(var i=0;i<3;i++){ var d=blob(BL[i],tt*(run?1.5:.9)+i*2.3,s); E.a[i].setAttribute("d",d); E.a[i].setAttribute("transform","rotate("+((tt*(i%2?-6:5))%360).toFixed(1)+" 150 150)"); } }
@@ -6720,7 +6720,7 @@ setTimeout(function(){
   }
   function prev(){ if(idx<=0) return; var keep=run; idx--; left=list[idx].sec; run=false; clearInterval(iv); pose(); if(keep) start(); }
   /* ----- pose bank: add / remove poses in today's session ----- */
-  var bank=null;
+  var bank=null, vt=0, vs=0;
   function plIds(){ return list.map(function(p){ return p.id; }); }
   function replan(){
     var id=list[idx]&&list[idx].id, was=run; list=Y.today(); var k=plIds().indexOf(id); done=false;
@@ -6734,7 +6734,7 @@ setTimeout(function(){
     Y.groups.forEach(function(g){
       var ps=Y.poses.filter(function(p){ return p.g===g[0]; }); if(!ps.length) return;
       h+='<div class="yb-t">'+g[1]+'</div>'+ps.map(function(p){ var n=pos[p.id];
-        return '<button type="button" class="yb-r'+(n?' on':'')+'" data-b="t" data-id="'+p.id+'"><span class="yb-im"><img src="'+Y.thumb(p)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+(n?'<i>'+fd(n)+'</i>':'')+'</span><span class="yb-n"><b>'+p.fa+'</b><small>'+p.en.replace(/\s*\(.*$/,'')+'</small></span><span class="yb-a">'+(n?'✓':'+')+'</span></button>'; }).join('');
+        return '<button type="button" class="yb-r'+(n?' on':'')+'" data-b="t" data-id="'+p.id+'"><span class="yb-im"><img src="'+Y.thumb(p)+'" alt="" loading="lazy" onerror="this.onerror=null;this.src=\''+Y.img(p,0)+'\'">'+(n?'<i>'+fd(n)+'</i>':'')+'</span><span class="yb-n"><b>'+p.fa+'</b><small>'+p.en.replace(/\s*\(.*$/,'')+'</small></span><span class="yb-a">'+(n?'✓':'+')+'</span></button>'; }).join('');
     });
     h+='<div class="yb-ft"><button type="button" data-b="rs">برنامه‌ی تصادفی امروز</button></div>';
     box.innerHTML=h; box.scrollTop=top;
