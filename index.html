@@ -2272,6 +2272,7 @@ function mergeState(loaded){
   if(Array.isArray(loaded.medPlans)) state.medPlans=loaded.medPlans;
   if(Array.isArray(loaded.reminders)) state.reminders=loaded.reminders;
   if(loaded.home && typeof loaded.home==="object") state.home=loaded.home;
+  if(loaded.timer && typeof loaded.timer==="object") state.timer=loaded.timer;
   if(loaded.weeks) state.weeks=loaded.weeks;
   if(loaded.chats && typeof loaded.chats==="object" && Object.keys(loaded.chats).length){
     state.chats=loaded.chats;
@@ -6452,7 +6453,18 @@ setTimeout(function(){
     plan(y).forEach(function(p){ av[p.id]=1; });
     return plan(d,av);
   }
-  window.LP_YOGA={poses:P, byId:BY, today:today, totalSec:function(l){ return l.reduce(function(s,p){ return s+p.sec; },0); }};
+  /* multi-angle poses: n = number of images; sides = one image per side (each gets an equal share of the time); hold = seconds each angle stays; intro = first image shown once, then the rest loop */
+  var VAR={"neck-side-stretch":{n:2,sides:1},"neck-rolls":{n:2,sides:1},"standing-side-bend":{n:2,sides:1},"cat-cow":{n:3,hold:5,intro:1},"low-lunge":{n:2,hold:7},"savasana":{n:2,hold:8}};
+  P.forEach(function(p){ var c=VAR[p.id]||{}; p.n=c.n||1; p.sides=c.sides; p.hold=c.hold||6; p.intro=c.intro; });
+  function img(p,i){ return "yoga/"+p.id+(p.n>1?"-"+(i+1):"")+".webp"; }
+  function thumb(p){ return "yoga/thumbs/"+p.id+".webp"; }
+  function vi(p,e){ if(p.n<2) return 0; if(p.sides) return Math.min(p.n-1,Math.floor(e/(p.sec/p.n))); var k=Math.floor(e/p.hold); return p.intro?(k<1?0:1+((k-1)%(p.n-1))):k%p.n; }
+  var GROUPS=[["breath","تنفس و تمرکز"],["upper","گردن، شانه و دست"],["back","کمر و ستون فقرات"],["legs","پا و باسن"],["relax","شل‌سازی پایانی"]];
+  function TM(){ if(typeof state==="undefined") return null; if(!state.timer||typeof state.timer!=="object") state.timer={}; return state.timer; }
+  function custom(){ var t=TM(), c=t&&t.yoga; if(!c||c.day!==key()||!Array.isArray(c.ids)) return null; var l=c.ids.map(function(id){ return BY[id]; }).filter(Boolean); return l.length?l:null; }
+  function setPlan(ids){ var t=TM(); if(!t) return; t.yoga={day:key(),ids:ids}; try{ scheduleSave(); }catch(e){} }
+  function resetPlan(){ var t=TM(); if(t) delete t.yoga; try{ scheduleSave(); }catch(e){} }
+  window.LP_YOGA={poses:P, byId:BY, groups:GROUPS, img:img, thumb:thumb, vi:vi, setPlan:setPlan, resetPlan:resetPlan, today:function(d){ return custom()||today(d); }, totalSec:function(l){ return l.reduce(function(s,p){ return s+p.sec; },0); }};
 })();
 </script>
 <style id="sound-mixer-css">
@@ -6628,6 +6640,30 @@ setTimeout(function(){
 .yg-row button.on{color:var(--accent-dk); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 18%,rgba(255,255,255,.4));}
 .yg-end{margin:40px 10px; padding:40px 20px; border-radius:var(--radius,24px); background:var(--g-fill,rgba(255,255,255,.3)); border:1px solid var(--g-line,rgba(255,255,255,.6)); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);}
 .yg-end em{font-style:normal; font-size:48px;} .yg-end b{display:block; font-size:19px; margin:8px 0 4px;} .yg-end span{font-size:13px; color:var(--text-soft);}
+
+/* --- yoga: big figure stage, smooth angle/pose crossfades, pose bank --- */
+.yg-stage{width:min(100%,520px); height:clamp(340px,52vh,500px); aspect-ratio:auto;}
+.yg-aura{left:50%; top:50%; width:min(100%,clamp(340px,52vh,500px)); transform:translate(-50%,-50%) scale(1.08);}
+.yg-fig{left:0; top:0; width:100%; height:100%; aspect-ratio:auto; animation:ygFloat 7s ease-in-out infinite;}
+@keyframes ygFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.012)}}
+.yg-img{opacity:0; transform:translateY(10px) scale(.955); pointer-events:none; will-change:opacity,transform; transition:opacity 1.1s ease-in-out .45s, transform 1.3s ease .45s; filter:drop-shadow(0 14px 22px color-mix(in srgb,var(--accent) 22%,transparent));}
+.yg-img.on{opacity:1; transform:none; transition:opacity 1.3s ease-in-out 0s, transform 1.6s cubic-bezier(.22,.8,.24,1) 0s;}
+.yg-info.in{animation:ygIn .9s cubic-bezier(.22,.8,.24,1) both;}
+@keyframes ygIn{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+.yg-bk{margin-inline-start:auto; flex:0 0 auto; padding:9px 14px; border-radius:999px; font-family:inherit; font-size:12px; font-weight:800; color:var(--accent-dk); background:color-mix(in srgb,var(--accent) 16%,rgba(255,255,255,.4)); border:1px solid color-mix(in srgb,var(--accent) 45%,transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);}
+.yb .fp-box{padding-bottom:30px;}
+.yb-hint{margin:0 2px 6px; font-size:12px; line-height:1.8; color:var(--text-soft);}
+.yb-t{margin:14px 4px 6px; font-size:12.5px; font-weight:800; color:var(--text-soft);}
+.yb-r{display:flex; align-items:center; gap:12px; width:100%; margin-bottom:8px; padding:8px 12px 8px 10px; border-radius:18px; font-family:inherit; text-align:right; color:var(--text); background:var(--g-fill,rgba(255,255,255,.3)); border:1px solid var(--g-line,rgba(255,255,255,.6));}
+.yb-r.on{border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,rgba(255,255,255,.35));}
+.yb-im{position:relative; flex:0 0 auto; width:64px; height:64px; border-radius:14px; background:color-mix(in srgb,var(--accent) 9%,transparent); display:grid; place-items:center;}
+.yb-im img{width:100%; height:100%; object-fit:contain; padding:3px; box-sizing:border-box;}
+.yb-im i{position:absolute; top:-5px; inset-inline-start:-5px; min-width:20px; height:20px; padding:0 4px; box-sizing:border-box; border-radius:10px; font-style:normal; font-size:11px; font-weight:800; line-height:20px; text-align:center; color:#fff; background:var(--accent);}
+.yb-n{flex:1; min-width:0;} .yb-n b{display:block; font-size:15px; font-weight:800;} .yb-n small{display:block; margin-top:2px; font-size:11px; color:var(--text-soft); direction:ltr; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.yb-a{flex:0 0 auto; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; font-size:18px; font-weight:800; color:var(--accent-dk); background:color-mix(in srgb,var(--accent) 16%,transparent);}
+.yb-r.on .yb-a{color:#fff; background:var(--accent);}
+.yb-ft{margin-top:16px; text-align:center;} .yb-ft button{font-family:inherit; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:700; color:var(--text-soft); background:var(--g-fill,rgba(255,255,255,.3)); border:1px solid var(--g-line,rgba(255,255,255,.6));}
+@media (prefers-reduced-motion:reduce){ .yg-fig{animation:none;} .yg-img,.yg-img.on{transition-duration:.01s; transition-delay:0s;} .yg-info.in{animation:none;} }
 </style>
 <script id="yoga-ui">
 /* ===== Yoga view: today's poses, crescent timer, breathing auras (no pose images yet: put them at yoga/<pose-id>.png) ===== */
@@ -6642,27 +6678,34 @@ setTimeout(function(){
   function blob(b,t,s){ var d="",a,r,k; for(var i=0;i<90;i++){ a=i/90*6.2832; r=b.R; for(k=0;k<b.h.length;k++) r+=b.h[k][0]*Math.sin(b.h[k][1]*a+b.h[k][2]*t+b.h[k][3]); r*=s; d+=(i?"L":"M")+(150+r*Math.cos(a)).toFixed(1)+" "+(150+r*Math.sin(a)).toFixed(1); } return d+"Z"; }
   function build(){
     var dots=list.map(function(){ return "<i></i>"; }).join("");
-    root.innerHTML='<div class="yg-top"><button type="button" class="yg-back" data-y="back" aria-label="برگشت">›</button><div><b>یوگای امروز</b><span>'+fd(list.length)+' حرکت · حدود '+fd(Math.round(Y.totalSec(list)/60))+' دقیقه</span></div></div><div class="yg-steps">'+dots+'</div><div class="yg-main"></div>';
-    E.steps=[].slice.call(root.querySelectorAll(".yg-steps i")); E.main=root.querySelector(".yg-main"); pose();
+    root.innerHTML='<div class="yg-top"><button type="button" class="yg-back" data-y="back" aria-label="برگشت">›</button><div><b>یوگای امروز</b><span>'+fd(list.length)+' حرکت · حدود '+fd(Math.round(Y.totalSec(list)/60))+' دقیقه</span></div><button type="button" class="yg-bk" data-y="bank">بانک حرکات یوگا</button></div><div class="yg-steps">'+dots+'</div><div class="yg-main"></div>';
+    E.steps=[].slice.call(root.querySelectorAll(".yg-steps i")); E.main=root.querySelector(".yg-main"); E.stage=null; pose();
   }
   function pose(){
-    if(done){ E.main.innerHTML='<div class="yg-end"><em>🌿</em><b>آفرین، تمومش کردی</b><span>'+fd(list.length)+' حرکت آرامش برای امروز. حالا چند نفس عمیق بکش.</span><div class="yg-row" style="margin-top:18px"><button type="button" data-y="again">دوباره از اول</button><button type="button" data-y="back">برگشت</button></div></div>'; steps(); return; }
-    var p=list[idx];
-    E.main.innerHTML=
-     '<div class="yg-stage"><svg class="yg-aura" viewBox="0 0 300 300" aria-hidden="true"><defs><radialGradient id="ygG1"><stop offset=".6" style="stop-color:var(--accent);stop-opacity:0"/><stop offset=".86" style="stop-color:var(--accent);stop-opacity:.3"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:0"/></radialGradient><radialGradient id="ygG2"><stop offset=".6" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:0"/><stop offset=".86" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:.26"/><stop offset="1" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:0"/></radialGradient><filter id="ygB1" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter><filter id="ygB2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs><path class="fl fa a3" fill="url(#ygG2)" filter="url(#ygB1)"/><path class="fl fa a2" fill="url(#ygG1)" filter="url(#ygB2)"/><path class="fl fa a1" fill="url(#ygG1)"/></svg>'+
-     '<div class="yg-fig"><em>🧘🏻‍♀️</em><img class="yg-img" src="yoga/'+p.id+'.png" alt="'+p.en+'"></div></div>'+
-     '<div class="yg-time"><span class="tv"></span><span class="tl"></span></div>'+
-     '<div class="yg-name">'+p.fa+'</div><div class="yg-en">'+p.en+'</div><div class="yg-desc">'+p.desc+'</div>'+
-     '<div class="yg-ctl"><button type="button" class="yg-sk" data-y="prev"'+(idx?'':' disabled')+'>قبلی</button><button type="button" class="yg-go" data-y="go"></button><button type="button" class="yg-sk" data-y="next">'+(idx<list.length-1?'بعدی':'پایان')+'</button></div>'+
-     '<div class="yg-row"><button type="button" data-y="snd">🎧 آوای آرامش</button><button type="button" data-y="auto" class="'+(auto?'on':'')+'">رفتن خودکار به حرکت بعد</button></div>';
-    var img=E.main.querySelector(".yg-img"), fig=E.main.querySelector(".yg-fig"); img.onerror=function(){ img.remove(); }; img.onload=function(){ fig.classList.add("has"); };
-    E.a=[".a1",".a2",".a3"].map(function(q){ return E.main.querySelector(q); });
-    E.tv=E.main.querySelector(".tv"); E.tl=E.main.querySelector(".tl"); E.go=E.main.querySelector(".yg-go"); steps(); paint(); draw();
+    if(done){ E.stage=null; E.main.innerHTML='<div class="yg-end"><em>🌿</em><b>آفرین، تمومش کردی</b><span>'+fd(list.length)+' حرکت آرامش برای امروز. حالا چند نفس عمیق بکش.</span><div class="yg-row" style="margin-top:18px"><button type="button" data-y="again">دوباره از اول</button><button type="button" data-y="back">برگشت</button></div></div>'; steps(); return; }
+    var p=list[idx], i;
+    if(!E.stage){
+      E.main.innerHTML='<div class="yg-stage"><svg class="yg-aura" viewBox="0 0 300 300" aria-hidden="true"><defs><radialGradient id="ygG1"><stop offset=".6" style="stop-color:var(--accent);stop-opacity:0"/><stop offset=".86" style="stop-color:var(--accent);stop-opacity:.3"/><stop offset="1" style="stop-color:var(--accent);stop-opacity:0"/></radialGradient><radialGradient id="ygG2"><stop offset=".6" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:0"/><stop offset=".86" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:.26"/><stop offset="1" style="stop-color:var(--c-yoga,var(--accent));stop-opacity:0"/></radialGradient><filter id="ygB1" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter><filter id="ygB2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs><path class="fl fa a3" fill="url(#ygG2)" filter="url(#ygB1)"/><path class="fl fa a2" fill="url(#ygG1)" filter="url(#ygB2)"/><path class="fl fa a1" fill="url(#ygG1)"/></svg><div class="yg-fig"><em>🧘🏻‍♀️</em></div></div><div class="yg-time"><span class="tv"></span><span class="tl"></span></div><div class="yg-info"></div><div class="yg-ctl"><button type="button" class="yg-sk" data-y="prev">قبلی</button><button type="button" class="yg-go" data-y="go"></button><button type="button" class="yg-sk" data-y="next"></button></div><div class="yg-row"><button type="button" data-y="snd">🎧 آوای آرامش</button><button type="button" data-y="auto">رفتن خودکار به حرکت بعد</button></div>';
+      E.stage=1; E.fig=E.main.querySelector(".yg-fig"); E.info=E.main.querySelector(".yg-info"); E.tv=E.main.querySelector(".tv"); E.tl=E.main.querySelector(".tl"); E.go=E.main.querySelector(".yg-go");
+      E.pv=E.main.querySelector('[data-y="prev"]'); E.nx=E.main.querySelector('[data-y="next"]'); E.au=E.main.querySelector('[data-y="auto"]');
+      E.a=[".a1",".a2",".a3"].map(function(q){ return E.main.querySelector(q); });
+    }
+    /* old angles fade out softly while the new pose's angles are added underneath */
+    [].forEach.call(E.fig.querySelectorAll(".yg-img"),function(o){ o.classList.remove("on"); o.classList.add("out"); setTimeout(function(){ o.remove(); },2600); });
+    cur=-1;
+    for(i=0;i<p.n;i++){ var im=new Image(); im.className="yg-img"; im.alt=p.en; im.decoding="async"; im.setAttribute("data-v",i); im.onerror=function(){ this.remove(); }; im.onload=function(){ E.fig.classList.add("has"); }; im.src=Y.img(p,i); E.fig.appendChild(im); }
+    void E.fig.offsetWidth; setVar(0);
+    E.info.innerHTML='<div class="yg-name">'+p.fa+'</div><div class="yg-en">'+p.en+'</div><div class="yg-desc">'+p.desc+'</div>';
+    E.info.classList.remove("in"); void E.info.offsetWidth; E.info.classList.add("in");
+    E.pv.disabled=!idx; E.nx.textContent=idx<list.length-1?"بعدی":"پایان"; E.au.classList.toggle("on",auto);
+    var nx=list[idx+1]; if(nx) for(i=0;i<nx.n;i++) new Image().src=Y.img(nx,i);
+    steps(); paint(); draw();
   }
+  function setVar(i){ if(i===cur||!E.fig) return; cur=i; [].forEach.call(E.fig.querySelectorAll(".yg-img:not(.out)"),function(m){ m.classList.toggle("on",+m.getAttribute("data-v")===i); }); }
   function steps(){ E.steps.forEach(function(s,i){ s.className=done||i<idx?"d":(i===idx?"c":""); }); }
   function paint(){
     if(done||!E.tv) return; var p=list[idx];
-    E.tv.textContent=fmt(left); E.go.textContent=run?"❚❚":"▶";
+    E.tv.textContent=fmt(left); E.go.textContent=run?"❚❚":"▶"; if(run||left<p.sec) setVar(Y.vi(p,p.sec-left));
     E.tl.textContent=run?((tt%10)<4?"دم…":"بازدم…"):(left<p.sec?"متوقف شد":"برای شروع بزن");
   }
   function draw(){ if(!E.a||!E.a[0]) return; var s=1+(run?.045*Math.sin(tt*.63):.015*Math.sin(tt*.4)); for(var i=0;i<3;i++){ var d=blob(BL[i],tt*(run?1.5:.9)+i*2.3,s); E.a[i].setAttribute("d",d); E.a[i].setAttribute("transform","rotate("+((tt*(i%2?-6:5))%360).toFixed(1)+" 150 150)"); } }
@@ -6676,12 +6719,49 @@ setTimeout(function(){
     var keep=run&&(!fromTimer||auto); idx++; left=list[idx].sec; run=false; clearInterval(iv); pose(); if(keep) start();
   }
   function prev(){ if(idx<=0) return; var keep=run; idx--; left=list[idx].sec; run=false; clearInterval(iv); pose(); if(keep) start(); }
+  /* ----- pose bank: add / remove poses in today's session ----- */
+  var bank=null;
+  function plIds(){ return list.map(function(p){ return p.id; }); }
+  function replan(){
+    var id=list[idx]&&list[idx].id, was=run; list=Y.today(); var k=plIds().indexOf(id); done=false;
+    if(k>=0) idx=k; else { idx=Math.min(idx,list.length-1); left=list[idx].sec; }
+    build(); if(was&&k<0) start();
+  }
+  function rb(){
+    if(!bank) return; var box=bank.querySelector(".fp-box"), top=box.scrollTop, pos={}, h;
+    plIds().forEach(function(id,i){ pos[id]=i+1; });
+    h='<div class="sm-h"><span>بانک حرکات یوگا</span><button type="button" class="sm-x" data-b="x">✕</button></div><p class="yb-hint">روی هر حرکت بزن تا به برنامه‌ی امروز اضافه یا از آن حذف شود. شماره‌ها ترتیب حرکت‌ها هستند.</p>';
+    Y.groups.forEach(function(g){
+      var ps=Y.poses.filter(function(p){ return p.g===g[0]; }); if(!ps.length) return;
+      h+='<div class="yb-t">'+g[1]+'</div>'+ps.map(function(p){ var n=pos[p.id];
+        return '<button type="button" class="yb-r'+(n?' on':'')+'" data-b="t" data-id="'+p.id+'"><span class="yb-im"><img src="'+Y.thumb(p)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+(n?'<i>'+fd(n)+'</i>':'')+'</span><span class="yb-n"><b>'+p.fa+'</b><small>'+p.en.replace(/\s*\(.*$/,'')+'</small></span><span class="yb-a">'+(n?'✓':'+')+'</span></button>'; }).join('');
+    });
+    h+='<div class="yb-ft"><button type="button" data-b="rs">برنامه‌ی تصادفی امروز</button></div>';
+    box.innerHTML=h; box.scrollTop=top;
+  }
+  function closeBank(){ if(bank){ bank.remove(); bank=null; } }
+  function openBank(){
+    if(bank) return; bank=document.createElement("div"); bank.className="fp tm-sheet sm-sheet yb"; bank.innerHTML='<div class="fp-ov"></div><div class="fp-box" dir="rtl"></div>'; document.body.appendChild(bank); rb();
+    bank.addEventListener("click",function(e){
+      if(e.target.classList.contains("fp-ov")){ closeBank(); return; }
+      var b=e.target.closest("[data-b]"); if(!b) return; var a=b.getAttribute("data-b"), ids=plIds();
+      if(a==="x") closeBank();
+      else if(a==="rs"){ Y.resetPlan(); replan(); rb(); }
+      else if(a==="t"){
+        var id=b.getAttribute("data-id"), k=ids.indexOf(id);
+        if(k>=0){ if(ids.length<2) return; ids.splice(k,1); }
+        else ids.splice((ids.length&&ids[ids.length-1]==="savasana"&&id!=="savasana")?ids.length-1:ids.length,0,id);
+        Y.setPlan(ids); replan(); rb();
+      }
+    });
+  }
   root.addEventListener("click",function(e){
     var b=e.target.closest("[data-y]"); if(!b) return; var y=b.getAttribute("data-y");
     if(y==="back"){ pause(); setTab("timer"); }
     else if(y==="go"){ run?pause():start(); }
     else if(y==="next") next(false); else if(y==="prev") prev();
     else if(y==="again") init();
+    else if(y==="bank") openBank();
     else if(y==="auto"){ auto=!auto; b.classList.toggle("on",auto); }
     else if(y==="snd"&&window.lpOpenMixer) window.lpOpenMixer();
   });
