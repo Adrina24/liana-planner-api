@@ -7,16 +7,38 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#4FA8FF">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-48.png">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Liana's Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&family=Mirza:wght@400..700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400..700&family=Poppins:wght@400;600;700&family=Quicksand:wght@400..700&family=Caveat:wght@500..700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300..900&family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&family=Mirza:wght@400..700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400..700&family=Poppins:wght@400;600;700&family=Quicksand:wght@400..700&family=Caveat:wght@500..700&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&family=Mirza:wght@400..700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400..700&family=Poppins:wght@400;600;700&family=Quicksand:wght@400..700&family=Caveat:wght@500..700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Kufi+Arabic:wght@300..900&family=Noto+Sans+Arabic:wght@300..900&family=Lalezar&family=Markazi+Text:wght@400..700&family=Amiri:wght@400;700&family=Dancing+Script:wght@500..700&family=Mirza:wght@400..700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400..700&family=Poppins:wght@400;600;700&family=Quicksand:wght@400..700&family=Caveat:wght@500..700&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" href="Vazirmatn-RD-VF.woff2" as="font" type="font/woff2" crossorigin>
+<style id="lp-local-font">
+@font-face{font-family:'Vazirmatn';src:url('Vazirmatn-RD-VF.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Yekan';src:url('font-yekan-regular.woff') format('woff');font-weight:100 900;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Nazanin';src:url('font-nazanin-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Nazanin';src:url('font-nazanin-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Zar';src:url('font-zar-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Zar';src:url('font-zar-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Mitra';src:url('font-mitra-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Mitra';src:url('font-mitra-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Lotus';src:url('font-lotus-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Lotus';src:url('font-lotus-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Roya';src:url('font-roya-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Roya';src:url('font-roya-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Koodak';src:url('font-koodak-regular.woff') format('woff');font-weight:100 900;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Titr';src:url('font-titr-regular.woff') format('woff');font-weight:100 900;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Traffic';src:url('font-traffic-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Traffic';src:url('font-traffic-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Kamran';src:url('font-kamran-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Kamran';src:url('font-kamran-bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'LP Nastaliq';src:url('font-nastaliq-regular.woff') format('woff');font-weight:100 900;font-style:normal;font-display:swap;size-adjust:125%;}
+</style>
 <style>
 :root{
   --accent-h:255; --accent-s:50%;
@@ -2081,6 +2103,17 @@ var PALETTES={
 };
 var FONTS=[
   {id:"vazir",  label:"وزیر متن",  family:"'Vazirmatn', Tahoma, sans-serif"},
+  {id:"lp-yekan", label:"یکان", family:"'LP Yekan', 'Vazirmatn', sans-serif"},
+  {id:"lp-nazanin", label:"نازنین", family:"'LP Nazanin', 'Vazirmatn', serif"},
+  {id:"lp-zar", label:"زر", family:"'LP Zar', 'Vazirmatn', serif"},
+  {id:"lp-mitra", label:"میترا", family:"'LP Mitra', 'Vazirmatn', sans-serif"},
+  {id:"lp-lotus", label:"لوتوس", family:"'LP Lotus', 'Vazirmatn', sans-serif"},
+  {id:"lp-roya", label:"رؤیا", family:"'LP Roya', 'Vazirmatn', sans-serif"},
+  {id:"lp-koodak", label:"کودک (بامزه)", family:"'LP Koodak', 'Vazirmatn', cursive"},
+  {id:"lp-titr", label:"تیتر (درشت)", family:"'LP Titr', 'Vazirmatn', sans-serif"},
+  {id:"lp-traffic", label:"ترافیک", family:"'LP Traffic', 'Vazirmatn', sans-serif"},
+  {id:"lp-kamran", label:"کامران (دست‌نویس)", family:"'LP Kamran', 'Vazirmatn', cursive"},
+  {id:"lp-nastaliq", label:"نستعلیق", family:"'LP Nastaliq', 'Vazirmatn', serif"},
   {id:"naskh",  label:"نسخ (Noto Naskh)", family:"'Noto Naskh Arabic', 'Vazirmatn', serif"},
   {id:"kufi",   label:"کوفی (Noto Kufi)", family:"'Noto Kufi Arabic', 'Vazirmatn', sans-serif"},
   {id:"notosans",label:"نوتو سنس عربی", family:"'Noto Sans Arabic', 'Vazirmatn', sans-serif"},
@@ -2332,7 +2365,20 @@ function mergeState(loaded){
 /* ---- auth / remote sync ---- */
 function getToken(){ return localStorage.getItem(TOKEN_KEY); }
 function getEmail(){ return localStorage.getItem(EMAIL_KEY); }
+var sessionExpiredShown=false;
+// the server no longer accepts this login (for example after the secret key was changed):
+// show the login screen instead of silently working without saving to the server.
+// Data on this phone is kept, and the next login pushes it to the server before reading anything back.
+function sessionExpired(){
+  if(sessionExpiredShown || !getToken()) return;
+  sessionExpiredShown=true;
+  clearSession();
+  document.body.classList.remove("booting");
+  showAuthScreen();
+  setAuthMsg("نشست ورودت تموم شده؛ دوباره وارد شو. اطلاعاتی که روی این گوشی داری حفظ می‌شه 💛","err");
+}
 function setSession(token,email){
+  sessionExpiredShown=false;
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(EMAIL_KEY, email);
 }
@@ -2350,6 +2396,7 @@ function apiCall(path, method, body, useAuth){
     body: body ? JSON.stringify(body) : undefined
   }).then(function(res){
     return res.json().then(function(data){
+      if(res.status===401 && useAuth) sessionExpired();
       return {ok:res.ok, status:res.status, data:data};
     });
   });
@@ -2504,6 +2551,7 @@ function continueOffline(){
   markReady();
 }
 function finishBoot(){
+  if(sessionExpiredShown) return;       // login was rejected by the server: stay on the login screen
   applyGlassDefaultOnce();
   hideAuthScreen();
   document.getElementById("accountEmailLabel").textContent=getEmail()||"";
