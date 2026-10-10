@@ -1,7 +1,9 @@
-/* Liana's Planner — service worker
+/* Liana Planner — service worker
    - the app shell is saved on the phone, so the site opens instantly and even without internet
    - index.html: shown from the saved copy right away, and refreshed quietly in the background
      (a new version appears the next time the app is opened)
+   - manifest.json + app icons: always taken from the network first (so a new name or icon shows up
+     right away); the saved copy is only used when there is no connection
    - images / fonts / sounds: saved the first time they are used
    - the server (workers.dev) and other websites are never touched by this file
    To force every phone to download everything again, change VERSION below. */
@@ -41,6 +43,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(pageStrategy(req, event));
     return;
   }
+  if (/\/(manifest\.json|apple-touch-icon\.png|icon-[^\/]*\.png)$/.test(url.pathname)) {
+    event.respondWith(freshStrategy(req));
+    return;
+  }
   if (req.headers.has("range")) {                        // audio / video
     event.respondWith(rangeStrategy(req, event));
     return;
@@ -57,6 +63,20 @@ async function pageStrategy(req, event) {
   if (cached) { event.waitUntil(refresh); return cached; }
   const res = await refresh;                              // first ever visit: nothing saved yet
   return res || new Response("offline", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+}
+
+// manifest + app icons: network first (max 4 s), saved copy only as a fallback
+async function freshStrategy(req) {
+  const cache = await caches.open(VERSION);
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 4000);
+    const res = await fetch(new Request(req.url, { cache: "no-cache", signal: ctl.signal }));
+    clearTimeout(timer);
+    if (res && res.status === 200) { cache.put(req.url, res.clone()); return res; }
+  } catch (e) {}
+  const hit = await cache.match(req.url, { ignoreSearch: true });
+  return hit || new Response("", { status: 504 });
 }
 
 async function assetStrategy(req) {
