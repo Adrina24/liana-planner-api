@@ -1148,9 +1148,9 @@ html body .chat-stage .liana-halo{width:calc(var(--stage-h)*.92);height:calc(var
 .bnav button{transition:color .18s ease, background-color .18s ease, transform .2s cubic-bezier(.2,.8,.2,1);}
 .hm-e,.hm-row,.hm-ck,.hm-d{transition:transform .2s cubic-bezier(.2,.8,.2,1), background-color .18s ease, border-color .18s ease, color .18s ease, opacity .18s ease;}
 @media (prefers-reduced-motion:reduce){ .view.on,.view.on > *,.liana-img.lp-in,.hm-lia img.swap{animation:none !important;} }
-.bnav,.car-card,.soon{background:var(--card); border:1.5px solid var(--border); box-shadow:var(--shadow);}
-body.style-glass .bnav, body.style-glass .car-card, body.style-glass .soon{background:rgba(255,255,255,.22); backdrop-filter:blur(22px) saturate(180%); -webkit-backdrop-filter:blur(22px) saturate(180%); border-color:rgba(255,255,255,.55); box-shadow:0 8px 32px rgba(31,38,135,.18), inset 0 1px 0 rgba(255,255,255,.6);}
-body.style-glass.mode-dark .bnav, body.style-glass.mode-dark .car-card, body.style-glass.mode-dark .soon{background:rgba(30,26,46,.35); border-color:rgba(255,255,255,.14);}
+.bnav,.car-card,.soon,.fx-card{background:var(--card); border:1.5px solid var(--border); box-shadow:var(--shadow);}
+body.style-glass .bnav, body.style-glass .car-card, body.style-glass .soon, body.style-glass .fx-card{background:rgba(255,255,255,.22); backdrop-filter:blur(22px) saturate(180%); -webkit-backdrop-filter:blur(22px) saturate(180%); border-color:rgba(255,255,255,.55); box-shadow:0 8px 32px rgba(31,38,135,.18), inset 0 1px 0 rgba(255,255,255,.6);}
+body.style-glass.mode-dark .bnav, body.style-glass.mode-dark .car-card, body.style-glass.mode-dark .soon, body.style-glass.mode-dark .fx-card{background:rgba(30,26,46,.35); border-color:rgba(255,255,255,.14);}
 .bnav{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(10px + env(safe-area-inset-bottom)); width:min(452px,calc(100% - 20px)); display:flex; gap:2px; padding:6px; border-radius:24px; z-index:35;}
 .bnav button{flex:1; min-width:0; border:0; background:none; color:var(--text-soft); display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 0 5px; border-radius:18px; font-size:10.5px; font-weight:700; transition:.2s;}
 .bnav svg{width:23px; height:23px;}
@@ -1488,7 +1488,7 @@ html body.style-glass .auth-card{ background:var(--g-fill,rgba(255,255,255,.28))
 html body.style-glass .auth-field input{ background:var(--g-fill,rgba(255,255,255,.28)) !important; border:1px solid var(--g-line,rgba(255,255,255,.6)) !important; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
 html body.style-glass .auth-btn{ background:linear-gradient(135deg, hsla(var(--accent-h),90%,60%,.85), hsla(var(--accent-h),90%,45%,.8)) !important; border:1px solid rgba(255,255,255,.45); box-shadow:0 6px 18px hsla(var(--accent-h),80%,40%,.3), inset 0 1px 0 rgba(255,255,255,.45); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
 /* big surfaces */
-html body.style-glass :is(.bnav,.car-card,.soon,.rm-in,.hm-card,.jr-card,.jr-nav,.jr-search,.jr-btn,.rep-tile,.rep-pill,.rep-row,.wt-chip,.fp-box,.rep-modal){
+html body.style-glass :is(.bnav,.car-card,.soon,.fx-card,.rm-in,.hm-card,.jr-card,.jr-nav,.jr-search,.jr-btn,.rep-tile,.rep-pill,.rep-row,.wt-chip,.fp-box,.rep-modal){
   background:var(--g-fill,rgba(255,255,255,.28)) !important; border:1px solid var(--g-line,rgba(255,255,255,.6)) !important;
   box-shadow:var(--g-shadow,0 4px 16px rgba(31,38,135,.12)), inset 0 1px 0 rgba(255,255,255,.4) !important;
   backdrop-filter:blur(20px) saturate(170%); -webkit-backdrop-filter:blur(20px) saturate(170%);
@@ -1500,6 +1500,18 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
   background:var(--g-fill,rgba(255,255,255,.28)) !important; border:1px solid var(--g-line,rgba(255,255,255,.6)) !important;
   backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
 }
+</style>
+<style id="fx-style">
+.fx-head{margin:14px 4px 14px; display:flex; flex-direction:column; gap:4px;}
+.fx-head b{font-size:18px; color:var(--text);}
+.fx-head span{font-size:13px; color:var(--text-soft); line-height:1.8;}
+.fx-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.fx-card{border-radius:var(--radius); padding:18px 10px 14px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; min-height:160px;}
+.fx-ic{width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-size:38px; line-height:1;}
+.fx-ic img{width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(40,50,90,.18));}
+.fx-card b{font-size:14.5px; color:var(--text);}
+.fx-d{font-size:11.5px; color:var(--text-soft); line-height:1.7;}
+.fx-chip{margin-top:auto; font-style:normal; padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:700; color:var(--accent-text,var(--accent-dk)); background:var(--accent-lt);}
 </style>
 </head>
 <body class="style-glass booting">
@@ -1608,7 +1620,7 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
 </div>
 
 </div>
-<div class="view" data-view="league"><div class="soon"><em>🏆</em><b>لیگ</b><span>به‌زودی…</span></div></div>
+<div class="view" data-view="fitness"><div class="fx-head"><b>فیتنس و تغذیه</b><span>برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه</span></div><div class="fx-grid"><div class="fx-card"><span class="fx-ic" data-fxicon="workout">🏋🏻‍♀️</span><b>برنامه‌ی ورزشی</b><span class="fx-d">برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="meal">🥗</span><b>برنامه‌ی تغذیه</b><span class="fx-d">وعده‌های روزانه و برنامه‌ی غذایی</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="calorie">🔥</span><b>کالری روزانه</b><span class="fx-d">کالری موردنیازت و کسری کالری برای کاهش وزن</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="exbank">💪</span><b>بانک حرکات ورزشی</b><span class="fx-d">آموزش و انیمیشن حرکات بدنسازی</span><em class="fx-chip">به‌زودی</em></div></div></div>
 
 <div class="view" data-view="timer"><div class="tm-tabs" id="tmTabs"><button type="button" class="on" data-tab="timer">تایمر</button><button type="button" data-tab="yoga">یوگا</button></div><div class="tm" id="tmRoot"></div><div class="yg" id="ygRoot" hidden></div></div><div class="view" data-view="journal"><div class="jr">
 <div class="jr-head"><button type="button" class="jr-nav" id="jrPM" aria-label="ماه قبل">›</button><div><b id="jrMonth"></b><span id="jrCount"></span></div><button type="button" class="jr-nav" id="jrNM" aria-label="ماه بعد">‹</button></div>
@@ -1834,7 +1846,7 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
   </div>
 </div>
 
-<nav class="bnav" id="bnav"><button type="button" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>خانه</span></button><button type="button" data-v="habits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span>عادت‌ها</span></button><button type="button" data-v="league"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4v1a3 3 0 0 0 4 3M16 6h4v1a3 3 0 0 1-4 3"/><path d="M12 13v4M8 20h8"/></svg><span>لیگ</span></button><button type="button" data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span>تایمر</span></button><button type="button" data-v="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>ژورنال</span></button><button type="button" data-v="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>آمار</span></button></nav>
+<nav class="bnav" id="bnav"><button type="button" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>خانه</span></button><button type="button" data-v="habits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span>عادت‌ها</span></button><button type="button" data-v="fitness"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><span>فیتنس</span></button><button type="button" data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span>تایمر</span></button><button type="button" data-v="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>ژورنال</span></button><button type="button" data-v="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>آمار</span></button></nav>
 <button class="chat-fab" id="chatFab" aria-label="چت با لیانا">
   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 10.5A5 5 0 0 1 10.5 5.5h9A5 5 0 0 1 24.5 10.5v6a5 5 0 0 1-5 5H14.6l-4.7 4a.7.7 0 0 1-1.15-.53V21.5A5 5 0 0 1 5.5 16.5z"/><circle cx="11.2" cy="13.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="18.8" cy="13.5" r="1.3" fill="currentColor" stroke="none"/><path d="M26 1.8l1.05 2.75L29.8 5.6l-2.75 1.05L26 9.4l-1.05-2.75L22.2 5.6l2.75-1.05z" fill="currentColor" stroke="none"/></svg>
 </button>
@@ -2182,6 +2194,10 @@ var ICONS={
 function setUiIcons(){
   var s1=document.getElementById("settingsIconImg"); if(s1) s1.src=ICONS.settings;
   var s4=document.getElementById("topCalIcon"); if(s4) s4.src=ICONS.today;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-fxicon]"),function(el){
+    var fs=ICONS["fx_"+el.getAttribute("data-fxicon")];
+    if(fs) el.innerHTML='<img alt="" src="'+fs+'">';
+  });
   Array.prototype.forEach.call(document.querySelectorAll("img[data-icon]"),function(img){
     var src=ICONS[img.getAttribute("data-icon")];
     if(src) img.src=src;
