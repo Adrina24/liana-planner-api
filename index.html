@@ -1119,6 +1119,9 @@ body{padding-bottom:104px;}
 .chat-stage{--sf:var(--accent,#8b7bff);--sc:color-mix(in srgb,var(--sf) 55%,transparent)}
 html body .chat-stage .liana-halo{width:calc(var(--stage-h)*.92);height:calc(var(--stage-h)*.92);border:0;background:radial-gradient(circle,color-mix(in srgb,var(--sf) 38%,transparent) 0%,color-mix(in srgb,var(--sf) 14%,transparent) 46%,transparent 70%);animation:sfBreath 5s ease-in-out infinite}
 .chat-stage .liana-fig,.chat-sheet[data-state="thinking"] .liana-fig{animation:none}
+/* Liana in chat: white light halo (same as home page) so the white outline of the figure melts into it */
+html body .chat-stage .liana-fig{filter:drop-shadow(0 0 9px rgba(255,255,255,.95)) drop-shadow(0 0 22px rgba(165,208,255,.85));}
+html body .chat-stage .liana-img, html body.theme-white .chat-stage .liana-img{filter:none;}
 .sf-grid{position:absolute;inset:0;background-image:linear-gradient(color-mix(in srgb,var(--sf) 20%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--sf) 20%,transparent) 1px,transparent 1px);background-size:24px 24px;-webkit-mask-image:radial-gradient(ellipse 62% 78% at 50% 44%,#000 0%,transparent 74%);mask-image:radial-gradient(ellipse 62% 78% at 50% 44%,#000 0%,transparent 74%);animation:sfGrid 12s linear infinite}
 .sf-ring{position:absolute;left:50%;top:calc(var(--stage-h)*.43);border-radius:50%;transform:translate(-50%,-50%)}
 .sf-ring.r1{width:calc(var(--stage-h)*.96);height:calc(var(--stage-h)*.96);border:1.5px dashed var(--sc);animation:sfSpin 26s linear infinite}
