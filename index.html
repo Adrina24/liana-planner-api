@@ -1575,6 +1575,26 @@ select.kc-in{text-align:right;padding:11px 10px;}
 .ex-hero{width:100%;aspect-ratio:4/3;object-fit:contain;background:#fff;border-radius:16px;margin:6px 0}
 .ex-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.ex-tags span{font-size:11.5px;padding:3px 10px;border-radius:999px;background:var(--border);color:var(--text)}
 .ex-ol{margin:4px 0 0;padding-right:18px;direction:ltr;text-align:left;padding-left:18px;padding-right:0;font-size:13px;line-height:1.8}
+#wkTabs button{flex:1}
+.wk-it{display:flex;align-items:center;gap:8px;justify-content:space-between;cursor:pointer}
+.wk-t b{display:block;font-size:13.5px}.wk-t small{display:block;color:var(--text-soft);font-size:11px;direction:ltr;text-align:right}.wk-t span{font-size:12px;color:var(--text-soft)}
+.wk-r{padding:8px 0;border-bottom:1px solid var(--border)}.wk-r .row{display:flex;align-items:center;gap:6px;margin-top:6px}.wk-n{width:72px;padding:6px 4px;font-size:13px}
+.ex-row small{display:block}
+.wk-c{padding-bottom:12px}
+.wk-h{position:relative;padding-left:100px}.wk-h b{display:block;font-size:14px}.wk-h small{display:block;font-size:11px;color:var(--text-soft);direction:ltr;text-align:right}
+.wk-ac{position:absolute;left:0;top:0;display:flex;gap:4px}.wk-ac button{border:none;background:var(--border);color:var(--text);width:26px;height:26px;border-radius:50%;font-size:12px}
+.wk-sr{display:grid;grid-template-columns:26px 1fr 1fr 30px;gap:6px;align-items:center;margin-top:6px;font-size:12.5px;text-align:center}
+.wk-sr.wk-st{grid-template-columns:26px 1fr 1fr 96px}.wk-sh{color:var(--text-soft);font-size:11.5px}
+.wk-x{border:none;background:transparent;color:var(--text-soft);font-size:14px}
+.wk-rest{display:flex;align-items:center;gap:6px;margin:10px 0 8px;font-size:12.5px}
+.wk-tm{display:none;position:sticky;top:0;z-index:3;justify-content:space-between;align-items:center;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;margin-bottom:8px;font-size:13px}
+.wk-tm button{border:none;border-radius:8px;padding:4px 10px}
+.ex-row.sel{background:var(--border)}
+.ex-ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.ex-row.sel .ex-ck{background:var(--accent)}
+.ex-i{border:none;background:transparent;font-size:18px;color:var(--text-soft);margin-right:auto}
+.ex-bar{position:sticky;bottom:0;padding:8px 0 4px;background:var(--card)}
+
 
 </style>
 </head>
@@ -1701,7 +1721,7 @@ select.kc-in{text-align:right;padding:11px 10px;}
 
 </div>
 
-<div class="view" data-view="fitness"><div class="fx-head"><b>فیتنس و تغذیه</b><span>برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه</span></div><div class="fx-grid"><div class="fx-card"><span class="fx-ic" data-fxicon="workout">🏋🏻‍♀️</span><b>برنامه‌ی ورزشی</b><span class="fx-d">برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card" data-fx="meal" role="button" tabindex="0"><span class="fx-ic" data-fxicon="meal">🥗</span><b>برنامه‌ی تغذیه</b><span class="fx-d">وعده‌های روزانه و برنامه‌ی غذایی</span><em class="fx-chip">ثبت کن</em></div><div class="fx-card" data-fx="calorie" role="button" tabindex="0"><span class="fx-ic" data-fxicon="calorie">🔥</span><b>کالری روزانه</b><span class="fx-d">کالری موردنیازت و کسری کالری برای کاهش وزن</span><em class="fx-chip">محاسبه کن</em></div><div class="fx-card" data-fx="exbank" role="button" tabindex="0"><span class="fx-ic" data-fxicon="exbank">💪</span><b>بانک حرکات ورزشی</b><span class="fx-d">آموزش و انیمیشن حرکات بدنسازی</span><em class="fx-chip">ببین</em></div></div></div>
+<div class="view" data-view="fitness"><div class="fx-head"><b>فیتنس و تغذیه</b><span>برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه</span></div><div class="fx-grid"><div class="fx-card" data-fx="workout" role="button" tabindex="0"><span class="fx-ic" data-fxicon="workout">🏋🏻‍♀️</span><b>برنامه‌ی ورزشی</b><span class="fx-d">برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه</span><em class="fx-chip">برنامه‌ریزی</em></div><div class="fx-card" data-fx="meal" role="button" tabindex="0"><span class="fx-ic" data-fxicon="meal">🥗</span><b>برنامه‌ی تغذیه</b><span class="fx-d">وعده‌های روزانه و برنامه‌ی غذایی</span><em class="fx-chip">ثبت کن</em></div><div class="fx-card" data-fx="calorie" role="button" tabindex="0"><span class="fx-ic" data-fxicon="calorie">🔥</span><b>کالری روزانه</b><span class="fx-d">کالری موردنیازت و کسری کالری برای کاهش وزن</span><em class="fx-chip">محاسبه کن</em></div><div class="fx-card" data-fx="exbank" role="button" tabindex="0"><span class="fx-ic" data-fxicon="exbank">💪</span><b>بانک حرکات ورزشی</b><span class="fx-d">آموزش و انیمیشن حرکات بدنسازی</span><em class="fx-chip">ببین</em></div></div></div>
 
 <div class="view" data-view="timer"><div class="tm-tabs" id="tmTabs"><button type="button" class="on" data-tab="timer">تایمر</button><button type="button" data-tab="yoga">یوگا</button></div><div class="tm" id="tmRoot"></div><div class="yg" id="ygRoot" hidden></div></div><div class="view" data-view="journal"><div class="jr">
 <div class="jr-head"><button type="button" class="jr-nav" id="jrPM" aria-label="ماه قبل">›</button><div><b id="jrMonth"></b><span id="jrCount"></span></div><button type="button" class="jr-nav" id="jrNM" aria-label="ماه بعد">‹</button></div>
@@ -2069,10 +2089,11 @@ select.kc-in{text-align:right;padding:11px 10px;}
   "سیب|52|0.3|180;موز|89|1.1|120;پرتقال|47|0.9|180;نارنگی|53|0.8|90;انگور|69|0.7|100;هندوانه|30|0.6|300;خربزه|34|0.8|200;گیلاس|50|1|100;توت‌فرنگی|32|0.7|100;انار|83|1.7|150;خرما (هر عدد ≈ ۸ گرم)|282|2.5|24;کیوی|61|1.1|100;گلابی|57|0.4|180;هلو|39|0.9|150;آلو|46|0.7|60;کشمش|299|3.1|30;"+
   "خیار|15|0.7|100;گوجه‌فرنگی|18|0.9|100;سبزی خوردن|25|2.5|30;سبزی قورمه (خام)|30|3|100;کاهو|15|1.4|50;هویج|41|0.9|80;اسفناج|23|2.9|100;کلم‌بروکلی|34|2.8|100;کدو سبز|17|1.2|100;بادمجان|25|1|100;قارچ|22|3.1|100;فلفل دلمه‌ای|31|1|100;پیاز|40|1.1|50;کلم|25|1.3|100;رب گوجه‌فرنگی|82|4.3|15;"+
   "بادام|579|21|30;گردو|654|15|30;پسته|562|20|30;فندق|628|15|30;بادام‌زمینی|567|26|30;کره‌ی بادام‌زمینی|588|25|16;روغن زیتون|884|0|10;روغن مایع|884|0|10;کره|717|0.9|10;عسل|304|0.3|20;شکر|387|0|5;مربا|278|0.4|20;شکلات تلخ|600|8|20;نوشابه|42|0|330;آب‌پرتقال طبیعی|45|0.7|200;چیپس|536|7|30;بیسکویت ساده|450|6|30;"+
-  "نان جو|250|9|60;نان باگت|270|9|60;نان همبرگر (هر عدد)|265|9|60;برنج قهوه‌ای پخته|112|2.6|200;پلو ایرانی با روغن (پخته)|165|3|200;برنج خام|360|7|60;ماکارونی خام|371|13|80;رشته‌ی آش یا رشته‌پلو (خام)|360|12|50;کینوا پخته|120|4.4|150;بلغور گندم پخته|83|3|150;جو پوست‌کنده (خام)|354|12|50;آرد گندم|364|10|30;آرد برنج|366|6|30;گرانولا|471|10|40;پودر سوخاری|395|13|20;پاپ‌کورن (بدون روغن)|387|13|20;ذرت پخته|96|3.4|150;سیب‌زمینی شیرین پخته|90|2|150;چغندر پخته|44|1.7|100;کدو حلوایی پخته|20|0.7|100;عدس خام|353|26|50;لوبیا چیتی خام|347|21|50;نخود خام|364|19|50;ماش خام|347|24|50;لوبیا قرمز پخته|127|8.7|150;سویا پخته|173|17|100;حمص (پوره‌ی نخود)|166|8|50;نخودفرنگی پخته|81|5.4|100;باقالا تازه|88|8|100;گوشت چرخ‌کرده‌ی گاو پخته|250|26|100;گوشت چرخ‌کرده‌ی گوسفند پخته|283|25|100;راسته‌ی گوساله کبابی|210|29|100;فیله‌ی گوساله پخته|200|28|100;ران گوسفند پخته|250|26|100;ماهیچه‌ی گوسفند پخته|230|28|100;جگر گوسفند پخته|220|30|100;جگر مرغ پخته|167|25|100;سینه‌ی مرغ با پوست پخته|197|30|120;ران مرغ با پوست پخته|229|24|100;بال مرغ پخته|290|27|100;مرغ سوخاری|270|18|100;سینه‌ی بوقلمون پخته|135|30|120;کتلت (تقریبی)|245|14|60;سوسیس|280|11|50;کالباس|200|11|40;ماهی سفید پخته|130|22|120;ماهی تیلاپیا پخته|128|26|120;ساردین کنسروی|208|25|100;تن ماهی (کنسرو در روغن)|190|27|100;نیمرو (هر عدد)|196|13.6|60;املت ساده|154|10.6|150;زرده‌ی تخم‌مرغ|322|16|17;شیر بدون چربی|34|3.4|240;شیر سویا|54|3.3|240;شیر بادام (بدون شکر)|15|0.6|240;شیر کاکائو|83|3.4|200;کفیر|41|3.4|240;بستنی شیری|207|3.5|60;خامه|340|2|20;ماست چکیده|110|7|100;پنیر پروسس|300|14|20;پنیر چدار|403|25|30;پنیر پارمزان|431|38|10;پنیر کوتیج|98|11|100;پنیر ریکوتا|174|11|50;پودر کاکائو|228|20|5;آناناس|50|0.5|100;انبه|60|0.8|150;پاپایا|43|0.5|150;لیمو ترش|29|1.1|30;گریپ‌فروت|42|0.8|150;آلبالو|50|1|100;زردآلو|48|1.4|100;شلیل|44|1.1|150;شاه‌توت|43|1.4|50;تمشک|52|1.2|100;بلوبری|57|0.7|100;انجیر تازه|74|0.8|60;انجیر خشک|249|3.3|30;برگه‌ی زردآلو|241|3.4|30;آلو بخارا (خشک)|240|2.2|30;نارگیل (گوشت)|354|3.3|30;آووکادو|160|2|100;زیتون (هر عدد ≈ ۴ گرم)|115|0.8|20;به|57|0.4|100;خرمالو|70|0.6|150;آب انار|54|0.2|200;آب‌هویج|40|0.9|200;کرفس|16|0.7|50;تربچه|16|0.7|50;شلغم|28|0.9|100;کلم قمری|27|0.9|100;کلم کیل|49|4.3|50;گل‌کلم|25|1.9|100;جعفری|36|3|20;گشنیز|23|2.1|20;شوید|43|3.5|20;نعناع|44|3.3|10;ریحان|23|3.2|10;ترخون|49|3.4|10;پیازچه|32|1.8|30;شنبلیله‌ی تازه|49|4.4|20;زنجبیل|80|1.8|5;سیر|149|6.4|5;پیاز داغ|450|3|10;خیارشور|11|0.3|50;فلفل تند|40|1.9|10;بادام هندی (کاجو)|553|18|30;تخمه‌ی آفتابگردان|584|21|30;تخمه‌ی کدو|559|30|30;تخمه‌ی هندوانه|557|28|30;کنجد|573|18|10;دانه‌ی چیا|486|17|15;بذر کتان|534|18|10;نارگیل رنده‌شده|660|7|15;نخودچی برشته|370|19|30;ارده|595|17|15;حلوا ارده|470|13|30;روغن نارگیل|862|0|10;روغن کنجد|884|0|10;مارگارین|717|0.2|10;سس مایونز|680|1|15;سس کچاپ|112|1.7|15;خردل|66|4|10;حبه قند (هر عدد ≈ ۴ گرم)|387|0|8;نبات|387|0|10;شیره‌ی انگور|290|0.5|20;شیره‌ی خرما|290|1|20;گز (تقریبی)|430|4|30;سوهان (تقریبی)|480|6|30;باقلوا (تقریبی)|430|6|50;شیرینی خامه‌ای|350|4|80;کیک ساده|390|5|60;دونات|420|5|60;کلوچه|450|6|30;شکلات شیری|535|8|20;پفک|530|5|20;کراکر|440|9|20;ویفر|520|5|20;آبمیوه‌ی صنعتی|50|0.3|200;نوشابه‌ی رژیمی|0|0|330;قهوه‌ی سیاه|2|0.3|200;پروتئین بار|370|30|60;خورشت قورمه‌سبزی (تقریبی)|120|8|200;خورشت قیمه (تقریبی)|150|7|200;خورشت بادمجان (تقریبی)|135|6|200;خورشت فسنجان (تقریبی)|210|10|200;آش رشته (تقریبی)|70|3.5|300;سوپ جو (تقریبی)|60|3|250;حلیم (تقریبی)|140|8|200;میرزاقاسمی (تقریبی)|120|4|150;کوکو سبزی (تقریبی)|150|8|100;کوکو سیب‌زمینی (تقریبی)|190|5|80;فلافل (سرخ‌شده)|333|13|60;ناگت مرغ|296|15|100;پیتزا (هر برش ≈ ۱۰۰ گرم)|266|11|100"
+  "نان جو|250|9|60;نان باگت|270|9|60;نان همبرگر (هر عدد)|265|9|60;برنج قهوه‌ای پخته|112|2.6|200;پلو ایرانی با روغن (پخته)|165|3|200;برنج خام|360|7|60;ماکارونی خام|371|13|80;رشته‌ی آش یا رشته‌پلو (خام)|360|12|50;کینوا پخته|120|4.4|150;بلغور گندم پخته|83|3|150;جو پوست‌کنده (خام)|354|12|50;آرد گندم|364|10|30;آرد برنج|366|6|30;گرانولا|471|10|40;پودر سوخاری|395|13|20;پاپ‌کورن (بدون روغن)|387|13|20;ذرت پخته|96|3.4|150;سیب‌زمینی شیرین پخته|90|2|150;چغندر پخته|44|1.7|100;کدو حلوایی پخته|20|0.7|100;عدس خام|353|26|50;لوبیا چیتی خام|347|21|50;نخود خام|364|19|50;ماش خام|347|24|50;لوبیا قرمز پخته|127|8.7|150;سویا پخته|173|17|100;حمص (پوره‌ی نخود)|166|8|50;نخودفرنگی پخته|81|5.4|100;باقالا تازه|88|8|100;گوشت چرخ‌کرده‌ی گاو پخته|250|26|100;گوشت چرخ‌کرده‌ی گوسفند پخته|283|25|100;راسته‌ی گوساله کبابی|210|29|100;فیله‌ی گوساله پخته|200|28|100;ران گوسفند پخته|250|26|100;ماهیچه‌ی گوسفند پخته|230|28|100;جگر گوسفند پخته|220|30|100;جگر مرغ پخته|167|25|100;سینه‌ی مرغ با پوست پخته|197|30|120;ران مرغ با پوست پخته|229|24|100;بال مرغ پخته|290|27|100;مرغ سوخاری|270|18|100;سینه‌ی بوقلمون پخته|135|30|120;کتلت (تقریبی)|245|14|60;سوسیس|280|11|50;کالباس|200|11|40;ماهی سفید پخته|130|22|120;ماهی تیلاپیا پخته|128|26|120;ساردین کنسروی|208|25|100;تن ماهی (کنسرو در روغن)|190|27|100;نیمرو (هر عدد)|196|13.6|60;املت ساده|154|10.6|150;زرده‌ی تخم‌مرغ|322|16|17;شیر بدون چربی|34|3.4|240;شیر سویا|54|3.3|240;شیر بادام (بدون شکر)|15|0.6|240;شیر کاکائو|83|3.4|200;کفیر|41|3.4|240;بستنی شیری|207|3.5|60;خامه|340|2|20;ماست چکیده|110|7|100;پنیر پروسس|300|14|20;پنیر چدار|403|25|30;پنیر پارمزان|431|38|10;پنیر کوتیج|98|11|100;پنیر ریکوتا|174|11|50;پودر کاکائو|228|20|5;آناناس|50|0.5|100;انبه|60|0.8|150;پاپایا|43|0.5|150;لیمو ترش|29|1.1|30;گریپ‌فروت|42|0.8|150;آلبالو|50|1|100;زردآلو|48|1.4|100;شلیل|44|1.1|150;شاه‌توت|43|1.4|50;تمشک|52|1.2|100;بلوبری|57|0.7|100;انجیر تازه|74|0.8|60;انجیر خشک|249|3.3|30;برگه‌ی زردآلو|241|3.4|30;آلو بخارا (خشک)|240|2.2|30;نارگیل (گوشت)|354|3.3|30;آووکادو|160|2|100;زیتون (هر عدد ≈ ۴ گرم)|115|0.8|20;به|57|0.4|100;خرمالو|70|0.6|150;آب انار|54|0.2|200;آب‌هویج|40|0.9|200;کرفس|16|0.7|50;تربچه|16|0.7|50;شلغم|28|0.9|100;کلم قمری|27|0.9|100;کلم کیل|49|4.3|50;گل‌کلم|25|1.9|100;جعفری|36|3|20;گشنیز|23|2.1|20;شوید|43|3.5|20;نعناع|44|3.3|10;ریحان|23|3.2|10;ترخون|49|3.4|10;پیازچه|32|1.8|30;شنبلیله‌ی تازه|49|4.4|20;زنجبیل|80|1.8|5;سیر|149|6.4|5;پیاز داغ|450|3|10;خیارشور|11|0.3|50;فلفل تند|40|1.9|10;بادام هندی (کاجو)|553|18|30;تخمه‌ی آفتابگردان|584|21|30;تخمه‌ی کدو|559|30|30;تخمه‌ی هندوانه|557|28|30;کنجد|573|18|10;دانه‌ی چیا|486|17|15;بذر کتان|534|18|10;نارگیل رنده‌شده|660|7|15;نخودچی برشته|370|19|30;ارده|595|17|15;حلوا ارده|470|13|30;روغن نارگیل|862|0|10;روغن کنجد|884|0|10;مارگارین|717|0.2|10;سس مایونز|680|1|15;سس کچاپ|112|1.7|15;خردل|66|4|10;حبه قند (هر عدد ≈ ۴ گرم)|387|0|8;نبات|387|0|10;شیره‌ی انگور|290|0.5|20;شیره‌ی خرما|290|1|20;گز (تقریبی)|430|4|30;سوهان (تقریبی)|480|6|30;باقلوا (تقریبی)|430|6|50;شیرینی خامه‌ای|350|4|80;کیک ساده|390|5|60;دونات|420|5|60;کلوچه|450|6|30;شکلات شیری|535|8|20;پفک|530|5|20;کراکر|440|9|20;ویفر|520|5|20;آبمیوه‌ی صنعتی|50|0.3|200;نوشابه‌ی رژیمی|0|0|330;قهوه‌ی سیاه|2|0.3|200;پروتئین بار|370|30|60;خورشت قورمه‌سبزی (تقریبی)|120|8|200;خورشت قیمه (تقریبی)|150|7|200;خورشت بادمجان (تقریبی)|135|6|200;خورشت فسنجان (تقریبی)|210|10|200;آش رشته (تقریبی)|70|3.5|300;سوپ جو (تقریبی)|60|3|250;حلیم (تقریبی)|140|8|200;میرزاقاسمی (تقریبی)|120|4|150;کوکو سبزی (تقریبی)|150|8|100;کوکو سیب‌زمینی (تقریبی)|190|5|80;فلافل (سرخ‌شده)|333|13|60;ناگت مرغ|296|15|100;پیتزا (هر برش ≈ ۱۰۰ گرم)|266|11|100;"+
+  "تخم‌مرغ آب‌پز|155|13|50;شیر برنج|110|3|150;فرنی|130|4|150;شله زرد|140|1|150;کاچی|150|3|150;فالوده|110|0.5|150;بستنی سنتی|190|4|60;آجیل مخلوط|600|18|30;لواشک|250|0.5|20;کیک یزدی|330|5|50;نان برنجی|450|6|20;قطاب|300|5|40;قهوه با شیر|40|2|200;سالاد شیرازی (تقریبی)|20|1|150;سالاد کاهو (تقریبی)|15|1|100;سالاد الویه (تقریبی)|200|6|100;سوپ مرغ (تقریبی)|40|3|250;عدسی (تقریبی)|90|5|250;آبگوشت (تقریبی)|100|7|300;آش دوغ (تقریبی)|60|3|300;آش جو (تقریبی)|70|3|300;سوپ ورمیشل (تقریبی)|55|2|250;املت گوجه (تقریبی)|120|7|150;کشک بادمجان (تقریبی)|120|4|150;حلیم بادمجان (تقریبی)|100|4|150;لوبیاپلو (تقریبی)|140|5|250;باقالی‌پلو (تقریبی)|150|5|250;عدس‌پلو (تقریبی)|150|5|250;زرشک‌پلو (تقریبی)|140|3|250;استانبولی‌پلو (تقریبی)|150|4|250;کلم‌پلو (تقریبی)|130|4|250;ته‌چین (تقریبی)|190|9|150;کباب تابه‌ای (تقریبی)|220|15|100;کباب برگ (تقریبی)|200|27|100;شیشلیک (تقریبی)|220|25|100;جگر کباب (تقریبی)|200|25|100;ماهی سرخ‌شده (تقریبی)|230|22|120;کوفته (تقریبی)|180|12|100;دلمه (تقریبی)|120|5|150;پاستا با سس گوشت (تقریبی)|150|7|250;برگر گوشت (با نان) (تقریبی)|250|13|150;ساندویچ کالباس (تقریبی)|250|10|150;ساندویچ مرغ (تقریبی)|220|14|200;هات‌داگ (تقریبی)|290|10|100"
   ).split(";").map(function(x){var a=x.split("|");return{n:a[0],k:+a[1],p:+a[2],g:+a[3]};});
   var MEALS=[["b","صبحانه"],["l","ناهار"],["d","شام"],["s","میان‌وعده"]],DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
-  var tab="log",addTo=null,pDay=0,view="list",curId=null,cfOpen=false,shareL="",impCode="",impObj=null,impErr="";
+  var tab="log",addTo=null,pDay=0,view="list",curId=null,cfOpen=false,shareL="",impCode="",impObj=null,impErr="",aiRes=[];
   function $(i){return document.getElementById(i);}
   function fa(n,d){return Number(n).toLocaleString("fa-IR",{maximumFractionDigits:d||0});}
   function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -2127,7 +2148,17 @@ select.kc-in{text-align:right;padding:11px 10px;}
   function shareBox(){return '<div class="kc-box" id="shBox"><h4>لینک برنامه</h4><textarea class="kc-in" id="shT" readonly rows="3" style="direction:ltr;font-size:11px">'+esc(shareL)+'</textarea><button type="button" class="kc-go" data-copyl="1">کپی لینک</button><button type="button" class="kc-go" data-sharel="1">اشتراک‌گذاری</button><div class="kc-note">لینک رو برای مربی یا دوستت بفرست (تلگرام، بله، ایتا، واتساپ...). وقتی لینک رو باز کنه، یا کدش رو تو «دریافت برنامه» بچسبونه، برنامه تو اپ خودش ذخیره می‌شه. چسبوندن کد بدون اینترنت هم کار می‌کنه. هر کی لینک رو داشته باشه متن برنامه رو می‌بینه.</div></div>';}
   function cfForm(){return '<div class="nt-panel"><div class="kc-note">غذای دلخواهت رو با مقدارِ «۱۰۰ گرم» از روی برچسب بسته یا جدول وارد کن.</div><span class="kc-lbl">اسم غذا</span><input class="kc-in" id="cfN" type="text" style="text-align:right"><div class="kc-row"><div><span class="kc-lbl">کالری (۱۰۰ گرم)</span><input class="kc-in" id="cfK" type="text" inputmode="decimal"></div><div><span class="kc-lbl">پروتئین (۱۰۰ گرم)</span><input class="kc-in" id="cfP" type="text" inputmode="decimal"></div><div><span class="kc-lbl">وزن هر وعده (گرم)</span><input class="kc-in" id="cfG" type="text" inputmode="decimal" placeholder="100"></div></div><div class="kc-err" id="cfE"></div><button type="button" class="kc-go" data-cfsave="1">ذخیره و افزودن</button><button type="button" class="nt-add" data-cfback="1">برگشت</button></div>';}
   function hint(){return '<div class="kc-note">مثلاً: لوبیا، مرغ، نان، سیب...</div>';}
-  function search(q){
+  function aiFood(q){
+    if(!window.apiCall||typeof window.getToken!=="function"||!window.getToken()) return Promise.resolve({msg:"برای جستجوی هوشمند باید وارد حسابت باشی."});
+    return window.apiCall("/api/food","POST",{q:q},true).then(function(r){
+      if(r.status===429) return {msg:"سهمیه‌ی جستجوی هوشمند امروزت تموم شده؛ فردا دوباره امتحان کن یا غذا رو دستی اضافه کن."};
+      if(!r.ok||!r.data) return {msg:"الان جواب نگرفتم، دوباره امتحان کن."};
+      var it=r.data.items||[]; return it.length?{items:it}:{msg:"چیزی پیدا نشد. اسمش رو ساده‌تر بنویس یا دستی اضافه کن."};
+    }).catch(function(){ return {msg:"برای جستجوی هوشمند اینترنت لازمه."}; });
+  }
+  function aibtn(q){ q=q.trim(); return q.length<2?"":'<button type="button" class="nt-add" data-ai="1">🔍 پیدا نکردی؟ جستجوی هوشمند «'+esc(q)+'»</button>'; }
+  function search(q){ return search0(q)+aibtn(q); }
+  function search0(q){
     q=nz(q.trim()); if(!q) return hint();
     var r=[]; all().forEach(function(f,i){ if(nz(f.n).indexOf(q)>-1) r.push(i); });
     if(!r.length) return '<div class="kc-note">چیزی پیدا نشد. اسمش رو ساده‌تر بنویس (مثلاً «برنج»).</div>';
@@ -2210,6 +2241,17 @@ select.kc-in{text-align:right;padding:11px 10px;}
     else if(t.hasAttribute("data-add")){ addTo=t.getAttribute("data-add"); render(); }
     else if(t.hasAttribute("data-cancel")){ addTo=null; render(); }
     else if(t.hasAttribute("data-del")){ var a=t.getAttribute("data-del").split(":"); L=n.log[dk()]||{}; (L[a[0]]||[]).splice(+a[1],1); sv(); render(); }
+    else if(t.hasAttribute("data-ai")){
+      var aq=($("ntQ").value||"").trim(); $("ntRes").innerHTML='<div class="kc-note">در حال جستجو...</div>';
+      aiFood(aq).then(function(r){
+        aiRes=r.items||[];
+        $("ntRes").innerHTML=r.msg?'<div class="kc-note">'+r.msg+'</div>':aiRes.map(function(x,i){return '<button type="button" class="nt-pick" data-aipick="'+i+'"><span>'+esc(x.n)+'</span><small>'+fa(x.k)+' کالری · '+fa(x.p,1)+' گرم پروتئین (۱۰۰ گرم) · هر وعده ≈ '+fa(x.g)+' گرم</small></button>';}).join("")+'<div class="kc-note">این‌ها تخمین هوش مصنوعیه؛ برای غذای بسته‌بندی‌شده، عدد روی برچسب دقیق‌تره.</div>';
+      });
+    }
+    else if(t.hasAttribute("data-aipick")){
+      var ax=aiRes[+t.getAttribute("data-aipick")];
+      if(ax){ n.foods.push({n:ax.n,k:ax.k,p:ax.p,g:ax.g}); L=n.log[dk()]=n.log[dk()]||{}; (L[addTo]=L[addTo]||[]).push({n:ax.n,g:ax.g,k:ax.k,p:ax.p}); sv(); render(); }
+    }
     else if(t.hasAttribute("data-pick")){
       var f=all()[+t.getAttribute("data-pick")]; L=n.log[dk()]=n.log[dk()]||{}; (L[addTo]=L[addTo]||[]).push({n:f.n,g:f.g,k:f.k,p:f.p});
       var ks=Object.keys(n.log).sort(); while(ks.length>90) delete n.log[ks.shift()];
@@ -2235,7 +2277,140 @@ select.kc-in{text-align:right;padding:11px 10px;}
   $("ntClose").addEventListener("click",close); $("ntOverlay").addEventListener("click",close);
   document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
   var hm=(location.hash||"").match(/^#lp=(.+)$/);
-  if(hm){ setTimeout(function(){ open(); tab="plan"; view="imp"; impCode=hm[1]; try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){} preview(impCode); },1500); }
+  if(hm){ var go=function(){ setTimeout(function(){ open(); tab="plan"; view="imp"; impCode=hm[1]; try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){} preview(impCode); },1500); }; dec(hm[1]).then(function(o){ if(!(o&&o.t==="work")) go(); }).catch(go); }
+  window.lpU={dk:dk,didx:didx,info:info,lenName:lenName,enc:enc,dec:dec,fa:fa,esc:esc,DAYS:DAYS};
+})();
+</script>
+<div class="overlay hidden" id="wkOverlay"></div>
+<div class="rep-modal hidden" id="wkModal" role="dialog" aria-modal="true">
+  <div class="sheet-head"><h2>برنامه‌ی ورزشی</h2><button type="button" id="wkClose" aria-label="بستن">✕</button></div>
+  <div class="wk-tm" id="wkTm"></div>
+  <div class="seg" id="wkTabs"><button type="button" data-t="today" class="active">امروز</button><button type="button" data-t="plans">برنامه‌ها</button></div>
+  <div id="wkBody"></div>
+</div>
+<script>
+(function(){
+  var U=window.lpU, DAYS=U.DAYS, tab="today", view="list", curId=null, pDay=0, shareL="", impCode="", impObj=null, impErr="", tmr=null;
+  function $(i){return document.getElementById(i);}
+  function ST(){return (window.lpBridge&&window.lpBridge.state)||window.state||{};}
+  function sv(){try{if(window.lpBridge&&window.lpBridge.save)window.lpBridge.save();}catch(e){}}
+  function W(){var s=ST();s.settings=s.settings||{};var w=s.settings.wk=s.settings.wk||{};w.plans=w.plans||[];w.done=w.done||{};return w;}
+  function byId(w,id){for(var i=0;i<w.plans.length;i++)if(w.plans[i].id===id)return w.plans[i];return null;}
+  function active(w){var b=null;w.plans.forEach(function(p){if(U.info(p).st==="on"&&(!b||p.start>=b.start))b=p;});return b;}
+  function pbar(f){return f.st==="on"?'<div class="nt-bar"><i><u style="width:'+f.pc.toFixed(0)+'%"></u></i></div>':"";}
+  function esc(t){return U.esc(t);}
+  function pre(p){ if(window.lpEx) Object.keys(p.days).forEach(function(k){ (p.days[k]||[]).forEach(function(x){ window.lpEx.pre(x.id); }); }); }
+  function norm(x){ if(!x.sets){ var a=[]; for(var i=0;i<(+x.s||3);i++) a.push({w:"",r:String(x.r||"10")}); x.sets=a; } if(x.rest===undefined) x.rest=90; if(x.note===undefined) x.note=""; return x; }
+  function clean(o){
+    if(!o||o.v!==1||o.t!=="work"||typeof o.d!=="object") throw 1;
+    var d={},c=0;
+    for(var i=0;i<7;i++){ d[i]=[]; (Array.isArray(o.d[i])?o.d[i]:[]).slice(0,30).forEach(function(x){ if(x&&/^[0-9a-zA-Z_\-]{1,80}$/.test(String(x.id))){ var y=norm({id:String(x.id),n:String(x.n||"").slice(0,80),f:String(x.f||"").slice(0,80),s:x.s,r:x.r,sets:Array.isArray(x.sets)?x.sets.slice(0,12).map(function(z){return{w:String((z&&z.w)||"").slice(0,6),r:String((z&&z.r)||"").slice(0,6)};}):undefined,rest:x.rest===undefined?undefined:Math.min(600,Math.max(0,+x.rest||0)),note:String(x.note||"").slice(0,300)}); delete y.s; delete y.r; d[i].push(y); c++; } }); }
+    return{name:String(o.n||"برنامه‌ی ورزشی").slice(0,60),len:Math.min(365,Math.max(1,+o.l||30)),days:d,cnt:c};
+  }
+  async function preview(c){ impErr=""; impObj=null; try{ impObj=clean(await U.dec(c)); }catch(e){ impErr="کد یا لینک درست نیست (یا مرورگرت قدیمیه)."; } render(); }
+  function copy(t){ try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t); return; } }catch(e){} var x=$("wkT")||$("wkImp"); if(x){ x.select(); document.execCommand("copy"); } }
+  function shareBox(){return '<div class="kc-box" id="wkSh"><h4>لینک برنامه</h4><textarea class="kc-in" id="wkT" readonly rows="3" style="direction:ltr;font-size:11px">'+esc(shareL)+'</textarea><button type="button" class="kc-go" data-copyl="1">کپی لینک</button><button type="button" class="kc-go" data-sharel="1">اشتراک‌گذاری</button><div class="kc-note">لینک رو برای دوستت یا شاگردت بفرست. با باز کردن لینک، یا چسبوندن کدش تو «دریافت برنامه»، برنامه تو اپ خودش ذخیره می‌شه (چسبوندن کد بدون اینترنت هم کار می‌کنه).</div></div>';}
+  function rest(sec){
+    clearInterval(tmr); var end=Date.now()+sec*1000,b=$("wkTm"); b.style.display="flex";
+    function tick(){ var l=Math.ceil((end-Date.now())/1000);
+      if(l<=0){ clearInterval(tmr); b.innerHTML='<span>⏱ استراحت تموم شد!</span><button type="button" data-tmx="1">باشه</button>'; try{ if(navigator.vibrate) navigator.vibrate([200,100,200]); }catch(e){} return; }
+      b.innerHTML='<span>⏱ استراحت: <b>'+U.fa(Math.floor(l/60))+':'+(l%60<10?"۰":"")+U.fa(l%60)+'</b></span><button type="button" data-tmx="1">رد کردن</button>'; }
+    tick(); tmr=setInterval(tick,500);
+  }
+  function head(x,extra){return '<div class="wk-h"><b>'+esc(x.f||x.n)+'</b><small>'+esc(x.n)+'</small>'+(extra||"")+'</div>';}
+  function card(x,i,n){
+    norm(x);
+    return '<div class="kc-box wk-c">'+head(x,'<span class="wk-ac"><button type="button" data-mv="'+i+':-1">↑</button><button type="button" data-mv="'+i+':1">↓</button><button type="button" data-del="'+i+'">✕</button></span>')+
+    '<div class="wk-sr wk-sh"><span>ست</span><span>وزنه (کیلو)</span><span>تکرار</span><span></span></div>'+
+    x.sets.map(function(s,j){return '<div class="wk-sr"><span>'+U.fa(j+1)+'</span><input class="kc-in wk-n" type="text" inputmode="decimal" data-i="'+i+'" data-j="'+j+'" data-k="w" value="'+esc(s.w)+'" placeholder="—"><input class="kc-in wk-n" type="text" inputmode="numeric" data-i="'+i+'" data-j="'+j+'" data-k="r" value="'+esc(s.r)+'"><button type="button" class="wk-x" data-ds="'+i+':'+j+'">✕</button></div>';}).join("")+
+    '<button type="button" class="nt-add" data-as="'+i+'">+ افزودن ست</button>'+
+    '<div class="wk-rest">⏱ استراحت بین ست‌ها <input class="kc-in wk-n" type="text" inputmode="numeric" data-i="'+i+'" data-k="rest" value="'+x.rest+'"> ثانیه</div>'+
+    '<textarea class="kc-in nt-ta" rows="2" data-i="'+i+'" data-k="note" placeholder="یادداشت برای این حرکت (نکته‌ی اجرا، شدت و...)">'+esc(x.note)+'</textarea></div>';
+  }
+  function render(){
+    var w=W(),h="",P=null,dk=U.dk();
+    Array.prototype.forEach.call($("wkTabs").querySelectorAll("button"),function(b){b.classList.toggle("active",b.getAttribute("data-t")===tab);});
+    if(tab==="today"){
+      var ap=active(w),list=ap?(ap.days[U.didx()]||[]):[],dn=w.done[dk]||{},tot=0,dd=0;
+      list.forEach(function(x,i){ norm(x); x.sets.forEach(function(s,j){ tot++; if(dn[i+"-"+j]) dd++; }); });
+      if(ap){ var f=U.info(ap); h+='<div class="kc-box"><h4>'+esc(ap.name)+' <small>'+f.txt+'</small></h4>'+pbar(f)+(tot?U.fa(dd)+' از '+U.fa(tot)+' ست امروز انجام شد':"")+'</div>'; }
+      else h+='<div class="kc-note">برنامه‌ی فعالی نداری؛ از تب «برنامه‌ها» یه برنامه بساز یا دریافت کن.</div>';
+      if(ap&&!list.length) h+='<div class="kc-note">برای امروز حرکتی ننوشتی؛ روز استراحته 😌</div>';
+      h+=list.map(function(x,i){
+        return '<div class="kc-box wk-c"><div data-ex="'+esc(x.id)+'" style="cursor:pointer">'+head(x)+'</div>'+(x.note?'<div class="nt-pn">📝 '+esc(x.note)+'</div>':"")+
+        x.sets.map(function(s,j){var k=i+"-"+j;return '<div class="wk-sr wk-st"><span>'+U.fa(j+1)+'</span><span>'+(s.w?esc(s.w)+' کیلو':"—")+'</span><span>× '+esc(s.r)+'</span><button type="button" class="nt-ok'+(dn[k]?" on":"")+'" data-set="'+k+'" data-rest="'+x.rest+'">'+(dn[k]?"✓ انجام شد":"انجام شد")+'</button></div>';}).join("")+
+        '<div class="kc-note">استراحت: '+U.fa(x.rest)+' ثانیه</div></div>';}).join("");
+      if(list.length) h+='<div class="kc-note">روی اسم هر حرکت بزن تا تصویر و توضیحش باز بشه. با تیک هر ست، تایمر استراحت شروع می‌شه.</div>';
+    }else if(view==="imp"){
+      h='<button type="button" class="nt-add" data-back="1">← همه‌ی برنامه‌ها</button><span class="kc-lbl">کد یا لینک برنامه رو اینجا بچسبون</span><textarea class="kc-in" id="wkImp" rows="4" style="direction:ltr;font-size:11px">'+esc(impCode)+'</textarea><button type="button" class="kc-go" data-imppv="1">بررسی برنامه</button>';
+      if(impErr) h+='<div class="kc-err">'+impErr+'</div>';
+      if(impObj) h+='<div class="kc-box"><h4>'+esc(impObj.name)+'</h4>'+U.lenName(impObj.len)+' · '+U.fa(impObj.cnt)+' حرکت؛ از امروز شروع می‌شه.<button type="button" class="kc-go" data-impgo="1">افزودن به برنامه‌های من</button></div>';
+    }else if(view==="new"){
+      h='<span class="kc-lbl">اسم برنامه</span><input class="kc-in" id="wnName" type="text" placeholder="مثلاً برنامه‌ی ماه اول باشگاه" style="text-align:right"><span class="kc-lbl">مدت برنامه</span><select class="kc-in" id="wnLen"><option value="14">۲ هفته</option><option value="30" selected>۱ ماه</option><option value="60">۲ ماه</option><option value="90">۳ ماه</option></select><span class="kc-lbl">تاریخ شروع</span><input class="kc-in" id="wnStart" type="date" value="'+dk+'"><button type="button" class="kc-go" data-create="1">ساخت برنامه</button><button type="button" class="nt-add" data-back="1">برگشت</button>';
+    }else if(view==="edit"&&(P=byId(w,curId))){
+      var f2=U.info(P),dl=P.days[pDay]||[];
+      h='<button type="button" class="nt-add" data-back="1">← همه‌ی برنامه‌ها</button><div class="kc-box"><h4>'+esc(P.name)+'</h4>'+U.lenName(P.len)+' · '+f2.txt+pbar(f2)+'</div><div class="seg nt-days">'+DAYS.map(function(d,i){return '<button type="button" data-d="'+i+'"'+(i===pDay?' class="active"':"")+'>'+d+'</button>';}).join("")+'</div>'+
+      (dl.length?dl.map(card).join(""):'<div class="kc-note">برای این روز حرکتی نیست (روز استراحت). از دکمه‌ی پایین حرکت اضافه کن.</div>')+
+      '<button type="button" class="kc-go" data-pickon="1">+ افزودن حرکت از بانک</button><div><button type="button" class="nt-add" data-send="1">ارسال این برنامه</button> <button type="button" class="nt-add" data-delp="1">حذف این برنامه</button></div>'+(shareL?shareBox():"");
+    }else{
+      view="list";
+      h='<div class="kc-note">هر برنامه‌ی ورزشی یه «برنامه»ی جداست با مدت مشخص. برای هر روز، حرکت‌ها رو از بانک انتخاب می‌کنی و ست، استراحت و یادداشتشون رو تنظیم می‌کنی.</div>';
+      w.plans.slice().reverse().forEach(function(p){var f=U.info(p);h+='<div class="kc-box nt-pl" data-open="'+p.id+'" role="button" tabindex="0"><h4>'+esc(p.name)+' <small>'+U.lenName(p.len)+'</small></h4>'+f.txt+pbar(f)+'</div>';});
+      h+='<button type="button" class="kc-go" data-new="1">+ برنامه‌ی جدید</button><button type="button" class="nt-add" data-imp="1">دریافت برنامه (کد یا لینک)</button>';
+    }
+    $("wkBody").innerHTML=h;
+  }
+  var B=$("wkBody");
+  B.addEventListener("click",function(ev){
+    var w=W(),P=byId(w,curId),o=ev.target.closest("[data-open]");
+    if(o){ curId=+o.getAttribute("data-open"); view="edit"; pDay=U.didx(); render(); return; }
+    var t=ev.target.closest("button");
+    if(!t){ var e0=ev.target.closest("[data-ex]"); if(e0&&window.lpEx) window.lpEx.openId(e0.getAttribute("data-ex")); return; }
+    var day=P?(P.days[pDay]=P.days[pDay]||[]):null, a;
+    if(t.hasAttribute("data-set")){ var k=t.getAttribute("data-set"),dd=w.done[U.dk()]=w.done[U.dk()]||{}; dd[k]=!dd[k]; var ks=Object.keys(w.done).sort(); while(ks.length>90) delete w.done[ks.shift()]; sv(); render(); if(dd[k]&&+t.getAttribute("data-rest")>0) rest(+t.getAttribute("data-rest")); }
+    else if(t.hasAttribute("data-new")){ view="new"; render(); }
+    else if(t.hasAttribute("data-imp")){ view="imp"; impCode=""; impObj=null; impErr=""; render(); }
+    else if(t.hasAttribute("data-back")){ view="list"; shareL=""; impObj=null; impErr=""; render(); }
+    else if(t.hasAttribute("data-create")){
+      var nm=($("wnName").value||"").trim()||"برنامه‌ی ورزشی",st=$("wnStart").value; if(!/^\d{4}-\d{2}-\d{2}$/.test(st)) st=U.dk();
+      var np={id:Date.now(),name:nm,start:st,len:+$("wnLen").value||30,days:{}}; w.plans.push(np); curId=np.id; view="edit"; pDay=U.didx(); sv(); render();
+    }
+    else if(t.hasAttribute("data-imppv")){ impCode=$("wkImp").value; preview(impCode); }
+    else if(t.hasAttribute("data-impgo")){ if(impObj){ var ip={id:Date.now(),name:impObj.name,start:U.dk(),len:impObj.len,days:impObj.days}; w.plans.push(ip); pre(ip); curId=ip.id; view="edit"; pDay=U.didx(); impObj=null; sv(); render(); } }
+    else if(t.hasAttribute("data-d")){ pDay=+t.getAttribute("data-d"); render(); }
+    else if(t.hasAttribute("data-pickon")){
+      if(P&&window.lpEx) window.lpEx.pick(function(list){ var d2=(P.days[pDay]=P.days[pDay]||[]); list.forEach(function(e){ d2.push({id:e.id,n:e.name,f:e._fa,sets:[{w:"",r:"10"},{w:"",r:"10"},{w:"",r:"10"}],rest:90,note:""}); window.lpEx.pre(e.id); }); sv(); render(); });
+    }
+    else if(t.hasAttribute("data-mv")){ a=t.getAttribute("data-mv").split(":"); var i=+a[0],j=i+(+a[1]); if(day&&j>=0&&j<day.length){ var tmp=day[i]; day[i]=day[j]; day[j]=tmp; sv(); render(); } }
+    else if(t.hasAttribute("data-del")){ if(day){ day.splice(+t.getAttribute("data-del"),1); sv(); render(); } }
+    else if(t.hasAttribute("data-ds")){ a=t.getAttribute("data-ds").split(":"); if(day&&day[+a[0]]){ norm(day[+a[0]]).sets.splice(+a[1],1); sv(); render(); } }
+    else if(t.hasAttribute("data-as")){ var x=day&&day[+t.getAttribute("data-as")]; if(x){ norm(x); var l=x.sets[x.sets.length-1]||{w:"",r:"10"}; x.sets.push({w:l.w,r:l.r}); sv(); render(); } }
+    else if(t.hasAttribute("data-delp")){ if(P&&window.confirm("این برنامه حذف بشه؟")){ w.plans.splice(w.plans.indexOf(P),1); view="list"; sv(); render(); } }
+    else if(t.hasAttribute("data-send")){ if(P) U.enc({v:1,t:"work",n:P.name,l:P.len,d:P.days}).then(function(c){ shareL=location.origin+location.pathname+"#lp="+c; render(); }); }
+    else if(t.hasAttribute("data-copyl")){ copy(shareL); t.textContent="کپی شد ✓"; }
+    else if(t.hasAttribute("data-sharel")){ if(navigator.share){ navigator.share({title:"برنامه‌ی ورزشی",text:"برنامه‌ی ورزشی «"+(P?P.name:"")+"» برای تو:",url:shareL}).catch(function(){}); } else { copy(shareL); t.textContent="کپی شد ✓"; } }
+  });
+  B.addEventListener("input",function(ev){
+    var t=ev.target;
+    if(t.id==="wkImp"){ impCode=t.value; return; }
+    if(!t.hasAttribute("data-k")) return;
+    var P=byId(W(),curId),x=P&&(P.days[pDay]||[])[+t.getAttribute("data-i")]; if(!x) return; norm(x);
+    var k=t.getAttribute("data-k");
+    if(k==="note") x.note=t.value.slice(0,300);
+    else if(k==="rest") x.rest=Math.min(600,Math.max(0,parseInt(String(t.value).replace(/[۰-۹]/g,function(c){return c.charCodeAt(0)-1776;}),10)||0));
+    else { var s=x.sets[+t.getAttribute("data-j")]; if(s) s[k]=t.value.slice(0,6); }
+    shareL=""; var sb=$("wkSh"); if(sb) sb.remove(); sv();
+  });
+  $("wkTm").addEventListener("click",function(ev){ if(ev.target.closest("[data-tmx]")){ clearInterval(tmr); this.style.display="none"; } });
+  $("wkTabs").addEventListener("click",function(ev){ var b=ev.target.closest("button"); if(b){ tab=b.getAttribute("data-t"); render(); } });
+  function open(){ tab="today"; view="list"; curId=null; shareL=""; impObj=null; impErr=""; render(); $("wkOverlay").classList.remove("hidden"); $("wkModal").classList.remove("hidden"); $("wkModal").scrollTop=0; }
+  function close(){ clearInterval(tmr); $("wkTm").style.display="none"; $("wkOverlay").classList.add("hidden"); $("wkModal").classList.add("hidden"); }
+  var card0=document.querySelector('[data-fx="workout"]');
+  if(card0){ card0.addEventListener("click",open); card0.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); } }); }
+  $("wkClose").addEventListener("click",close); $("wkOverlay").addEventListener("click",close);
+  document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
+  var hm=(location.hash||"").match(/^#lp=(.+)$/);
+  if(hm){ U.dec(hm[1]).then(function(o){ if(o&&o.t==="work") setTimeout(function(){ open(); tab="plans"; view="imp"; impCode=hm[1]; try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){} preview(impCode); },1500); }).catch(function(){}); }
 })();
 </script>
 <div class="overlay hidden" id="exOverlay"></div>
@@ -2247,6 +2422,7 @@ select.kc-in{text-align:right;padding:11px 10px;}
     <select class="kc-in" id="exEq"></select>
   </div>
   <div id="exBody"></div>
+  <div id="exBar" class="ex-bar hidden"><button type="button" class="kc-go" id="exAdd">افزودن</button></div>
 </div>
 <script>
 (function(){
@@ -2256,12 +2432,40 @@ select.kc-in{text-align:right;padding:11px 10px;}
   var EQ={"body only":"بدون وسیله","machine":"دستگاه","other":"سایر","foam roll":"فوم‌رولر","kettlebells":"کتل‌بل","dumbbell":"دمبل","cable":"کابل","barbell":"هالتر","bands":"کش","medicine ball":"توپ طبی","exercise ball":"توپ ورزشی","e-z curl bar":"هالتر EZ"};
   var LV={beginner:"مبتدی",intermediate:"متوسط",expert:"پیشرفته"};
   var CT={"strength":"قدرتی","stretching":"کششی","plyometrics":"پلایومتریک","powerlifting":"پاورلیفتینگ","olympic weightlifting":"وزنه‌برداری المپیک","strongman":"استرانگمن","cardio":"هوازی"};
-  var D=null,base="",q="",mu="",eq="",shown=40,cur=null,tm=null,state="idle";
+  var D=null,base="",q="",mu="",eq="",shown=40,cur=null,tm=null,state="idle",selMode=false,sel={},cb=null;
   function $(i){return document.getElementById(i);}
   function fa(n){return Number(n).toLocaleString("fa-IR");}
   function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
   function nz(t){return String(t).replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/\u200c/g," ").toLowerCase();}
   function tr(x,m){return (m&&m[x])||x||"";}
+  var GL={}; ("barbell=هالتر;dumbbell=دمبل;cable=سیم‌کش;machine=دستگاه;band=کش;kettlebell=کتل‌بل;ball=توپ;bar=میله;ez-bar=هالتر EZ;smith=اسمیت;bodyweight=وزن بدن;body=بدن;bench=نیمکت;rope=طناب;handle=دستگیره;plate=صفحه;roller=رولر;foam=فوم;roll=رول;landmine=لندماین;sled=سورتمه;tire=تایر;chain=زنجیر;stone=سنگ;log=کنده;medicine=طبی;exercise=ورزشی;"+
+  "chest=سینه;shoulder=شانه;bicep=جلو بازو;tricep=پشت بازو;forearm=ساعد;lat=زیربغل;back=پشت;trap=ذوزنقه;neck=گردن;ab=شکم;abdominal=شکم;oblique=شکم کناری;quad=جلو ران;quadricep=جلو ران;hamstring=پشت ران;glute=باسن;calve=ساق پا;calf=ساق پا;leg=پا;thigh=ران;hip=لگن;arm=بازو;wrist=مچ دست;ankle=مچ پا;core=میان‌تنه;groin=کشاله‌ی ران;hand=دست;foot=پا;feet=پا;head=سر;knee=زانو;elbow=آرنج;pec=سینه;delt=سرشانه;shin=ساق جلو;torso=تنه;spine=ستون فقرات;lower=پایین;upper=بالایی;inner=داخلی;outer=خارجی;"+
+  "press=پرس;curl=کرل;row=روئینگ;raise=نشر;fly=فلای;flye=فلای;extension=اکستنشن;flexion=فلکشن;squat=اسکات;deadlift=ددلیفت;lunge=لانج;pulldown=پول‌داون;pullover=پولاور;pushdown=پوش‌داون;shrug=شراگ;crunch=کرانچ;plank=پلانک;bridge=بریج;thrust=تراست;kickback=کیک‌بک;swing=سوینگ;snatch=اسنچ;clean=کلین;jerk=جرک;twist=چرخش;rotation=چرخش;stretch=کشش;walk=راه رفتن;run=دویدن;jump=پرش;hop=پرش;step=استپ;dip=دیپ;pull=کشیدن;push=هل دادن;hold=نگه داشتن;lift=لیفت;carry=حمل;crossover=کراس‌اور;bend=خم شدن;sit-up=دراز‌ونشست;push-up=شنا;pull-up=بارفیکس;chin-up=بارفیکس دست معکوس;step-up=استپ‌آپ;kick=ضربه;slam=اسلم;toss=پرتاب;throw=پرتاب;climb=کوهنوردی;climber=کوهنورد;burpee=برپی;stand=ایستادن;"+
+  "incline=شیب‌دار;decline=شیب منفی;seated=نشسته;sitting=نشسته;standing=ایستاده;lying=خوابیده;reverse=معکوس;alternate=متناوب;alternating=متناوب;single=تک;one=تک;one-arm=تک‌دست;one-leg=تک‌پا;two=دو;double=دوبل;wide=باز;close=جمع;narrow=باریک;grip=دست;overhead=بالای سر;front=جلو;rear=پشت;side=کنار;lateral=جانبی;bent=خمیده;bent-over=خم‌شده;straight=صاف;stiff=سفت;stiff-legged=پا صاف;romanian=رومانیایی;sumo=سومو;hammer=چکشی;preacher=پریچر;concentration=تمرکزی;zottman=زاتمن;arnold=آرنولد;military=نظامی;box=باکس;goblet=گوبلت;hack=هک;good-morning=گود مورنینگ;low=پایین;high=بالا;mid=وسط;medium=متوسط;full=کامل;partial=نیمه;power=پاور;static=ایستا;dynamic=پویا;kneeling=زانو زده;prone=دمر;assisted=کمکی;weighted=وزنه‌دار;position=حالت;farmer=فارمر;left=چپ;right=راست;palm=کف دست;up=بالا;down=پایین;flat=تخت;wall=دیوار;floor=زمین;hanging=آویزان;supported=تکیه‌دار;toe=پنجه;heel=پاشنه;balance=تعادلی;ez=EZ").split(";").forEach(function(p){var a=p.split("=");GL[a[0]]=a[1];});
+  var PR={"with":"با","on":"روی","to":"به","and":"و","against":"به","over":"روی","behind":"پشت","from":"از","in":"در","off":"از","under":"زیر","at":"در","into":"به","for":"برای","of":"","the":"","a":"","an":""};
+  var PC=[[/bent[- ]over/g,"bent-over"],[/step[- ]?ups?/g,"step-up"],[/push[- ]?ups?/g,"push-up"],[/pull[- ]?ups?/g,"pull-up"],[/chin[- ]?ups?/g,"chin-up"],[/sit[- ]?ups?/g,"sit-up"],[/good[- ]mornings?/g,"good-morning"],[/(one|single)[- ]arm/g,"one-arm"],[/(one|single)[- ]leg/g,"one-leg"],[/stiff[- ]legged/g,"stiff-legged"],[/e-?z[- ](curl )?bar/g,"ez-bar"]];
+  function wd(t){
+    if(GL[t]!==undefined) return GL[t]; if(/^[\d\/]+$/.test(t)) return t;
+    var c=[t.replace(/ies$/,"y"),t.replace(/es$/,""),t.replace(/s$/,"")];
+    for(var i=0;i<c.length;i++) if(c[i]!==t&&GL[c[i]]!==undefined) return GL[c[i]];
+    if(t.indexOf("-")>0) return t.split("-").map(wd).reverse().join(" ");
+    return t;
+  }
+  function faName(n){
+    var s=n.toLowerCase().replace(/[()]/g," - ").replace(/'s\b/g,"").replace(/[^a-z0-9\/\-, ]/g," ");
+    PC.forEach(function(p){ s=s.replace(p[0],p[1]); });
+    return s.split(/\s+-\s+|,/).map(function(part){
+      var out=[],seg=[]; function fl(){ if(seg.length) out.push(seg.reverse().join(" ")); seg=[]; }
+      part.trim().split(/\s+/).forEach(function(t){ if(!t) return; if(PR[t]!==undefined){ fl(); if(PR[t]) out.push(PR[t]); } else { var w=wd(t); if(w) seg.push(w); } });
+      fl(); return out.join(" ");
+    }).filter(Boolean).join(" – ");
+  }
+  function sum(e){
+    var p=e.primaryMuscles.map(function(x){return tr(x,MU);}).join("، "), s=e.secondaryMuscles.map(function(x){return tr(x,MU);}).join("، ");
+    var f={push:"فشاری",pull:"کششی","static":"ایستا"}[e.force], m={compound:"ترکیبی (چند مفصلی)",isolation:"ایزوله (تک‌مفصلی)"}[e.mechanic];
+    return "این حرکت "+(p?"روی «"+p+"» کار می‌کنه":"یه حرکت "+tr(e.category,CT)+" هست")+(s?" و «"+s+"» هم کمکش می‌کنن":"")+". "+(e.equipment?"وسیله: "+tr(e.equipment,EQ)+". ":"")+"سطح: "+tr(e.level,LV)+(f?"؛ نوع حرکت: "+f:"")+(m?"؛ "+m:"")+".";
+  }
+
   async function load(){
     var c=null,i,j,r; try{ c=await caches.open("lp-ex"); }catch(e){}
     if(c) for(i=0;i<SRC.length;i++){ try{ var m=await c.match(SRC[i][0]); if(m){ j=await m.json(); if(Array.isArray(j)&&j.length>50){ base=SRC[i][1]; return j; } } }catch(e){} }
@@ -2272,7 +2476,7 @@ select.kc-in{text-align:right;padding:11px 10px;}
     try{ var c=await caches.open("lp-ex"),m=await c.match(url); if(!m){ var r=await fetch(url); if(!r.ok) return url; await c.put(url,r.clone()); m=r; } return URL.createObjectURL(await m.blob()); }catch(e){ return url; }
   }
   function prep(){
-    D.forEach(function(e){ e.primaryMuscles=e.primaryMuscles||[]; e.secondaryMuscles=e.secondaryMuscles||[]; e._s=nz([e.name,e.equipment||"",tr(e.equipment,EQ)].concat(e.primaryMuscles,e.secondaryMuscles,e.primaryMuscles.map(function(x){return tr(x,MU);}),e.secondaryMuscles.map(function(x){return tr(x,MU);})).join(" ")); });
+    D.forEach(function(e){ e.primaryMuscles=e.primaryMuscles||[]; e.secondaryMuscles=e.secondaryMuscles||[]; e._fa=faName(e.name); e._s=nz([e.name,e._fa,e.equipment||"",tr(e.equipment,EQ)].concat(e.primaryMuscles,e.secondaryMuscles,e.primaryMuscles.map(function(x){return tr(x,MU);}),e.secondaryMuscles.map(function(x){return tr(x,MU);})).join(" ")); });
     $("exChips").innerHTML='<button type="button" data-mu="" class="on">همه</button>'+Object.keys(MU).map(function(k){return '<button type="button" data-mu="'+k+'">'+MU[k]+'</button>';}).join("");
     var eqs={}; D.forEach(function(e){ if(e.equipment) eqs[e.equipment]=1; });
     $("exEq").innerHTML='<option value="">همه‌ی وسیله‌ها</option>'+Object.keys(eqs).sort().map(function(k){return '<option value="'+esc(k)+'">'+tr(k,EQ)+'</option>';}).join("");
@@ -2280,7 +2484,7 @@ select.kc-in{text-align:right;padding:11px 10px;}
   function renderList(){
     var qq=nz(q.trim()), r=D.filter(function(e){ return (!mu||e.primaryMuscles.indexOf(mu)>-1)&&(!eq||e.equipment===eq)&&(!qq||e._s.indexOf(qq)>-1); });
     var h='<div class="kc-note">'+fa(r.length)+' حرکت</div>'+r.slice(0,shown).map(function(e){
-      return '<div class="ex-row" data-id="'+esc(e.id)+'"><img loading="lazy" alt="" src="'+esc(base+((e.images||[])[0]||""))+'"><div><b dir="auto">'+esc(e.name)+'</b><small>'+e.primaryMuscles.map(function(x){return tr(x,MU);}).join("، ")+(e.equipment?' · '+tr(e.equipment,EQ):"")+' · '+tr(e.level,LV)+'</small></div></div>';
+      return '<div class="ex-row'+(selMode&&sel[e.id]?" sel":"")+'" data-id="'+esc(e.id)+'">'+(selMode?'<span class="ex-ck">'+(sel[e.id]?"✓":"")+'</span>':"")+'<img loading="lazy" alt="" src="'+esc(base+((e.images||[])[0]||""))+'"><div><b>'+esc(e._fa)+'</b><small dir="ltr" style="text-align:right">'+esc(e.name)+'</small><small>'+e.primaryMuscles.map(function(x){return tr(x,MU);}).join("، ")+(e.equipment?' · '+tr(e.equipment,EQ):"")+' · '+tr(e.level,LV)+'</small></div>'+(selMode?'<button type="button" class="ex-i" data-info="'+esc(e.id)+'">ⓘ</button>':"")+'</div>';
     }).join("");
     if(r.length>shown) h+='<button type="button" class="nt-add" data-more="1">نمایش بیشتر</button>';
     if(!r.length) h='<div class="kc-note">حرکتی پیدا نشد. اسم رو ساده‌تر بنویس یا فیلترها رو بردار.</div>';
@@ -2289,33 +2493,46 @@ select.kc-in{text-align:right;padding:11px 10px;}
   function detail(e){
     var tags=e.primaryMuscles.map(function(x){return '<span>🎯 '+tr(x,MU)+'</span>';}).concat(e.secondaryMuscles.map(function(x){return '<span>'+tr(x,MU)+'</span>';}));
     if(e.equipment) tags.push('<span>🏋️ '+tr(e.equipment,EQ)+'</span>'); tags.push('<span>'+tr(e.level,LV)+'</span>'); if(e.category) tags.push('<span>'+tr(e.category,CT)+'</span>');
-    $("exBody").innerHTML='<button type="button" class="nt-add" data-back="1">← برگشت به لیست</button><div class="kc-box"><h4 dir="auto">'+esc(e.name)+'</h4><img class="ex-hero" id="exHero" alt=""><div class="ex-tags">'+tags.join("")+'</div></div>'+
-    '<div class="kc-box"><h4>طرز انجام</h4><ol class="ex-ol">'+(e.instructions||[]).map(function(s){return '<li>'+esc(s)+'</li>';}).join("")+'</ol><div class="kc-note">اسم حرکت و توضیحات فعلاً انگلیسیه.</div></div>';
+    $("exBody").innerHTML='<button type="button" class="nt-add" data-back="1">← برگشت به لیست</button>'+(selMode?'<button type="button" class="nt-add" data-selone="1">'+(sel[e.id]?"✓ انتخاب شد":"انتخاب این حرکت")+'</button>':"")+'<div class="kc-box"><h4>'+esc(e._fa)+'</h4><div class="kc-note" dir="ltr" style="text-align:right;margin:0 0 4px">'+esc(e.name)+'</div><img class="ex-hero" id="exHero" alt=""><div class="ex-tags">'+tags.join("")+'</div></div>'+
+    '<div class="kc-box"><h4>توضیح</h4>'+sum(e)+'</div><div class="kc-box"><h4>طرز انجام (انگلیسی)</h4><ol class="ex-ol">'+(e.instructions||[]).map(function(s){return '<li>'+esc(s)+'</li>';}).join("")+'</ol><div class="kc-note">اسم فارسی و توضیح بالا خودکار از روی مشخصات حرکت ساخته شده؛ مراحل انجام فعلاً انگلیسیه.</div></div>';
     Promise.all((e.images||[]).map(function(p){return img(base+p);})).then(function(a){
       var hero=$("exHero"); if(!hero||cur!==e||!a.length) return; var i=0; hero.src=a[0];
       if(a.length>1) tm=setInterval(function(){ i=(i+1)%a.length; hero.src=a[i]; },900);
     });
   }
   function render(){
-    clearInterval(tm); var tl=$("exTools");
+    clearInterval(tm); bar(); var tl=$("exTools");
     if(!D){ tl.classList.add("hidden"); $("exBody").innerHTML=state==="load"?'<div class="kc-note">در حال دریافت بانک حرکات...</div>':'<div class="kc-note kc-warn">بانک حرکات دریافت نشد. اینترنت رو چک کن و دوباره امتحان کن؛ بعد از اولین دریافت، لیست حرکات آفلاین هم کار می‌کنه.</div><button type="button" class="kc-go" data-retry="1">تلاش دوباره</button>'; return; }
     if(cur){ tl.classList.add("hidden"); detail(cur); return; }
     tl.classList.remove("hidden"); renderList();
   }
   function start(){ state="load"; render(); load().then(function(j){ D=j; state=j?"ok":"fail"; if(j) prep(); render(); }); }
-  function open(){ cur=null; $("exOverlay").classList.remove("hidden"); $("exModal").classList.remove("hidden"); $("exModal").scrollTop=0; if(!D&&state!=="load") start(); else render(); }
-  function close(){ clearInterval(tm); $("exOverlay").classList.add("hidden"); $("exModal").classList.add("hidden"); }
+  function open(){ ext=false; selMode=false; cur=null; $("exOverlay").classList.remove("hidden"); $("exModal").classList.remove("hidden"); $("exModal").scrollTop=0; if(!D&&state!=="load") start(); else render(); }
+  function close(){ ext=false; selMode=false; cb=null; clearInterval(tm); $("exOverlay").classList.add("hidden"); $("exModal").classList.add("hidden"); }
   $("exBody").addEventListener("click",function(ev){
-    var r=ev.target.closest("[data-id]");
-    if(r){ var id=r.getAttribute("data-id"); cur=D.filter(function(e){return e.id===id;})[0]||null; $("exModal").scrollTop=0; render(); return; }
+    var ib=ev.target.closest("[data-info]"), r=ib||ev.target.closest("[data-id]");
+    if(selMode&&!ib&&r&&!cur){ tog(r.getAttribute("data-id"),r); return; }
+    if(r){ var id=r.getAttribute(ib?"data-info":"data-id"); cur=D.filter(function(e){return e.id===id;})[0]||null; $("exModal").scrollTop=0; render(); return; }
     var b=ev.target.closest("button"); if(!b) return;
-    if(b.hasAttribute("data-back")){ cur=null; render(); }
+    if(b.hasAttribute("data-back")){ if(ext){ close(); } else { cur=null; render(); } }
+    else if(b.hasAttribute("data-selone")){ if(cur){ if(sel[cur.id]) delete sel[cur.id]; else sel[cur.id]=1; render(); } }
     else if(b.hasAttribute("data-more")){ shown+=40; renderList(); }
     else if(b.hasAttribute("data-retry")){ start(); }
   });
   $("exQ").addEventListener("input",function(){ q=this.value; shown=40; renderList(); });
   $("exEq").addEventListener("change",function(){ eq=this.value; shown=40; renderList(); });
   $("exChips").addEventListener("click",function(ev){ var b=ev.target.closest("button"); if(!b) return; mu=b.getAttribute("data-mu"); Array.prototype.forEach.call($("exChips").children,function(x){x.classList.toggle("on",x===b);}); shown=40; renderList(); });
+  var ext=false;
+  function bar(){ var n=Object.keys(sel).length; $("exBar").classList.toggle("hidden",!selMode); $("exAdd").textContent="افزودن "+fa(n)+" حرکت"; $("exAdd").disabled=!n; }
+  function tog(id,el){ if(sel[id]) delete sel[id]; else sel[id]=1; el.classList.toggle("sel",!!sel[id]); var c=el.querySelector(".ex-ck"); if(c) c.textContent=sel[id]?"✓":""; bar(); }
+  $("exAdd").addEventListener("click",function(){ var f=cb,list=Object.keys(sel).map(function(id){return D.filter(function(e){return e.id===id;})[0];}).filter(Boolean); close(); if(f) f(list); });
+  function ensure(){ return D?Promise.resolve(D):load().then(function(j){ if(j){ D=j; prep(); state="ok"; } return D; }); }
+  async function put(u){ try{ var c=await caches.open("lp-ex"); if(!(await c.match(u))){ var r=await fetch(u); if(r.ok) await c.put(u,r); } }catch(e){} }
+  function byid(d,id){ return d&&d.filter(function(e){return e.id===id;})[0]; }
+  window.lpEx={pick:function(f){ ensure().then(function(d){ if(!d){ window.alert("بانک حرکات دریافت نشد؛ اینترنت رو چک کن."); return; } selMode=true; sel={}; cb=f; ext=false; cur=null; q=""; mu=""; eq=""; $("exQ").value=""; shown=40; $("exOverlay").classList.remove("hidden"); $("exModal").classList.remove("hidden"); $("exModal").scrollTop=0; render(); }); },ensure:ensure,fa:function(e){return e._fa;},
+    search:function(q){ if(!D) return []; var qq=nz(q.trim()); return qq?D.filter(function(e){return e._s.indexOf(qq)>-1;}).slice(0,15):[]; },
+    pre:function(id){ ensure().then(function(d){ var e=byid(d,id); if(e) (e.images||[]).forEach(function(x){ put(base+x); }); }); },
+    openId:function(id){ ensure().then(function(d){ var e=byid(d,id); if(!e) return; ext=true; cur=e; $("exOverlay").classList.remove("hidden"); $("exModal").classList.remove("hidden"); $("exModal").scrollTop=0; render(); }); }};
   var card=document.querySelector('[data-fx="exbank"]');
   if(card){ card.addEventListener("click",open); card.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); } }); }
   $("exClose").addEventListener("click",close); $("exOverlay").addEventListener("click",close);
