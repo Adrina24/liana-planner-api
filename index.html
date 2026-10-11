@@ -715,6 +715,17 @@ body.style-glass .cal-day.sel{
 .rep-row .bar{flex:1; height:8px; border-radius:99px; background:rgba(127,127,127,.18); overflow:hidden; min-width:0;}
 .rep-row .bar i{display:block; height:100%; border-radius:99px; background:var(--c); box-shadow:0 0 10px var(--c);}
 .rep-row .pc{width:40px; text-align:left; font-size:12px; font-weight:800; flex-shrink:0;}
+/* stats page tabs */
+.stt-tabs{display:flex; width:min(94%,380px); margin:2px auto 12px; padding:4px; gap:4px; border-radius:999px; background:var(--g-fill,rgba(255,255,255,.3)); border:1px solid var(--g-line,rgba(255,255,255,.6)); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);}
+.stt-tabs button{flex:1; padding:9px 2px; border-radius:999px; border:none; background:none; font-family:inherit; font-size:12.5px; font-weight:700; white-space:nowrap; color:var(--text-soft); transition:background .2s,color .2s;}
+.stt-tabs button.on{color:var(--accent-dk); background:color-mix(in srgb,var(--accent) 22%,rgba(255,255,255,.55)); box-shadow:0 2px 10px color-mix(in srgb,var(--accent) 25%,transparent);}
+.stt-pane[hidden]{display:none;}
+.stt-cards{display:flex; flex-direction:column; gap:10px; margin-top:12px;}
+.stt-card.fx-card{flex-direction:row; align-items:center; text-align:right; min-height:0; width:100%; padding:14px 16px; gap:12px; font-family:inherit; color:var(--text); cursor:pointer;}
+.stt-card .st-icon{flex-shrink:0;}
+.stt-card .stt-tx{flex:1; display:flex; flex-direction:column; gap:2px;}
+.stt-card .arrow{font-size:18px; color:var(--text-soft);}
+.stt-card:active{opacity:.7;}
 .rep-mcal{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
 .rep-mcal .wd{text-align:center; font-size:10px; font-weight:700; color:var(--text-soft);}
 .rep-mcal .dd{aspect-ratio:1; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;
@@ -1610,19 +1621,36 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
 
 </div>
 <div class="view" data-view="stats">
-<div class="section-title"><img class="st-icon" data-icon="tracker" alt="">ردیاب عادت‌های هفته</div>
-<div class="hint rep-hint">روی هر عادت بزن تا گزارش ماهانه و سالانه‌ش باز بشه</div>
-<div class="rings-grid" id="ringsGrid"></div>
-<div class="hp-links">
-  <button type="button" class="hp-link" id="openReports"><span><img class="st-icon" data-icon="chart" alt="" style="width:18px;height:18px;vertical-align:-4px;margin-left:4px;">گزارش کلی همه‌ی عادت‌ها</span><span class="arrow">‹</span></button>
+<div class="stt-tabs" id="sttTabs">
+  <button type="button" class="on" data-tab="week">عادت‌های هفته</button>
+  <button type="button" data-tab="report">گزارش کلی</button>
+  <button type="button" data-tab="chart">نمودار هفتگی</button>
 </div>
 
-<div class="weekly-chart">
-  <div class="section-title"><img class="st-icon" data-icon="chart" alt="">نمودار پیشرفت هفتگی</div>
-  <div class="chart-card"><svg id="weeklyChart" viewBox="0 0 320 170"></svg></div>
+<div class="stt-pane" data-pane="week">
+  <div class="section-title"><img class="st-icon" data-icon="tracker" alt="">ردیاب عادت‌های هفته</div>
+  <div class="hint rep-hint">روی هر عادت بزن تا گزارش ماهانه و سالانه‌ش باز بشه</div>
+  <div class="rings-grid" id="ringsGrid"></div>
+</div>
+
+<div class="stt-pane" data-pane="report" hidden>
+  <div class="section-title"><img class="st-icon" data-icon="chart" alt="">گزارش کلی همه‌ی عادت‌ها</div>
+  <div id="sttSum"></div>
+  <div class="stt-cards">
+    <button type="button" class="fx-card stt-card" id="openReports"><img class="st-icon" data-icon="today" alt=""><span class="stt-tx"><b>گزارش ماهانه</b><span class="fx-d">روند همه‌ی عادت‌هات تو این ماه</span></span><span class="arrow">‹</span></button>
+    <button type="button" class="fx-card stt-card" id="openReportsYear"><img class="st-icon" data-icon="chart" alt=""><span class="stt-tx"><b>گزارش سالانه</b><span class="fx-d">نگاه کلی به یه سال کامل</span></span><span class="arrow">‹</span></button>
+  </div>
+</div>
+
+<div class="stt-pane" data-pane="chart" hidden>
+  <div class="weekly-chart">
+    <div class="section-title"><img class="st-icon" data-icon="chart" alt="">نمودار پیشرفت هفتگی</div>
+    <div class="chart-card"><svg id="weeklyChart" viewBox="0 0 320 170"></svg></div>
+  </div>
 </div>
 
 </div>
+
 <div class="view" data-view="fitness"><div class="fx-head"><b>فیتنس و تغذیه</b><span>برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه</span></div><div class="fx-grid"><div class="fx-card"><span class="fx-ic" data-fxicon="workout">🏋🏻‍♀️</span><b>برنامه‌ی ورزشی</b><span class="fx-d">برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="meal">🥗</span><b>برنامه‌ی تغذیه</b><span class="fx-d">وعده‌های روزانه و برنامه‌ی غذایی</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="calorie">🔥</span><b>کالری روزانه</b><span class="fx-d">کالری موردنیازت و کسری کالری برای کاهش وزن</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="exbank">💪</span><b>بانک حرکات ورزشی</b><span class="fx-d">آموزش و انیمیشن حرکات بدنسازی</span><em class="fx-chip">به‌زودی</em></div></div></div>
 
 <div class="view" data-view="timer"><div class="tm-tabs" id="tmTabs"><button type="button" class="on" data-tab="timer">تایمر</button><button type="button" data-tab="yoga">یوگا</button></div><div class="tm" id="tmRoot"></div><div class="yg" id="ygRoot" hidden></div></div><div class="view" data-view="journal"><div class="jr">
@@ -1825,6 +1853,21 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
     <div class="hint" id="bkLast"></div>
     <label class="bk-auto"><input type="checkbox" id="bkAuto" checked><span>بک‌آپ خودکار هفتگی: هر هفته که سایت رو باز کنی، خودش فایل پشتیبان رو ذخیره می‌کنه</span></label>
     <div class="hint bk-msg" id="bkMsg"></div>
+  </div>
+  </div>
+
+  <button class="meas-toggle" id="pushToggle" style="margin-top:10px;">
+    <span class="lbl"><svg class="st-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 20a1.94 1.94 0 0 0 3.4 0"/></svg><span>اعلان‌ها</span></span>
+    <span class="arrow">▾</span>
+  </button>
+  <div class="theme-box hidden" id="pushBox">
+  <div class="set-row" style="margin-top:0;">
+    <div class="hint" id="pnStatus" style="margin-top:0;"></div>
+    <div class="seg bk-seg" style="margin-top:10px;">
+      <button type="button" id="pnToggle">روشن کردن اعلان‌ها</button>
+      <button type="button" id="pnTest" class="hidden">اعلان آزمایشی</button>
+    </div>
+    <div class="hint bk-msg" id="pnMsg"></div>
   </div>
   </div>
 
@@ -3374,6 +3417,21 @@ function renderRings(){
   }).join("");
   if(!list.length) html='<div class="empty-note" style="grid-column:1/-1;">عادتی برای نمایش نیست</div>';
   document.getElementById("ringsGrid").innerHTML=html;
+  try{ renderStatSummary(); }catch(e){}
+}
+function renderStatSummary(){
+  var el=document.getElementById("sttSum"); if(!el) return;
+  var week=currentWeek(), list=getCountable();
+  if(!list.length){ el.innerHTML=""; return; }
+  var tot=0, best=null, bestN=0;
+  list.forEach(function(h){
+    var c=0; week.days.forEach(function(d,di){ if(isDone(h,d,addDays(currentWeekStart,di))) c++; });
+    tot+=c; if(c>bestN){ bestN=c; best=h; }
+  });
+  el.innerHTML='<div class="rep-pills">'+
+    '<div class="rep-pill"><b>'+fpct(tot/(list.length*7))+'</b><span>میانگین این هفته</span></div>'+
+    '<div class="rep-pill"><b>'+(best?esc(best.name):"—")+'</b><span>بهترین عادت این هفته</span></div>'+
+  '</div>';
 }
 
 function renderChart(){
@@ -4650,6 +4708,17 @@ document.getElementById("wtClose").addEventListener("click",closeBodyPath);
 document.getElementById("wtOverlay").addEventListener("click",closeBodyPath);
 document.getElementById("openBodyPath").addEventListener("click",openBodyPath);
 document.getElementById("openReports").addEventListener("click",function(){ openReport(null,"month"); });
+document.getElementById("openReportsYear").addEventListener("click",function(){ openReport(null,"year"); });
+(function(){
+  var tabs=document.getElementById("sttTabs"); if(!tabs) return;
+  function show(t){
+    Array.prototype.forEach.call(tabs.querySelectorAll("button"),function(b){ b.classList.toggle("on",b.getAttribute("data-tab")===t); });
+    Array.prototype.forEach.call(document.querySelectorAll(".stt-pane"),function(p){ p.hidden=(p.getAttribute("data-pane")!==t); });
+    if(t==="chart"){ try{ renderChart(); }catch(e){} }
+    if(t==="report"){ try{ renderStatSummary(); }catch(e){} }
+  }
+  tabs.addEventListener("click",function(e){ var b=e.target.closest("button[data-tab]"); if(b) show(b.getAttribute("data-tab")); });
+})();
 
 /* ================= Backup: download / share a file, restore from a file ================= */
 var LS_LAST_BACKUP="fa-planner-last-backup";
@@ -5812,7 +5881,8 @@ function add(o){
   RS().push(r); scheduleSave(); return r;
 }
 function confirmText(r){
-  var tail=(r.time && r.freq!=="open")?"\n(اگه اون موقع سایت باز نبود، اولین باری که بیای نشونت می‌دم)":"";
+  var pushOn=false; try{ pushOn=!!(window.lpPush && window.lpPush.on()); }catch(e){}
+  var tail=(r.time && r.freq!=="open")?(pushOn?"\n(سر ساعت برات نوتیف هم میاد 🔔 و وقتی اپ رو باز کنی یه بار نشونت می‌دم)":"\n(اگه اون موقع سایت باز نبود، اولین باری که بیای نشونت می‌دم. برای نوتیف سر ساعت، از تنظیمات «اعلان‌ها» رو روشن کن 🔔)"):"";
   return pick(OKS)+" "+describe(r)+" بهت یادآوری می‌کنم:\n«"+r.text+"»"+tail;
 }
 function listLines(){ return RS().map(function(r,i){ return fd(i+1)+") «"+r.text+"» — "+describe(r); }).join("\n"); }
@@ -6064,7 +6134,115 @@ document.addEventListener("visibilitychange",function(){
   else if(hid && Date.now()-hid>10*60*1000 && ready()){ check("open"); }
 });
 setTimeout(function(){ try{ Object.keys(LIANA_POSES).forEach(function(k){ var im=new Image(); im.src=LIANA_POSES[k]; }); setLianaPose("normal"); }catch(e){} },3500);
-window.lpRemind={toast:toast,weeklyBackup:weeklyBackup,handle:handle,addAction:addAction,delAction:delAction,listReply:listReply,_parse:parse,_due:due,_add:add,_describe:describe};
+window.lpRemind={check:check,ready:ready,toast:toast,weeklyBackup:weeklyBackup,handle:handle,addAction:addAction,delAction:delAction,listReply:listReply,_parse:parse,_due:due,_add:add,_describe:describe};
+})();
+
+/* ===== Notifications for reminders (Web Push) ===== */
+(function(){
+var LS_ON="lp-push-on", lastSig="", msgT=null;
+function $(id){ return document.getElementById(id); }
+function sup(){ return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window; }
+function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1); }
+function standalone(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone===true; }
+function tz(){ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"; }catch(e){ return "UTC"; } }
+function perm(){ try{ return Notification.permission; }catch(e){ return "denied"; } }
+function on(){ return sup() && perm()==="granted" && localStorage.getItem(LS_ON)==="1"; }
+function u8(b64){
+  var s=String(b64).replace(/-/g,"+").replace(/_/g,"/"); while(s.length%4) s+="=";
+  var raw=atob(s), a=new Uint8Array(raw.length); for(var i=0;i<raw.length;i++) a[i]=raw.charCodeAt(i); return a;
+}
+function sameKey(sub,key){
+  try{ var a=new Uint8Array(sub.options.applicationServerKey); if(a.length!==key.length) return false; for(var i=0;i<a.length;i++) if(a[i]!==key[i]) return false; return true; }catch(e){ return false; }
+}
+function payload(){
+  var rs=(state && Array.isArray(state.reminders))?state.reminders:[];
+  return rs.map(function(r){ return {id:r.id,text:r.text,freq:r.freq,time:r.time,days:r.days,date:r.date,created:r.created,done:r.done,lastDay:r.lastDay,snoozeUntil:r.snoozeUntil}; });
+}
+function say(t){ var m=$("pnMsg"); if(!m) return; m.textContent=t||""; clearTimeout(msgT); if(t) msgT=setTimeout(function(){ m.textContent=""; },9000); }
+function paint(){
+  var st=$("pnStatus"), b=$("pnToggle"), t=$("pnTest"); if(!st||!b||!t) return;
+  var isOn=on();
+  t.classList.toggle("hidden",!isOn);
+  b.textContent=isOn?"خاموش کردن اعلان‌ها":"روشن کردن اعلان‌ها";
+  if(!sup()) st.textContent="این مرورگر اعلان رو پشتیبانی نمی‌کنه.";
+  else if(perm()==="denied") st.textContent="اعلان‌ها برای این اپ مسدوده. آیکون اپ رو روی صفحه‌ی گوشی نگه دار، «Site Settings» رو بزن و Notifications رو روی Allow بذار.";
+  else if(isIOS() && !standalone()) st.textContent="تو آیفون اول باید اپ رو با «Add to Home Screen» نصب کنی و از روی آیکونش باز کنی؛ بعد این‌جا اعلان‌ها رو روشن کن.";
+  else if(isOn) st.textContent="روشنه ✓ یادآوری‌هایی که ساعت دارن سر همون ساعت برات نوتیف می‌شن، حتی وقتی اپ بسته‌ست.";
+  else st.textContent="با روشن کردنش، یادآوری‌هایی که ساعت دارن (مثلاً «ساعت ۸ دارو») سر همون ساعت برات نوتیف می‌شن، حتی وقتی اپ بسته‌ست.";
+}
+function subscribe(){
+  return navigator.serviceWorker.ready.then(function(reg){
+    return apiCall("/api/push/key","GET",null,true).then(function(k){
+      if(!k.ok || !k.data || !k.data.key) throw new Error("key");
+      var key=u8(k.data.key);
+      return reg.pushManager.getSubscription().then(function(old){
+        if(old && sameKey(old,key)) return old;
+        return (old?old.unsubscribe():Promise.resolve()).then(function(){ return reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key}); });
+      });
+    });
+  }).then(function(sub){
+    return apiCall("/api/push/subscribe","POST",{subscription:sub.toJSON(),tz:tz(),reminders:payload()},true);
+  }).then(function(r){ if(!r.ok) throw new Error("subscribe"); lastSig=JSON.stringify(payload())+tz(); });
+}
+function ask(){ return new Promise(function(res){ var r=Notification.requestPermission(res); if(r && r.then) r.then(res); }); }
+function enable(){
+  if(!sup()){ say("این مرورگر اعلان رو پشتیبانی نمی‌کنه."); return; }
+  if(isIOS() && !standalone()){ paint(); return; }
+  if(!getToken()){ say("اول وارد حسابت شو."); return; }
+  say("یه لحظه…");
+  ask().then(function(p){
+    if(p!=="granted"){ paint(); say(p==="denied"?"اجازه داده نشد.":"اجازه‌ی اعلان رو ندادی."); return; }
+    return subscribe().then(function(){ localStorage.setItem(LS_ON,"1"); paint(); say("اعلان‌ها روشن شد 💛"); });
+  }).catch(function(){ say("روشن نشد. اینترنتت رو چک کن و دوباره امتحان کن."); paint(); });
+}
+function disable(){
+  localStorage.setItem(LS_ON,"0"); paint();
+  navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){
+    if(!sub) return; var ep=sub.endpoint;
+    return sub.unsubscribe().then(function(){ return apiCall("/api/push/unsubscribe","POST",{endpoint:ep},true); });
+  }).then(function(){ say("اعلان‌ها خاموش شد."); }).catch(function(){ say("خاموش شد."); });
+}
+function test(){
+  say("فرستادم، چند ثانیه صبر کن…");
+  apiCall("/api/push/test","POST",{},true).then(function(r){ if(!(r.ok && r.data && r.data.ok)) say("نشد بفرستم؛ یه بار خاموش و روشنش کن."); }).catch(function(){ say("نشد بفرستم؛ اینترنتت رو چک کن."); });
+}
+/* keep the server's small copy of the reminders up to date (only when something changed) */
+function sync(force){
+  if(!on() || !getToken()) return;
+  var p=payload(), sig=JSON.stringify(p)+tz();
+  if(!force && sig===lastSig) return;
+  lastSig=sig;
+  apiCall("/api/push/sync","POST",{tz:tz(),reminders:p},true).then(function(r){
+    if(r.ok && r.data && r.data.subscribed===false) subscribe().catch(function(){ lastSig=""; });
+  }).catch(function(){ lastSig=""; });
+}
+var tg=$("pushToggle");
+if(tg){ tg.onclick=function(){ var box=$("pushBox"), c=box.classList.toggle("hidden"); tg.querySelector(".arrow").textContent=c?"▾":"▴"; paint(); }; }
+if($("pnToggle")) $("pnToggle").onclick=function(){ if(on()) disable(); else enable(); };
+if($("pnTest")) $("pnTest").onclick=test;
+paint();
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.addEventListener("message",function(e){
+    if(e.data && e.data.type==="lp-reminder-check" && window.lpRemind && window.lpRemind.ready && window.lpRemind.ready()) window.lpRemind.check("tick");
+  });
+}
+document.addEventListener("visibilitychange",function(){
+  sync(false);
+  if(document.hidden) return;
+  try{ if(on() && window.lpRemind && window.lpRemind.ready && window.lpRemind.ready()) window.lpRemind.check("tick"); }catch(e){}
+});
+var iv=setInterval(function(){
+  if(!(window.lpRemind && window.lpRemind.ready && window.lpRemind.ready())) return; clearInterval(iv);
+  setTimeout(function(){
+    if(!on()) return;
+    /* the phone may have dropped the subscription: quietly make a new one (no question needed, permission is already given) */
+    navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){
+      if(!sub) return subscribe(); sync(true);
+    }).catch(function(){});
+  },3000);
+  setInterval(function(){ sync(false); },8000);
+},900);
+window.lpPush={on:on,sync:sync,enable:enable,disable:disable};
 })();
 
 /* ===== Home: energy check-in, today's focus, gentle streak, 1-minute quest ===== */
