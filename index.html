@@ -1526,6 +1526,42 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
 .fx-card b{font-size:14.5px; color:var(--text);}
 .fx-d{font-size:11.5px; color:var(--text-soft); line-height:1.7;}
 .fx-chip{margin-top:auto; font-style:normal; padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:700; color:var(--accent-text,var(--accent-dk)); background:var(--accent-lt);}
+
+.fx-card[data-fx]{cursor:pointer;}
+.kc-lbl{display:block;font-size:12px;color:var(--text-soft);margin:12px 2px 5px;}
+.kc-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.kc-in{width:100%;padding:11px 8px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;text-align:center;}
+select.kc-in{text-align:right;padding:11px 10px;}
+.kc-go{width:100%;margin-top:16px;padding:13px;border:none;border-radius:14px;background:var(--accent);color:#fff;font-weight:800;font-size:14px;}
+.kc-err{color:#d9534f;font-size:12px;margin-top:8px;}
+.kc-hero{text-align:center;padding:16px 8px 4px;}
+.kc-hero b{display:block;font-size:42px;line-height:1.15;color:var(--text);}
+.kc-hero span{font-size:12px;color:var(--text-soft);}
+.kc-box{margin-top:12px;padding:12px 14px;border-radius:16px;border:1.5px solid var(--border);background:var(--card);font-size:13px;line-height:1.95;color:var(--text);}
+.kc-box h4{font-size:13.5px;margin:0 0 2px;}
+.kc-tb{width:100%;border-collapse:collapse;font-size:12.5px;}
+.kc-tb td{padding:7px 4px;border-bottom:1px solid var(--border);}
+.kc-tb tr{cursor:pointer;}
+.kc-tb tr.on td{font-weight:800;color:var(--accent-text,var(--accent));}
+.kc-tb td:last-child{text-align:left;white-space:nowrap;}
+.kc-note{font-size:11.5px;color:var(--text-soft);margin-top:12px;line-height:1.85;}
+.kc-warn{color:#d9534f;}
+.kc-top{border-color:#d9534f;background:rgba(217,83,79,.10);color:var(--text);}
+.kc-top b{color:#d9534f;}
+.nt-bar{margin:10px 0}.nt-bh{display:flex;justify-content:space-between;font-size:12.5px;color:var(--text);margin-bottom:4px}
+.nt-bar i{display:block;height:9px;border-radius:9px;background:var(--border);overflow:hidden}
+.nt-bar u{display:block;height:100%;border-radius:9px;background:var(--accent);transition:width .4s}
+.nt-m h4 small{font-weight:600;color:var(--text-soft);margin-right:6px}
+.nt-it{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border)}
+.nt-n{flex:1;font-size:13px}.nt-g{width:64px;padding:6px 4px;font-size:13px}.nt-it small{font-size:11px;color:var(--text-soft)}
+.nt-it b{min-width:36px;text-align:left;font-size:12.5px}
+.nt-it button{border:none;background:var(--border);width:24px;height:24px;border-radius:50%;color:var(--text)}
+.nt-add{margin-top:8px;border:1.5px dashed var(--accent);background:transparent;border-radius:10px;padding:6px 12px;font-size:12.5px;color:var(--accent);font-weight:700}
+.nt-pick{display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%;padding:8px 6px;border:none;border-bottom:1px solid var(--border);background:transparent;color:var(--text);font-size:13px;text-align:right}
+.nt-pick small{font-size:10.5px;color:var(--text-soft)}
+.nt-ta{text-align:right;resize:vertical;font-size:13px}
+.nt-days{margin:10px 0 2px;gap:6px}.nt-days button{padding:6px 10px;font-size:12px}
+#ntTabs button{flex:1}
 </style>
 </head>
 <body class="style-glass booting">
@@ -1651,7 +1687,7 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
 
 </div>
 
-<div class="view" data-view="fitness"><div class="fx-head"><b>فیتنس و تغذیه</b><span>برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه</span></div><div class="fx-grid"><div class="fx-card"><span class="fx-ic" data-fxicon="workout">🏋🏻‍♀️</span><b>برنامه‌ی ورزشی</b><span class="fx-d">برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="meal">🥗</span><b>برنامه‌ی تغذیه</b><span class="fx-d">وعده‌های روزانه و برنامه‌ی غذایی</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="calorie">🔥</span><b>کالری روزانه</b><span class="fx-d">کالری موردنیازت و کسری کالری برای کاهش وزن</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="exbank">💪</span><b>بانک حرکات ورزشی</b><span class="fx-d">آموزش و انیمیشن حرکات بدنسازی</span><em class="fx-chip">به‌زودی</em></div></div></div>
+<div class="view" data-view="fitness"><div class="fx-head"><b>فیتنس و تغذیه</b><span>برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه</span></div><div class="fx-grid"><div class="fx-card"><span class="fx-ic" data-fxicon="workout">🏋🏻‍♀️</span><b>برنامه‌ی ورزشی</b><span class="fx-d">برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه</span><em class="fx-chip">به‌زودی</em></div><div class="fx-card" data-fx="meal" role="button" tabindex="0"><span class="fx-ic" data-fxicon="meal">🥗</span><b>برنامه‌ی تغذیه</b><span class="fx-d">وعده‌های روزانه و برنامه‌ی غذایی</span><em class="fx-chip">ثبت کن</em></div><div class="fx-card" data-fx="calorie" role="button" tabindex="0"><span class="fx-ic" data-fxicon="calorie">🔥</span><b>کالری روزانه</b><span class="fx-d">کالری موردنیازت و کسری کالری برای کاهش وزن</span><em class="fx-chip">محاسبه کن</em></div><div class="fx-card"><span class="fx-ic" data-fxicon="exbank">💪</span><b>بانک حرکات ورزشی</b><span class="fx-d">آموزش و انیمیشن حرکات بدنسازی</span><em class="fx-chip">به‌زودی</em></div></div></div>
 
 <div class="view" data-view="timer"><div class="tm-tabs" id="tmTabs"><button type="button" class="on" data-tab="timer">تایمر</button><button type="button" data-tab="yoga">یوگا</button></div><div class="tm" id="tmRoot"></div><div class="yg" id="ygRoot" hidden></div></div><div class="view" data-view="journal"><div class="jr">
 <div class="jr-head"><button type="button" class="jr-nav" id="jrPM" aria-label="ماه قبل">›</button><div><b id="jrMonth"></b><span id="jrCount"></span></div><button type="button" class="jr-nav" id="jrNM" aria-label="ماه بعد">‹</button></div>
@@ -1892,6 +1928,214 @@ html body.style-glass :is(.tb-chip,.cal-day,.rep-backchip,.med-check,.hm-actions
   </div>
 </div>
 
+<div class="overlay hidden" id="kcOverlay"></div>
+<div class="rep-modal hidden" id="kcModal" role="dialog" aria-modal="true">
+  <div class="sheet-head"><h2>کالری روزانه</h2><button type="button" id="kcClose" aria-label="بستن">✕</button></div>
+  <div id="kcForm">
+    <span class="kc-lbl">جنسیت</span>
+    <div class="seg" id="kcSex"><button type="button" data-s="f">زن</button><button type="button" data-s="m">مرد</button></div>
+    <div class="kc-row">
+      <div><span class="kc-lbl">سن</span><input class="kc-in" id="kcAge" type="text" inputmode="decimal" placeholder="سال"></div>
+      <div><span class="kc-lbl">قد (سانتی‌متر)</span><input class="kc-in" id="kcH" type="text" inputmode="decimal" placeholder="سانتی‌متر"></div>
+      <div><span class="kc-lbl">وزن (کیلوگرم)</span><input class="kc-in" id="kcW" type="text" inputmode="decimal" placeholder="کیلوگرم"></div>
+    </div>
+    <span class="kc-lbl">میزان فعالیت</span><select class="kc-in" id="kcAct"></select>
+    <span class="kc-lbl">هدف تو</span><select class="kc-in" id="kcGoal"></select>
+    <div class="kc-err" id="kcErr"></div>
+    <button type="button" class="kc-go" id="kcGo">محاسبه</button>
+  </div>
+  <div id="kcRes"></div>
+</div>
+<script>
+(function(){
+  var ACT=[["کم‌تحرک هستم (ورزش نمی‌کنم یا خیلی کم)",1.2],["کمی فعالیت می‌کنم (ورزش سبک ۱ تا ۳ روز در هفته)",1.375],["نسبتاً فعال هستم (ورزش متوسط ۳ تا ۵ روز در هفته)",1.55],["خیلی فعال هستم (ورزش سنگین ۶ تا ۷ روز در هفته)",1.725],["فوق‌العاده فعال هستم (تمرین خیلی سخت یا کار فیزیکی)",1.9]];
+  var GOAL=[["حفظ وزن و عضلات",0],["کاهش وزن خفیف ۰٫۲۵ کیلو در هفته",-0.25],["کاهش وزن ۰٫۵ کیلو در هفته",-0.5],["کاهش شدید وزن ۱ کیلو در هفته",-1],["افزایش وزن خفیف ۰٫۲۵ کیلو در هفته",0.25],["افزایش وزن ۰٫۵ کیلو در هفته",0.5],["افزایش سریع وزن ۱ کیلو در هفته",1]];
+  var KCAL_PER_KG=7700, sex="f";
+  function $(i){ return document.getElementById(i); }
+  function fa(n,d){ return Number(n).toLocaleString("fa-IR",{maximumFractionDigits:d||0}); }
+  function num(v){ v=String(v||"").replace(/[۰-۹]/g,function(c){return c.charCodeAt(0)-1776;}).replace(/[٠-٩]/g,function(c){return c.charCodeAt(0)-1632;}).replace("٫",".").replace("،",".").replace(",","."); return parseFloat(v); }
+  function ST(){ return (window.lpBridge&&window.lpBridge.state)||window.state||{}; }
+  function persist(o){ try{ var s=ST(); s.settings=s.settings||{}; s.settings.fit=o; if(window.lpBridge&&window.lpBridge.save) window.lpBridge.save(); }catch(e){} }
+  /* ---- the formula (Harris-Benedict, metric) lives only here ---- */
+  function bmrOf(sx,w,h,a){ return sx==="m" ? 66.47+13.75*w+5.003*h-6.755*a : 655.1+9.563*w+1.85*h-4.676*a; }
+  function protRange(gi,ai){ var g=GOAL[gi][1], r; if(g<=-1) r=[2.0,2.4]; else if(g<0) r=[1.8,2.2]; else if(g>0) r=[1.6,2.2]; else r=[1.6,2.0]; if(ai===0&&g>=0) r=[1.2,1.6]; return r; }
+  function r5(x){ return Math.round(x/5)*5; }
+  function fill(){
+    $("kcAct").innerHTML=ACT.map(function(a,i){return '<option value="'+i+'">'+a[0]+'</option>';}).join("");
+    $("kcGoal").innerHTML=GOAL.map(function(g,i){return '<option value="'+i+'">'+g[0]+'</option>';}).join("");
+  }
+  function setSex(s){ sex=s; Array.prototype.forEach.call($("kcSex").querySelectorAll("button"),function(b){ b.classList.toggle("active",b.getAttribute("data-s")===s); }); }
+  function prefill(){
+    var s=ST(), f=(s.settings&&s.settings.fit)||null, ob=(s.settings&&s.settings.onb)||{}, p=s.profile||{};
+    var w=0; try{ w=(typeof latestWeight==="function")?latestWeight():0; }catch(e){}
+    if(f){ setSex(f.sx); $("kcAge").value=f.a||""; $("kcH").value=f.h||""; $("kcW").value=f.w||""; $("kcAct").value=f.ai; $("kcGoal").value=f.gi; return true; }
+    setSex(ob.gender==="m"?"m":"f"); $("kcAge").value=ob.age||""; $("kcH").value=p.heightCm||ob.height||""; $("kcW").value=w||p.weightKg||ob.weight||"";
+    $("kcAct").value=1; $("kcGoal").value=0; return false;
+  }
+  function calc(log){
+    var a=num($("kcAge").value), h=num($("kcH").value), w=num($("kcW").value), ai=+$("kcAct").value, gi=+$("kcGoal").value, e=$("kcErr");
+    if(!(a>=10&&a<=100)){ e.textContent="سنت رو درست وارد کن (بین ۱۰ تا ۱۰۰ سال)."; return; }
+    if(!(h>=80&&h<=250)){ e.textContent="قدت رو به سانتی‌متر وارد کن (مثلاً ۱۶۵)."; return; }
+    if(!(w>=20&&w<=300)){ e.textContent="وزنت رو به کیلوگرم وارد کن (مثلاً ۶۰)."; return; }
+    e.textContent=""; persist({sx:sex,a:a,h:h,w:w,ai:ai,gi:gi});
+    var bmr=bmrOf(sex,w,h,a), keep=bmr*ACT[ai][1], kg=GOAL[gi][1], d=Math.round(kg*KCAL_PER_KG/7), target=Math.round(keep+d), wk=Math.abs(d)*7, out="";
+    var bmi=w/Math.pow(h/100,2);
+    if(log){
+      var S0=ST(); S0.settings=S0.settings||{}; var H0=S0.settings.fitHist=S0.settings.fitHist||[];
+      var rec={t:Date.now(),w:w,bmi:Math.round(bmi*10)/10,bmr:Math.round(bmr),kc:target}, L0=H0[H0.length-1];
+      if(L0&&new Date(L0.t).toDateString()===new Date().toDateString()) H0[H0.length-1]=rec; else H0.push(rec);
+      if(H0.length>90) H0.splice(0,H0.length-90);
+      persist(S0.settings.fit);
+    }
+    var mn=sex==="m"?1500:1200;
+    if(target<mn){
+      var lk=(keep-mn)/1100;
+      out+='<div class="kc-box kc-top"><b>⚠️ هشدار مهم</b><br>مصرف کالری نباید کمتر از <b>'+fa(mn)+'</b> کالری در روز باشه ('+(sex==="m"?"برای آقایون":"برای خانم‌ها")+')، چون برای بدن خطرناکه و می‌تونه باعث ضعف، تحلیل رفتن عضله، کمبود ویتامین و مواد معدنی و آسیب به سوخت‌وساز بشه. عدد بالا ('+fa(target)+') از این حد پایین‌تره، پس پیشنهاد من اینه که از <b>'+fa(mn)+' کالری</b> شروع کنی. '+(lk>0.05?'با همین مقدار حدود '+fa(lk,2)+' کیلو در هفته کم می‌کنی.':'این مقدار تقریباً همون نیاز نگهداری وزنته، پس برای کم شدن وزن بهتره فعالیتت رو بیشتر کنی.')+'</div>';
+    }
+    out+='<div class="kc-hero"><b>'+fa(target)+'</b><span>کالری در روز برای هدف «'+GOAL[gi][0]+'»</span></div>';
+    out+='<div class="kc-box"><h4>برنامه‌ی هفتگی</h4>';
+    if(d<0) out+='هر روز '+fa(-d)+' کالری کمتر از نیاز نگهداری وزنت ('+fa(Math.round(keep))+') می‌خوری؛ یعنی هفته‌ای '+fa(wk)+' کالری کسری و حدود '+fa(-kg,2)+' کیلو کم شدن در هفته (نزدیک '+fa(-kg*4,1)+' کیلو در ماه).';
+    else if(d>0) out+='هر روز '+fa(d)+' کالری بیشتر از نیاز نگهداری وزنت ('+fa(Math.round(keep))+') می‌خوری؛ یعنی هفته‌ای '+fa(wk)+' کالری اضافه و حدود '+fa(kg,2)+' کیلو اضافه شدن در هفته (نزدیک '+fa(kg*4,1)+' کیلو در ماه).';
+    else out+='همین‌قدر که نیاز داری بخور تا وزن و عضله‌هات ثابت بمونه؛ مجموع مصرفت در هفته حدود '+fa(Math.round(keep)*7)+' کالری می‌شه.';
+    out+='<br>مجموع مصرف هفتگی: <b>'+fa(target*7)+'</b> کالری<br>متابولیسم پایه (BMR): <b>'+fa(Math.round(bmr))+'</b> کالری؛ انرژی‌ای که بدنت تو حالت استراحت کامل می‌سوزونه.</div>';
+    var pr=protRange(gi,ai), lo=r5(pr[0]*w), hi=r5(pr[1]*w), per=Math.round(((lo+hi)/2)/4/5)*5;
+    try{var F0=ST().settings.fit; F0.kc=target; F0.pl=lo; F0.ph=hi; if(window.lpBridge&&window.lpBridge.save) window.lpBridge.save();}catch(e){}
+    out+='<div class="kc-box"><h4>پروتئین روزانه</h4>باید روزی حدود <b>'+fa(lo)+' تا '+fa(hi)+' گرم</b> پروتئین بخوری ('+fa(pr[0],1)+' تا '+fa(pr[1],1)+' گرم برای هر کیلو وزنت). ';
+    if(kg<0) out+='وقتی کالری کم می‌کنی، اگه پروتئین کم باشه بدن علاوه بر چربی از عضله هم انرژی برمی‌داره و عضلاتت تحلیل می‌ره؛ این مقدار پروتئین کمک می‌کنه فقط چربی بره و عضله بمونه. ';
+    else if(kg>0) out+='این مقدار پروتئین باعث می‌شه وزنی که اضافه می‌کنی بیشتر عضله باشه، نه فقط چربی. ';
+    else out+='این مقدار پروتئین عضله‌هات رو سالم نگه می‌داره و از تحلیل رفتنشون جلوگیری می‌کنه. ';
+    out+='بهتره تو ۳ تا ۴ وعده پخشش کنی (هر وعده حدود '+fa(per)+' گرم) و ورزش مقاومتی یا وزنه هم داشته باشی.</div>';
+    var bc=bmi<18.5?"کم‌وزن":bmi<25?"نرمال":bmi<30?"اضافه‌وزن":"چاق", hm=h/100;
+    out+='<div class="kc-box"><h4>شاخص توده‌ی بدنی (BMI)</h4>BMI تو <b>'+fa(bmi,1)+'</b> هست و تو محدوده‌ی «<b>'+bc+'</b>» قرار می‌گیره. وزن سالم برای قدت حدود '+fa(Math.round(18.5*hm*hm))+' تا '+fa(Math.round(24.9*hm*hm))+' کیلوئه. (BMI عضله و چربی رو از هم جدا نمی‌کنه، پس برای ورزشکارها دقیق نیست.)</div>';
+    var H2=(ST().settings&&ST().settings.fitHist)||[];
+    if(H2.length){
+      var rows=H2.slice(-6).reverse().map(function(r){return '<tr><td>'+new Date(r.t).toLocaleDateString("fa-IR")+'</td><td>'+fa(r.w,1)+' کیلو</td><td>BMI '+fa(r.bmi,1)+'</td><td>'+fa(r.kc)+' کالری</td></tr>';}).join(""), tr="";
+      if(H2.length>1){
+        var dw=H2[H2.length-1].w-H2[0].w, ws=H2.slice(-30).map(function(r){return r.w;}), mi=Math.min.apply(null,ws), ma=Math.max.apply(null,ws), rg=(ma-mi)||1;
+        var pts=ws.map(function(v,i){return (i*(200/(ws.length-1))).toFixed(1)+","+(34-(v-mi)/rg*28).toFixed(1);}).join(" ");
+        tr='از اولین محاسبه تا الان '+(Math.abs(dw)<0.05?"وزنت ثابت مونده.":fa(Math.abs(dw),1)+" کیلو "+(dw<0?"کم":"زیاد")+" شده.")+'<svg viewBox="0 0 200 40" preserveAspectRatio="none" style="width:100%;height:44px;margin:6px 0"><polyline points="'+pts+'" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>';
+      }
+      out+='<div class="kc-box"><h4>سابقه‌ی محاسبه‌ها</h4>'+tr+'<table class="kc-tb">'+rows+'</table></div>';
+    }
+    out+='<div class="kc-box"><h4>بقیه‌ی هدف‌ها (برای انتخاب بزن روش)</h4><table class="kc-tb">'+GOAL.map(function(g,i){ return '<tr data-g="'+i+'"'+(i===gi?' class="on"':'')+'><td>'+g[0]+'</td><td>'+fa(Math.round(keep+Math.round(g[1]*KCAL_PER_KG/7)))+'</td></tr>'; }).join("")+'</table></div>';
+    if(target<mn) out+='<div class="kc-note kc-warn">این عدد از حداقل معمول روزانه ('+fa(mn)+' کالری) پایین‌تره. بهتره هدف ملایم‌تری انتخاب کنی یا با متخصص تغذیه مشورت کنی.</div>';
+    else if(Math.abs(kg)>=1) out+='<div class="kc-note kc-warn">تغییر وزن ۱ کیلو در هفته سرعت زیادیه؛ اگه بدنت اذیت شد، هدف ملایم‌تر رو انتخاب کن.</div>';
+    out+='<div class="kc-note">این اعداد فقط یه تخمینه و جای نظر پزشک یا متخصص تغذیه رو نمی‌گیره. اگه بیماری خاصی (مثل مشکل کلیه) داری یا باردار هستی، قبل از تغییر برنامه‌ی غذایی حتماً با پزشک حرف بزن.</div>';
+    out+='<button type="button" class="kc-go" id="kcAgain">محاسبه‌ی دوباره</button>';
+    $("kcForm").classList.add("hidden"); $("kcRes").innerHTML=out; $("kcModal").scrollTop=0;
+  }
+  function open(){ var had=prefill(); $("kcErr").textContent=""; $("kcOverlay").classList.remove("hidden"); $("kcModal").classList.remove("hidden"); $("kcModal").scrollTop=0; $("kcForm").classList.remove("hidden"); $("kcRes").innerHTML=""; if(had) calc(); }
+  function close(){ $("kcOverlay").classList.add("hidden"); $("kcModal").classList.add("hidden"); }
+  fill();
+  var card=document.querySelector('[data-fx="calorie"]');
+  if(card){ card.addEventListener("click",open); card.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); } }); }
+  $("kcClose").addEventListener("click",close); $("kcOverlay").addEventListener("click",close);
+  document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
+  $("kcSex").addEventListener("click",function(ev){ var b=ev.target.closest("button"); if(b) setSex(b.getAttribute("data-s")); });
+  $("kcGo").addEventListener("click",function(){calc(true);});
+  $("kcRes").addEventListener("click",function(ev){
+    if(ev.target.id==="kcAgain"){ $("kcRes").innerHTML=""; $("kcForm").classList.remove("hidden"); $("kcModal").scrollTop=0; return; }
+    var tr=ev.target.closest("tr[data-g]"); if(tr){ $("kcGoal").value=tr.getAttribute("data-g"); calc(); }
+  });
+})();
+</script>
+<div class="overlay hidden" id="ntOverlay"></div>
+<div class="rep-modal hidden" id="ntModal" role="dialog" aria-modal="true">
+  <div class="sheet-head"><h2>برنامه‌ی تغذیه</h2><button type="button" id="ntClose" aria-label="بستن">✕</button></div>
+  <div class="seg" id="ntTabs"><button type="button" data-t="log" class="active">ثبت امروز</button><button type="button" data-t="plan">برنامه‌ی باشگاه</button></div>
+  <div id="ntBody"></div>
+</div>
+<script>
+(function(){
+  var FOODS=("نان سنگک|255|8.5|100;نان لواش|275|9|50;نان بربری|270|9|100;نان تافتون|285|9|60;نان تست (هر برش ≈ ۳۰ گرم)|265|9|30;"+
+  "برنج پخته (ساده)|130|2.7|200;ماکارونی پخته|158|5.8|200;جو دوسر (خام)|389|17|40;کورن‌فلکس|357|7|30;سیب‌زمینی آب‌پز|87|1.9|150;سیب‌زمینی سرخ‌شده|312|3.4|100;"+
+  "لوبیا چیتی پخته|143|9|150;لوبیا سفید پخته|139|9.7|150;لوبیا چشم‌بلبلی پخته|116|7.7|150;عدس پخته|116|9|150;نخود پخته|164|8.9|100;باقالا پخته|110|7.6|150;ماش پخته|105|7|150;لوبیا سبز پخته|35|1.9|100;"+
+  "سینه‌ی مرغ پخته|165|31|120;ران مرغ بدون پوست پخته|209|26|100;گوشت قرمز کم‌چرب پخته|215|27|100;گوشت خورشتی گوسفند پخته|294|25|100;جوجه‌کباب سینه|180|29|150;کباب کوبیده|260|18|100;ماهی سالمون پخته|206|22|120;ماهی قزل‌آلا پخته|168|23|120;تن ماهی (کنسرو در آب)|116|26|100;میگو پخته|99|24|100;تخم‌مرغ (هر عدد ≈ ۵۰ گرم)|143|12.6|50;سفیده‌ی تخم‌مرغ|52|11|33;پودر پروتئین وی|400|80|30;"+
+  "شیر کم‌چرب|42|3.4|240;شیر پرچرب|61|3.2|240;ماست کم‌چرب|56|5.3|150;ماست پرچرب|61|3.5|150;ماست یونانی کم‌چرب|73|10|150;دوغ|27|1.7|250;پنیر سفید ایرانی|264|14|40;پنیر خامه‌ای|342|6|20;پنیر موزارلا|280|28|30;"+
+  "سیب|52|0.3|180;موز|89|1.1|120;پرتقال|47|0.9|180;نارنگی|53|0.8|90;انگور|69|0.7|100;هندوانه|30|0.6|300;خربزه|34|0.8|200;گیلاس|50|1|100;توت‌فرنگی|32|0.7|100;انار|83|1.7|150;خرما (هر عدد ≈ ۸ گرم)|282|2.5|24;کیوی|61|1.1|100;گلابی|57|0.4|180;هلو|39|0.9|150;آلو|46|0.7|60;کشمش|299|3.1|30;"+
+  "خیار|15|0.7|100;گوجه‌فرنگی|18|0.9|100;سبزی خوردن|25|2.5|30;سبزی قورمه (خام)|30|3|100;کاهو|15|1.4|50;هویج|41|0.9|80;اسفناج|23|2.9|100;کلم‌بروکلی|34|2.8|100;کدو سبز|17|1.2|100;بادمجان|25|1|100;قارچ|22|3.1|100;فلفل دلمه‌ای|31|1|100;پیاز|40|1.1|50;کلم|25|1.3|100;رب گوجه‌فرنگی|82|4.3|15;"+
+  "بادام|579|21|30;گردو|654|15|30;پسته|562|20|30;فندق|628|15|30;بادام‌زمینی|567|26|30;کره‌ی بادام‌زمینی|588|25|16;روغن زیتون|884|0|10;روغن مایع|884|0|10;کره|717|0.9|10;عسل|304|0.3|20;شکر|387|0|5;مربا|278|0.4|20;شکلات تلخ|600|8|20;نوشابه|42|0|330;آب‌پرتقال طبیعی|45|0.7|200;چیپس|536|7|30;بیسکویت ساده|450|6|30"
+  ).split(";").map(function(x){var a=x.split("|");return{n:a[0],k:+a[1],p:+a[2],g:+a[3]};});
+  var MEALS=[["b","صبحانه"],["l","ناهار"],["d","شام"],["s","میان‌وعده"]],DAYS=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
+  var tab="log",addTo=null,pDay=0;
+  function $(i){return document.getElementById(i);}
+  function fa(n,d){return Number(n).toLocaleString("fa-IR",{maximumFractionDigits:d||0});}
+  function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function nz(t){return String(t).replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/\u200c/g," ").toLowerCase();}
+  function ST(){return (window.lpBridge&&window.lpBridge.state)||window.state||{};}
+  function sv(){try{if(window.lpBridge&&window.lpBridge.save)window.lpBridge.save();}catch(e){}}
+  function NT(){var s=ST();s.settings=s.settings||{};var n=s.settings.nt=s.settings.nt||{};n.plan=n.plan||{};n.log=n.log||{};return n;}
+  function p2(x){return("0"+x).slice(-2);}
+  function dk(){var d=new Date();return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());}
+  function didx(){return(new Date().getDay()+1)%7;}
+  function bar(l,v,t,u){var pc=t?Math.min(100,v/t*100):0;return '<div class="nt-bar"><div class="nt-bh"><span>'+l+'</span><span>'+fa(v)+(t?' / '+fa(t):"")+' '+u+'</span></div><i><u style="width:'+pc.toFixed(0)+'%"></u></i></div>';}
+  function hint(){return '<div class="kc-note">مثلاً: لوبیا، مرغ، نان، سیب...</div>';}
+  function search(q){
+    q=nz(q.trim()); if(!q) return hint();
+    var r=[]; FOODS.forEach(function(f,i){ if(nz(f.n).indexOf(q)>-1) r.push(i); });
+    if(!r.length) return '<div class="kc-note">چیزی پیدا نشد. اسمش رو ساده‌تر بنویس (مثلاً «برنج»).</div>';
+    return r.slice(0,12).map(function(i){var f=FOODS[i];return '<button type="button" class="nt-pick" data-pick="'+i+'"><span>'+f.n+'</span><small>'+fa(f.k)+' کالری · '+fa(f.p,1)+' گرم پروتئین (در ۱۰۰ گرم)</small></button>';}).join("");
+  }
+  function render(){
+    var n=NT(),h="",F=(ST().settings&&ST().settings.fit)||{};
+    Array.prototype.forEach.call($("ntTabs").querySelectorAll("button"),function(b){b.classList.toggle("active",b.getAttribute("data-t")===tab);});
+    if(tab==="plan"){
+      var pd=n.plan[pDay]||{};
+      h='<div class="seg nt-days">'+DAYS.map(function(d,i){return '<button type="button" data-d="'+i+'"'+(i===pDay?' class="active"':"")+'>'+d+'</button>';}).join("")+'</div>';
+      h+='<div class="kc-note">برنامه‌ی غذاییِ مربی یا متخصص تغذیه‌ت رو برای هر روز اینجا بنویس. تو «ثبت امروز»، برنامه‌ی همون روز بالای صفحه نشونت داده می‌شه.</div>';
+      h+=MEALS.map(function(m){return '<span class="kc-lbl">'+m[1]+'</span><textarea class="kc-in nt-ta" data-m="'+m[0]+'" rows="3" placeholder="مثلاً ۲ تخم‌مرغ + ۱ برش نان سنگک + خیار">'+esc(pd[m[0]]||"")+'</textarea>';}).join("");
+      h+='<button type="button" class="nt-add" data-copy="1">کپی این روز برای همه‌ی روزهای هفته</button>';
+    }else{
+      var L=n.log[dk()]||{},tk=0,tp=0,tpl=n.plan[didx()]||{};
+      MEALS.forEach(function(m){(L[m[0]]||[]).forEach(function(x){tk+=x.g*x.k/100;tp+=x.g*x.p/100;});});
+      h+=bar("کالری",Math.round(tk),F.kc||0,"کالری")+bar("پروتئین",Math.round(tp),F.pl||0,"گرم");
+      if(!F.kc) h+='<div class="kc-note">هدف کالری و پروتئینت هنوز حساب نشده؛ از کارت «کالری روزانه» حسابش کن.</div>';
+      var pt=MEALS.filter(function(m){return tpl[m[0]];}).map(function(m){return '<b>'+m[1]+':</b> '+esc(tpl[m[0]]);}).join("<br>");
+      if(pt) h+='<div class="kc-box"><h4>برنامه‌ی امروزت</h4>'+pt+'</div>';
+      MEALS.forEach(function(m){
+        var it=L[m[0]]||[],mk=0; it.forEach(function(x){mk+=x.g*x.k/100;});
+        h+='<div class="kc-box nt-m"><h4>'+m[1]+' <small>'+fa(Math.round(mk))+' کالری</small></h4>'+
+        it.map(function(x,i){return '<div class="nt-it"><span class="nt-n">'+x.n+'</span><input class="kc-in nt-g" type="number" inputmode="decimal" data-m="'+m[0]+'" data-i="'+i+'" value="'+x.g+'"><small>گرم</small><b>'+fa(Math.round(x.g*x.k/100))+'</b><button type="button" data-del="'+m[0]+':'+i+'">✕</button></div>';}).join("")+
+        (addTo===m[0]?'<div class="nt-panel"><input class="kc-in" id="ntQ" type="text" placeholder="اسم غذا یا ماده‌ی غذایی..." style="text-align:right"><div id="ntRes">'+hint()+'</div><button type="button" class="nt-add" data-cancel="1">تمام شد</button></div>':'<button type="button" class="nt-add" data-add="'+m[0]+'">+ افزودن غذا</button>')+'</div>';
+      });
+      h+='<div class="kc-note">کالری و پروتئین هر ماده‌ی غذایی تقریبیه و برای ۱۰۰ گرمه. بعد از انتخاب، مقدار گرم رو خودت درست کن؛ برای غذاهای پخته، وزنِ پخته‌ی اون رو بزن.</div>';
+    }
+    $("ntBody").innerHTML=h;
+    if(tab==="log"&&addTo&&$("ntQ")) $("ntQ").focus();
+  }
+  var B=$("ntBody");
+  B.addEventListener("click",function(ev){
+    var t=ev.target.closest("button"); if(!t) return; var n=NT(),L;
+    if(t.hasAttribute("data-d")){ pDay=+t.getAttribute("data-d"); render(); }
+    else if(t.hasAttribute("data-copy")){ var src=n.plan[pDay]||{}; for(var i=0;i<7;i++) n.plan[i]=JSON.parse(JSON.stringify(src)); sv(); t.textContent="کپی شد ✓"; }
+    else if(t.hasAttribute("data-add")){ addTo=t.getAttribute("data-add"); render(); }
+    else if(t.hasAttribute("data-cancel")){ addTo=null; render(); }
+    else if(t.hasAttribute("data-del")){ var a=t.getAttribute("data-del").split(":"); L=n.log[dk()]||{}; (L[a[0]]||[]).splice(+a[1],1); sv(); render(); }
+    else if(t.hasAttribute("data-pick")){
+      var f=FOODS[+t.getAttribute("data-pick")]; L=n.log[dk()]=n.log[dk()]||{}; (L[addTo]=L[addTo]||[]).push({n:f.n,g:f.g,k:f.k,p:f.p});
+      var ks=Object.keys(n.log).sort(); while(ks.length>90) delete n.log[ks.shift()];
+      sv(); render();
+    }
+  });
+  B.addEventListener("change",function(ev){
+    var t=ev.target; if(!t.classList.contains("nt-g")) return;
+    var L=NT().log[dk()]||{}, it=(L[t.getAttribute("data-m")]||[])[+t.getAttribute("data-i")];
+    if(it){ it.g=Math.max(0,parseFloat(String(t.value).replace(",","."))||0); sv(); render(); }
+  });
+  B.addEventListener("input",function(ev){
+    var t=ev.target;
+    if(t.id==="ntQ") $("ntRes").innerHTML=search(t.value);
+    else if(t.classList.contains("nt-ta")){ var n=NT(); (n.plan[pDay]=n.plan[pDay]||{})[t.getAttribute("data-m")]=t.value; sv(); }
+  });
+  $("ntTabs").addEventListener("click",function(ev){ var b=ev.target.closest("button"); if(b){ tab=b.getAttribute("data-t"); addTo=null; render(); } });
+  function open(){ tab="log"; addTo=null; pDay=didx(); render(); $("ntOverlay").classList.remove("hidden"); $("ntModal").classList.remove("hidden"); $("ntModal").scrollTop=0; }
+  function close(){ $("ntOverlay").classList.add("hidden"); $("ntModal").classList.add("hidden"); }
+  var card=document.querySelector('[data-fx="meal"]');
+  if(card){ card.addEventListener("click",open); card.addEventListener("keydown",function(ev){ if(ev.key==="Enter"||ev.key===" "){ ev.preventDefault(); open(); } }); }
+  $("ntClose").addEventListener("click",close); $("ntOverlay").addEventListener("click",close);
+  document.addEventListener("keydown",function(ev){ if(ev.key==="Escape") close(); });
+})();
+</script>
 <nav class="bnav" id="bnav"><button type="button" data-v="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg><span>خانه</span></button><button type="button" data-v="habits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span>عادت‌ها</span></button><button type="button" data-v="fitness"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><span>فیتنس</span></button><button type="button" data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg><span>تایمر</span></button><button type="button" data-v="journal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>ژورنال</span></button><button type="button" data-v="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>آمار</span></button></nav>
 <button class="chat-fab" id="chatFab" aria-label="چت با لیانا">
   <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 10.5A5 5 0 0 1 10.5 5.5h9A5 5 0 0 1 24.5 10.5v6a5 5 0 0 1-5 5H14.6l-4.7 4a.7.7 0 0 1-1.15-.53V21.5A5 5 0 0 1 5.5 16.5z"/><circle cx="11.2" cy="13.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="18.8" cy="13.5" r="1.3" fill="currentColor" stroke="none"/><path d="M26 1.8l1.05 2.75L29.8 5.6l-2.75 1.05L26 9.4l-1.05-2.75L22.2 5.6l2.75-1.05z" fill="currentColor" stroke="none"/></svg>
