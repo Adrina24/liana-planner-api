@@ -7,7 +7,7 @@
    - images / fonts / sounds: saved the first time they are used
    - the server (workers.dev) and other websites are never touched by this file
    To force every phone to download everything again, change VERSION below. */
-const VERSION = "liana-v3";
+const VERSION = "liana-v4";
 const CORE = [
   "./", "./index.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png", "./icon-maskable-192.png", "./icon-maskable-512.png",
@@ -123,3 +123,42 @@ async function rangeStrategy(req, event) {
   }
   return fetch(req);
 }
+
+/* ---------- reminder notifications (Web Push) ----------
+   The server sends a small encrypted message at the reminder's time. If the app is open on screen
+   we only tell it to check (it shows its own popup); otherwise we show a real notification. */
+self.addEventListener("push", (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = { body: event.data ? event.data.text() : "" }; }
+  const title = data.title || "لیانا 💛";
+  event.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    if (!data.force && wins.some((c) => c.visibilityState === "visible")) {
+      wins.forEach((c) => c.postMessage({ type: "lp-reminder-check" }));
+      return;
+    }
+    await self.registration.showNotification(title, {
+      body: data.body || "",
+      icon: "./icon-192.png",
+      tag: data.tag || "liana-reminder",
+      renotify: true,
+      lang: "fa",
+      dir: "rtl",
+      data: { url: "./" }
+    });
+  })());
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    if (wins.length) {
+      const c = wins[0];
+      try { await c.focus(); } catch (e) {}
+      c.postMessage({ type: "lp-reminder-check" });
+      return;
+    }
+    await self.clients.openWindow("./");
+  })());
+});
