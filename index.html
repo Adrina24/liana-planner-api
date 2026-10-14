@@ -1299,6 +1299,27 @@ body.style-glass.mode-dark .rm-in{background:rgba(30,26,46,.5); border-color:rgb
 .rm-card.hold .rm-bar b{animation-play-state:paused;}
 @keyframes rmBar{to{transform:scaleX(0);}}
 @media (prefers-reduced-motion:reduce){ .rm-in{animation:none;} .rm-card{animation:none;} }
+/* ===== Invite to turn on notifications (installed app only) ===== */
+#lpNp{position:fixed; inset:0; z-index:99000; display:flex; align-items:flex-end; justify-content:center; padding:0 14px calc(18px + env(safe-area-inset-bottom)); box-sizing:border-box; color:var(--text); transition:opacity .3s ease;}
+#lpNp.out{opacity:0; pointer-events:none;}
+#lpNp .np-bd{position:absolute; inset:0; background:rgba(20,15,35,.34); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); animation:npFade .35s ease both;}
+#lpNp .np-card{position:relative; width:min(400px,100%); margin-top:150px; padding:46px 20px 18px; border-radius:28px; text-align:center; background:var(--card); border:1.5px solid var(--border); box-shadow:var(--shadow); animation:npUp .6s cubic-bezier(.2,1.25,.4,1) both; transition:transform .3s ease;}
+#lpNp.out .np-card{transform:translateY(26px);}
+body.style-glass #lpNp .np-card{background:rgba(255,255,255,.68); backdrop-filter:blur(28px) saturate(190%); -webkit-backdrop-filter:blur(28px) saturate(190%); border-color:rgba(255,255,255,.78); box-shadow:0 18px 44px rgba(31,38,135,.26), inset 0 1px 0 rgba(255,255,255,.8);}
+body.style-glass.mode-dark #lpNp .np-card{background:rgba(30,26,46,.8); border-color:rgba(255,255,255,.16); box-shadow:0 18px 44px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);}
+#lpNp .np-av{position:absolute; left:50%; bottom:calc(100% - 36px); width:124px; transform:translateX(-50%); pointer-events:none; filter:drop-shadow(0 0 8px rgba(255,255,255,.9)) drop-shadow(0 0 18px rgba(165,208,255,.75));}
+#lpNp .np-av img{display:block; width:100%; height:auto; -webkit-mask-image:linear-gradient(#000 62%, transparent 99%); mask-image:linear-gradient(#000 62%, transparent 99%);}
+#lpNp h2{margin:0 0 6px; font-size:19px; font-weight:800; line-height:1.5; color:var(--text);}
+#lpNp p{margin:0 0 16px; font-size:13.5px; line-height:1.95; color:var(--text); opacity:.82;}
+#lpNp .np-acts{display:flex; gap:10px;}
+#lpNp .np-b{flex:1; min-height:46px; padding:11px 10px; border-radius:18px; border:1px solid var(--border); background:rgba(255,255,255,.5); color:var(--text); font-size:14px; font-weight:700; transition:transform .15s, opacity .2s;}
+body.mode-dark #lpNp .np-b:not(.main){background:rgba(255,255,255,.1);}
+#lpNp .np-b.main{flex:1.6; background:var(--accent); border-color:transparent; color:#fff; box-shadow:0 6px 16px hsla(var(--accent-h),90%,50%,.35), inset 0 1px 0 rgba(255,255,255,.4);}
+#lpNp .np-b:active{transform:scale(.96);}
+#lpNp .np-b:disabled{opacity:.7; transform:none;}
+@keyframes npFade{from{opacity:0;}}
+@keyframes npUp{from{opacity:0; transform:translateY(46px) scale(.96);}}
+@media (prefers-reduced-motion:reduce){ #lpNp .np-bd,#lpNp .np-card{animation:none;} #lpNp,#lpNp .np-card{transition:none;} }
 .bk-auto{display:flex; gap:8px; align-items:flex-start; margin-top:12px; font-size:12.5px; line-height:1.9; color:var(--text);}
 .bk-auto input{flex:none; margin-top:5px; width:18px; height:18px; accent-color:var(--accent);}
 /* ---------- Home: companion cards ---------- */
@@ -1839,6 +1860,62 @@ html body .ms-modal .meas-box, html body.style-glass .ms-modal .meas-box, html b
 .cal-pd-key .pdm-ic svg, .cal-pd-key .pdm-ic img{width:100%; height:100%; object-fit:contain;}
 .cal-pd-key.hidden{display:none;}
 </style>
+<style id="pn-admin-style">
+.pn-admin{margin-top:14px; padding-top:12px; border-top:1px dashed rgba(124,108,196,.35);}
+.pn-admin.hidden{display:none;}
+.pn-admin .pn-ah{font-weight:800; font-size:13px; margin-bottom:8px;}
+.pn-admin .pn-q{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
+.pn-admin .pn-q button{border:1px solid var(--g-line,rgba(255,255,255,.6)); border-radius:999px; padding:6px 11px; font:inherit; font-size:12px; background:var(--g-fill,rgba(255,255,255,.55)); color:inherit;}
+.pn-admin input, .pn-admin textarea{width:100%; box-sizing:border-box; margin-bottom:8px; border-radius:12px; border:1px solid var(--g-line,rgba(255,255,255,.6)); background:var(--g-fill,rgba(255,255,255,.55)); padding:10px 12px; font:inherit; font-size:13px; color:inherit;}
+.pn-admin textarea{resize:none; line-height:1.8;}
+</style>
+<style id="rm-style">
+.rm-hc{cursor:pointer;}
+.rm-hc .hm-h b, .rm-modal .sheet-head h2{display:flex; align-items:center; gap:8px;}
+.rm-hic{display:inline-flex; width:22px; height:22px; color:var(--accent);}
+.rm-hic svg, .rm-hc .hm-h b svg{width:100%; height:100%;}
+.rm-hc .hm-h b svg{width:20px; height:20px; color:var(--accent);}
+.rm-row{display:flex; align-items:center; gap:10px; padding:8px 2px; border-top:1px solid rgba(124,108,196,.16);}
+.rm-hc .hm-h + .rm-row{border-top:0;}
+.rm-dot{width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0;}
+.rm-rt{display:flex; flex-direction:column; gap:2px; min-width:0; flex:1;}
+.rm-rt b{font-size:13px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.rm-rt span{font-size:11.5px; opacity:.72;}
+.rm-more{font-size:11.5px; opacity:.7; padding:6px 2px 0;}
+.rm-empty{font-size:12.5px; opacity:.78; line-height:1.9; padding:4px 2px;}
+.rm-msg{min-height:0; margin:0 2px 6px;}
+.rm-msg:empty{display:none;}
+.rm-item{display:flex; align-items:center; gap:10px; padding:11px 12px; margin-bottom:8px; border-radius:14px; background:var(--g-fill,rgba(255,255,255,.5)); border:1px solid var(--g-line,rgba(255,255,255,.6));}
+.rm-it{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;}
+.rm-it b{font-size:13.5px; font-weight:700; line-height:1.7; word-break:break-word;}
+.rm-it span{font-size:11.5px; opacity:.74;}
+.rm-ia{display:flex; gap:6px; flex-shrink:0;}
+.rm-ia button{width:34px; height:34px; padding:0; border-radius:50%; display:flex; align-items:center; justify-content:center; color:inherit; border:1px solid var(--g-line,rgba(255,255,255,.6)); background:var(--g-fill,rgba(255,255,255,.5));}
+.rm-ia button svg{width:16px; height:16px;}
+.rm-ia button.del{color:#c0394f;}
+.rm-add{width:100%; margin-top:4px; padding:12px; border-radius:14px; font:inherit; font-weight:800; font-size:13.5px; color:#fff; border:0; background:var(--accent);}
+.rm-push{margin-top:12px; font-size:12px; line-height:1.9; opacity:.88;}
+.rm-push button{margin-top:6px; padding:8px 14px; border-radius:12px; font:inherit; font-size:12.5px; font-weight:700; color:inherit; border:1px solid var(--g-line,rgba(255,255,255,.6)); background:var(--g-fill,rgba(255,255,255,.5));}
+.rm-f label{display:block; font-size:12px; font-weight:800; margin:14px 2px 6px;}
+.rm-f label:first-child{margin-top:2px;}
+.rm-f input, .rm-f textarea, .rm-f select{width:100%; box-sizing:border-box; border-radius:12px; border:1px solid var(--g-line,rgba(255,255,255,.6)); background:var(--g-fill,rgba(255,255,255,.5)); padding:10px 12px; font:inherit; font-size:13.5px; color:inherit;}
+.rm-f textarea{resize:none; line-height:1.8;}
+.rm-f input[type=time]{text-align:center; direction:ltr;}
+.rm-seg{flex-wrap:wrap; gap:6px;}
+.rm-seg button{flex:1 1 auto; padding:8px 12px; font-size:12.5px;}
+.rm-jal{display:flex; gap:6px; margin-top:8px;}
+.rm-jal.hidden, #rmDaysBox.hidden{display:none;}
+.rm-dshow{margin:8px 2px 0;}
+.rm-days{display:flex; gap:6px; flex-wrap:wrap;}
+.rm-days button{width:38px; height:38px; padding:0; border-radius:50%; font:inherit; font-size:13px; font-weight:800; color:inherit; border:1px solid var(--g-line,rgba(255,255,255,.6)); background:var(--g-fill,rgba(255,255,255,.5));}
+.rm-days button.on{background:var(--accent); border-color:var(--accent); color:#fff;}
+.rm-err{min-height:18px; margin:10px 2px 0; font-size:12.5px; color:#c0394f; font-weight:700;}
+.rm-fa{display:flex; gap:8px; margin-top:12px;}
+.rm-fa button{flex:1; padding:12px; border-radius:14px; font:inherit; font-weight:800; font-size:13.5px;}
+.rm-save{color:#fff; border:0; background:var(--accent);}
+.rm-cancel{color:inherit; background:var(--g-fill,rgba(255,255,255,.5)); border:1px solid var(--g-line,rgba(255,255,255,.6));}
+#rmOverlay{z-index:58;} #rmModal{z-index:60;}
+</style>
 </head>
 <body class="style-glass booting">
 
@@ -1934,6 +2011,7 @@ html body .ms-modal .meas-box, html body.style-glass .ms-modal .meas-box, html b
 </div>
 <div class="dashboard"><div class="dash-card" id="dashCard"></div></div>
 <div class="hm" id="hmRoot"></div>
+<div id="rmHome"></div>
 <div class="pd-homewrap" id="pdHome"></div>
 
 </div>
@@ -2040,6 +2118,50 @@ html body .ms-modal .meas-box, html body.style-glass .ms-modal .meas-box, html b
     <button class="cal-nav" data-repnav="12" aria-label="سال بعد">«</button>
   </div>
   <div id="repBody"></div>
+</div>
+
+<div class="overlay hidden" id="rmOverlay"></div>
+<div class="rep-modal rm-modal hidden" id="rmModal" role="dialog" aria-modal="true">
+  <div class="sheet-head"><h2><span class="rm-hic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17h12l-1.6-2.3V10.5a4.4 4.4 0 0 0-8.8 0v4.2L6 17z"/><path d="M10 19.5a2.1 2.1 0 0 0 4 0"/></svg></span>یادآورها</h2><button type="button" id="rmClose" aria-label="بستن">✕</button></div>
+  <div id="rmListView">
+    <div class="rm-msg hint" id="rmMsg"></div>
+    <div id="rmList"></div>
+    <button type="button" class="rm-add" id="rmAdd">+ یادآور جدید</button>
+    <div class="rm-push" id="rmPush"></div>
+  </div>
+  <div id="rmFormView" class="rm-f hidden">
+    <label for="rmText">متن یادآور</label>
+    <textarea id="rmText" maxlength="160" rows="2" placeholder="مثلاً: قرص‌هام رو بخورم"></textarea>
+    <label>تکرار</label>
+    <div class="seg rm-seg" id="rmFreq">
+      <button type="button" data-f="once">یک بار</button>
+      <button type="button" data-f="daily">هر روز</button>
+      <button type="button" data-f="weekdays">روزهای هفته</button>
+      <button type="button" data-f="alt">یه روز در میون</button>
+      <button type="button" data-f="open">هر بار که اپ رو باز کردم</button>
+    </div>
+    <div id="rmDateBox">
+      <label>تاریخ</label>
+      <div class="seg rm-seg" id="rmDateChips">
+        <button type="button" data-d="0">امروز</button>
+        <button type="button" data-d="1">فردا</button>
+        <button type="button" data-d="2">پس‌فردا</button>
+        <button type="button" data-d="x">تاریخ دیگه</button>
+      </div>
+      <div class="rm-jal hidden" id="rmJal"><select id="rmJd" aria-label="روز"></select><select id="rmJm" aria-label="ماه"></select><select id="rmJy" aria-label="سال"></select></div>
+      <div class="hint rm-dshow" id="rmDateShow"></div>
+    </div>
+    <div id="rmDaysBox" class="hidden">
+      <label>روزها</label>
+      <div class="rm-days" id="rmDays"></div>
+    </div>
+    <div id="rmTimeBox">
+      <label for="rmTime">ساعت</label>
+      <input type="time" id="rmTime">
+    </div>
+    <div class="rm-err" id="rmErr"></div>
+    <div class="rm-fa"><button type="button" class="rm-save" id="rmSave">ذخیره</button><button type="button" class="rm-cancel" id="rmCancel">انصراف</button></div>
+  </div>
 </div>
 
 <div class="overlay hidden" id="msOverlay"></div>
@@ -2210,6 +2332,21 @@ html body .ms-modal .meas-box, html body.style-glass .ms-modal .meas-box, html b
       <button type="button" id="pnTest" class="hidden">اعلان آزمایشی</button>
     </div>
     <div class="hint bk-msg" id="pnMsg"></div>
+    <div class="pn-admin hidden" id="pnAdmin">
+      <div class="pn-ah">📣 ارسال اعلان به بقیه</div>
+      <div class="pn-q">
+        <button type="button" data-q="water">💧 آب بخور</button>
+        <button type="button" data-q="quest">🎯 چالش ۲ دقیقه‌ای</button>
+        <button type="button" data-q="feature">✨ قابلیت جدید</button>
+      </div>
+      <input type="text" id="pnaTitle" maxlength="60" placeholder="عنوان اعلان">
+      <textarea id="pnaBody" maxlength="180" rows="3" placeholder="متن اعلان (حداکثر دو خط)"></textarea>
+      <div class="seg bk-seg">
+        <button type="button" id="pnaSend">ارسال به همه</button>
+        <button type="button" id="pnaSelf">فقط برای خودم (آزمایشی)</button>
+      </div>
+      <div class="hint bk-msg" id="pnaMsg"></div>
+    </div>
   </div>
   </div>
 
@@ -7269,15 +7406,27 @@ function subscribe(){
   }).then(function(r){ if(!r.ok) throw new Error("subscribe"); lastSig=JSON.stringify(payload())+tz(); });
 }
 function ask(){ return new Promise(function(res){ var r=Notification.requestPermission(res); if(r && r.then) r.then(res); }); }
+/* asks for permission + subscribes; says what happened ("ok","denied","dismissed","unsupported","ios-install","login","error") so other screens can react */
+function enableAsk(){
+  if(!sup()) return Promise.resolve("unsupported");
+  if(isIOS() && !standalone()) return Promise.resolve("ios-install");
+  if(!getToken()) return Promise.resolve("login");
+  return ask().then(function(p){
+    if(p!=="granted") return p==="denied"?"denied":"dismissed";
+    return subscribe().then(function(){ localStorage.setItem(LS_ON,"1"); paint(); return "ok"; });
+  }).catch(function(){ return "error"; });
+}
 function enable(){
   if(!sup()){ say("این مرورگر اعلان رو پشتیبانی نمی‌کنه."); return; }
   if(isIOS() && !standalone()){ paint(); return; }
   if(!getToken()){ say("اول وارد حسابت شو."); return; }
   say("یه لحظه…");
-  ask().then(function(p){
-    if(p!=="granted"){ paint(); say(p==="denied"?"اجازه داده نشد.":"اجازه‌ی اعلان رو ندادی."); return; }
-    return subscribe().then(function(){ localStorage.setItem(LS_ON,"1"); paint(); say("اعلان‌ها روشن شد 💛"); });
-  }).catch(function(){ say("روشن نشد. اینترنتت رو چک کن و دوباره امتحان کن."); paint(); });
+  enableAsk().then(function(r){
+    if(r==="ok") say("اعلان‌ها روشن شد 💛");
+    else if(r==="denied"){ paint(); say("اجازه داده نشد."); }
+    else if(r==="dismissed"){ paint(); say("اجازه‌ی اعلان رو ندادی."); }
+    else { say("روشن نشد. اینترنتت رو چک کن و دوباره امتحان کن."); paint(); }
+  });
 }
 function disable(){
   localStorage.setItem(LS_ON,"0"); paint();
@@ -7326,7 +7475,414 @@ var iv=setInterval(function(){
   },3000);
   setInterval(function(){ sync(false); },8000);
 },900);
-window.lpPush={on:on,sync:sync,enable:enable,disable:disable};
+window.lpPush={on:on,sync:sync,enable:enable,disable:disable,ask:enableAsk,perm:perm,sup:sup,isIOS:isIOS,standalone:standalone};
+})();
+
+/* ===== Invite to turn on notifications: shows only inside the installed app, on every open until they are on ===== */
+(function(){
+var T={
+ fa:{
+  ask:{t:"اعلان‌هات رو روشن کنیم؟",s:"تا یادآوری‌ها و کارهات سر وقت برات بیاد؛ حتی وقتی اپ بسته‌ست. هر وقت خواستی می‌تونی خاموششون کنی.",yes:"روشن کن 🔔",no:"بعداً"},
+  busy:"یه لحظه…",
+  done:{t:"اعلان‌ها روشن شد",s:"از این به بعد یادآوری‌هات سر ساعتش می‌رسه 💛"},
+  denied:{t:"اعلان‌ها مسدوده‌ست",s:"برای روشن شدنش آیکون اپ رو روی صفحه‌ی گوشی نگه دار، «Site Settings» رو بزن و Notifications رو روی Allow بذار.",no:"باشه"},
+  later:{t:"اشکالی نداره",s:"هر وقت خواستی، از «تنظیمات» بخش «اعلان‌ها» رو باز کن و روشنشون کن.",no:"باشه"},
+  fail:{t:"روشن نشد",s:"اینترنتت رو چک کن و دوباره امتحان کن.",yes:"تلاش دوباره",no:"بستن"}
+ },
+ en:{
+  ask:{t:"Turn on notifications?",s:"So your reminders and tasks reach you on time, even when the app is closed. You can switch them off anytime.",yes:"Turn on 🔔",no:"Not now"},
+  busy:"One moment…",
+  done:{t:"Notifications are on",s:"From now on your reminders will arrive right on time 💛"},
+  denied:{t:"Notifications are blocked",s:"To turn them on, long-press the app icon, tap “Site settings” and set Notifications to Allow.",no:"Got it"},
+  later:{t:"No problem",s:"Whenever you like, open Settings and turn on “Notifications” there.",no:"Got it"},
+  fail:{t:"Couldn't turn them on",s:"Check your internet connection and try again.",yes:"Try again",no:"Close"}
+ }
+};
+var POSE={ask:"wave",done:"claps",denied:"kind",later:"kind",fail:"worriedChin"};
+var LS_ON="lp-push-on", K_SESS="lp-np-sess", K_TS="lp-np-ts", K_DN="lp-np-dn";
+var root=null, busy=false, pushed=false, swallow=false, seenFlag=false, iv=null, since=0, closeT=0;
+function P(){ return window.lpPush; }
+function B(){ return window.lpBridge; }
+function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){} return null; }
+function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v); }catch(e){} return null; }
+function lang(){ try{ return (B().state.settings && B().state.settings.lang==="en")?"en":"fa"; }catch(e){ return "fa"; } }
+function installed(){
+  try{
+    var mm=window.matchMedia;
+    if(mm && (mm("(display-mode: standalone)").matches || mm("(display-mode: fullscreen)").matches || mm("(display-mode: minimal-ui)").matches)) return true;
+    if(navigator.standalone===true) return true;
+    if((document.referrer||"").indexOf("android-app://")===0) return true;
+  }catch(e){}
+  return false;
+}
+function pose(n){ try{ var p=B().poses; return p[n]||p.normal||""; }catch(e){ return ""; } }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+/* what should we show right now? null = nothing, "ask" = invite, "denied" = how to unblock (at most once every 3 days) */
+function want(){
+  var p=P(), b=B();
+  if(!p || !b || !p.sup()) return null;
+  if(!b.token() || b.offline()) return null;
+  if(p.on()) return null;
+  if(p.isIOS() && !installed()) return null;
+  if(ls(LS_ON)==="0") return null;                          /* she switched them off herself in settings: don't nag */
+  if(Date.now()-(+ls(K_TS)||0)<90000) return null;          /* just shown a moment ago (browser tab -> installed app) */
+  if(p.perm()==="denied") return (Date.now()-(+ls(K_DN)||0)>3*864e5)?"denied":null;
+  if(navigator.onLine===false) return null;                 /* turning them on needs the internet */
+  return "ask";
+}
+function homeNow(){ var v=document.querySelector(".view.on"); return !v || v.getAttribute("data-view")==="home"; }
+function blocked(){
+  var r=window.lpRemind;
+  if(!(r && r.ready && r.ready())) return true;                                   /* still loading / not logged in */
+  if(document.hidden) return true;
+  if(document.getElementById("lpOnb") || document.getElementById("lpPg")) return true;  /* onboarding / recovery-code screen */
+  if(document.querySelector(".hm-br") || document.querySelector(".rm-stack .rm-card")) return true;  /* breathing overlay / reminder popup */
+  if(document.querySelector(".overlay:not(.hidden)")) return true;               /* a sheet is open */
+  if(!homeNow()) return true;
+  return false;
+}
+function seen(){ return seenFlag || ss(K_SESS)==="1"; }
+function mark(){ seenFlag=true; ss(K_SESS,"1"); ls(K_TS,String(Date.now())); }
+function stop(){ if(iv){ clearInterval(iv); iv=null; } }
+function tick(){
+  if(root) return;
+  if(seen()){ stop(); return; }
+  var p=P(); if(p && p.sup() && p.on()){ stop(); return; }
+  var m=want();
+  if(!m || blocked()){ since=0; return; }
+  if(!since){ since=Date.now(); return; }
+  if(Date.now()-since<2200) return;                         /* let the opening animation and Home settle first */
+  open(m);
+}
+function start(){ if(!iv && !seen()) iv=setInterval(tick,1000); }
+
+function paintView(v){
+  var L=T[lang()], c=L[v], img=root.querySelector("#npImg"), src=pose(POSE[v]);
+  root.querySelector("#npT").textContent=c.t; root.querySelector("#npS").textContent=c.s;
+  if(src){ img.src=src; img.parentNode.style.display=""; } else img.parentNode.style.display="none";
+  var h="";
+  if(c.yes) h+='<button type="button" class="np-b main" data-a="yes">'+esc(c.yes)+'</button>';
+  if(c.no) h+='<button type="button" class="np-b'+(c.yes?'':' main')+'" data-a="no">'+esc(c.no)+'</button>';
+  root.querySelector("#npA").innerHTML=h;
+}
+function open(m){
+  if(root) return;
+  mark(); if(m==="denied") ls(K_DN,String(Date.now()));
+  root=document.createElement("div"); root.id="lpNp"; root.dir=lang()==="en"?"ltr":"rtl";
+  root.setAttribute("role","dialog"); root.setAttribute("aria-modal","true"); root.setAttribute("aria-labelledby","npT");
+  root.innerHTML='<div class="np-bd"></div><div class="np-card"><div class="np-av"><img id="npImg" alt=""></div><h2 id="npT"></h2><p id="npS"></p><div class="np-acts" id="npA"></div></div>';
+  document.body.appendChild(root);
+  paintView(m==="denied"?"denied":"ask");
+  try{ history.pushState({lpNp:1},""); pushed=true; }catch(e){}   /* so the phone's Back button closes this first */
+  root.addEventListener("click",onClick);
+}
+function close(){
+  if(!root) return;
+  clearTimeout(closeT);
+  var r=root; root=null; r.classList.add("out");
+  setTimeout(function(){ if(r.parentNode) r.parentNode.removeChild(r); },340);
+  if(pushed){ pushed=false; swallow=true; setTimeout(function(){ swallow=false; },700); try{ history.back(); }catch(e){ swallow=false; } }
+}
+function onClick(e){
+  if(e.target.classList.contains("np-bd")){ if(!busy) close(); return; }
+  var b=e.target.closest(".np-b"); if(!b || busy) return;
+  if(b.getAttribute("data-a")==="no") close(); else go();
+}
+function go(){
+  var p=P(); if(!p){ close(); return; }
+  busy=true;
+  var btn=root.querySelector(".np-b.main"); if(btn){ btn.disabled=true; btn.textContent=T[lang()].busy; }
+  var res; try{ res=p.ask(); }catch(e){ res=Promise.resolve("error"); }   /* called right inside the tap, so the phone shows its permission question */
+  res.then(function(r){
+    busy=false; if(!root) return;
+    if(r==="ok"){ paintView("done"); closeT=setTimeout(close,2200); }
+    else if(r==="denied") paintView("denied");
+    else if(r==="dismissed") paintView("later");
+    else if(r==="error") paintView("fail");
+    else close();
+  });
+}
+/* Back button: closes the invite first. (our own history entry is removed quietly when we close by a button) */
+window.addEventListener("popstate",function(e){
+  if(swallow){ swallow=false; e.stopImmediatePropagation(); return; }
+  if(root && pushed){ pushed=false; close(); }
+},true);
+document.addEventListener("keydown",function(e){ if(e.key==="Escape" && root && !busy) close(); });
+window.addEventListener("appinstalled",function(){ start(); });
+if(installed()) start();
+window.lpNp={want:want,open:open,close:close,installed:installed};
+})();
+
+/* ===== Reminders section: choose the text, date and time yourself ===== */
+(function(){
+function $(id){ return document.getElementById(id); }
+var BELL='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17h12l-1.6-2.3V10.5a4.4 4.4 0 0 0-8.8 0v4.2L6 17z"/><path d="M10 19.5a2.1 2.1 0 0 0 4 0"/></svg>';
+var PEN='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4.2-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20z"/></svg>';
+var BIN='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></svg>';
+var WD=[["ش",6],["ی",0],["د",1],["س",2],["چ",3],["پ",4],["ج",5]];
+var F=null, lastSig="", msgT=null;
+
+function RL(){ if(!Array.isArray(state.reminders)) state.reminders=[]; return state.reminders; }
+function fd(s){ return String(s).replace(/\d/g,function(c){ return "۰۱۲۳۴۵۶۷۸۹".charAt(+c); }); }
+function p2(n){ return (n<10?"0":"")+n; }
+function mins(t){ var p=String(t).split(":"); return (+p[0])*60+(+p[1]); }
+function gd(k){ var p=String(k).split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+function today0(){ var n=new Date(); return new Date(n.getFullYear(),n.getMonth(),n.getDate()); }
+function addD(d,n){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n); }
+function desc(r){ try{ return window.lpRemind._describe(r); }catch(e){ return ""; } }
+function liveOk(){ return !!(window.lpRemind && window.lpRemind._add && state && state.weeks); }
+
+/* when will this reminder next go off (ms)? used only to sort the list */
+function nextAt(r){
+  if(r.done) return 9e15;
+  var now=new Date(), nowMs=now.getTime(), tk=toDateKey(now), t=r.time||"00:00", i, d, ms;
+  if(r.snoozeUntil) return Math.max(r.snoozeUntil,nowMs);
+  if(r.freq==="open") return 8e15;
+  if(r.freq==="once"){
+    if(!r.date) return 8e15;
+    d=gd(r.date); ms=new Date(d.getFullYear(),d.getMonth(),d.getDate(),+t.split(":")[0],+t.split(":")[1]).getTime();
+    return ms<=nowMs?nowMs:ms;
+  }
+  for(i=0;i<9;i++){
+    d=addD(today0(),i);
+    if(r.freq==="weekdays" && (!r.days || r.days.indexOf(d.getDay())<0)) continue;
+    if(r.freq==="alt" && Math.round((d-gd(r.created||tk))/864e5)%2!==0) continue;
+    if(i===0 && r.lastDay===tk) continue;
+    ms=new Date(d.getFullYear(),d.getMonth(),d.getDate(),+t.split(":")[0],+t.split(":")[1]).getTime();
+    if(ms>nowMs || (i===0 && !r.time)) return Math.max(ms,nowMs);
+  }
+  return 9e15;
+}
+function sorted(){ return RL().slice().sort(function(a,b){ return nextAt(a)-nextAt(b); }); }
+
+/* ---------- card on the home page ---------- */
+function homeRender(force){
+  var host=$("rmHome"); if(!host || !liveOk()) return;
+  var L=sorted(), sig=JSON.stringify(L.map(function(r){ return [r.id,r.text,r.freq,r.time,r.date,r.days,r.done,r.lastDay,r.snoozeUntil]; }))+Math.floor(Date.now()/60000);
+  if(!force && sig===lastSig) return; lastSig=sig;
+  var rows=L.slice(0,3).map(function(r){ return '<div class="rm-row"><i class="rm-dot"></i><div class="rm-rt"><b>'+esc(r.text)+'</b><span>'+esc(desc(r))+'</span></div></div>'; }).join("");
+  if(L.length>3) rows+='<div class="rm-more">و '+fd(L.length-3)+' یادآور دیگه…</div>';
+  host.innerHTML='<div class="hm-card rm-hc" role="button" tabindex="0" data-rmopen="1"><div class="hm-h"><b>'+BELL+'یادآورها</b><span class="hm-hr">'+(L.length?'<span class="hm-chip">'+fd(L.length)+'</span>':'')+'<button type="button" class="hm-edit" data-rmnew="1">+ جدید</button></span></div>'+
+    (rows||'<div class="rm-empty">هنوز یادآوری‌ای نذاشتی. با «+ جدید» متن، تاریخ و ساعت رو خودت مشخص کن.</div>')+'</div>';
+}
+
+/* ---------- the sheet ---------- */
+function say(t){ var m=$("rmMsg"); if(!m) return; m.textContent=t||""; clearTimeout(msgT); if(t) msgT=setTimeout(function(){ m.textContent=""; },4000); }
+function showView(v){ $("rmListView").classList.toggle("hidden",v!=="list"); $("rmFormView").classList.toggle("hidden",v!=="form"); var m=$("rmModal"); if(m) m.scrollTop=0; }
+function openModal(){ $("rmOverlay").classList.remove("hidden"); $("rmModal").classList.remove("hidden"); }
+function closeModal(){ $("rmOverlay").classList.add("hidden"); $("rmModal").classList.add("hidden"); }
+function openList(){ renderList(); showView("list"); openModal(); }
+
+function renderList(){
+  var L=sorted(), el=$("rmList");
+  el.innerHTML=L.length ? L.map(function(r){
+    return '<div class="rm-item"><div class="rm-it"><b>'+esc(r.text)+'</b><span>'+esc(desc(r))+'</span></div><div class="rm-ia"><button type="button" data-edit="'+esc(r.id)+'" aria-label="ویرایش">'+PEN+'</button><button type="button" class="del" data-del="'+esc(r.id)+'" aria-label="حذف">'+BIN+'</button></div></div>';
+  }).join("") : '<div class="rm-empty">هنوز یادآوری‌ای نذاشتی.</div>';
+  pushHint();
+}
+function pushHint(){
+  var el=$("rmPush"); if(!el) return;
+  var timed=RL().some(function(r){ return r.time && r.freq!=="open"; });
+  var sup=("serviceWorker" in navigator) && ("PushManager" in window) && ("Notification" in window);
+  var on=false; try{ on=!!(window.lpPush && window.lpPush.on()); }catch(e){}
+  if(on){ el.innerHTML='نوتیف سر ساعت روشنه ✓ حتی وقتی اپ بسته‌ست برات می‌فرستمش، و وقتی اپ بازه به‌شکل پاپ‌آپ نشونت می‌دم.'; return; }
+  if(!sup){ el.textContent='این مرورگر نوتیف رو پشتیبانی نمی‌کنه؛ یادآوری‌ها فقط وقتی اپ بازه به‌شکل پاپ‌آپ نشون داده می‌شن.'; return; }
+  try{ if(Notification.permission==="denied"){ el.textContent='نوتیف برای این اپ مسدوده. از تنظیمات گوشی (Site settings) اجازه‌ی Notifications رو بده تا سر ساعت نوتیف بیاد.'; return; } }catch(e){}
+  el.innerHTML=(timed?'برای اینکه یادآورها سر ساعت نوتیف هم بشن (حتی وقتی اپ بسته‌ست)، اعلان‌ها رو روشن کن.':'اگه می‌خوای یادآورهای ساعت‌دار نوتیف هم بشن، اعلان‌ها رو روشن کن.')+'<br><button type="button" id="rmPushOn">روشن کردن اعلان‌ها</button>';
+}
+
+/* ---------- the form ---------- */
+function nextHour(){ var n=new Date(); n.setMinutes(0,0,0); n.setHours(n.getHours()+1); return p2(n.getHours())+":00"; }
+function fillJal(date){
+  var j=gregorianToJalali(date), jd=$("rmJd"), jm=$("rmJm"), jy=$("rmJy"), i, h="";
+  for(i=1;i<=31;i++) h+='<option value="'+i+'">'+fd(i)+'</option>'; jd.innerHTML=h;
+  h=""; for(i=1;i<=12;i++) h+='<option value="'+i+'">'+PERSIAN_MONTHS[i-1]+'</option>'; jm.innerHTML=h;
+  var cj=gregorianToJalali(new Date()).jy; h="";
+  for(i=cj;i<=cj+4;i++) h+='<option value="'+i+'">'+fd(i)+'</option>'; jy.innerHTML=h;
+  jd.value=String(j.jd); jm.value=String(j.jm); jy.value=String(Math.min(Math.max(j.jy,cj),cj+4));
+}
+function jalToKey(){
+  var y=+$("rmJy").value, m=+$("rmJm").value, d=+$("rmJd").value;
+  var g=jalaliToGregorian(y,m,d), dt=new Date(g.gy,g.gm-1,g.gd), back=gregorianToJalali(dt);
+  if(back.jy!==y || back.jm!==m || back.jd!==d) return null;       /* e.g. 31 Mehr does not exist */
+  return toDateKey(dt);
+}
+function dateLabel(k){
+  if(!k) return "این تاریخ وجود نداره.";
+  var d=gd(k), j=gregorianToJalali(d);
+  return DOW_FA[d.getDay()]+" "+fd(j.jd)+" "+PERSIAN_MONTHS[j.jm-1]+" "+fd(j.jy);
+}
+function paintForm(){
+  Array.prototype.forEach.call(document.querySelectorAll("#rmFreq button"),function(b){ b.classList.toggle("active",b.getAttribute("data-f")===F.freq); });
+  $("rmDateBox").classList.toggle("hidden",F.freq!=="once");
+  $("rmDaysBox").classList.toggle("hidden",F.freq!=="weekdays");
+  $("rmTimeBox").classList.toggle("hidden",F.freq==="open");
+  Array.prototype.forEach.call(document.querySelectorAll("#rmDateChips button"),function(b){ b.classList.toggle("active",b.getAttribute("data-d")===F.dmode); });
+  $("rmJal").classList.toggle("hidden",F.dmode!=="x");
+  $("rmDateShow").textContent=F.freq==="once"?dateLabel(F.date):"";
+  Array.prototype.forEach.call(document.querySelectorAll("#rmDays button"),function(b){ b.classList.toggle("on",F.days.indexOf(+b.getAttribute("data-w"))>-1); });
+}
+function openForm(r){
+  var t0=today0(), dm="0", date=toDateKey(t0), time=nextHour();
+  if(!r && time==="00:00"){ dm="1"; date=toDateKey(addD(t0,1)); }          /* it is almost midnight: default to tomorrow */
+  if(r && r.freq==="once" && r.date){
+    var diff=Math.round((gd(r.date)-t0)/864e5); date=r.date;
+    dm=(diff>=0&&diff<=2)?String(diff):"x";
+  }
+  F={id:r?r.id:null, freq:r?r.freq:"once", dmode:dm, date:date, days:(r&&r.days)?r.days.slice():[]};
+  $("rmText").value=r?r.text:"";
+  $("rmTime").value=(r&&r.time)?(p2(+r.time.split(":")[0])+":"+r.time.split(":")[1]):time;
+  fillJal(gd(date));
+  $("rmDays").innerHTML=WD.map(function(w){ return '<button type="button" data-w="'+w[1]+'">'+w[0]+'</button>'; }).join("");
+  $("rmErr").textContent="";
+  paintForm(); showView("form"); openModal();
+  if(!r) setTimeout(function(){ try{ $("rmText").focus(); }catch(e){} },250);
+}
+function save(){
+  var text=($("rmText").value||"").replace(/\s+/g," ").trim().slice(0,160), err="", time=null, o;
+  if(!text) err="متن یادآور رو بنویس.";
+  if(!err && F.freq!=="open"){
+    time=$("rmTime").value;
+    if(!/^\d{1,2}:\d{2}$/.test(time||"")) err="ساعت رو انتخاب کن."; else time=p2(+time.split(":")[0])+":"+time.split(":")[1];
+  }
+  if(!err && F.freq==="weekdays" && !F.days.length) err="حداقل یه روز از هفته رو انتخاب کن.";
+  if(!err && F.freq==="once"){
+    if(F.dmode==="x") F.date=jalToKey();
+    if(!F.date) err="این تاریخ وجود نداره.";
+    else { var d=gd(F.date), ms=new Date(d.getFullYear(),d.getMonth(),d.getDate(),+time.split(":")[0],+time.split(":")[1]).getTime(); if(ms<=Date.now()) err="این زمان گذشته؛ یه ساعت یا تاریخ بعدی انتخاب کن."; }
+  }
+  if(err){ $("rmErr").textContent=err; return; }
+  o={text:text,freq:F.freq,time:time,days:F.freq==="weekdays"?F.days.slice().sort():null,date:F.freq==="once"?F.date:null,untilDone:false};
+  if(F.id) state.reminders=RL().filter(function(x){ return x.id!==F.id; });
+  var r=window.lpRemind._add(o);
+  try{ scheduleSave(); }catch(e){}
+  try{ if(window.lpPush) window.lpPush.sync(false); }catch(e){}
+  renderList(); showView("list"); homeRender(true);
+  say("ذخیره شد ✓ "+desc(r));
+}
+function removeId(id){
+  var r=RL().filter(function(x){ return x.id===id; })[0]; if(!r) return;
+  customConfirm("این یادآور پاک بشه؟\n«"+r.text+"»","پاک کن").then(function(ok){
+    if(!ok) return;
+    state.reminders=RL().filter(function(x){ return x.id!==id; });
+    try{ scheduleSave(); }catch(e){}
+    try{ if(window.lpPush) window.lpPush.sync(false); }catch(e){}
+    renderList(); homeRender(true); say("پاک شد.");
+  });
+}
+
+/* ---------- wiring ---------- */
+var host=$("rmHome");
+if(host){
+  host.addEventListener("click",function(e){ if(e.target.closest("[data-rmnew]")){ openForm(null); return; } if(e.target.closest("[data-rmopen]")) openList(); });
+  host.addEventListener("keydown",function(e){ if((e.key==="Enter"||e.key===" ") && e.target.closest("[data-rmopen]")){ e.preventDefault(); openList(); } });
+}
+$("rmClose").addEventListener("click",closeModal);
+$("rmOverlay").addEventListener("click",closeModal);
+$("rmAdd").addEventListener("click",function(){ openForm(null); });
+$("rmCancel").addEventListener("click",function(){ renderList(); showView("list"); });
+$("rmSave").addEventListener("click",save);
+$("rmList").addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b) return;
+  if(b.hasAttribute("data-edit")){ var r=RL().filter(function(x){ return x.id===b.getAttribute("data-edit"); })[0]; if(r) openForm(r); }
+  else if(b.hasAttribute("data-del")) removeId(b.getAttribute("data-del"));
+});
+$("rmFreq").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b||!F) return; F.freq=b.getAttribute("data-f"); $("rmErr").textContent=""; paintForm(); });
+$("rmDateChips").addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b||!F) return; var v=b.getAttribute("data-d"); F.dmode=v;
+  if(v==="x"){ fillJal(gd(F.date||toDateKey(today0()))); F.date=jalToKey(); } else { F.date=toDateKey(addD(today0(),+v)); }
+  $("rmErr").textContent=""; paintForm();
+});
+["rmJd","rmJm","rmJy"].forEach(function(id){ $(id).addEventListener("change",function(){ F.date=jalToKey(); $("rmErr").textContent=""; paintForm(); }); });
+$("rmDays").addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b||!F) return; var w=+b.getAttribute("data-w"), i=F.days.indexOf(w);
+  if(i>-1) F.days.splice(i,1); else F.days.push(w); $("rmErr").textContent=""; paintForm();
+});
+$("rmPush").addEventListener("click",function(e){
+  if(!e.target.closest("#rmPushOn")) return;
+  try{ window.lpPush.enable(); }catch(x){}
+  var n=0, iv=setInterval(function(){
+    n++; var pm=$("pnMsg"), t=pm?pm.textContent:"";
+    if(window.lpPush && window.lpPush.on()){ clearInterval(iv); pushHint(); return; }
+    if(t && t!=="یه لحظه…"){ clearInterval(iv); pushHint(); var h=$("rmPush"); if(h) h.insertAdjacentHTML("beforeend",'<div>'+esc(t)+'</div>'); }
+    if(n>20) clearInterval(iv);
+  },600);
+});
+var iv0=setInterval(function(){ if(!liveOk()) return; homeRender(true); clearInterval(iv0); setInterval(function(){ homeRender(false); },4000); },700);
+document.addEventListener("visibilitychange",function(){ if(!document.hidden) homeRender(false); });
+window.lpOpenReminders=openList;
+window.lpNewReminder=function(){ openForm(null); };
+})();
+
+/* ===== Admin: send a notification to other users (the server decides who is an admin) ===== */
+(function(){
+var isAdmin=null, armT=null, busy=false;
+function $(id){ return document.getElementById(id); }
+function say(t,cls){ var m=$("pnaMsg"); if(!m) return; m.textContent=t||""; m.className="hint bk-msg"+(cls?" "+cls:""); }
+function show(v){ var p=$("pnAdmin"); if(p) p.classList.toggle("hidden",!v); }
+function check(){
+  if(isAdmin!==null){ show(isAdmin); return; }
+  if(!getToken()){ show(false); return; }
+  apiCall("/api/admin/me","GET",null,true).then(function(r){
+    isAdmin=!!(r.ok && r.data && r.data.admin); show(isAdmin);
+  }).catch(function(){ show(false); });
+}
+function fill(k){
+  var T={
+    water:["💧 وقت آب خوردنه","یه لیوان آب بخور و تو لیانا تیکش رو بزن."],
+    quest:["🎯 چالش ۲ دقیقه‌ای امروز","امروز یه کار کوچیک ۲ دقیقه‌ای داریم؛ بیا با هم انجامش بدیم."],
+    feature:["✨ قابلیت جدید تو لیانا",""]
+  }[k]; if(!T) return;
+  $("pnaTitle").value=T[0]; $("pnaBody").value=T[1]; say("");
+  if(!T[1]) $("pnaBody").focus();
+}
+function send(target,btn){
+  if(busy) return;
+  var title=($("pnaTitle").value||"").trim(), body=($("pnaBody").value||"").trim();
+  if(!title){ say("یه عنوان بنویس.","err"); return; }
+  if(!body){ say("متن اعلان رو بنویس.","err"); return; }
+  if(target==="all" && !btn.dataset.arm){            // two taps for "everyone", so it never goes out by accident
+    btn.dataset.arm="1"; btn.textContent="مطمئنی؟ دوباره بزن تا برای همه بره";
+    clearTimeout(armT); armT=setTimeout(function(){ btn.dataset.arm=""; btn.textContent="ارسال به همه"; },5000); return;
+  }
+  btn.dataset.arm=""; clearTimeout(armT); $("pnaSend").textContent="ارسال به همه";
+  busy=true; say("در حال ارسال…");
+  apiCall("/api/admin/push","POST",{title:title,body:body,target:target,url:"/"},true).then(function(r){
+    busy=false;
+    var d=r.data||{};
+    if(r.ok && d.ok){
+      if(d.queued){
+        say("در صف ارسال قرار گرفت: "+d.total+" نفر. هر دقیقه چند نفر می‌رسه…","ok");
+        poll(d.id,90);
+      } else {
+        say("برای خودت فرستاده شد ✓","ok");
+      }
+    }
+    else if(r.status===404){ say("سرور هنوز این قابلیت رو نداره؛ Worker باید آپدیت بشه.","err"); }
+    else if(r.status===403){ say("این حساب اجازه‌ی ارسال اعلان نداره.","err"); }
+    else if(r.status===429){ say("زیاد فرستادی؛ یه کم بعد دوباره امتحان کن.","err"); }
+    else if(r.status===400 && d.error==="nosub"){ say(target==="self" ? "برای دستگاه تو اعلانی ثبت نشده؛ اول اعلان‌ها رو روشن کن." : "هنوز هیچ‌کس اعلان‌ها رو روشن نکرده.","err"); }
+    else if(r.status===400 && d.error==="bad_input"){ say("عنوان یا متن اعلان درست نیست.","err"); }
+    else if(r.ok && d.ok===false){ say("به دستگاهت نرسید؛ اعلان‌ها رو یه بار خاموش و روشن کن.","err"); }
+    else say("نشد بفرستم؛ دوباره امتحان کن.","err");
+  }).catch(function(){ busy=false; say("نشد بفرستم؛ اینترنتت رو چک کن.","err"); });
+}
+/* follows a queued announcement until every user has been reached */
+function poll(id,tries){
+  setTimeout(function(){
+    apiCall("/api/admin/status?id="+encodeURIComponent(id),"GET",null,true).then(function(r){
+      var d=r.data||{}; if(!r.ok||typeof d.total!=="number") return;
+      say((d.done?"تموم شد ✓ ":"در حال ارسال… ")+"به "+d.sent+" دستگاه رسید ("+d.cursor+" از "+d.total+" نفر)"+(d.failed?"، "+d.failed+" تا نرسید":""), d.done?"ok":"");
+      if(!d.done && tries>0) poll(id,tries-1);
+    }).catch(function(){ if(tries>0) poll(id,tries-1); });
+  },6000);
+}
+var tg=$("pushToggle"); if(tg) tg.addEventListener("click",function(){ setTimeout(check,50); });
+var q=document.querySelectorAll(".pn-q button"); Array.prototype.forEach.call(q,function(b){ b.addEventListener("click",function(){ fill(b.getAttribute("data-q")); }); });
+var bs=$("pnaSend"), bf=$("pnaSelf");
+if(bs) bs.addEventListener("click",function(){ send("all",bs); });
+if(bf) bf.addEventListener("click",function(){ send("self",bf); });
 })();
 
 /* ===== Home: energy check-in, today's focus, gentle streak, 1-minute quest ===== */
@@ -7416,10 +7972,9 @@ var lastPose="";
 function poseFor(s,fd,ft){
   var h=new Date().getHours(), i=s.today, en=i.en, night=(h>=23||h<5);
   if(!i.n) return "waveOpen";
+  if((i.done>0 && i.done>=i.n) || (ft && fd>=ft)) return "checkDone";   // everything ticked -> the Liana who finished the list
+  if(i.done>0 || fd>0) return "doCheck";                               // started ticking -> the Liana who is ticking
   if(!en) return night?"sleepy":"wave";
-  if(ft && fd>=ft) return "checkDone";
-  if(i.ok) return "victory";
-  if(fd>0) return "doCheck";
   if(en==="low") return night?"sleepy":"kind";
   if(en==="high") return "enthusiasm";
   return "calm";
