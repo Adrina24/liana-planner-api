@@ -8021,8 +8021,8 @@ var lastPose="";
 function poseFor(s,fd,ft){
   var h=new Date().getHours(), i=s.today, en=i.en, night=(h>=23||h<5);
   if(!i.n) return "waveOpen";
-  if((i.done>0 && i.done>=i.n) || (ft && fd>=ft)) return "checkDone";   // everything ticked -> the Liana who finished the list
-  if(i.done>0 || fd>0) return "doCheck";                               // started ticking -> the Liana who is ticking
+  if((ft>0 && fd>=ft) || (i.done>0 && i.done>=i.n)) return "checkDone";   // every habit in "today's focus" ticked (or everything done) -> the Liana who finished the list
+  if(fd>0) return "doCheck";                                           // started ticking focus habits -> the Liana who is ticking (auto-logged water/steps/sleep no longer count, so the energy Lianas can show)
   if(!en) return night?"sleepy":"wave";
   if(en==="low") return night?"sleepy":"kind";
   if(en==="high") return "enthusiasm";
