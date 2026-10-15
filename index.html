@@ -8363,8 +8363,9 @@ setTimeout(function(){
     var idx=pool.length<=per?pool.map(function(_,q){ return q; }):window.lpDailyCards(pool.length,day);
     var auto=idx.map(function(q){ return resolve(pool[q]); });
     if(phaseOn){
-      var tips=['period-2','period-3','period-4','period-5','period-6','period-7','period-8'];
-      auto=['period-1',tips[(2*day)%7],tips[(2*day+1)%7]].concat(auto.slice(0,5));
+      /* period-1 always first, then two tip cards; the three are spread out so they never sit next to each other */
+      var tips=['period-2','period-3','period-4','period-5','period-6','period-7','period-8'], rest=auto.slice(0,6);
+      auto=['period-1'].concat(rest.slice(0,2),[tips[(2*day)%7]],rest.slice(2,4),[tips[(2*day+1)%7]],rest.slice(4,6));
     } else if(auto.indexOf('period-1')>0){ auto.splice(auto.indexOf('period-1'),1); auto.unshift('period-1'); }
     var ids=auto, ov=null;
     try{ var o=JSON.parse(localStorage.getItem('lp-car-today')||'null'); if(o&&o.k===tk&&o.ids&&o.ids.length) ov=o.ids; }catch(e){}
