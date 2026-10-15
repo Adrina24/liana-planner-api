@@ -1508,6 +1508,42 @@ body.style-glass.mode-dark .fp-box{background:rgba(28,24,44,.86);}
 .fp-act .fp-ok{background:var(--accent); border-color:transparent; color:#fff;}
 @keyframes fpF{from{opacity:0;} to{opacity:1;}} @keyframes fpUp{from{transform:translateY(40px); opacity:0;} to{transform:none; opacity:1;}}
 @media (prefers-reduced-motion:reduce){ .tm *{animation:none !important;} .tm-svg .arc{transition:none;} .fp-box,.fp-ov{animation:none;} }
+
+/* ---------- photo cards (home carousel) ---------- */
+html body[class] .car-card.cp{
+  display:block !important; padding:0 !important; border:0 !important; overflow:hidden; isolation:isolate;
+  background:#2b2745 !important; -webkit-backdrop-filter:none !important; backdrop-filter:none !important;
+  box-shadow:0 8px 24px rgba(31,38,135,.22) !important; color:#fff; text-align:right;
+}
+.car-card.cp .cp-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:100% 50%; display:block; pointer-events:none; -webkit-user-drag:none; user-select:none;}
+.car-card.cp .cp-bl{position:absolute; left:0; top:0; bottom:0; width:70%; pointer-events:none; background:rgba(12,16,40,.27);
+  -webkit-backdrop-filter:blur(1.6px); backdrop-filter:blur(1.6px);
+  -webkit-mask-image:radial-gradient(ellipse 55% 68% at 45% 50%, #000 0%, #000 26%, rgba(0,0,0,.9) 46%, rgba(0,0,0,.68) 62%, rgba(0,0,0,.4) 76%, rgba(0,0,0,.17) 87%, rgba(0,0,0,.05) 95%, transparent 100%);
+          mask-image:radial-gradient(ellipse 55% 68% at 45% 50%, #000 0%, #000 26%, rgba(0,0,0,.9) 46%, rgba(0,0,0,.68) 62%, rgba(0,0,0,.4) 76%, rgba(0,0,0,.17) 87%, rgba(0,0,0,.05) 95%, transparent 100%);}
+.car-card.cp .cp-tx{position:absolute; left:0; top:0; bottom:0; width:46%; box-sizing:border-box; padding:0 6px 0 12px; display:flex; flex-direction:column; justify-content:center; gap:5px; text-align:right;}
+.car-card.cp .cp-tx b{font-size:17px; font-weight:800; line-height:1.4; color:#fff; text-wrap:balance; text-shadow:0 1px 2px rgba(0,0,0,.55), 0 0 12px rgba(0,0,0,.38);}
+.car-card.cp .cp-sub{font-size:12.5px; font-weight:600; line-height:1.55; color:#fff; text-wrap:balance; text-shadow:0 1px 2px rgba(0,0,0,.55), 0 0 10px rgba(0,0,0,.38);}
+/* keep the text and the soft patch off Liana's face: --fl = where her face starts (fraction of the image width);
+   the image is scaled to the card height (452px wide) and cropped from the LEFT only, so her face sits at (card width - (1-fl)*452px) */
+@supports (width:1cqw){
+  .car-card.cp{container-type:inline-size;}
+  .car-card.cp .cp-tx{width:min(46%, max(96px, calc(100cqw - (1 - var(--fl,.78)) * 452px - 8px)));}
+  .car-card.cp .cp-bl{width:min(70%, max(40%, calc(100cqw - (1 - var(--fl,.78)) * 452px - 2px)));}
+}
+/* "today's cards" button + picker */
+.car-edit{position:absolute; left:2px; bottom:-2px; z-index:3; height:20px; padding:0 9px; border:0; border-radius:10px; font:inherit; font-size:11px; font-weight:800; line-height:20px; color:var(--text); background:rgba(255,255,255,.55); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); cursor:pointer; opacity:.85;}
+body.style-glass.mode-dark .car-edit{background:rgba(255,255,255,.14);}
+.car-edit:active{transform:scale(.95);}
+.cpk-sec{font-size:12.5px; font-weight:800; margin:14px 2px 8px; opacity:.75;}
+.cpk-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px 10px;}
+.cpk-it{position:relative; display:block; padding:0; border:0; background:none; font:inherit; color:inherit; text-align:center; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+.cpk-im{position:relative; display:block; aspect-ratio:2/1; border-radius:12px; overflow:hidden; opacity:.45; filter:grayscale(.7); transition:opacity .2s, filter .2s; box-shadow:0 2px 8px rgba(31,38,135,.15);}
+.cpk-im img{width:100%; height:100%; object-fit:cover; object-position:100% 50%; display:block; pointer-events:none;}
+.cpk-it.on .cpk-im{opacity:1; filter:none;}
+.cpk-ck{position:absolute; top:6px; left:6px; width:24px; height:24px; border-radius:50%; box-sizing:border-box; background:rgba(255,255,255,.88); border:2px solid #fff; color:transparent; display:flex; align-items:center; justify-content:center; font-style:normal; font-size:14px; font-weight:800; box-shadow:0 1px 4px rgba(0,0,0,.35); transition:.15s;}
+.cpk-it.on .cpk-ck{background:var(--accent); color:#fff;}
+.cpk-nm{display:block; margin-top:5px; font-size:12px; font-weight:700; line-height:1.4;}
+.cpk-note{font-size:12px; line-height:1.8; opacity:.7; margin:10px 2px 0;}
 </style>
 <style id="glass-extra">
 /* ===== glass: remaining solid surfaces (auth, nav, cards, modals, chips, inputs) ===== */
@@ -1989,25 +2025,38 @@ html body .ms-modal .meas-box, html body.style-glass .ms-modal .meas-box, html b
 <div class="view" data-view="home">
 <div class="greeting-card" id="greetingCard"></div>
 <div class="car" id="car">
-  <button type="button" class="car-card" data-go="habits"><em>🌿</em><b>عادت‌های امروز</b><span>یه نگاه بنداز، چندتاشون مونده؟</span></button>
-  <button type="button" class="car-card" data-go="habits"><em><img data-icon="water" alt="" style="width:1em;height:1em;object-fit:contain;vertical-align:-.12em" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA="></em><b>امروز آب خوردی؟</b><span>همین الان یه لیوان بخور و تیکش بزن</span></button>
-  <button type="button" class="car-card" data-go="chat"><em>💬</em><b>بیا باهام درد و دل کن</b><span>لیانا همیشه گوش می‌ده</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="sleep"><em>😴</em><b>دیشب چقدر خوابیدی؟</b><span>ساعت خوابت رو بنویس</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="meds"><em>💊</em><b>قرص و داروهات</b><span>ببین امروز چیزی جا نمونده</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="steps"><em>🚶🏻‍♀️</em><b>قدم‌های امروز</b><span>چند قدم راه رفتی؟</span></button>
-  <button type="button" class="car-card" data-go="fitness" data-fxo="workout"><em>🏋🏻‍♀️</em><b>تمرین امروز</b><span id="fxcW">برنامه‌ی ورزشی‌ات رو باز کن</span></button>
-  <button type="button" class="car-card" data-go="fitness" data-fxo="meal"><em>🥗</em><b>کالری امروز</b><span id="fxcM">ببین امروز چقدر خوردی</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="exercise"><em>🏋🏻‍♀️</em><b>ورزش امروز</b><span>هر قدمی که برداری ارزش داره</span></button>
-  <button type="button" class="car-card" data-go="timer" data-yoga="1"><em>🧘🏻</em><b>یوگا و کشش</b><span>چند دقیقه برای آرامش</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="reading"><em>📚</em><b>مطالعه‌ی امروز</b><span>چند صفحه خوندی؟</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="nutrition"><em>🥗</em><b>تغذیه سالم</b><span>امروز چی خوردی؟ ثبتش کن</span></button>
-  <button type="button" class="car-card" data-go="habits" data-habit="sugarFree"><em>🍬</em><b>چالش حذف قند</b><span>امروز هم قوی بودی؟</span></button>
-  <button type="button" class="car-card" data-go="fitness" data-act="meas"><em>⚖️</em><b>وزن و اندازه‌ها</b><span>پیشرفت بدنت رو ثبت کن</span></button>
-  <button type="button" class="car-card" data-go="stats"><em>📊</em><b>پیشرفت این هفته</b><span>ببین چقدر خوب پیش رفتی</span></button>
-  <button type="button" class="car-card" data-go="stats" data-act="reports"><em>📈</em><b>گزارش ماهانه و سالانه</b><span>همه‌ی عادت‌هات یک‌جا</span></button>
-  <button type="button" class="car-card" data-go="home" data-act="cal"><em>📅</em><b>تقویم و برنامه‌ی هفته‌ها</b><span>هر هفته یا هر روز رو باز کن</span></button>
-  <button type="button" class="car-card" data-pd="1" data-go="home" data-act="period" id="pdCarCard"><em><svg viewBox="0 0 24 24" fill="none" stroke="#B3314D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-.12em"><path d="M12 3.5c3.2 4 6 7 6 10.2a6 6 0 0 1-12 0c0-3.2 2.8-6.2 6-10.2z"/></svg></em><b>پریود ترکر</b><span id="pdCarSub">پیش‌بینی پریود و گزارش پزشک</span></button>
+  <button type="button" class="car-card cp" data-cid="habits" data-go="habits" style="--fl:0.76"><img class="cp-img" src="cards/habits.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>عادت‌های امروز</b><span class="cp-sub">یه نگاه بنداز، چندتاشون مونده؟</span></span></button>
+  <button type="button" class="car-card cp" data-cid="water" data-go="habits" style="--fl:0.73"><img class="cp-img" src="cards/water.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>امروز آب خوردی؟</b><span class="cp-sub">یه لیوان بخور و تیکش بزن</span></span></button>
+  <button type="button" class="car-card cp" data-cid="sleep" data-go="habits" data-habit="sleep" style="--fl:0.67"><img class="cp-img" src="cards/sleep.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>دیشب چقدر خوابیدی؟</b><span class="cp-sub">ساعت خوابت رو بنویس</span></span></button>
+  <button type="button" class="car-card cp" data-cid="meds" data-go="habits" data-habit="meds" style="--fl:0.68"><img class="cp-img" src="cards/meds.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>قرص و داروهات</b><span class="cp-sub">ببین امروز چیزی جا نمونده</span></span></button>
+  <button type="button" class="car-card cp" data-cid="steps" data-go="habits" data-habit="steps" style="--fl:0.8"><img class="cp-img" src="cards/steps.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>قدم‌های امروز</b><span class="cp-sub">چند قدم راه رفتی؟</span></span></button>
+  <button type="button" class="car-card cp" data-cid="reading" data-go="habits" data-habit="reading" style="--fl:0.8"><img class="cp-img" src="cards/reading.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>مطالعه‌ی امروز</b><span class="cp-sub">چند صفحه خوندی؟</span></span></button>
+  <button type="button" class="car-card cp" data-cid="chat-1" data-go="chat" style="--fl:0.74"><img class="cp-img" src="cards/chat-1.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>بیا باهام درد و دل کن</b><span class="cp-sub">لیانا همیشه گوش می‌ده</span></span></button>
+  <button type="button" class="car-card cp" data-cid="chat-2" data-go="chat" style="--fl:0.75"><img class="cp-img" src="cards/chat-2.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>دلت یه همدم می‌خواد؟</b><span class="cp-sub">هر چی تو دلته، بهم بگو</span></span></button>
+  <button type="button" class="car-card cp" data-cid="chat-3" data-go="chat" style="--fl:0.77"><img class="cp-img" src="cards/chat-3.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>من دستیار هوش مصنوعی توام</b><span class="cp-sub">هر چی خواستی ازم بپرس</span></span></button>
+  <button type="button" class="car-card cp" data-cid="yoga" data-go="timer" data-yoga="1" style="--fl:0.87"><img class="cp-img" src="cards/yoga.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>یوگا و کشش</b><span class="cp-sub">چند دقیقه برای آرامش</span></span></button>
+  <button type="button" class="car-card cp" data-cid="sugar-free" data-go="habits" data-habit="sugarFree" style="--fl:0.72"><img class="cp-img" src="cards/sugar-free.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>چالش حذف قند</b><span class="cp-sub">امروز هم قوی بودی؟</span></span></button>
+  <button type="button" class="car-card cp" data-cid="nutrition" data-go="habits" data-habit="nutrition" style="--fl:0.67"><img class="cp-img" src="cards/nutrition.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>تغذیه سالم</b><span class="cp-sub">چی خوردی؟ ثبتش کن</span></span></button>
+  <button type="button" class="car-card cp" data-cid="workout" data-go="fitness" data-fxo="workout" style="--fl:0.75"><img class="cp-img" src="cards/workout.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>تمرین امروز</b><span class="cp-sub" id="fxcW">برنامه‌ی ورزشی‌ات رو باز کن</span></span></button>
+  <button type="button" class="car-card cp" data-cid="exercise" data-go="habits" data-habit="exercise" style="--fl:0.78"><img class="cp-img" src="cards/exercise.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>ورزش امروز</b><span class="cp-sub">هر قدمی که برداری ارزش داره</span></span></button>
+  <button type="button" class="car-card cp" data-cid="meal" data-go="fitness" data-fxo="meal" style="--fl:0.77"><img class="cp-img" src="cards/meal.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>کالری امروز</b><span class="cp-sub" id="fxcM">ببین امروز چقدر خوردی</span></span></button>
+  <button type="button" class="car-card cp" data-cid="weight-1" data-go="fitness" data-act="meas" style="--fl:0.65"><img class="cp-img" src="cards/weight-1.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>وزنت رو ثبت کنیم؟</b><span class="cp-sub">بدون استرس، هر وقت آماده‌ای</span></span></button>
+  <button type="button" class="car-card cp" data-cid="weight-2" data-go="fitness" data-act="meas" style="--fl:0.62"><img class="cp-img" src="cards/weight-2.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>وزن امروزت</b><span class="cp-sub">بدون قضاوت، فقط برای خودت</span></span></button>
+  <button type="button" class="car-card cp" data-cid="body-trend-1" data-go="home" data-act="bodypath" style="--fl:0.77"><img class="cp-img" src="cards/body-trend-1.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>مسیر تغییرات بدن</b><span class="cp-sub">تغییرات کوچیک هم ارزش داره</span></span></button>
+  <button type="button" class="car-card cp" data-cid="body-trend-2" data-go="home" data-act="bodypath" style="--fl:0.76"><img class="cp-img" src="cards/body-trend-2.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>مسیر تغییرات بدن</b><span class="cp-sub">ببینیم تا اینجا چقدر اومدی</span></span></button>
+  <button type="button" class="car-card cp" data-cid="weekly" data-go="stats" style="--fl:0.74"><img class="cp-img" src="cards/weekly.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>پیشرفت این هفته</b><span class="cp-sub">ببین چقدر خوب پیش رفتی</span></span></button>
+  <button type="button" class="car-card cp" data-cid="reports" data-go="stats" data-act="reports" style="--fl:0.8"><img class="cp-img" src="cards/reports.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>گزارش ماهانه و سالانه</b><span class="cp-sub">همه‌ی عادت‌هات یک‌جا</span></span></button>
+  <button type="button" class="car-card cp" data-cid="calendar" data-go="home" data-act="cal" style="--fl:0.73"><img class="cp-img" src="cards/calendar.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>تقویم و برنامه‌ی هفته‌ها</b><span class="cp-sub">هر هفته یا هر روز رو باز کن</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-1" data-pd="1" data-go="home" data-act="period" id="pdCarCard" style="--fl:0.8"><img class="cp-img" src="cards/period-1.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>پریود ترکر</b><span class="cp-sub" id="pdCarSub">پیش‌بینی پریود و گزارش پزشک</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-2" data-pt="1" data-go="home" data-act="period" style="--fl:0.72"><img class="cp-img" src="cards/period-2.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>یه چای گرم و کمی استراحت</b><span class="cp-sub">امروز به خودت مهربون‌تر باش</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-3" data-pt="1" data-go="home" data-act="period" style="--fl:0.75"><img class="cp-img" src="cards/period-3.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>بدنت داره کار مهمی می‌کنه</b><span class="cp-sub">کمی بهش محبت کن</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-4" data-pt="1" data-go="home" data-act="period" style="--fl:0.69"><img class="cp-img" src="cards/period-4.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>برای این روزها آماده باش</b><span class="cp-sub">ملزوماتت رو دم‌دست بذار</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-5" data-pt="1" data-go="home" data-act="period" style="--fl:0.73"><img class="cp-img" src="cards/period-5.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>یه کیسه‌ی آب گرم کنارت باشه</b><span class="cp-sub">آب خوردن و استراحت هم یادت نره</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-6" data-pt="1" data-go="home" data-act="period" style="--fl:0.75"><img class="cp-img" src="cards/period-6.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>بدنت رو بیشتر بشناس</b><span class="cp-sub">گزارش و آمار پریودت رو ببین</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-7" data-pt="1" data-go="home" data-act="period" style="--fl:0.8"><img class="cp-img" src="cards/period-7.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>زمان مراقبت از خودته</b><span class="cp-sub">امروز آروم و مهربون باش</span></span></button>
+  <button type="button" class="car-card cp" data-cid="period-8" data-pt="1" data-go="home" data-act="period" style="--fl:0.77"><img class="cp-img" src="cards/period-8.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>امشب آروم بخواب</b><span class="cp-sub">تو لایق آرامش و استراحتی</span></span></button>
   <div class="car-dots"></div>
+  <button type="button" class="car-edit" id="carEdit" aria-label="انتخاب کارت‌های امروز">✎ کارت‌ها</button>
 </div>
 <div class="dashboard"><div class="dash-card" id="dashCard"></div></div>
 <div class="hm" id="hmRoot"></div>
@@ -8254,23 +8303,41 @@ setTimeout(function(){
   window.lpGo=go;
   btns.forEach(function(b){ b.addEventListener('click', function(){ go(b.getAttribute('data-v')); }); });
   (function pickDaily(){
-    var pin=document.querySelector('.car-card[data-pd]'), forced=false;
+    var host=document.getElementById('car'), dotsEl=host.querySelector('.car-dots');
+    var all=[].slice.call(host.querySelectorAll('.car-card')), byId={}, per=7;
+    all.forEach(function(c){ byId[c.getAttribute('data-cid')]=c; });
+    var n=new Date(), day=Math.abs(Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5)-19723),
+        tk=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);
+    function isPd(id){ return id==='period-1' || /^period-/.test(id); }
+    /* where is she in her cycle today? -> '' | 'during' | 'before' | 'after' (same grouping rules as the period tracker) */
+    function pdPhase(p){
+      var L=p.logs||{}, E=p.ends||{};
+      function dn(k){ var a=k.split('-'); return Math.floor(Date.UTC(+a[0],+a[1]-1,+a[2])/864e5); }
+      function ak(k,d){ var x=new Date((dn(k)+d)*864e5); return x.getUTCFullYear()+'-'+('0'+(x.getUTCMonth()+1)).slice(-2)+'-'+('0'+x.getUTCDate()).slice(-2); }
+      var keys=Object.keys(L).filter(function(k){ return /^\d{4}-\d{2}-\d{2}$/.test(k); }).sort(), ps={};
+      keys.forEach(function(k){ if((L[k].f|0)>=2) ps[k]=1; });
+      keys.forEach(function(k){ if((L[k].f|0)===1&&(ps[ak(k,-1)]===1||ps[ak(k,1)]===1)) ps[k]=2; });
+      var dk=Object.keys(ps).sort(), per2=[], cur=null;
+      dk.forEach(function(k){ if(cur&&dn(k)-dn(cur.e)<=2){ cur.e=k; } else { cur={s:k,e:k}; per2.push(cur); } });
+      if(!per2.length) return '';
+      var tn=dn(tk), last=per2[per2.length-1], len=dn(last.e)-dn(last.s)+1;
+      var ended=E[last.s]&&dn(E[last.s])>=dn(last.e);
+      if(!ended&&dn(last.e)<=tn&&tn-dn(last.e)<=1) return 'during';
+      if(tn-dn(last.s)+1<=len) return 'during';
+      var since=tn-dn(last.e); if(since>=1&&since<=2) return 'after';
+      var lens=[]; for(var i=0;i<per2.length-1;i++) lens.push(dn(per2[i+1].s)-dn(per2[i].s));
+      var v=lens.filter(function(x){ return x>=15&&x<=90; }).slice(-6), def=(p.cl>=15&&p.cl<=60)?p.cl:28, avg=def;
+      if(v.length){ var s=0; v.forEach(function(x){ s+=x; }); avg=v.length===1?(s+def)/2:s/v.length; }
+      var until=dn(ak(last.s,Math.max(15,Math.round(avg))))-tn;
+      if(until>=-3&&until<=3) return 'before';
+      return '';
+    }
+    var hidePd=false, phase='';
     try{
       var _s=JSON.parse(localStorage.getItem('fa-planner-state-v1')||'null'), _st=_s&&_s.settings, _o=_st&&_st.onb, _p=_st&&_st.period;
-      if(pin&&((_o&&_o.gender==='m')||(_p&&_p.hideHome))){ pin.parentNode.removeChild(pin); pin=null; }
-      else if(pin&&_p&&_p.logs){
-        var _dn=function(k){ var a=k.split('-'); return Math.floor(Date.UTC(+a[0],+a[1]-1,+a[2])/864e5); };
-        var _t=new Date(), _tk=_t.getFullYear()+'-'+('0'+(_t.getMonth()+1)).slice(-2)+'-'+('0'+_t.getDate()).slice(-2);
-        var _ks=Object.keys(_p.logs).filter(function(k){ return (_p.logs[k].f|0)>=2; }).sort();
-        if(_ks.length){
-          var _i=_ks.length-1, _e=_ks[_i]; while(_i>0&&_dn(_ks[_i])-_dn(_ks[_i-1])<=2) _i--;
-          var _s0=_ks[_i], _end=_p.ends&&_p.ends[_s0]&&_dn(_p.ends[_s0])>=_dn(_e), _d=_dn(_tk)-_dn(_e);
-          if(!_end&&_d>=0&&_d<=1) forced=true;
-        }
-      }
+      if((_o&&_o.gender==='m')||(_p&&_p.hideHome)) hidePd=true;
+      else if(_p&&_p.logs) phase=pdPhase(_p);
     }catch(e){}
-    var all=[].slice.call(document.querySelectorAll('.car-card')).filter(function(c){ return !(forced&&c===pin); }), per=7;
-    if(all.length<=per) return;
     function rng(a){ return function(){ var x=a+=0x6D2B79F5; x=Math.imul(x^x>>>15,x|1); x^=x+Math.imul(x^x>>>7,x|61); return((x^x>>>14)>>>0)/4294967296; }; }
     function shuf(arr,r){ for(var q=arr.length-1;q>0;q--){ var j=Math.floor(r()*(q+1)), z=arr[q]; arr[q]=arr[j]; arr[j]=z; } return arr; }
     window.lpDailyCards=function(N,day){
@@ -8282,28 +8349,45 @@ setTimeout(function(){
       }
       return shuf((day%2===0?A:B).slice(),rng(day*31+7));
     };
-    var n=new Date(), day=Math.abs(Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5)-19723);
-    var keep=window.lpDailyCards(all.length,day), host=all[0].parentNode, dotsEl=host.querySelector('.car-dots');
-    all.forEach(function(c,ix){ if(keep.indexOf(ix)<0 && c.parentNode) c.parentNode.removeChild(c); });
-    keep.forEach(function(ix){ host.insertBefore(all[ix],dotsEl); });
-    if(pin&&pin.parentNode===host){ host.insertBefore(pin,dotsEl); }
+    /* the pool: groups of look-alike cards count once (the variant changes day by day) */
+    var GROUPS=[['chat-1','chat-2','chat-3'],['weight-1','weight-2'],['body-trend-1','body-trend-2']], gOf={}, pool=[], seen={};
+    GROUPS.forEach(function(g,gi){ g.forEach(function(id){ gOf[id]=gi; }); });
+    all.forEach(function(c){
+      var id=c.getAttribute('data-cid');
+      if(isPd(id)) return;
+      if(gOf[id]!==undefined){ if(seen[gOf[id]]) return; seen[gOf[id]]=1; pool.push(GROUPS[gOf[id]]); } else pool.push(id);
+    });
+    var phaseOn=!hidePd&&phase!=='';
+    if(!hidePd&&!phaseOn&&byId['period-1']) pool.push('period-1');
+    function resolve(e){ if(typeof e==='string') return e; return e[(day+gOf[e[0]])%e.length]; }
+    var idx=pool.length<=per?pool.map(function(_,q){ return q; }):window.lpDailyCards(pool.length,day);
+    var auto=idx.map(function(q){ return resolve(pool[q]); });
+    if(phaseOn){
+      var tips=['period-2','period-3','period-4','period-5','period-6','period-7','period-8'];
+      auto=['period-1',tips[(2*day)%7],tips[(2*day+1)%7]].concat(auto.slice(0,5));
+    } else if(auto.indexOf('period-1')>0){ auto.splice(auto.indexOf('period-1'),1); auto.unshift('period-1'); }
+    var ids=auto, ov=null;
+    try{ var o=JSON.parse(localStorage.getItem('lp-car-today')||'null'); if(o&&o.k===tk&&o.ids&&o.ids.length) ov=o.ids; }catch(e){}
+    if(ov){ ov=ov.filter(function(id){ return byId[id]&&!(hidePd&&isPd(id)); }); if(ov.length) ids=ov; }
+    all.forEach(function(c){ if(c.parentNode) c.parentNode.removeChild(c); });
+    ids.forEach(function(id){ if(byId[id]) host.insertBefore(byId[id],dotsEl); });
+    window.lpCarCat={all:all,byId:byId,auto:auto,tk:tk,hidePd:hidePd,isPd:isPd};
   })();
   var cards=[].slice.call(document.querySelectorAll('.car-card')), dots=document.querySelector('.car-dots'), car=document.getElementById('car'),
       i=0, timer, drag=null, suppress=false, s=(getComputedStyle(car).direction==='rtl')?-1:1;
-  cards.forEach(function(c){
-    dots.appendChild(document.createElement('i'));
-    c.addEventListener('click', function(){
+  function bindCard(c){ if(c._b) return; c._b=1; c.addEventListener('click', function(){
       var g=c.getAttribute('data-go'), hb=c.getAttribute('data-habit'), ac=c.getAttribute('data-act');
       if(ac==='period'){ if(window.lpPeriod&&window.lpPeriod.open) window.lpPeriod.open(); return; }
       if(g==='chat'){ document.getElementById('chatFab').click(); return; }
       if(ac==='cal'){ window.lpOpenCal(); return; }
+      if(ac==='bodypath'){ var bb=document.getElementById('openBodyPath'); if(bb) bb.click(); return; }
       if(g==='habits'){ try{ window.lpToday(); }catch(e){} }
       go(g);
       if(ac==='meas'){ try{ window.lpOpenMeas(); }catch(e){} }
       if(ac==='reports'){ var rb=document.getElementById('openReports'); if(rb) rb.click(); }
       if(hb){ setTimeout(function(){ var el=document.querySelector('.habit-card[data-habit="'+hb+'"]'); if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.classList.add('hc-flash'); setTimeout(function(){ el.classList.remove('hc-flash'); },1500); } },120); }
-    });
-  });
+  }); }
+  cards.forEach(function(c){ dots.appendChild(document.createElement('i')); bindCard(c); });
   function rel(k){ var n=cards.length; return ((k-i+n+1)%n)-1; }
   function layout(dx){
     if(!car || !car.offsetWidth) return;
@@ -8323,6 +8407,55 @@ setTimeout(function(){
     [].forEach.call(dots.children, function(d,k){ d.classList.toggle('on', k===i); });
   }
   function run(){ clearInterval(timer); timer=setInterval(function(){ if(car.offsetParent && !drag) show(i+1); }, 4200); }
+  /* ---- "today's cards": tick which cards show in today's carousel (resets by itself tomorrow) ---- */
+  window.lpCarSet=function(list){
+    var cat=window.lpCarCat, next=(list||[]).map(function(id){ return cat.byId[id]; }).filter(Boolean);
+    if(!next.length) return false;
+    clearInterval(timer);
+    cards.forEach(function(c){ if(c.parentNode) c.parentNode.removeChild(c); c.style.transform=''; c.style.opacity=''; c._o=undefined; });
+    while(dots.firstChild) dots.removeChild(dots.firstChild);
+    cards=next;
+    cards.forEach(function(c){ car.insertBefore(c,dots); dots.appendChild(document.createElement('i')); bindCard(c); var im=c.querySelector('img'); if(im) im.loading='eager'; });
+    show(0); run();
+    try{ if(window.lpFitCards) window.lpFitCards(); }catch(e){}
+    try{ if(window.lpPeriod&&window.lpPeriod.render) window.lpPeriod.render(); }catch(e){}
+    return true;
+  };
+  function carPicker(){
+    if(document.querySelector('.cpk')) return;
+    var cat=window.lpCarCat, shown=cards.map(function(c){ return c.getAttribute('data-cid'); }), on={};
+    shown.forEach(function(id){ on[id]=1; });
+    var el=document.createElement('div'); el.className='fp cpk';
+    function item(c){
+      var id=c.getAttribute('data-cid'), im=c.querySelector('img'), t=c.querySelector('b');
+      return '<button type="button" class="cpk-it'+(on[id]?' on':'')+'" data-cid="'+id+'" aria-pressed="'+(on[id]?'true':'false')+'"><span class="cpk-im"><img alt="" loading="lazy" src="'+(im?im.getAttribute('src'):'')+'"><i class="cpk-ck">✓</i></span><span class="cpk-nm">'+(t?t.textContent:'')+'</span></button>';
+    }
+    var main=cat.all.filter(function(c){ return !cat.isPd(c.getAttribute('data-cid')); }), pd=cat.hidePd?[]:cat.all.filter(function(c){ return cat.isPd(c.getAttribute('data-cid')); });
+    el.innerHTML='<div class="fp-ov"></div><div class="fp-box" role="dialog" aria-modal="true"><div class="sheet-head"><h2>کارت‌های امروز</h2><button type="button" class="fp-x" aria-label="بستن">✕</button></div>'+
+      '<p class="fp-hint">کارت‌های تیک‌دار امروز توی کاروسل نشون داده می‌شن. هر کدوم رو نمی‌خوای تیکش رو بردار، یا یه کارت دیگه رو تیک بزن تا جاش بیاد. این انتخاب فقط برای امروزه و فردا دوباره خودکار عوض می‌شه.</p>'+
+      '<div class="cpk-grid">'+main.map(item).join('')+'</div>'+
+      (pd.length?'<div class="cpk-sec">کارت‌های پریود</div><div class="cpk-grid">'+pd.map(item).join('')+'</div>':'')+
+      '<div class="fp-act"><button type="button" class="fp-auto">انتخاب خودکار</button><button type="button" class="fp-ok">ذخیره</button></div></div>';
+    document.body.appendChild(el);
+    function close(){ if(el.parentNode) el.parentNode.removeChild(el); }
+    el.addEventListener('click',function(e){
+      var b=e.target.closest('button'), ov=e.target.classList.contains('fp-ov');
+      if(ov||(b&&b.classList.contains('fp-x'))){ close(); return; }
+      if(!b) return;
+      if(b.classList.contains('cpk-it')){ var id=b.getAttribute('data-cid'); if(on[id]) delete on[id]; else on[id]=1; b.classList.toggle('on',!!on[id]); b.setAttribute('aria-pressed',on[id]?'true':'false'); return; }
+      if(b.classList.contains('fp-auto')){ try{ localStorage.removeItem('lp-car-today'); }catch(e2){} window.lpCarSet(cat.auto); close(); return; }
+      if(b.classList.contains('fp-ok')){
+        var pick=shown.filter(function(id){ return on[id]; }); cat.all.forEach(function(c){ var id=c.getAttribute('data-cid'); if(on[id]&&pick.indexOf(id)<0) pick.push(id); });
+        if(!pick.length){ var h=el.querySelector('.fp-hint'); if(h){ h.textContent='حداقل یه کارت باید تیک داشته باشه.'; h.style.opacity='1'; h.style.color='#c0392b'; } return; }
+        var pi=pick.indexOf('period-1'); if(pi>0){ pick.splice(pi,1); pick.unshift('period-1'); }
+        try{ localStorage.setItem('lp-car-today',JSON.stringify({k:cat.tk,ids:pick})); }catch(e3){}
+        window.lpCarSet(pick); close();
+      }
+    });
+  }
+  var editBtn=document.getElementById('carEdit');
+  if(editBtn){ editBtn.addEventListener('pointerdown',function(e){ e.stopPropagation(); }); editBtn.addEventListener('click',function(e){ e.stopPropagation(); carPicker(); }); }
+  window.lpCarPicker=carPicker;
   car.addEventListener('pointerdown', function(e){
     if(e.pointerType==='mouse' && e.button!==0) return;
     drag={x:e.clientX,y:e.clientY,t:Date.now(),dx:0,h:false,id:e.pointerId}; clearInterval(timer);
@@ -8348,6 +8481,7 @@ setTimeout(function(){
   car.addEventListener('dragstart', function(e){ e.preventDefault(); });
   window.addEventListener('resize', function(){ layout(drag&&drag.h?drag.dx:0); });
   window.addEventListener('orientationchange', function(){ setTimeout(function(){ layout(0); },200); });
+  (function(){ var im=cards[0]&&cards[0].querySelector('img'); if(im) im.loading='eager'; })();
   show(0); run(); go('home');
 })();
 </script>
