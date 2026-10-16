@@ -4,6 +4,33 @@
 <meta charset="UTF-8">
 <style id="lp-pre">html{background:#17212A}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, interactive-widget=resizes-content">
+<script id="lp-wide-fix">
+/* some phones/browsers ignore the mobile viewport and lay the page out ~980px wide (the app then looks like a tiny column).
+   Detect that (touch phone, layout much wider than the screen) and scale the page up so it fills the screen like normal. */
+(function(){
+  var de=document.documentElement;
+  function ratio(){
+    try{
+      var iw=window.innerWidth||0, sw=Math.min(screen.width||0,screen.height||0);
+      var coarse=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
+      var vv=window.visualViewport, sc=vv&&vv.scale;
+      if(!coarse||!iw) return 0;
+      var dev=(sw>=280&&sw<=520)?sw:((sc&&sc<0.75)?iw*sc:0);
+      if(dev>=280&&dev<=520&&iw>=dev*1.5) return iw/dev;
+    }catch(e){}
+    return 0;
+  }
+  function apply(){
+    var z=ratio();
+    if(z){ de.style.setProperty("--lpz",String(Math.round(z*100)/100)); de.classList.add("lp-wide"); }
+    else { de.classList.remove("lp-wide"); de.style.removeProperty("--lpz"); }
+  }
+  apply();
+  window.addEventListener("resize",apply);
+  window.addEventListener("orientationchange",function(){ setTimeout(apply,350); });
+})();
+</script>
+
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1984,6 +2011,15 @@ html body.style-glass .bnav#bnav, html body.style-glass .topbar{-webkit-backdrop
 /* fixed bars lose their blur, so they get a more solid glass fill to stay readable */
 html body.style-glass .topbar{background:color-mix(in srgb, var(--bg) 90%, transparent) !important;}
 html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, transparent) !important;}
+
+/* ---- wide-layout phones: scale up + keep viewport-based sizes sane ---- */
+html.lp-wide{zoom:var(--lpz);}
+html.lp-wide body{min-height:calc(100vh / var(--lpz)) !important; max-width:100% !important;}
+html.lp-wide .sheet{max-height:calc(82vh / var(--lpz)) !important;}
+html.lp-wide .rep-modal{max-height:calc(90vh / var(--lpz)) !important;}
+html.lp-wide .fp-box{max-height:calc(84vh / var(--lpz)) !important;}
+html.lp-wide .pd-modal{max-height:calc(92vh / var(--lpz)) !important;}
+html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !important;}
 </style>
 </head>
 <body class="style-glass booting">
