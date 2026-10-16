@@ -4,33 +4,6 @@
 <meta charset="UTF-8">
 <style id="lp-pre">html{background:#17212A}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, interactive-widget=resizes-content">
-<script id="lp-wide-fix">
-/* some phones/browsers ignore the mobile viewport and lay the page out ~980px wide (the app then looks like a tiny column).
-   Detect that (touch phone, layout much wider than the screen) and scale the page up so it fills the screen like normal. */
-(function(){
-  var de=document.documentElement;
-  function ratio(){
-    try{
-      var iw=window.innerWidth||0, sw=Math.min(screen.width||0,screen.height||0);
-      var coarse=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
-      var vv=window.visualViewport, sc=vv&&vv.scale;
-      if(!coarse||!iw) return 0;
-      var dev=(sw>=280&&sw<=520)?sw:((sc&&sc<0.75)?iw*sc:0);
-      if(dev>=280&&dev<=520&&iw>=dev*1.5) return iw/dev;
-    }catch(e){}
-    return 0;
-  }
-  function apply(){
-    var z=ratio();
-    if(z){ de.style.setProperty("--lpz",String(Math.round(z*100)/100)); de.classList.add("lp-wide"); }
-    else { de.classList.remove("lp-wide"); de.style.removeProperty("--lpz"); }
-  }
-  apply();
-  window.addEventListener("resize",apply);
-  window.addEventListener("orientationchange",function(){ setTimeout(apply,350); });
-})();
-</script>
-
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1342,6 +1315,7 @@ body.style-glass.mode-dark #lpNp .np-card{background:rgba(30,26,46,.8); border-c
 #lpNp .np-b{flex:1; min-height:46px; padding:11px 10px; border-radius:18px; border:1px solid var(--border); background:rgba(255,255,255,.5); color:var(--text); font-size:14px; font-weight:700; transition:transform .15s, opacity .2s;}
 body.mode-dark #lpNp .np-b:not(.main){background:rgba(255,255,255,.1);}
 #lpNp .np-b.main{flex:1.6; background:var(--accent); border-color:transparent; color:#fff; box-shadow:0 6px 16px hsla(var(--accent-h),90%,50%,.35), inset 0 1px 0 rgba(255,255,255,.4);}
+#lpNp .np-b:not(.main){flex:.75; min-height:42px; font-weight:600; opacity:.85;}
 #lpNp .np-b:active{transform:scale(.96);}
 #lpNp .np-b:disabled{opacity:.7; transform:none;}
 @keyframes npFade{from{opacity:0;}}
@@ -1547,14 +1521,14 @@ html body[class] .car-card.cp{
   -webkit-backdrop-filter:blur(1.6px); backdrop-filter:blur(1.6px);
   -webkit-mask-image:radial-gradient(ellipse 55% 68% at 45% 50%, #000 0%, #000 26%, rgba(0,0,0,.9) 46%, rgba(0,0,0,.68) 62%, rgba(0,0,0,.4) 76%, rgba(0,0,0,.17) 87%, rgba(0,0,0,.05) 95%, transparent 100%);
           mask-image:radial-gradient(ellipse 55% 68% at 45% 50%, #000 0%, #000 26%, rgba(0,0,0,.9) 46%, rgba(0,0,0,.68) 62%, rgba(0,0,0,.4) 76%, rgba(0,0,0,.17) 87%, rgba(0,0,0,.05) 95%, transparent 100%);}
-.car-card.cp .cp-tx{position:absolute; left:0; top:0; bottom:0; width:46%; box-sizing:border-box; padding:0 6px 0 12px; display:flex; flex-direction:column; justify-content:center; gap:5px; text-align:right;}
+.car-card.cp .cp-tx{position:absolute; left:0; top:0; bottom:0; width:calc(46% - 14px); box-sizing:border-box; padding:0 6px 0 10px; display:flex; flex-direction:column; justify-content:center; gap:5px; text-align:right;}
 .car-card.cp .cp-tx b{font-size:17px; font-weight:800; line-height:1.4; color:#fff; text-wrap:balance; text-shadow:0 1px 2px rgba(0,0,0,.55), 0 0 12px rgba(0,0,0,.38);}
 .car-card.cp .cp-sub{font-size:12.5px; font-weight:600; line-height:1.55; color:#fff; text-wrap:balance; text-shadow:0 1px 2px rgba(0,0,0,.55), 0 0 10px rgba(0,0,0,.38);}
 /* keep the text and the soft patch off Liana's face: --fl = where her face starts (fraction of the image width);
    the image is scaled to the card height (452px wide) and cropped from the LEFT only, so her face sits at (card width - (1-fl)*452px) */
 @supports (width:1cqw){
   .car-card.cp{container-type:inline-size;}
-  .car-card.cp .cp-tx{width:min(46%, max(96px, calc(100cqw - (1 - var(--fl,.78)) * 452px - 8px)));}
+  .car-card.cp .cp-tx{width:min(calc(46% - 14px), max(82px, calc(100cqw - (1 - var(--fl,.78)) * 452px - 22px)));}
   .car-card.cp .cp-bl{width:min(70%, max(40%, calc(100cqw - (1 - var(--fl,.78)) * 452px - 2px)));}
 }
 /* "today's cards" button + picker */
@@ -1694,7 +1668,7 @@ body.mode-dark .pd-modal,body.mode-dark .pd-homewrap{--pd-p:#E0647F;--pd-pl:rgba
 .pd-homewrap{margin:12px 0 0;}
 .pd-hc{display:block;cursor:pointer;padding:14px;text-align:right;}
 .pd-hr{display:flex;align-items:center;gap:12px;}
-.pd-hic{flex:none;width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:var(--pd-pl);color:var(--pd-p);}
+.pd-hic{flex:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:none;box-shadow:none;color:var(--pd-p);}
 .pd-hic svg,.pd-ic svg{width:26px;height:26px;}
 .pd-hic img,.pd-ic img{width:100%;height:100%;object-fit:contain;}
 .pd-hc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
@@ -1938,6 +1912,7 @@ html body .ms-modal .meas-box, html body.style-glass .ms-modal .meas-box, html b
 .rm-hic{display:inline-flex; width:22px; height:22px; color:var(--accent);}
 .rm-hic svg, .rm-hc .hm-h b svg{width:100%; height:100%;}
 .rm-hc .hm-h b svg{width:20px; height:20px; color:var(--accent);}
+.rm-hc .hm-h b .st-icon{width:28px; height:28px; flex:none;}
 .rm-row{display:flex; align-items:center; gap:10px; padding:8px 2px; border-top:1px solid rgba(124,108,196,.16);}
 .rm-hc .hm-h + .rm-row{border-top:0;}
 .rm-dot{width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0;}
@@ -1993,7 +1968,7 @@ html body[class] .fx-card.fx-img{display:block !important; position:relative; pa
 .ht-col{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;}
 .st-icon.ht-ic{width:16px; height:48px; flex-shrink:0;}
 .set-row:has(#lgSeg){margin-top:14px;}
-.pd-hic img{padding:3px; box-sizing:border-box;}
+.pd-hic img{padding:0; box-sizing:border-box;}
 .hrt.big.rcimg{width:auto; font-size:0; line-height:0;}
 .hrt.big.rcimg img{display:block; height:92px; width:auto;}
 </style>
@@ -2011,15 +1986,6 @@ html body.style-glass .bnav#bnav, html body.style-glass .topbar{-webkit-backdrop
 /* fixed bars lose their blur, so they get a more solid glass fill to stay readable */
 html body.style-glass .topbar{background:color-mix(in srgb, var(--bg) 90%, transparent) !important;}
 html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, transparent) !important;}
-
-/* ---- wide-layout phones: scale up + keep viewport-based sizes sane ---- */
-html.lp-wide{zoom:var(--lpz);}
-html.lp-wide body{min-height:calc(100vh / var(--lpz)) !important; max-width:100% !important;}
-html.lp-wide .sheet{max-height:calc(82vh / var(--lpz)) !important;}
-html.lp-wide .rep-modal{max-height:calc(90vh / var(--lpz)) !important;}
-html.lp-wide .fp-box{max-height:calc(84vh / var(--lpz)) !important;}
-html.lp-wide .pd-modal{max-height:calc(92vh / var(--lpz)) !important;}
-html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !important;}
 </style>
 </head>
 <body class="style-glass booting">
@@ -2101,8 +2067,8 @@ html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !importa
   <button type="button" class="car-card cp" data-cid="steps" data-go="habits" data-habit="steps" style="--fl:0.8"><img class="cp-img" src="cards/steps.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>قدم‌های امروز</b><span class="cp-sub">چند قدم راه رفتی؟</span></span></button>
   <button type="button" class="car-card cp" data-cid="reading" data-go="habits" data-habit="reading" style="--fl:0.8"><img class="cp-img" src="cards/reading.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>مطالعه‌ی امروز</b><span class="cp-sub">چند صفحه خوندی؟</span></span></button>
   <button type="button" class="car-card cp" data-cid="chat-1" data-go="chat" style="--fl:0.74"><img class="cp-img" src="cards/chat-1.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>بیا باهام درد و دل کن</b><span class="cp-sub">لیانا همیشه گوش می‌ده</span></span></button>
-  <button type="button" class="car-card cp" data-cid="chat-2" data-go="chat" style="--fl:0.75"><img class="cp-img" src="cards/chat-2.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>دلت یه همدم می‌خواد؟</b><span class="cp-sub">هر چی تو دلته، بهم بگو</span></span></button>
-  <button type="button" class="car-card cp" data-cid="chat-3" data-go="chat" style="--fl:0.77"><img class="cp-img" src="cards/chat-3.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>من دستیار هوش مصنوعی توام</b><span class="cp-sub">هر چی خواستی ازم بپرس</span></span></button>
+  <button type="button" class="car-card cp" data-cid="chat-2" data-go="chat" style="--fl:0.75"><img class="cp-img" src="cards/chat-2.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>دلت یه همدم می‌خواد؟</b><span class="cp-sub">هرچی تو دلته، بهم بگو</span></span></button>
+  <button type="button" class="car-card cp" data-cid="chat-3" data-go="chat" style="--fl:0.77"><img class="cp-img" src="cards/chat-3.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>من دستیار هوش مصنوعی توام</b><span class="cp-sub">هرچی خواستی ازم بپرس</span></span></button>
   <button type="button" class="car-card cp" data-cid="yoga" data-go="timer" data-yoga="1" style="--fl:0.87"><img class="cp-img" src="cards/yoga.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>یوگا و کشش</b><span class="cp-sub">چند دقیقه برای آرامش</span></span></button>
   <button type="button" class="car-card cp" data-cid="sugar-free" data-go="habits" data-habit="sugarFree" style="--fl:0.72"><img class="cp-img" src="cards/sugar-free.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>چالش حذف قند</b><span class="cp-sub">امروز هم قوی بودی؟</span></span></button>
   <button type="button" class="car-card cp" data-cid="nutrition" data-go="habits" data-habit="nutrition" style="--fl:0.67"><img class="cp-img" src="cards/nutrition.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>تغذیه سالم</b><span class="cp-sub">چی خوردی؟ ثبتش کن</span></span></button>
@@ -2208,7 +2174,7 @@ html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !importa
 <div class="jr-card">
 <div class="jr-day"><button type="button" class="jr-nav" id="jrPD" aria-label="روز قبل">›</button><div><b id="jrDayLab"></b><span id="jrDayWd"></span></div><button type="button" class="jr-nav" id="jrND" aria-label="روز بعد">‹</button></div>
 <div class="jr-prompts" id="jrPrompts"></div>
-<textarea class="journal jr-text" id="jrText" placeholder="هر چی تو دلته بنویس؛ خاطره، فکر، یه جمله‌ی کوتاه..."></textarea>
+<textarea class="journal jr-text" id="jrText" placeholder="هرچی تو دلته بنویس؛ خاطره، فکر، یه جمله‌ی کوتاه..."></textarea>
 <div class="jr-meta"><span id="jrCnt"></span><span id="jrSaved"></span></div>
 </div>
 <div class="jr-card"><div class="jr-t">یادداشت‌های قبلی</div><input type="search" class="jr-search" id="jrSearch" placeholder="جستجو توی یادداشت‌ها..."><div id="jrList"></div></div>
@@ -2240,7 +2206,7 @@ html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !importa
 
 <div class="overlay hidden" id="rmOverlay"></div>
 <div class="rep-modal rm-modal hidden" id="rmModal" role="dialog" aria-modal="true">
-  <div class="sheet-head"><h2><span class="rm-hic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17h12l-1.6-2.3V10.5a4.4 4.4 0 0 0-8.8 0v4.2L6 17z"/><path d="M10 19.5a2.1 2.1 0 0 0 4 0"/></svg></span>یادآورها</h2><button type="button" id="rmClose" aria-label="بستن">✕</button></div>
+  <div class="sheet-head"><h2><img class="st-icon" data-icon="notify" alt="">یادآورها</h2><button type="button" id="rmClose" aria-label="بستن">✕</button></div>
   <div id="rmListView">
     <div class="rm-msg hint" id="rmMsg"></div>
     <div id="rmList"></div>
@@ -2351,7 +2317,7 @@ html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !importa
   </div>
 
   <div class="set-row">
-    <div class="row-between"><span>حالت تک‌رنگ (بجای سفید، همه‌چیز از رنگ خودش)</span>
+    <div class="row-between"><span>حالت تک‌رنگ (به‌جای سفید، همه‌چیز از رنگ خودش)</span>
       <button class="switch" id="monoSwitch"></button>
     </div>
   </div>
@@ -2471,13 +2437,13 @@ html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !importa
   <div class="set-row">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="language" alt="" style="width:34px;height:28px;"><span>زبان / Language</span></div>
     <div class="lg-seg" id="lgSeg"><button type="button" data-l="fa">فارسی</button><button type="button" data-l="en">English</button></div>
-    <div class="hint">فعلاً آنبوردینگ دوزبانه‌ست؛ بقیهٔ بخش‌ها به‌مرور ترجمه می‌شن.</div>
-    <button type="button" class="ob-redo" id="obRedo">دیدن دوبارهٔ آنبوردینگ</button>
+    <div class="hint">فعلاً آنبوردینگ دوزبانه‌ست؛ بقیه‌ی بخش‌ها به‌مرور ترجمه می‌شن.</div>
+    <button type="button" class="ob-redo" id="obRedo">دیدن دوباره‌ی آنبوردینگ</button>
   </div>
 
   <div class="set-row">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="recovery" alt="" style="width:28px;height:28px;"><span>کد بازیابی حساب</span></div>
-    <div class="hint">اگه رمزت یادت رفت با این کد رمز جدید می‌سازی. همیشه همینه و عوض نمی‌شه.</div>
+    <div class="hint">اگه رمزت یادت رفت، با این کد رمز جدید می‌سازی. همیشه همینه و عوض نمی‌شه.</div>
     <div class="lg-seg"><button type="button" class="on" id="rcOpen">نمایش کد بازیابی</button></div>
   </div>
 
@@ -3041,7 +3007,7 @@ html.lp-wide .chat-sheet{height:calc(var(--chat-h,100dvh) / var(--lpz)) !importa
   function tr(x,m){return (m&&m[x])||esc(x||"");}
   var GL={}; ("barbell=هالتر;dumbbell=دمبل;cable=سیم‌کش;machine=دستگاه;band=کش;kettlebell=کتل‌بل;ball=توپ;bar=میله;ez-bar=هالتر EZ;smith=اسمیت;bodyweight=وزن بدن;body=بدن;bench=نیمکت;rope=طناب;handle=دستگیره;plate=صفحه;roller=رولر;foam=فوم;roll=رول;landmine=لندماین;sled=سورتمه;tire=تایر;chain=زنجیر;stone=سنگ;log=کنده;medicine=طبی;exercise=ورزشی;"+
   "chest=سینه;shoulder=شانه;bicep=جلو بازو;tricep=پشت بازو;forearm=ساعد;lat=زیربغل;back=پشت;trap=ذوزنقه;neck=گردن;ab=شکم;abdominal=شکم;oblique=شکم کناری;quad=جلو ران;quadricep=جلو ران;hamstring=پشت ران;glute=باسن;calve=ساق پا;calf=ساق پا;leg=پا;thigh=ران;hip=لگن;arm=بازو;wrist=مچ دست;ankle=مچ پا;core=میان‌تنه;groin=کشاله‌ی ران;hand=دست;foot=پا;feet=پا;head=سر;knee=زانو;elbow=آرنج;pec=سینه;delt=سرشانه;shin=ساق جلو;torso=تنه;spine=ستون فقرات;lower=پایین;upper=بالایی;inner=داخلی;outer=خارجی;"+
-  "press=پرس;curl=کرل;row=روئینگ;raise=نشر;fly=فلای;flye=فلای;extension=اکستنشن;flexion=فلکشن;squat=اسکات;deadlift=ددلیفت;lunge=لانج;pulldown=پول‌داون;pullover=پولاور;pushdown=پوش‌داون;shrug=شراگ;crunch=کرانچ;plank=پلانک;bridge=بریج;thrust=تراست;kickback=کیک‌بک;swing=سوینگ;snatch=اسنچ;clean=کلین;jerk=جرک;twist=چرخش;rotation=چرخش;stretch=کشش;walk=راه رفتن;run=دویدن;jump=پرش;hop=پرش;step=استپ;dip=دیپ;pull=کشیدن;push=هل دادن;hold=نگه داشتن;lift=لیفت;carry=حمل;crossover=کراس‌اور;bend=خم شدن;sit-up=دراز‌ونشست;push-up=شنا;pull-up=بارفیکس;chin-up=بارفیکس دست معکوس;step-up=استپ‌آپ;kick=ضربه;slam=اسلم;toss=پرتاب;throw=پرتاب;climb=کوهنوردی;climber=کوهنورد;burpee=برپی;stand=ایستادن;"+
+  "press=پرس;curl=کرل;row=روئینگ;raise=نشر;fly=فلای;flye=فلای;extension=اکستنشن;flexion=فلکشن;squat=اسکات;deadlift=ددلیفت;lunge=لانج;pulldown=پول‌داون;pullover=پولاور;pushdown=پوش‌داون;shrug=شراگ;crunch=کرانچ;plank=پلانک;bridge=بریج;thrust=تراست;kickback=کیک‌بک;swing=سوینگ;snatch=اسنچ;clean=کلین;jerk=جرک;twist=چرخش;rotation=چرخش;stretch=کشش;walk=راه رفتن;run=دویدن;jump=پرش;hop=پرش;step=استپ;dip=دیپ;pull=کشیدن;push=هل دادن;hold=نگه داشتن;lift=لیفت;carry=حمل;crossover=کراس‌اور;bend=خم شدن;sit-up=دراز و نشست;push-up=شنا;pull-up=بارفیکس;chin-up=بارفیکس دست معکوس;step-up=استپ‌آپ;kick=ضربه;slam=اسلم;toss=پرتاب;throw=پرتاب;climb=کوهنوردی;climber=کوهنورد;burpee=برپی;stand=ایستادن;"+
   "incline=شیب‌دار;decline=شیب منفی;seated=نشسته;sitting=نشسته;standing=ایستاده;lying=خوابیده;reverse=معکوس;alternate=متناوب;alternating=متناوب;single=تک;one=تک;one-arm=تک‌دست;one-leg=تک‌پا;two=دو;double=دوبل;wide=باز;close=جمع;narrow=باریک;grip=دست;overhead=بالای سر;front=جلو;rear=پشت;side=کنار;lateral=جانبی;bent=خمیده;bent-over=خم‌شده;straight=صاف;stiff=سفت;stiff-legged=پا صاف;romanian=رومانیایی;sumo=سومو;hammer=چکشی;preacher=پریچر;concentration=تمرکزی;zottman=زاتمن;arnold=آرنولد;military=نظامی;box=باکس;goblet=گوبلت;hack=هک;good-morning=گود مورنینگ;low=پایین;high=بالا;mid=وسط;medium=متوسط;full=کامل;partial=نیمه;power=پاور;static=ایستا;dynamic=پویا;kneeling=زانو زده;prone=دمر;assisted=کمکی;weighted=وزنه‌دار;position=حالت;farmer=فارمر;left=چپ;right=راست;palm=کف دست;up=بالا;down=پایین;flat=تخت;wall=دیوار;floor=زمین;hanging=آویزان;supported=تکیه‌دار;toe=پنجه;heel=پاشنه;balance=تعادلی;ez=EZ").split(";").forEach(function(p){var a=p.split("=");GL[a[0]]=a[1];});
   var PR={"with":"با","on":"روی","to":"به","and":"و","against":"به","over":"روی","behind":"پشت","from":"از","in":"در","off":"از","under":"زیر","at":"در","into":"به","for":"برای","of":"","the":"","a":"","an":""};
   var PC=[[/bent[- ]over/g,"bent-over"],[/step[- ]?ups?/g,"step-up"],[/push[- ]?ups?/g,"push-up"],[/pull[- ]?ups?/g,"pull-up"],[/chin[- ]?ups?/g,"chin-up"],[/sit[- ]?ups?/g,"sit-up"],[/good[- ]mornings?/g,"good-morning"],[/(one|single)[- ]arm/g,"one-arm"],[/(one|single)[- ]leg/g,"one-leg"],[/stiff[- ]legged/g,"stiff-legged"],[/e-?z[- ](curl )?bar/g,"ez-bar"]];
@@ -3392,7 +3358,7 @@ var DEFAULT_HABITS=[
   {id:"nutrition",icon:"🥗",   iconKey:"nutrition",name:"تغذیه سالم",            color:"var(--c-nutrition)",kind:"nutrition"},
   {id:"reading", icon:"📚",    iconKey:"reading",  name:"مطالعه / یادگیری",      color:"var(--c-reading)", kind:"minutes"},
   {id:"selfcare",icon:"🧴",    iconKey:"selfcare", name:"مراقبت شخصی",           color:"var(--c-selfcare)",kind:"check"},
-  {id:"cleaning",icon:"🧹",    iconKey:"cleaning", name:"مرتب‌کردن خانه",        color:"var(--c-cleaning)",kind:"check"},
+  {id:"cleaning",icon:"🧹",    iconKey:"cleaning", name:"مرتب کردن خانه",        color:"var(--c-cleaning)",kind:"check"},
   {id:"clothesTidy",icon:"👕", iconKey:"clothesTidy", name:"مرتب کردن لباس‌ها", color:"var(--c-clothesTidy)",kind:"check"},
   {id:"bedMaking",icon:"🛏️",  iconKey:"bedMaking",name:"مرتب کردن تخت‌خواب",   color:"var(--c-bedMaking)",kind:"check"},
   {id:"toothbrush",icon:"🪥", iconKey:"toothbrush",name:"مسواک زدن",           color:"var(--c-toothbrush)",kind:"toothbrush"},
@@ -3885,7 +3851,7 @@ function showOfflineOption(){
   var b=document.createElement("div");
   b.id="authOfflineBtn";
   b.className="auth-switch";
-  b.textContent="ادامه بدون اتصال (فقط روی همین دستگاه ذخیره میشه)";
+  b.textContent="ادامه بدون اتصال (فقط روی همین دستگاه ذخیره می‌شه)";
   b.onclick=continueOffline;
   document.getElementById("authMsg").insertAdjacentElement("afterend",b);
 }
@@ -4139,7 +4105,7 @@ function renderMeasurements(){
   if(lt) lt.textContent = (weekly ? "وزن و اندازه‌های هفته" : "وزن روزانه و اندازه‌های هفته") + (wkt ? " · " + wkt : "");
   var bh=document.getElementById("measBmiHint");
   if(bh){
-    var bmi=computeBMI(), bt = bmi ? "BMI فعلی: "+bmi.toFixed(1)+" ("+bmiCategory(bmi)+")" : "برای BMI، قدت را در تنظیمات وارد کن.";
+    var bmi=computeBMI(), bt = bmi ? "BMI فعلی: "+bmi.toFixed(1)+" ("+bmiCategory(bmi)+")" : "برای BMI، قدت رو تو تنظیمات وارد کن.";
     var dl=""; if(!weekly){ try{ dl="وزن برای «"+faDigits(jfmt(addDays(currentWeekStart,selectedDayIndex)))+"» ثبت می‌شه · "; }catch(e){ dl=""; } }
     bh.textContent = dl+bt;
   }
@@ -4305,7 +4271,7 @@ function fieldHtml(kind,day,h,date){
   if(kind==="weight"){
     var bmi=computeBMI();
     return '<div class="mini-field"><label>وزن امروز (کیلوگرم)</label><input type="number" step="0.1" min="0" data-field="weight" value="'+(day.weight||"")+'"></div>'+
-      (bmi ? '<div class="hint">BMI فعلی: '+bmi.toFixed(1)+' ('+bmiCategory(bmi)+')</div>' : '<div class="hint">برای BMI، قدت را در تنظیمات وارد کن.</div>');
+      (bmi ? '<div class="hint">BMI فعلی: '+bmi.toFixed(1)+' ('+bmiCategory(bmi)+')</div>' : '<div class="hint">برای BMI، قدت رو تو تنظیمات وارد کن.</div>');
   }
   if(kind==="steps"){
     var kcal=Math.round((Number(day.steps)||0)*kcalPerStep());
@@ -4336,7 +4302,7 @@ function fieldHtml(kind,day,h,date){
     return minutesHtml;
   }
   if(kind==="sleep"){
-    return '<div class="mini-field"><label>خواب مفید (ساعت) ✨</label><input type="number" step="0.5" min="0" max="24" placeholder="مثلاً ۶.۵" data-field="sleepHours" value="'+(day.sleepHours||"")+'"></div>';
+    return '<div class="mini-field"><label>خواب مفید (ساعت) ✨</label><input type="number" step="0.5" min="0" max="24" placeholder="مثلاً ۶٫۵" data-field="sleepHours" value="'+(day.sleepHours||"")+'"></div>';
   }
   if(kind==="meds"){
     var mdate=date||new Date();
@@ -4840,19 +4806,19 @@ function renderSettingsSheet(){
   });
   renderBackupInfo();
   document.getElementById("weightHint").textContent = weightMode()==="weekly"
-    ? "وزن هفته‌ای یک بار، کنار اندازه‌ها تو کارت «وزن و اندازه‌ها» (بخش فیتنس) ثبت میشه و کارت وزن روزانه از برنامه‌ی امروز برداشته میشه."
-    : "وزن هر روز تو کارت «وزن روزانه» توی برنامه‌ی امروز ثبت میشه.";
+    ? "وزن هفته‌ای یک بار، کنار اندازه‌ها تو کارت «وزن و اندازه‌ها» (بخش فیتنس) ثبت می‌شه و کارت وزن روزانه از برنامه‌ی امروز برداشته می‌شه."
+    : "وزن هر روز تو کارت «وزن روزانه» توی برنامه‌ی امروز ثبت می‌شه.";
   document.getElementById("bmiHint").textContent = weightMode()==="weekly"
-    ? "وزن هفتگی رو تو کارت «وزن و اندازه‌ها» توی بخش فیتنس وارد کن؛ BMI خودش حساب میشه."
-    : "وزن روزانه رو از کارت «وزن روزانه» تو صفحه‌ی اصلی وارد کن؛ BMI خودش حساب میشه.";
+    ? "وزن هفتگی رو تو کارت «وزن و اندازه‌ها» توی بخش فیتنس وارد کن؛ BMI خودش حساب می‌شه."
+    : "وزن روزانه رو از کارت «وزن روزانه» تو صفحه‌ی اصلی وارد کن؛ BMI خودش حساب می‌شه.";
   document.querySelectorAll("#sugarSeg button").forEach(function(b){
     b.classList.toggle("active", b.getAttribute("data-v")===sugarMode());
   });
   document.getElementById("sugarLimitField").classList.toggle("hidden", sugarMode()!=="gradual");
   document.getElementById("sugarLimitInput").value=sugarLimit();
   document.getElementById("sugarHint").textContent = sugarMode()==="gradual"
-    ? "هر روز تعداد وعده/تکه‌های قند رو وارد کن؛ تا وقتی از سقف بیشتر نشه اون روز موفق حساب میشه. سقف رو می‌تونی هفته‌به‌هفته کمتر کنی."
-    : "هر روزی که قند نخوری، تیک میخوره.";
+    ? "هر روز تعداد وعده/تکه‌های قند رو وارد کن؛ تا وقتی از سقف بیشتر نشه اون روز موفق حساب می‌شه. سقف رو می‌تونی هفته‌به‌هفته کمتر کنی."
+    : "هر روزی که قند نخوری، تیک می‌خوره.";
   renderHabitManager();
   wireSettingsSheet();
 }
@@ -4869,7 +4835,7 @@ function updateToothbrushRow(){
   });
   var hint=document.getElementById("toothbrushHint");
   if(hint) hint.textContent = times.length
-    ? "برای هر کدوم که انتخاب کنی، جدا تو برنامه‌ی روزانه چک باکس داره."
+    ? "برای هر کدوم که انتخاب کنی، جدا تو برنامه‌ی روزانه چک‌باکس داره."
     : "اگه هیچ‌کدوم رو انتخاب نکنی، مسواک زدن مثل بقیه‌ی عادت‌ها فقط یه تیک ساده می‌مونه.";
 }
 function wireSettingsSheet(){
@@ -5138,7 +5104,7 @@ function renderHabitManager(){
   html+='</div><button type="button" class="hm-add" data-act="add">+ افزودن عادت جدید</button>';
   var hidden=buildHabits(true).filter(function(h){return h.hidden;});
   if(hidden.length){
-    html+='<div class="pal-group-title" style="margin-top:16px;">عادت‌های حذف‌شده (اطلاعاتشون نگه داشته میشه)</div><div class="hm-list">';
+    html+='<div class="pal-group-title" style="margin-top:16px;">عادت‌های حذف‌شده (اطلاعاتشون نگه داشته می‌شه)</div><div class="hm-list">';
     hidden.forEach(function(h){
       html+='<div class="hm-item">'+
         '<span class="hm-emoji">'+hmIcon(h)+'</span>'+
@@ -6090,7 +6056,7 @@ function downloadBackup(){
   a.href=url; a.download=backupFileName(); document.body.appendChild(a); a.click();
   setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },1500);
   noteBackupDone();
-  bkMsg("فایل پشتیبان ساخته شد؛ معمولاً تو پوشه‌ی Downloads گوشی ذخیره میشه. برای امنیت بیشتر یه کپی هم تو Drive یا تلگرام نگه دار.","ok");
+  bkMsg("فایل پشتیبان ساخته شد؛ معمولاً تو پوشه‌ی Downloads گوشی ذخیره می‌شه. برای امنیت بیشتر یه کپی هم تو Drive یا تلگرام نگه دار.","ok");
 }
 function shareBackup(){
   var file=new File([backupText()],backupFileName(),{type:"application/json"});
@@ -6117,7 +6083,7 @@ function handleBackupFile(file){
     bkPending=obj;
     var n=Object.keys(obj.data.weeks).length;
     var when=obj.exportedAt?bkDateTxt(new Date(obj.exportedAt)):"";
-    bkMsg("این پشتیبان"+(when?" مربوط به "+when:"")+" شامل اطلاعات "+faDigits(n)+" هفته‌ست. با بازیابی، همه‌ی اطلاعات فعلی با اون جایگزین میشه."+
+    bkMsg("این پشتیبان"+(when?" مربوط به "+when:"")+" شامل اطلاعات "+faDigits(n)+" هفته‌ست. با بازیابی، همه‌ی اطلاعات فعلی با اون جایگزین می‌شه."+
       '<div class="bk-actions"><button type="button" id="bkConfirm">بله، بازیابی کن</button><button type="button" id="bkCancel" class="ghost">انصراف</button></div>');
   };
   reader.readAsText(file);
@@ -6667,7 +6633,7 @@ function runActionsInReply(text){
     var action=tryParseAction(cleaned);
     if(!action) return "این کار درست انجام نشد، لطفاً دوباره امتحان کن.";
     var r=applyAction(action);
-    return r.msg || (r.ok?"":"نتونستم این کارو انجام بدم.");
+    return r.msg || (r.ok?"":"نتونستم این کار رو انجام بدم.");
   });
   /* an [[ACTION]] that never got a closing tag (e.g. the reply got cut off mid-way) —
      strip it entirely so the user never sees raw/broken JSON in the chat */
@@ -6679,7 +6645,7 @@ function runActionsInReply(text){
     var replacement="این کار درست انجام نشد، لطفاً دوباره امتحان کن.";
     if(action2){
       var r2=applyAction(action2);
-      replacement=r2.msg || (r2.ok?"":"نتونستم این کارو انجام بدم.");
+      replacement=r2.msg || (r2.ok?"":"نتونستم این کار رو انجام بدم.");
     }
     out=out.slice(0,openIdx)+replacement;
   }
@@ -6925,7 +6891,7 @@ function sendChatMessage(){
     flushSave();
   }).catch(function(){
     typingEl.remove();
-    chat.messages=chat.messages.concat([{role:"assistant",content:"الان اینترنت جهانی در دسترس نیست و نمی‌تونم جواب بدم 🌸 بقیهٔ سایت کار می‌کنه، هر وقت نت برگشت دوباره بیا پیشم."}]);
+    chat.messages=chat.messages.concat([{role:"assistant",content:"الان اینترنت جهانی در دسترس نیست و نمی‌تونم جواب بدم 🌸 بقیه‌ی سایت کار می‌کنه، هر وقت نت برگشت دوباره بیا پیشم."}]);
     lianaFlash("worriedChin",3200);
     chat.updatedAt=Date.now();
     renderChat();
@@ -7117,7 +7083,7 @@ function head(){
 }
 function buildMoods(){
   $("jrMoods").innerHTML=MOOD_OPTS.map(function(m){ return '<button type="button" class="jr-m" data-m="'+m+'" style="--mc:'+MOODS[m].c+'aa"><i class="mo mo-'+m+'"></i><span>'+MOODS[m].l+'</span></button>'; }).join("");
-  $("jrPrompts").innerHTML=["ممنونم بابت: ","یه چیز خوب: ","چیزی که یاد گرفتم: ","چیزی که ذهنمو درگیر کرده: ","برای فردا: "].map(function(p){ return '<button type="button" data-p="'+p+'">'+p.replace(": ","")+'</button>'; }).join("");
+  $("jrPrompts").innerHTML=["ممنونم بابت: ","یه چیز خوب: ","چیزی که یاد گرفتم: ","چیزی که ذهنم رو درگیر کرده: ","برای فردا: "].map(function(p){ return '<button type="button" data-p="'+p+'">'+p.replace(": ","")+'</button>'; }).join("");
 }
 function fit(){ var ta=$("jrText"); ta.style.height="auto"; ta.style.height=Math.max(180,ta.scrollHeight+4)+"px"; }
 function cnt(){ $("jrCnt").textContent=faDigits($("jrText").value.length)+" کاراکتر"; }
@@ -7516,7 +7482,7 @@ function paint(){
   b.textContent=isOn?"خاموش کردن اعلان‌ها":"روشن کردن اعلان‌ها";
   if(!sup()) st.textContent="این مرورگر اعلان رو پشتیبانی نمی‌کنه.";
   else if(perm()==="denied") st.textContent="اعلان‌ها برای این اپ مسدوده. آیکون اپ رو روی صفحه‌ی گوشی نگه دار، «Site Settings» رو بزن و Notifications رو روی Allow بذار.";
-  else if(isIOS() && !standalone()) st.textContent="تو آیفون اول باید اپ رو با «Add to Home Screen» نصب کنی و از روی آیکونش باز کنی؛ بعد این‌جا اعلان‌ها رو روشن کن.";
+  else if(isIOS() && !standalone()) st.textContent="تو آیفون اول باید اپ رو با «Add to Home Screen» نصب کنی و از روی آیکونش باز کنی؛ بعد اینجا اعلان‌ها رو روشن کن.";
   else if(isOn) st.textContent="روشنه ✓ یادآوری‌هایی که ساعت دارن سر همون ساعت برات نوتیف می‌شن، حتی وقتی اپ بسته‌ست.";
   else st.textContent="با روشن کردنش، یادآوری‌هایی که ساعت دارن (مثلاً «ساعت ۸ دارو») سر همون ساعت برات نوتیف می‌شن، حتی وقتی اپ بسته‌ست.";
 }
@@ -7611,25 +7577,25 @@ window.lpPush={on:on,sync:sync,enable:enable,disable:disable,ask:enableAsk,perm:
 (function(){
 var T={
  fa:{
-  ask:{t:"اعلان‌هات رو روشن کنیم؟",s:"تا یادآوری‌ها و کارهات سر وقت برات بیاد؛ حتی وقتی اپ بسته‌ست. هر وقت خواستی می‌تونی خاموششون کنی.",yes:"روشن کن 🔔",no:"بعداً"},
+  ask:{t:"اعلان‌هات رو روشن کن",s:"بدون اعلان، یادآوری‌ها و کارهات سر وقت بهت نمی‌رسن؛ حتی وقتی اپ بسته‌ست. فقط یه لمس طول می‌کشه و هر وقت خواستی می‌تونی خاموشش کنی.",yes:"روشن کن 🔔",no:"الان نه"},
   busy:"یه لحظه…",
   done:{t:"اعلان‌ها روشن شد",s:"از این به بعد یادآوری‌هات سر ساعتش می‌رسه 💛"},
   denied:{t:"اعلان‌ها مسدوده‌ست",s:"برای روشن شدنش آیکون اپ رو روی صفحه‌ی گوشی نگه دار، «Site Settings» رو بزن و Notifications رو روی Allow بذار.",no:"باشه"},
-  later:{t:"اشکالی نداره",s:"هر وقت خواستی، از «تنظیمات» بخش «اعلان‌ها» رو باز کن و روشنشون کن.",no:"باشه"},
+  later:{t:"هنوز روشن نشد",s:"چند دقیقه‌ی دیگه دوباره یادت می‌ندازم؛ بدون اعلان، یادآوری‌هات سر ساعتش نمی‌رسه. اگه می‌خوای الان روشنش کنی، دوباره بزن.",yes:"روشن کن 🔔",no:"باشه"},
   fail:{t:"روشن نشد",s:"اینترنتت رو چک کن و دوباره امتحان کن.",yes:"تلاش دوباره",no:"بستن"}
  },
  en:{
-  ask:{t:"Turn on notifications?",s:"So your reminders and tasks reach you on time, even when the app is closed. You can switch them off anytime.",yes:"Turn on 🔔",no:"Not now"},
+  ask:{t:"Turn on your notifications",s:"Without them, your reminders and tasks won't reach you on time, even when the app is closed. It takes one tap, and you can switch them off anytime.",yes:"Turn on 🔔",no:"Not now"},
   busy:"One moment…",
   done:{t:"Notifications are on",s:"From now on your reminders will arrive right on time 💛"},
   denied:{t:"Notifications are blocked",s:"To turn them on, long-press the app icon, tap “Site settings” and set Notifications to Allow.",no:"Got it"},
-  later:{t:"No problem",s:"Whenever you like, open Settings and turn on “Notifications” there.",no:"Got it"},
+  later:{t:"Not turned on yet",s:"I'll remind you again in a few minutes; without notifications your reminders won't arrive on time. To turn them on now, tap again.",yes:"Turn on 🔔",no:"Got it"},
   fail:{t:"Couldn't turn them on",s:"Check your internet connection and try again.",yes:"Try again",no:"Close"}
  }
 };
 var POSE={ask:"wave",done:"claps",denied:"kind",later:"kind",fail:"worriedChin"};
 var LS_ON="lp-push-on", K_SESS="lp-np-sess", K_TS="lp-np-ts", K_DN="lp-np-dn";
-var root=null, busy=false, pushed=false, swallow=false, seenFlag=false, iv=null, since=0, closeT=0;
+var root=null, busy=false, pushed=false, swallow=false, nextAt=0, iv=null, since=0, closeT=0, REPEAT=4*60*1000;
 function P(){ return window.lpPush; }
 function B(){ return window.lpBridge; }
 function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){} return null; }
@@ -7656,7 +7622,7 @@ function want(){
   if(p.isIOS() && !installed()) return null;
   if(ls(LS_ON)==="0") return null;                          /* she switched them off herself in settings: don't nag */
   if(Date.now()-(+ls(K_TS)||0)<90000) return null;          /* just shown a moment ago (browser tab -> installed app) */
-  if(p.perm()==="denied") return (Date.now()-(+ls(K_DN)||0)>3*864e5)?"denied":null;
+  if(p.perm()==="denied") return "denied";
   if(navigator.onLine===false) return null;                 /* turning them on needs the internet */
   return "ask";
 }
@@ -7671,20 +7637,20 @@ function blocked(){
   if(!homeNow()) return true;
   return false;
 }
-function seen(){ return seenFlag || ss(K_SESS)==="1"; }
-function mark(){ seenFlag=true; ss(K_SESS,"1"); ls(K_TS,String(Date.now())); }
+function seen(){ return Date.now()<nextAt; }
+function mark(m){ nextAt=Date.now()+(m==="denied"?9e12:REPEAT); ls(K_TS,String(Date.now())); }   /* shown again a few minutes later (not for the "blocked" help) */
 function stop(){ if(iv){ clearInterval(iv); iv=null; } }
 function tick(){
   if(root) return;
-  if(seen()){ stop(); return; }
   var p=P(); if(p && p.sup() && p.on()){ stop(); return; }
+  if(seen()){ since=0; return; }
   var m=want();
   if(!m || blocked()){ since=0; return; }
   if(!since){ since=Date.now(); return; }
   if(Date.now()-since<2200) return;                         /* let the opening animation and Home settle first */
   open(m);
 }
-function start(){ if(!iv && !seen()) iv=setInterval(tick,1000); }
+function start(){ if(!iv) iv=setInterval(tick,1000); }
 
 function paintView(v){
   var L=T[lang()], c=L[v], img=root.querySelector("#npImg"), src=pose(POSE[v]);
@@ -7697,7 +7663,7 @@ function paintView(v){
 }
 function open(m){
   if(root) return;
-  mark(); if(m==="denied") ls(K_DN,String(Date.now()));
+  mark(m); if(m==="denied") ls(K_DN,String(Date.now()));
   root=document.createElement("div"); root.id="lpNp"; root.dir=lang()==="en"?"ltr":"rtl";
   root.setAttribute("role","dialog"); root.setAttribute("aria-modal","true"); root.setAttribute("aria-labelledby","npT");
   root.innerHTML='<div class="np-bd"></div><div class="np-card"><div class="np-av"><img id="npImg" alt=""></div><h2 id="npT"></h2><p id="npS"></p><div class="np-acts" id="npA"></div></div>';
@@ -7746,7 +7712,7 @@ window.lpNp={want:want,open:open,close:close,installed:installed};
 /* ===== Reminders section: choose the text, date and time yourself ===== */
 (function(){
 function $(id){ return document.getElementById(id); }
-var BELL='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17h12l-1.6-2.3V10.5a4.4 4.4 0 0 0-8.8 0v4.2L6 17z"/><path d="M10 19.5a2.1 2.1 0 0 0 4 0"/></svg>';
+var BELL=(window.LP_NEW_ICONS&&window.LP_NEW_ICONS.notify)?'<img class="st-icon" alt="" src="'+window.LP_NEW_ICONS.notify+'">':'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 17h12l-1.6-2.3V10.5a4.4 4.4 0 0 0-8.8 0v4.2L6 17z"/><path d="M10 19.5a2.1 2.1 0 0 0 4 0"/></svg>';
 var PEN='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4.2-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20z"/></svg>';
 var BIN='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></svg>';
 var WD=[["ش",6],["ی",0],["د",1],["س",2],["چ",3],["پ",4],["ج",5]];
@@ -8113,7 +8079,7 @@ function render(){
   var cap=EN[en||"mid"].n, tog=focusList(cap);
   var fdone=tog.filter(function(h){ return isDone(h,day,td); }).length, pose=poseFor(s,fdone,tog.length), av=avatar(pose), changed=(pose!==lastPose); lastPose=pose;
   var html='<div class="hm-card hm-liana"><div class="hm-top"><div class="hm-lia">'+(av?'<img'+(changed?' class="swap"':'')+' data-pose="'+pose+'" alt="" src="'+av+'">':'<span>💛</span>')+'</div><div class="hm-bub">'+esc(lianaLine(s,fdone,tog.length))+'</div></div>'+
-    '<div class="hm-q">انرژیت امروز چقدره؟'+(en?' <small class="hm-eh">(دوباره بزن تا لغو شود)</small>':'')+'</div><div class="hm-en">'+
+    '<div class="hm-q">انرژیت امروز چقدره؟'+(en?' <small class="hm-eh">(دوباره بزن تا لغو بشه)</small>':'')+'</div><div class="hm-en">'+
     ["low","mid","high"].map(function(k){ return '<button type="button" class="hm-e'+(en===k?' on':'')+'" data-en="'+k+'">'+battery(EN[k].bars)+'<span>'+EN[k].l+'</span></button>'; }).join("")+'</div></div>';
   if(tog.length||getHabits().some(function(h){return h.id==="water";})){
     var pct=tog.length?Math.round(fdone/tog.length*100):0, wh=getHabits().filter(function(h){return h.id==="water";})[0];
@@ -8128,7 +8094,7 @@ function render(){
       if(dd>td) cls="future"; else if(key===toDateKey(td)) cls=i.ok?"ok":"today"; else cls=s.map[key]||((s.firstOk&&key>=s.firstOk)?"miss":"none");
       dots+='<div class="hm-d '+cls+'"><span>'+(cls==="ok"?'✓':(cls==="rest"?'☾':''))+'</span><em>'+WD[k]+'</em></div>';
     }
-    var sub=s.n===0?"یه شروع تازه؟ امروز اولین حلقه‌ی زنجیره‌ات رو ببند 🌱":(s.rest?"این هفته یه روز استراحت داشتی و زنجیره نشکست 💛":"هر هفته یه روز استراحت رایگان داری؛ یه روز جا‌افتادن زنجیره‌ات رو نمی‌شکنه 🛡️");
+    var sub=s.n===0?"یه شروع تازه؟ امروز اولین حلقه‌ی زنجیره‌ات رو ببند 🌱":(s.rest?"این هفته یه روز استراحت داشتی و زنجیره نشکست 💛":"هر هفته یه روز استراحت رایگان داری؛ یه روز جا افتادن زنجیره‌ات رو نمی‌شکنه 🛡️");
     if(s.n>0 && !i.ok) sub="امروز رو هم ببندی می‌شه "+fdg(s.n+1)+" روز 🔥";
     html+='<div class="hm-card hm-streak"><div class="hm-sr"><div class="hm-fl"><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M12 1c1 5 7 8 7 15a7 7 0 0 1-14 0c0-3 1.5-5 3-6.500.3 2 1 3 2 3.500C10 9 11 5 12 1z" fill="url(#hmFlame)"/><defs><linearGradient id="hmFlame" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff7a45"/><stop offset="1" stop-color="#ffd23f"/></linearGradient></defs></svg></div><div class="hm-sn"><b>'+fdg(s.n)+' روز پشت هم</b><span>رکورد: '+fdg(Math.max(s.best,s.n))+' روز</span></div></div><div class="hm-wk">'+dots+'</div><p class="hm-note">'+sub+'</p></div>';
   }
@@ -8513,7 +8479,7 @@ setTimeout(function(){
     }
     var main=cat.all.filter(function(c){ return !cat.isPd(c.getAttribute('data-cid')); }), pd=cat.hidePd?[]:cat.all.filter(function(c){ return cat.isPd(c.getAttribute('data-cid')); });
     el.innerHTML='<div class="fp-ov"></div><div class="fp-box" role="dialog" aria-modal="true"><div class="sheet-head"><h2>کارت‌های امروز</h2><button type="button" class="fp-x" aria-label="بستن">✕</button></div>'+
-      '<p class="fp-hint">کارت‌های تیک‌دار امروز توی کاروسل نشون داده می‌شن. هر کدوم رو نمی‌خوای تیکش رو بردار، یا یه کارت دیگه رو تیک بزن تا جاش بیاد. این انتخاب فقط برای امروزه و فردا دوباره خودکار عوض می‌شه.</p>'+
+      '<p class="fp-hint">کارت‌های تیک‌دار امروز توی کاروسل نشون داده می‌شن. هر کدوم رو نمی‌خوای، تیکش رو بردار، یا یه کارت دیگه رو تیک بزن تا جاش بیاد. این انتخاب فقط برای امروزه و فردا دوباره خودکار عوض می‌شه.</p>'+
       '<div class="cpk-grid">'+main.map(item).join('')+'</div>'+
       (pd.length?'<div class="cpk-sec">کارت‌های پریود</div><div class="cpk-grid">'+pd.map(item).join('')+'</div>':'')+
       '<div class="fp-act"><button type="button" class="fp-auto">انتخاب خودکار</button><button type="button" class="fp-ok">ذخیره</button></div></div>';
@@ -8586,7 +8552,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
    {id:"body-scan",en:"Seated Body Scan Meditation",fa:"اسکن بدن",g:"breath",sec:60,desc:"چشم‌ها را ببند. توجه‌ات را از سر تا پا ببر و هر جا که سفت بود، با بازدم شلش کن."},
    {id:"mountain",en:"Mountain Pose (Tadasana)",fa:"حالت کوه",g:"breath",sec:30,desc:"صاف بایست، کف پاها محکم روی زمین، شانه‌ها شل. چند نفس آرام بکش و قدت را بلند حس کن."},
    // --- neck, shoulders, arms ---
-   {id:"neck-side-stretch",en:"Seated Neck Side Stretch",fa:"کشش گردن به طرفین",g:"upper",sec:30,desc:"صاف بنشین. گوش را به سمت شانه ببر، هر طرف ۱۵ ثانیه. شانهٔ مقابل را پایین نگه دار."},
+   {id:"neck-side-stretch",en:"Seated Neck Side Stretch",fa:"کشش گردن به طرفین",g:"upper",sec:30,desc:"صاف بنشین. گوش را به سمت شانه ببر، هر طرف ۱۵ ثانیه. شانه‌ی مقابل را پایین نگه دار."},
    {id:"neck-rolls",en:"Gentle Neck Rolls",fa:"چرخش آرام گردن",g:"upper",sec:30,desc:"چانه را به سینه نزدیک کن و گردن را خیلی آرام و با دایره‌های کوچک بچرخان. نیمی از زمان یک طرف، نیمی طرف دیگر."},
    {id:"shoulder-rolls",en:"Shoulder Rolls",fa:"چرخش شانه‌ها",g:"upper",sec:30,desc:"شانه‌ها را بالا بیاور، به عقب بچرخان و پایین بده. بعد همین را رو به جلو انجام بده."},
    {id:"clasped-hands-back",en:"Standing Clasped Hands Behind Back Stretch",fa:"دست‌های قفل پشت کمر",g:"upper",sec:30,desc:"دست‌ها را پشت کمر قفل کن، سینه را باز کن و دست‌ها را کمی از بدن دور کن. نفس عمیق بکش."},
@@ -8611,7 +8577,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
    {id:"happy-baby",en:"Happy Baby Pose (Ananda Balasana)",fa:"نوزاد شاد",g:"legs",sec:45,desc:"به پشت بخواب، پاها را از کنار بگیر و آرام به طرفین تکان بخور."},
    {id:"low-lunge",en:"Low Lunge (Anjaneyasana)",fa:"کشش ران جلو",g:"legs",sec:30,desc:"یک زانو روی زمین، پای دیگر جلو. باسن را آرام به جلو بده تا جلوی ران کشیده شود. هر طرف ۱۵ ثانیه."},
    // --- final relaxation ---
-   {id:"savasana",en:"Corpse Pose (Savasana)",fa:"شل‌سازی کامل",g:"relax",sec:90,desc:"به پشت بخواب، دست‌ها و پاها شل، چشم‌ها بسته. همهٔ بدن را به زمین بسپار و فقط نفس بکش."}
+   {id:"savasana",en:"Corpse Pose (Savasana)",fa:"شل‌سازی کامل",g:"relax",sec:90,desc:"به پشت بخواب، دست‌ها و پاها شل، چشم‌ها بسته. همه‌ی بدن را به زمین بسپار و فقط نفس بکش."}
   ];
   var BY={}; P.forEach(function(p){ BY[p.id]=p; });
 
@@ -8695,7 +8661,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
    {id:"rain",fa:"باران",ic:"🌧️",c:"n"},{id:"thunder",fa:"رعد",ic:"⛈️",c:"n"},{id:"waves",fa:"موج دریا",ic:"🌊",c:"n"},{id:"forest",fa:"جنگل",ic:"🌲",c:"n"},
    {id:"wind",fa:"باد",ic:"🍃",c:"n"},{id:"stream",fa:"رود",ic:"💧",c:"n"},{id:"fire",fa:"آتش",ic:"🔥",c:"n"},{id:"crickets",fa:"جیرجیرک",ic:"🦗",c:"n"},
    {id:"purr",fa:"خرخر گربه",ic:"🐱",c:"h"},{id:"heartbeat",fa:"ضربان قلب",ic:"🫀",c:"h"},{id:"train",fa:"قطار",ic:"🚆",c:"h"},{id:"cafe",fa:"کافه",ic:"☕",c:"h"},
-   {id:"white",fa:"نویز سفید",ic:"⚪",c:"z"},{id:"brown",fa:"نویز قهوه‌ای",ic:"🟤",c:"z"},{id:"bowl",fa:"کاسهٔ تبتی",ic:"🔔",c:"z"}
+   {id:"white",fa:"نویز سفید",ic:"⚪",c:"z"},{id:"brown",fa:"نویز قهوه‌ای",ic:"🟤",c:"z"},{id:"bowl",fa:"کاسه‌ی تبتی",ic:"🔔",c:"z"}
   ];
   var CATS={n:"طبیعت",h:"خانه و محیط",z:"نویز و آرامش"};
   var BUILT=[
@@ -8758,7 +8724,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
     if(ids.length) h+='<div class="sm-save"><input type="text" class="sm-nm" placeholder="اسم این ترکیب…" maxlength="24"><button type="button" data-x="save">ذخیره</button></div>';
     Object.keys(CATS).forEach(function(c){ h+='<div class="sm-t">'+CATS[c]+'</div><div class="sm-grid">'+SOUNDS.filter(function(s){ return s.c===c; }).map(function(s){ return '<button type="button" class="sm-tile'+(m.sounds[s.id]?' on':'')+(bad[s.id]?' miss':'')+'" data-t="'+s.id+'"><em>'+s.ic+'</em>'+s.fa+(bad[s.id]?'<small>فایل نیست</small>':'')+'</button>'; }).join('')+'</div>'; });
     h+='<div class="sm-t">خاموش شدن خودکار</div><div class="sm-pre">'+[[0,'خاموش'],[15,fd(15)+' دقیقه'],[30,fd(30)+' دقیقه'],[60,fd(60)+' دقیقه']].map(function(o){ var on=(o[0]===0&&!offAt)||(offAt&&o[0]&&Math.abs((offAt-Date.now())/60000-o[0])<o[0]); return '<button type="button" data-o="'+o[0]+'"'+((o[0]===0&&!offAt)?' class="on"':'')+'>'+o[1]+'</button>'; }).join('')+'</div>';
-    h+='<div class="sm-sw"><span>با شروع و توقف تایمر، صدا هم شروع و متوقف شود</span><button type="button" data-x="sync" class="'+(m.sync?'on':'')+'"></button></div>';
+    h+='<div class="sm-sw"><span>با شروع و توقف تایمر، صدا هم شروع و متوقف بشه</span><button type="button" data-x="sync" class="'+(m.sync?'on':'')+'"></button></div>';
     box.innerHTML=h; box.scrollTop=top;
   }
   function openSheet(){
@@ -8962,7 +8928,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
   function rb(){
     if(!bank) return; var box=bank.querySelector(".fp-box"), top=box.scrollTop, pos={}, h;
     plIds().forEach(function(id,i){ pos[id]=i+1; });
-    h='<div class="sm-h"><span>بانک حرکات یوگا</span><button type="button" class="sm-x" data-b="x">✕</button></div><p class="yb-hint">روی هر حرکت بزن تا به برنامه‌ی امروز اضافه یا از آن حذف شود. شماره‌ها ترتیب حرکت‌ها هستند.</p>';
+    h='<div class="sm-h"><span>بانک حرکات یوگا</span><button type="button" class="sm-x" data-b="x">✕</button></div><p class="yb-hint">روی هر حرکت بزن تا به برنامه‌ی امروز اضافه یا از اون حذف بشه. شماره‌ها ترتیب حرکت‌ها هستن.</p>';
     Y.groups.forEach(function(g){
       var ps=Y.poses.filter(function(p){ return p.g===g[0]; }); if(!ps.length) return;
       h+='<div class="yb-t">'+g[1]+'</div>'+ps.map(function(p){ var n=pos[p.id];
@@ -9184,7 +9150,7 @@ body.lp-onb-open>*:not(#lpOnb){visibility:hidden}
 (function(){
 var B=function(){return window.lpBridge},S=function(){return B().state};
 var L={
-fa:{of:"از",t0:"به لیانا پلنر خوش اومدی",s0:"عادت‌های روزانه‌ات، زیبا و مرتب",n0:"سلام، خوش اومدی! من لیانام، دستیار تو و کنارتم تا عادت‌هات رو راحت‌تر بسازی و دنبال کنی.",t1:"دربارهٔ خودت بگو",s1:"این به شخصی‌سازی تجربهٔ تو کمک می‌کنه",name:"اسمت",age:"سن",gender:"جنسیت",f:"زن",m:"مرد",h:"قد (سانتی‌متر)",w:"وزن (کیلوگرم)",t2:"هدف‌های اصلیت چیه؟",s2:"اون‌چه برات مهم‌تره رو انتخاب کن",habits:"عادت‌های بهتر",fitness:"تناسب اندام",eat:"تغذیهٔ سالم‌تر",stress:"کاهش استرس",learn:"یادگیری و رشد",sleep:"خواب بهتر",t3:"از پسش برمیای!",s3:"قدم‌های کوچیک امروز، تغییرهای بزرگ فردا",n3:"خیلی خوشحالیم که توی این مسیر همراهتیم!",n3b:"حالا بریم سراغ لیانا پلنر و روز اولت.",next:"بعدی",skip:"رد کردن",go:"بزن بریم 🚀"},
+fa:{of:"از",t0:"به لیانا پلنر خوش اومدی",s0:"عادت‌های روزانه‌ات، زیبا و مرتب",n0:"سلام، خوش اومدی! من لیانام، دستیار تو و کنارتم تا عادت‌هات رو راحت‌تر بسازی و دنبال کنی.",t1:"درباره‌ی خودت بگو",s1:"این به شخصی‌سازی تجربه‌ی تو کمک می‌کنه",name:"اسمت",age:"سن",gender:"جنسیت",f:"زن",m:"مرد",h:"قد (سانتی‌متر)",w:"وزن (کیلوگرم)",t2:"هدف‌های اصلیت چیه؟",s2:"چیزی که برات مهم‌تره رو انتخاب کن",habits:"عادت‌های بهتر",fitness:"تناسب اندام",eat:"تغذیه‌ی سالم‌تر",stress:"کاهش استرس",learn:"یادگیری و رشد",sleep:"خواب بهتر",t3:"از پسش برمی‌آی!",s3:"قدم‌های کوچیک امروز، تغییرهای بزرگ فردا",n3:"خیلی خوشحالیم که توی این مسیر همراهتیم!",n3b:"حالا بریم سراغ لیانا پلنر و روز اولت.",next:"بعدی",skip:"رد کردن",go:"بزن بریم 🚀"},
 en:{of:"of",t0:"Welcome to Liana Planner",s0:"Your daily habits, beautifully organized.",n0:"Hi, welcome! I'm Liana, your assistant, here to help you build and track your habits.",t1:"Tell us about you",s1:"This helps us personalize your experience.",name:"Your name",age:"Age",gender:"Gender",f:"Female",m:"Male",h:"Height (cm)",w:"Weight (kg)",t2:"What are your main goals?",s2:"Choose what matters most to you.",habits:"Build better habits",fitness:"Improve fitness",eat:"Eat healthier",stress:"Reduce stress",learn:"Learn & grow",sleep:"Sleep better",t3:"You've got this!",s3:"Small steps today, big changes tomorrow.",n3:"We're so excited to be on this journey with you!",n3b:"Now let's open your Liana Planner.",next:"Next",skip:"Skip",go:"Let's Go! 🚀"}};
 var G=[["habits","🎯"],["fitness","💪"],["eat","🥗"],["stress","🧠"],["learn","📚"],["sleep","🌙"]];
 var GI={habits:LP_A[64],fitness:LP_A[65],eat:LP_A[66],stress:LP_A[67],learn:LP_A[68],sleep:LP_A[69]};
@@ -9319,7 +9285,7 @@ function onClick(e){var b=e.target.closest("button");if(!b)return;var a=b.getAtt
  else if(a==="copy")copy();
  else if(a==="retry")loadCode();
  else if(a==="tab"){tab=b.getAttribute("data-t");render()}
- else if(a==="send"){if(V.email.indexOf("@")<1)return msg(ERR.invalid);call("/api/forgot",{email:V.email},function(){msg("اگه این ایمیل حساب داشته باشه، لینک تغییر رمز تا چند دقیقه دیگه می‌رسه. پوشهٔ اسپم رو هم نگاه کن 💌",true)})}
+ else if(a==="send"){if(V.email.indexOf("@")<1)return msg(ERR.invalid);call("/api/forgot",{email:V.email},function(){msg("اگه این ایمیل حساب داشته باشه، لینک تغییر رمز تا چند دقیقه دیگه می‌رسه. پوشه‌ی اسپم رو هم نگاه کن 💌",true)})}
  else if(a==="codeReset"){if(V.email.indexOf("@")<1||V.code.length<19||V.pw.length<6)return msg(ERR.invalid);call("/api/reset-with-code",{email:V.email,code:V.code,password:V.pw},login)}
  else if(a==="doReset"){if(V.pw.length<6)return msg(ERR.invalid);if(V.pw!==V.pw2)return msg("دو رمز با هم یکی نیستن.");call("/api/reset",{token:V.token,password:V.pw},login)}}
 window.lpRcMaybe=function(){try{var b=B();if(!b.token()||b.offline())return;if(ls("lp-rc-ack:"+b.email()))return;if(document.getElementById("lpOnb")||document.getElementById("lpPg"))return;open("rc",{first:true})}catch(e){}};
@@ -10100,7 +10066,7 @@ function saveSetup(){
   if(dn(tk)-dn(k)>730){ setupErr="تاریخ خیلی قدیمیه؛ تاریخ آخرین پریودت رو وارد کن."; render(); return; }
   setupErr=""; p.cl=sd.cl; p.pl=sd.pl; p.setupDone=true;
   for(var i=0;i<sd.pl;i++){ var dk=addK(k,i); if(dn(dk)>dn(tk)) break; (function(dk){ pd.mut(dk,function(r){ if(!(r.f>0)) r.f=6; }); })(dk); }
-  U.sv(); sd=null; view="main"; tab="cycle"; render(); $("pdModal").scrollTop=0; toast("ذخیره شد. هر چی بیشتر ثبت کنی، پیش‌بینی بهتر می‌شه");
+  U.sv(); sd=null; view="main"; tab="cycle"; render(); $("pdModal").scrollTop=0; toast("ذخیره شد. هرچی بیشتر ثبت کنی، پیش‌بینی بهتر می‌شه");
 }
 function init(){
   if(!$("pdModal")) return;
