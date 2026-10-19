@@ -4,6 +4,267 @@
 <meta charset="UTF-8">
 <style id="lp-pre">html{background:#17212A}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, interactive-widget=resizes-content">
+<script id="lp-deskfix">
+/* Desktop-site fix: some phones open the page as a "Desktop site" (~980px wide layout) and the app
+   becomes a tiny column. Detect that and scale the whole app so it fills the screen like on a normal phone.
+   Normal phones, tablets and real computers are left untouched. */
+(function(){
+  var d=document.documentElement;
+  function calc(){
+    try{
+      var iw=window.innerWidth||d.clientWidth||0;
+      var land=window.matchMedia&&window.matchMedia("(orientation:landscape)").matches;
+      var a=screen.width||0,b=screen.height||0;
+      var sw=land?Math.max(a,b):Math.min(a,b);
+      var touch=(navigator.maxTouchPoints>0)||("ontouchstart" in window);
+      var z=1;
+      if(touch&&iw>=640){
+        if(sw>0&&sw<=700&&iw>=sw*1.3){ z=iw/sw; }
+        else{
+          var vv=window.visualViewport;
+          if(vv&&vv.scale&&vv.scale<0.85){ z=1/vv.scale; }
+        }
+      }
+      if(z<1.3) z=1;
+      if(z>3.5) z=3.5;
+      z=Math.round(z*1000)/1000;
+      if(window.__lpZoom===z) return;
+      window.__lpZoom=z;
+      if(z>1){ d.style.zoom=String(z); d.style.setProperty("--lp-z",String(z)); d.classList.add("lp-deskfix"); }
+      else{ d.style.zoom=""; d.style.removeProperty("--lp-z"); d.classList.remove("lp-deskfix"); }
+    }catch(e){}
+  }
+  window.__lpZoom=1;
+  calc();
+  window.addEventListener("load",calc);
+  window.addEventListener("orientationchange",function(){setTimeout(calc,250);});
+  var t=0;
+  window.addEventListener("resize",function(){clearTimeout(t);t=setTimeout(calc,150);});
+})();
+</script>
+<script id="lp-i18n-data">window.__LP_EN={"d":{"بعضی بخش‌های برنامه ساخته نشد. اگه این پیام رو می‌بینی، عکسش رو برای من بفرست":"Some parts of the app failed to load. If you see this message, send me a screenshot","برای بستن، لمس کن":"Tap to close","تلاش دوباره":"Try again","ادامه بدون اتصال":"Continue offline","وارد شو تا اطلاعاتت همیشه ذخیره بمونه":"Log in so your data is always saved","ایمیل":"Email","رمز عبور":"Password","حداقل ۶ کاراکتر":"At least 6 characters","ورود":"Log in","حساب نداری؟ ثبت‌نام کن":"Don't have an account? Sign up","رمزم رو فراموش کردم":"I forgot my password","تنظیمات":"Settings","تقویم":"Calendar","عادت‌های امروز":"Today's habits","یه نگاه بنداز، چندتاشون مونده؟":"Take a look, how many are left?","امروز آب خوردی؟":"Did you drink water today?","یه لیوان بخور و تیکش بزن":"Drink a glass and tick it off","دیشب چقدر خوابیدی؟":"How long did you sleep last night?","ساعت خوابت رو بنویس":"Write down your sleep time","قرص و داروهات":"Your pills and medicine","ببین امروز چیزی جا نمونده":"Check that nothing was missed today","قدم‌های امروز":"Today's steps","چند قدم راه رفتی؟":"How many steps did you walk?","مطالعه‌ی امروز":"Today's reading","چند صفحه خوندی؟":"How many pages did you read?","بیا باهام درد و دل کن":"Come chat with me","لیانا همیشه گوش می‌ده":"Liana is always listening","دلت یه همدم می‌خواد؟":"Want a companion?","هرچی تو دلته، بهم بگو":"Tell me whatever's on your mind","من دستیار هوش مصنوعی توام":"I'm your AI assistant","هرچی خواستی ازم بپرس":"Ask me anything you like","یوگا و کشش":"Yoga & stretching","چند دقیقه برای آرامش":"A few minutes of calm","چالش حذف قند":"No-sugar challenge","امروز هم قوی بودی؟":"Were you strong today too?","تغذیه سالم":"Healthy eating","چی خوردی؟ ثبتش کن":"What did you eat? Log it","تمرین امروز":"Today's workout","برنامه‌ی ورزشی‌ات رو باز کن":"Open your workout plan","ورزش امروز":"Today's exercise","هر قدمی که برداری ارزش داره":"Every step you take counts","کالری امروز":"Today's calories","ببین امروز چقدر خوردی":"See how much you've eaten today","وزنت رو ثبت کنیم؟":"Shall we log your weight?","بدون استرس، هر وقت آماده‌ای":"No stress, whenever you're ready","وزن امروزت":"Today's weight","بدون قضاوت، فقط برای خودت":"No judgment, just for you","مسیر تغییرات بدن":"Body change journey","تغییرات کوچیک هم ارزش داره":"Small changes count too","ببینیم تا اینجا چقدر اومدی":"Let's see how far you've come","پیشرفت این هفته":"This week's progress","ببین چقدر خوب پیش رفتی":"See how well you're doing","گزارش ماهانه و سالانه":"Monthly & yearly report","همه‌ی عادت‌هات یک‌جا":"All your habits in one place","تقویم و برنامه‌ی هفته‌ها":"Calendar & weekly plans","هر هفته یا هر روز رو باز کن":"Open any week or day","پریود ترکر":"Period tracker","پیش‌بینی پریود و گزارش پزشک":"Period predictions & doctor report","یه چای گرم و کمی استراحت":"A warm tea and some rest","امروز به خودت مهربون‌تر باش":"Be kinder to yourself today","بدنت داره کار مهمی می‌کنه":"Your body is doing important work","کمی بهش محبت کن":"Show it a little love","برای این روزها آماده باش":"Get ready for these days","ملزوماتت رو دم‌دست بذار":"Keep your essentials within reach","یه کیسه‌ی آب گرم کنارت باشه":"Keep a hot water bottle nearby","آب خوردن و استراحت هم یادت نره":"Don't forget to drink water and rest","بدنت رو بیشتر بشناس":"Get to know your body better","گزارش و آمار پریودت رو ببین":"See your period report and stats","زمان مراقبت از خودته":"Time to take care of yourself","امروز آروم و مهربون باش":"Be calm and kind today","امشب آروم بخواب":"Sleep well tonight","تو لایق آرامش و استراحتی":"You deserve peace and rest","انتخاب کارت‌های امروز":"Choose today's cards","کارت‌ها":"Cards","برنامه امروز":"Today's plan","عادت‌های هفته":"Weekly habits","گزارش کلی":"Overall report","نمودار هفتگی":"Weekly chart","ردیاب عادت‌های هفته":"Weekly habit tracker","روی هر عادت بزن تا گزارش ماهانه و سالانه‌ش باز بشه":"Tap a habit to open its monthly and yearly report","گزارش کلی همه‌ی عادت‌ها":"Overall report for all habits","گزارش ماهانه":"Monthly report","روند همه‌ی عادت‌هات تو این ماه":"The trend of all your habits this month","گزارش سالانه":"Yearly report","نگاه کلی به یه سال کامل":"An overview of a whole year","نمودار پیشرفت هفتگی":"Weekly progress chart","فیتنس و تغذیه":"Fitness & nutrition","برنامه‌ی ورزشی، برنامه‌ی تغذیه و ابزارهای بدنت اینجا جمع می‌شه":"Your workout plan, meal plan and body tools all live here","برنامه‌ی ورزشی":"Workout plan","برنامه‌ی هفتگی تمرین‌هات و ثبت هر جلسه":"Your weekly training plan and logging each session","برنامه‌ی تغذیه":"Meal plan","وعده‌های روزانه و برنامه‌ی غذایی":"Daily meals and your eating plan","کالری روزانه":"Daily calories","کالری موردنیازت و کسری کالری برای کاهش وزن":"Your calorie needs and the calorie deficit for weight loss","بانک حرکات ورزشی":"Exercise bank","آموزش و انیمیشن حرکات بدنسازی":"Tutorials and animations for gym exercises","وزن و اندازه‌ها":"Weight & measurements","وزن، دور شکم، بازو، ران، باسن، سینه و مسیر تغییرات بدن":"Weight, waist, arm, thigh, hips, chest and your body change journey","ثبت کن":"Log it","تایمر":"Timer","یوگا":"Yoga","ماه قبل":"Previous month","ماه بعد":"Next month","تکونش بده":"Shake it","روز قبل":"Previous day","روز بعد":"Next day","هرچی تو دلته بنویس؛ خاطره، فکر، یه جمله‌ی کوتاه":"Write whatever's on your mind: a memory, a thought, a short sentence","یادداشت‌های قبلی":"Previous notes","جستجو توی یادداشت‌ها":"Search notes","ساخته‌شده توسط":"Made by","بستن":"Close","سال قبل":"Previous year","سال بعد":"Next year","یادآورها":"Reminders","یادآور جدید":"New reminder","متن یادآور":"Reminder text","مثلاً: قرص‌هام رو بخورم":"e.g. take my pills","تکرار":"Repeat","یک بار":"Once","هر روز":"Every day","روزهای هفته":"Weekdays","یه روز در میون":"Every other day","هر بار که اپ رو باز کردم":"Every time I open the app","تاریخ":"Date","امروز":"Today","فردا":"Tomorrow","پس‌فردا":"Day after tomorrow","تاریخ دیگه":"Another date","روز":"Day","ماه":"Month","سال":"Year","روزها":"Days","ساعت":"Time","ذخیره":"Save","انصراف":"Cancel","وزن (کیلوگرم":"Weight (kg","دور شکم":"Waist","دور بازو":"Arm","دور ران":"Thigh","دور باسن":"Hips","دور سینه":"Chest","شمسی":"Jalali","میلادی":"Gregorian","روزهای پریود":"Period days","روی هر روز بزن تا برنامه‌ی همون روز باز بشه":"Tap a day to open that day's plan","نقطه‌ی زیر تاریخ یعنی اون روز فعالیتی ثبت شده":"A dot under the date means an activity was logged that day","برو به امروز":"Go to today","برنامه‌ی هفته":"Week plan","ردیاب و نمودار این هفته":"This week's tracker and chart","روشن / تیره":"Light / Dark","تم (رنگ، پس‌زمینه، سبک، فونت":"Theme (color, background, style, font","پالت رنگی":"Color palette","حالت تک‌رنگ (به‌جای سفید، همه‌چیز از رنگ خودش":"Single-color mode (everything uses its own color instead of white","سبک تم":"Theme style","ساده":"Simple","شیشه‌ای":"Glass","فونت":"Font","شخصی‌سازی عادت‌ها (افزودن، حذف، ویرایش":"Customize habits (add, remove, edit","پروفایل سلامت (برای محاسبه":"Health profile (for calculating","قد (سانتی‌متر":"Height (cm","کالری هر ۱۰۰۰ قدم در اپ قدم‌شمارت (اختیاری":"Calories per 1,000 steps in your pedometer app (optional","ثبت وزن":"Log weight","وزن روزانه":"Daily weight","وزن هفتگی":"Weekly weight","مسواک زدن":"Brushing teeth","صبح":"Morning","ظهر":"Noon","شب":"Night","چالش قند":"Sugar challenge","حذف کامل قند":"Quit sugar completely","حذف تدریجی قند":"Cut sugar gradually","سقف روزانه (تعداد وعده یا تکه‌ی قند":"Daily limit (number of servings or sugar cubes","پشتیبان‌گیری":"Backup","دانلود فایل":"Download file","ارسال به Drive، تلگرام":"Send to Drive, Telegram","بازیابی از فایل":"Restore from file","بک‌آپ خودکار هفتگی: هر هفته که سایت رو باز کنی، خودش فایل پشتیبان رو ذخیره می‌کنه":"Weekly auto-backup: every week you open the site, it saves a backup file by itself","اعلان‌ها":"Notifications","روشن کردن اعلان‌ها":"Turn on notifications","اعلان آزمایشی":"Test notification","ارسال اعلان به بقیه":"Send notification to others","آب بخور":"Drink water","چالش ۲ دقیقه‌ای":"2-minute challenge","قابلیت جدید":"New feature","عنوان اعلان":"Notification title","متن اعلان (حداکثر دو خط":"Notification text (max two lines","ارسال به همه":"Send to everyone","فقط برای خودم (آزمایشی":"Only for me (test","زبان":"Language","دیدن دوباره‌ی آنبوردینگ":"Replay onboarding","کد بازیابی حساب":"Account recovery code","اگه رمزت یادت رفت، با این کد رمز جدید می‌سازی. همیشه همینه و عوض نمی‌شه":"If you forget your password, you can create a new one with this code. It's always the same and never changes","نمایش کد بازیابی":"Show recovery code","حساب کاربری":"Account","نام نمایشی":"Display name","مثلاً لیانا":"e.g. Liana","خروج از حساب":"Log out","برگشت":"Back","سابقه‌ی محاسبه‌ها":"Calculation history","جنسیت":"Gender","زن":"Female","مرد":"Male","سن":"Age","سانتی‌متر":"cm","کیلوگرم":"kg","میزان فعالیت":"Activity level","هدف تو":"Your goal","محاسبه":"Calculate","کم‌تحرک هستم (ورزش نمی‌کنم یا خیلی کم":"Sedentary (little or no exercise","کمی فعالیت می‌کنم (ورزش سبک ۱ تا ۳ روز در هفته":"Lightly active (light exercise 1–3 days a week","نسبتاً فعال هستم (ورزش متوسط ۳ تا ۵ روز در هفته":"Moderately active (moderate exercise 3–5 days a week","خیلی فعال هستم (ورزش سنگین ۶ تا ۷ روز در هفته":"Very active (hard exercise 6–7 days a week","فوق‌العاده فعال هستم (تمرین خیلی سخت یا کار فیزیکی":"Extremely active (very hard training or a physical job","حفظ وزن و عضلات":"Maintain weight and muscle","کاهش وزن خفیف ۰٫۲۵ کیلو در هفته":"Mild weight loss 0.25 kg per week","کاهش وزن ۰٫۵ کیلو در هفته":"Weight loss 0.5 kg per week","کاهش شدید وزن ۱ کیلو در هفته":"Aggressive weight loss 1 kg per week","افزایش وزن خفیف ۰٫۲۵ کیلو در هفته":"Mild weight gain 0.25 kg per week","افزایش وزن ۰٫۵ کیلو در هفته":"Weight gain 0.5 kg per week","افزایش سریع وزن ۱ کیلو در هفته":"Fast weight gain 1 kg per week","سنت رو درست وارد کن (بین ۱۰ تا ۱۰۰ سال":"Enter your age correctly (between 10 and 100 years","قدت رو به سانتی‌متر وارد کن (مثلاً ۱۶۵":"Enter your height in centimeters (e.g. 165","وزنت رو به کیلوگرم وارد کن (مثلاً ۶۰":"Enter your weight in kilograms (e.g. 60","برای زیر ۱۸ سال":"For under 18","بدن تو هنوز در حال رشده؛ برای همین اینجا فقط نیاز روزانه‌ی «حفظ وزن» نشون داده می‌شه و کم یا زیاد کردن وزن پیشنهاد نمی‌شه. این عددها هم تقریبی‌ان؛ اگه نگران وزنت هستی، حتماً با پزشک یا متخصص تغذیه حرف بزن":"Your body is still growing, so only your daily \"maintain weight\" need is shown here and losing or gaining weight isn't suggested. These numbers are approximate too; if you're worried about your weight, please talk to a doctor or nutritionist","هشدار مهم":"Important warning","مصرف کالری نباید کمتر از":"Calorie intake shouldn't go below","کالری در روز باشه":"calories a day","برای آقایون":"for men","برای خانم‌ها":"for women","، چون برای بدن خطرناکه و می‌تونه باعث ضعف، تحلیل رفتن عضله، کمبود ویتامین و مواد معدنی و آسیب به سوخت‌وساز بشه. عدد بالا":", because that's dangerous for your body and can cause weakness, muscle loss, vitamin and mineral deficiency and damage to your metabolism. The number above","از این حد پایین‌تره، پس پیشنهاد من اینه که از":"is below this limit, so I suggest you start from","کالری":"calories","شروع کنی":"","با همین مقدار حدود":"With this amount you'll lose about","کیلو در هفته کم می‌کنی":"kg per week","این مقدار تقریباً همون نیاز نگهداری وزنته، پس برای کم شدن وزن بهتره فعالیتت رو بیشتر کنی":"This amount is roughly your maintenance need, so to lose weight it's better to be more active","کالری در روز برای هدف":"calories a day for the goal","برنامه‌ی هفتگی":"Weekly plan","کالری کمتر از نیاز نگهداری وزنت":"calories less than your maintenance need","می‌خوری؛ یعنی هفته‌ای":"you'll eat; that is, per week","کالری کسری و حدود":"calorie deficit and about","کیلو کم شدن در هفته (نزدیک":"kg lost per week (close to","کیلو در ماه":"kg per month","کالری بیشتر از نیاز نگهداری وزنت":"calories more than your maintenance need","کالری اضافه و حدود":"extra calories and about","کیلو اضافه شدن در هفته (نزدیک":"kg gained per week (close to","همین‌قدر که نیاز داری بخور تا وزن و عضله‌هات ثابت بمونه؛ مجموع مصرفت در هفته حدود":"Eat just what you need so your weight and muscle stay the same; your total weekly intake is about","کالری می‌شه":"calories","مجموع مصرف هفتگی":"Total weekly intake","متابولیسم پایه":"Basal metabolism","کالری؛ انرژی‌ای که بدنت تو حالت استراحت کامل می‌سوزونه":"calories; the energy your body burns at complete rest","پروتئین روزانه":"Daily protein","باید روزی حدود":"You should eat about","تا":"to","گرم":"g","پروتئین بخوری":"of protein a day","گرم برای هر کیلو وزنت":"g per kg of your body weight","وقتی کالری کم می‌کنی، اگه پروتئین کم باشه بدن علاوه بر چربی از عضله هم انرژی برمی‌داره و عضلاتت تحلیل می‌ره؛ این مقدار پروتئین کمک می‌کنه فقط چربی بره و عضله بمونه":"When you cut calories, if protein is low your body takes energy from muscle as well as fat and your muscles waste away; this amount of protein helps you lose only fat and keep muscle","این مقدار پروتئین باعث می‌شه وزنی که اضافه می‌کنی بیشتر عضله باشه، نه فقط چربی":"This amount of protein makes the weight you add more muscle, not just fat","این مقدار پروتئین عضله‌هات رو سالم نگه می‌داره و از تحلیل رفتنشون جلوگیری می‌کنه":"This amount of protein keeps your muscles healthy and prevents them from wasting away","بهتره تو ۳ تا ۴ وعده پخشش کنی (هر وعده حدود":"It's best to spread it over 3 to 4 meals (about","گرم) و ورزش مقاومتی یا وزنه هم داشته باشی":"g per meal) and also do resistance or weight training","کم‌وزن":"Underweight","نرمال":"Normal","اضافه‌وزن":"Overweight","چاق":"Obese","تو":"You","هست. برای زیر ۱۸ سال، BMI رو باید با نمودار رشدِ هم‌سن‌هات و با نظر پزشک تفسیر کرد، نه با جدول بزرگسال‌ها":". For under 18, BMI should be interpreted with the growth chart for people your age and your doctor's opinion, not the adult table","شاخص توده‌ی بدنی":"Body mass index","هست و تو محدوده‌ی":"and you're in the","قرار می‌گیره. وزن سالم برای قدت حدود":"range. A healthy weight for your height is about","کیلوئه. (BMI عضله و چربی رو از هم جدا نمی‌کنه، پس برای ورزشکارها دقیق نیست":"kg. (BMI doesn't separate muscle from fat, so it isn't accurate for athletes","کیلو":"kg","از اولین محاسبه تا الان":"From the first calculation until now","وزنت ثابت مونده":"Your weight has stayed the same","کم":"less","زیاد":"more","شده":"","بقیه‌ی هدف‌ها (برای انتخاب بزن روش":"Other goals (tap to choose","این عدد از حداقل معمول روزانه":"This number is below the usual daily minimum of","کالری) پایین‌تره. بهتره هدف ملایم‌تری انتخاب کنی یا با متخصص تغذیه مشورت کنی":"calories). It's better to pick a gentler goal or consult a nutritionist","تغییر وزن ۱ کیلو در هفته سرعت زیادیه؛ اگه بدنت اذیت شد، هدف ملایم‌تر رو انتخاب کن":"Changing 1 kg per week is too fast; if your body struggles, pick a gentler goal","این اعداد فقط یه تخمینه و جای نظر پزشک یا متخصص تغذیه رو نمی‌گیره. اگه بیماری خاصی (مثل مشکل کلیه) داری یا باردار هستی، قبل از تغییر برنامه‌ی غذایی حتماً با پزشک حرف بزن":"These numbers are only an estimate and don't replace a doctor's or nutritionist's advice. If you have a specific condition (like kidney problems) or are pregnant, talk to a doctor before changing your diet","محاسبه‌ی دوباره":"Recalculate","هنوز محاسبه‌ای ذخیره نشده. هر بار «محاسبه» رو بزنی، اینجا ثبت می‌شه":"No calculation saved yet. Every time you tap \"Calculate\", it's logged here","روند وزن":"Weight trend","محاسبه‌ی ذخیره‌شده؛":"Saved calculation;","ساله":"years old","قد":"Height","فعالیت":"Activity","هدف":"Goal","نیاز نگهداری وزن":"Maintenance need","این محاسبه از سابقه پاک بشه؟":"Delete this calculation from history?","برای زیر ۱۸ سال فقط «حفظ وزن» نشون داده می‌شه؛ برای کم یا زیاد کردن وزن حتماً با پزشک یا متخصص تغذیه حرف بزن":"For under 18 only \"maintain weight\" is shown; to lose or gain weight, talk to a doctor or nutritionist","ثبت امروز":"Log today","برنامه‌ی باشگاه":"Gym program","نان سنگک":"Sangak bread","نان لواش":"Lavash bread","نان بربری":"Barbari bread","نان تافتون":"Taftoon bread","نان تست (هر برش":"Toast (per slice","۳۰ گرم":"30 g","برنج پخته (ساده":"Cooked rice (plain","ماکارونی پخته":"Cooked pasta","جو دوسر (خام":"Oats (raw","کورن‌فلکس":"Corn flakes","سیب‌زمینی آب‌پز":"Boiled potato","سیب‌زمینی سرخ‌شده":"French fries","لوبیا چیتی پخته":"Cooked pinto beans","لوبیا سفید پخته":"Cooked white beans","لوبیا چشم‌بلبلی پخته":"Cooked black-eyed peas","عدس پخته":"Cooked lentils","نخود پخته":"Cooked chickpeas","باقالا پخته":"Cooked fava beans","ماش پخته":"Cooked mung beans","لوبیا سبز پخته":"Cooked green beans","سینه‌ی مرغ پخته":"Cooked chicken breast","ران مرغ بدون پوست پخته":"Cooked skinless chicken thigh","گوشت قرمز کم‌چرب پخته":"Cooked lean red meat","گوشت خورشتی گوسفند پخته":"Cooked lamb stew meat","جوجه‌کباب سینه":"Chicken breast kebab","کباب کوبیده":"Koobideh kebab","ماهی سالمون پخته":"Cooked salmon","ماهی قزل‌آلا پخته":"Cooked trout","تن ماهی (کنسرو در آب":"Tuna (canned in water","میگو پخته":"Cooked shrimp","تخم‌مرغ (هر عدد":"Egg (each","۵۰ گرم":"50 g","سفیده‌ی تخم‌مرغ":"Egg white","پودر پروتئین وی":"Whey protein powder","شیر کم‌چرب":"Low-fat milk","شیر پرچرب":"Whole milk","ماست کم‌چرب":"Low-fat yogurt","ماست پرچرب":"Full-fat yogurt","ماست یونانی کم‌چرب":"Low-fat Greek yogurt","دوغ":"Doogh (yogurt drink)","پنیر سفید ایرانی":"Iranian white cheese","پنیر خامه‌ای":"Cream cheese","پنیر موزارلا":"Mozzarella","سیب":"Apple","موز":"Banana","پرتقال":"Orange","نارنگی":"Tangerine","انگور":"Grapes","هندوانه":"Watermelon","خربزه":"Cantaloupe","گیلاس":"Cherries","توت‌فرنگی":"Strawberries","انار":"Pomegranate","خرما (هر عدد":"Dates (each","۸ گرم":"8 g","کیوی":"Kiwi","گلابی":"Pear","هلو":"Peach","آلو":"Plum","کشمش":"Raisins","خیار":"Cucumber","گوجه‌فرنگی":"Tomato","سبزی خوردن":"Fresh herbs platter","سبزی قورمه (خام":"Ghormeh sabzi herbs (raw","کاهو":"Lettuce","هویج":"Carrot","اسفناج":"Spinach","کلم‌بروکلی":"Broccoli","کدو سبز":"Zucchini","بادمجان":"Eggplant","قارچ":"Mushrooms","فلفل دلمه‌ای":"Bell pepper","پیاز":"Onion","کلم":"Cabbage","رب گوجه‌فرنگی":"Tomato paste","بادام":"Almonds","گردو":"Walnuts","پسته":"Pistachios","فندق":"Hazelnuts","بادام‌زمینی":"Peanuts","کره‌ی بادام‌زمینی":"Peanut butter","روغن زیتون":"Olive oil","روغن مایع":"Vegetable oil","کره":"Butter","عسل":"Honey","شکر":"Sugar","مربا":"Jam","شکلات تلخ":"Dark chocolate","نوشابه":"Soda","آب‌پرتقال طبیعی":"Fresh orange juice","چیپس":"Chips","بیسکویت ساده":"Plain biscuits","نان جو":"Barley bread","نان باگت":"Baguette","نان همبرگر (هر عدد":"Hamburger bun (each","برنج قهوه‌ای پخته":"Cooked brown rice","پلو ایرانی با روغن (پخته":"Persian rice with oil (cooked","برنج خام":"Raw rice","ماکارونی خام":"Raw pasta","رشته‌ی آش یا رشته‌پلو (خام":"Ash or reshteh polo noodles (raw","کینوا پخته":"Cooked quinoa","بلغور گندم پخته":"Cooked bulgur","جو پوست‌کنده (خام":"Hulled barley (raw","آرد گندم":"Wheat flour","آرد برنج":"Rice flour","گرانولا":"Granola","پودر سوخاری":"Breadcrumbs","پاپ‌کورن (بدون روغن":"Popcorn (no oil","ذرت پخته":"Cooked corn","سیب‌زمینی شیرین پخته":"Cooked sweet potato","چغندر پخته":"Cooked beetroot","کدو حلوایی پخته":"Cooked pumpkin","عدس خام":"Raw lentils","لوبیا چیتی خام":"Raw pinto beans","نخود خام":"Raw chickpeas","ماش خام":"Raw mung beans","لوبیا قرمز پخته":"Cooked kidney beans","سویا پخته":"Cooked soybeans","حمص (پوره‌ی نخود":"Hummus (chickpea puree","نخودفرنگی پخته":"Cooked green peas","باقالا تازه":"Fresh fava beans","گوشت چرخ‌کرده‌ی گاو پخته":"Cooked ground beef","گوشت چرخ‌کرده‌ی گوسفند پخته":"Cooked ground lamb","راسته‌ی گوساله کبابی":"Grilled beef sirloin","فیله‌ی گوساله پخته":"Cooked veal tenderloin","ران گوسفند پخته":"Cooked leg of lamb","ماهیچه‌ی گوسفند پخته":"Cooked lamb shank","جگر گوسفند پخته":"Cooked lamb liver","جگر مرغ پخته":"Cooked chicken liver","سینه‌ی مرغ با پوست پخته":"Cooked chicken breast with skin","ران مرغ با پوست پخته":"Cooked chicken thigh with skin","بال مرغ پخته":"Cooked chicken wings","مرغ سوخاری":"Fried chicken","سینه‌ی بوقلمون پخته":"Cooked turkey breast","کتلت (تقریبی":"Kotlet patty (approx.","سوسیس":"Sausage","کالباس":"Deli sausage","ماهی سفید پخته":"Cooked white fish","ماهی تیلاپیا پخته":"Cooked tilapia","ساردین کنسروی":"Canned sardines","تن ماهی (کنسرو در روغن":"Tuna (canned in oil","نیمرو (هر عدد":"Fried egg (each","املت ساده":"Plain omelet","زرده‌ی تخم‌مرغ":"Egg yolk","شیر بدون چربی":"Skim milk","شیر سویا":"Soy milk","شیر بادام (بدون شکر":"Almond milk (no sugar","شیر کاکائو":"Chocolate milk","کفیر":"Kefir","بستنی شیری":"Milk ice cream","خامه":"Cream","ماست چکیده":"Strained yogurt","پنیر پروسس":"Processed cheese","پنیر چدار":"Cheddar cheese","پنیر پارمزان":"Parmesan cheese","پنیر کوتیج":"Cottage cheese","پنیر ریکوتا":"Ricotta cheese","پودر کاکائو":"Cocoa powder","آناناس":"Pineapple","انبه":"Mango","پاپایا":"Papaya","لیمو ترش":"Lime","گریپ‌فروت":"Grapefruit","آلبالو":"Sour cherries","زردآلو":"Apricot","شلیل":"Nectarine","شاه‌توت":"Mulberries","تمشک":"Raspberries","بلوبری":"Blueberries","انجیر تازه":"Fresh figs","انجیر خشک":"Dried figs","برگه‌ی زردآلو":"Dried apricot leather","آلو بخارا (خشک":"Prunes (dried","نارگیل (گوشت":"Coconut (flesh","آووکادو":"Avocado","زیتون (هر عدد":"Olives (each","۴ گرم":"4 g","خرمالو":"Persimmon","آب انار":"Pomegranate juice","آب‌هویج":"Carrot juice","کرفس":"Celery","تربچه":"Radish","شلغم":"Turnip","کلم قمری":"Kohlrabi","کلم کیل":"Kale","گل‌کلم":"Cauliflower","جعفری":"Parsley","گشنیز":"Cilantro","شوید":"Dill","نعناع":"Mint","ریحان":"Basil","ترخون":"Tarragon","پیازچه":"Scallions","شنبلیله‌ی تازه":"Fresh fenugreek","زنجبیل":"Ginger","سیر":"Garlic","پیاز داغ":"Fried onions","خیارشور":"Pickled cucumbers","فلفل تند":"Hot pepper","بادام هندی (کاجو":"Cashews","تخمه‌ی آفتابگردان":"Sunflower seeds","تخمه‌ی کدو":"Pumpkin seeds","تخمه‌ی هندوانه":"Watermelon seeds","کنجد":"Sesame","دانه‌ی چیا":"Chia seeds","بذر کتان":"Flaxseed","نارگیل رنده‌شده":"Shredded coconut","نخودچی برشته":"Roasted chickpeas","ارده":"Tahini","حلوا ارده":"Tahini halva","روغن نارگیل":"Coconut oil","روغن کنجد":"Sesame oil","مارگارین":"Margarine","سس مایونز":"Mayonnaise","سس کچاپ":"Ketchup","خردل":"Mustard","حبه قند (هر عدد":"Sugar cube (each","نبات":"Rock candy (nabat)","شیره‌ی انگور":"Grape molasses","شیره‌ی خرما":"Date syrup","گز (تقریبی":"Gaz nougat (approx.","سوهان (تقریبی":"Sohan brittle (approx.","باقلوا (تقریبی":"Baklava (approx.","شیرینی خامه‌ای":"Cream pastry","کیک ساده":"Plain cake","دونات":"Donut","کلوچه":"Koloocheh cookie","شکلات شیری":"Milk chocolate","پفک":"Puffy corn snack","کراکر":"Crackers","ویفر":"Wafer","آبمیوه‌ی صنعتی":"Packaged fruit juice","نوشابه‌ی رژیمی":"Diet soda","قهوه‌ی سیاه":"Black coffee","پروتئین بار":"Protein bar","خورشت قورمه‌سبزی (تقریبی":"Ghormeh sabzi stew (approx.","خورشت قیمه (تقریبی":"Gheymeh stew (approx.","خورشت بادمجان (تقریبی":"Eggplant stew (approx.","خورشت فسنجان (تقریبی":"Fesenjan stew (approx.","آش رشته (تقریبی":"Ash reshteh (approx.","سوپ جو (تقریبی":"Barley soup (approx.","حلیم (تقریبی":"Haleem (approx.","میرزاقاسمی (تقریبی":"Mirza ghasemi (approx.","کوکو سبزی (تقریبی":"Herb kuku (approx.","کوکو سیب‌زمینی (تقریبی":"Potato kuku (approx.","فلافل (سرخ‌شده":"Falafel (fried","ناگت مرغ":"Chicken nuggets","پیتزا (هر برش":"Pizza (per slice","۱۰۰ گرم":"100 g","تخم‌مرغ آب‌پز":"Boiled egg","شیر برنج":"Rice pudding","فرنی":"Firni pudding","شله زرد":"Sholeh zard","کاچی":"Kachi","فالوده":"Faloodeh","بستنی سنتی":"Traditional ice cream","آجیل مخلوط":"Mixed nuts","لواشک":"Lavashak (fruit leather)","کیک یزدی":"Yazdi cake","نان برنجی":"Rice cookies (nan berenji)","قطاب":"Ghotab (fried almond pastry)","قهوه با شیر":"Coffee with milk","سالاد شیرازی (تقریبی":"Shirazi salad (approx.","سالاد کاهو (تقریبی":"Lettuce salad (approx.","سالاد الویه (تقریبی":"Olivier salad (approx.","سوپ مرغ (تقریبی":"Chicken soup (approx.","عدسی (تقریبی":"Lentil soup (approx.","آبگوشت (تقریبی":"Abgoosht (approx.","آش دوغ (تقریبی":"Ash doogh (approx.","آش جو (تقریبی":"Barley ash (approx.","سوپ ورمیشل (تقریبی":"Vermicelli soup (approx.","املت گوجه (تقریبی":"Tomato omelet (approx.","کشک بادمجان (تقریبی":"Kashk-e bademjan (approx.","حلیم بادمجان (تقریبی":"Haleem bademjan (approx.","لوبیاپلو (تقریبی":"Green bean rice (approx.","باقالی‌پلو (تقریبی":"Fava bean rice (approx.","عدس‌پلو (تقریبی":"Lentil rice (approx.","زرشک‌پلو (تقریبی":"Barberry rice (approx.","استانبولی‌پلو (تقریبی":"Estamboli polo (approx.","کلم‌پلو (تقریبی":"Cabbage rice (approx.","ته‌چین (تقریبی":"Tahchin (approx.","کباب تابه‌ای (تقریبی":"Pan kebab (approx.","کباب برگ (تقریبی":"Barg kebab (approx.","شیشلیک (تقریبی":"Shishlik (approx.","جگر کباب (تقریبی":"Liver kebab (approx.","ماهی سرخ‌شده (تقریبی":"Fried fish (approx.","کوفته (تقریبی":"Koofteh meatballs (approx.","دلمه (تقریبی":"Dolmeh (approx.","پاستا با سس گوشت (تقریبی":"Pasta with meat sauce (approx.","برگر گوشت (با نان) (تقریبی":"Beef burger (with bun) (approx.","ساندویچ کالباس (تقریبی":"Deli sausage sandwich (approx.","ساندویچ مرغ (تقریبی":"Chicken sandwich (approx.","هات‌داگ (تقریبی":"Hot dog (approx.","صبحانه":"Breakfast","ناهار":"Lunch","شام":"Dinner","میان‌وعده":"Snack","شنبه":"Saturday","یکشنبه":"Sunday","دوشنبه":"Monday","سه‌شنبه":"Tuesday","چهارشنبه":"Wednesday","پنجشنبه":"Thursday","جمعه":"Friday","برنامه‌ی من":"My plan","۲ هفته":"2 weeks","۱ ماه":"1 month","۲ ماه":"2 months","۳ ماه":"3 months","شروعش":"Starts in","روز دیگه‌ست":"days","تموم شده":"Finished","از":"of","روز مونده":"days left","برنامه‌ی دریافتی":"Received plan","کد یا لینک درست نیست (یا مرورگرت قدیمیه":"The code or link is invalid (or your browser is outdated","لینک برنامه":"Plan link","کپی لینک":"Copy link","اشتراک‌گذاری":"Share","لینک رو برای مربی یا دوستت بفرست (تلگرام، بله، ایتا، واتساپ...). وقتی لینک رو باز کنه، یا کدش رو تو «دریافت برنامه» بچسبونه، برنامه تو اپ خودش ذخیره می‌شه. چسبوندن کد بدون اینترنت هم کار می‌کنه. هر کی لینک رو داشته باشه متن برنامه رو می‌بینه":"Send the link to your coach or friend (Telegram, Bale, Eitaa, WhatsApp...). When they open the link, or paste its code into \"Receive plan\", the plan is saved inside their own app. Pasting the code works offline too. Anyone with the link can see the plan text","غذای دلخواهت رو با مقدارِ «۱۰۰ گرم» از روی برچسب بسته یا جدول وارد کن":"Enter your food with the \"100 g\" values from the package label or table","اسم غذا":"Food name","کالری (۱۰۰ گرم":"Calories (per 100 g","پروتئین (۱۰۰ گرم":"Protein (per 100 g","وزن هر وعده (گرم":"Serving weight (g","ذخیره و افزودن":"Save and add","مثلاً: لوبیا، مرغ، نان، سیب":"e.g. beans, chicken, bread, apple","برای جستجوی هوشمند باید وارد حسابت باشی":"You need to be logged in to use smart search","سهمیه‌ی جستجوی هوشمند امروزت تموم شده؛ فردا دوباره امتحان کن یا غذا رو دستی اضافه کن":"You've used up today's smart search quota; try again tomorrow or add the food manually","الان جواب نگرفتم، دوباره امتحان کن":"I didn't get an answer just now, try again","چیزی پیدا نشد. اسمش رو ساده‌تر بنویس یا دستی اضافه کن":"Nothing found. Try a simpler name or add it manually","برای جستجوی هوشمند اینترنت لازمه":"Smart search needs an internet connection","پیدا نکردی؟ جستجوی هوشمند":"Can't find it? Smart search","چیزی پیدا نشد. اسمش رو ساده‌تر بنویس (مثلاً «برنج":"Nothing found. Try a simpler name (e.g. \"rice","گرم پروتئین (در ۱۰۰ گرم":"g protein (per 100 g","همه‌ی برنامه‌ها":"All plans","کد یا لینک برنامه رو اینجا بچسبون":"Paste the plan code or link here","بررسی برنامه":"Check plan","وعده نوشته شده؛ از امروز شروع می‌شه":"meals written; starts today","افزودن به برنامه‌های من":"Add to my plans","اسم برنامه":"Plan name","مثلاً برنامه‌ی ماه اول باشگاه":"e.g. First month gym plan","مدت برنامه":"Plan duration","تاریخ شروع":"Start date","ساخت برنامه":"Create plan","وعده‌های هر روزِ این برنامه رو بنویس. تو «ثبت امروز»، برنامه‌ی همون روز نشونت داده می‌شه و می‌تونی هر وعده رو تیک بزنی":"Write the meals for each day of this plan. In \"Log today\", you'll see that day's plan and can tick off each meal","مثلاً ۲ تخم‌مرغ":"e.g. 2 eggs","۱ برش نان سنگک":"1 slice of sangak bread","کپی این روز برای همه‌ی روزهای هفته":"Copy this day to all days of the week","حذف این برنامه":"Delete this plan","ارسال این برنامه":"Send this plan","هر برنامه‌ای که باشگاه یا متخصص تغذیه بهت داده، یه «برنامه»ی جداست. مدتش رو انتخاب می‌کنی و تا آخرِ اون مدت، وعده‌های هر روز تو «ثبت امروز» نشونت داده می‌شه":"Every plan your gym or nutritionist gives you is a separate \"plan\". You pick its duration, and until it ends you'll see each day's meals in \"Log today\"","برنامه‌ی جدید":"New plan","دریافت برنامه (کد یا لینک":"Receive plan (code or link","پروتئین":"Protein","هدف کالری و پروتئینت هنوز حساب نشده؛ از کارت «کالری روزانه» حسابش کن":"Your calorie and protein goal hasn't been calculated yet; calculate it from the \"Daily calories\" card","برنامه‌ی امروزت":"Today's plan","زیر هر وعده نوشته شده":"written under each meal","برای امروز چیزی تو این برنامه ننوشتی":"You haven't written anything for today in this plan","برنامه‌ی فعالی نداری؛ از تب «برنامه‌ی باشگاه» یه برنامه‌ی جدید بساز":"You have no active plan; create a new one from the \"Gym plan\" tab","برنامه":"Plan","انجام شد":"Done","طبق برنامه خوردم":"Ate as planned","اسم غذا یا ماده‌ی غذایی":"Food or ingredient name","غذای دلخواه خودم":"My own food","تمام شد":"Finished","افزودن غذا":"Add food","کالری و پروتئین هر ماده‌ی غذایی تقریبیه و برای ۱۰۰ گرمه. بعد از انتخاب، مقدار گرم رو خودت درست کن؛ برای غذاهای پخته، وزنِ پخته‌ی اون رو بزن":"The calories and protein of each ingredient are approximate and are for 100 g. After choosing, adjust the grams yourself; for cooked foods, enter the cooked weight","کپی شد":"Copied","برنامه‌ی غذایی":"Meal plan","برای تو":"For you","اسم و کالری (بین ۰ تا ۹۰۰ در هر ۱۰۰ گرم) رو درست وارد کن":"Enter the name and calories (between 0 and 900 per 100 g) correctly","این برنامه حذف بشه؟":"Delete this plan?","در حال جستجو":"Searching","گرم پروتئین (۱۰۰ گرم":"g protein (100 g","هر وعده":"Each meal","این‌ها تخمین هوش مصنوعیه؛ برای غذای بسته‌بندی‌شده، عدد روی برچسب دقیق‌تره":"These are AI estimates; for packaged food, the number on the label is more accurate","برنامه‌ها":"Plans","لینک رو برای دوستت یا شاگردت بفرست. با باز کردن لینک، یا چسبوندن کدش تو «دریافت برنامه»، برنامه تو اپ خودش ذخیره می‌شه (چسبوندن کد بدون اینترنت هم کار می‌کنه":"Send the link to your friend or student. By opening the link, or pasting its code into \"Receive plan\", the plan is saved inside their app (pasting the code works offline too","استراحت تموم شد":"Rest is over","باشه":"OK","استراحت":"Rest","رد کردن":"Skip","ست":"Set","وزنه (کیلو":"Weight (kg","افزودن ست":"Add set","استراحت بین ست‌ها":"Rest between sets","ثانیه":"seconds","یادداشت برای این حرکت (نکته‌ی اجرا، شدت و":"Note for this exercise (form tip, intensity and","ست امروز انجام شد":"Today's set done","برنامه‌ی فعالی نداری؛ از تب «برنامه‌ها» یه برنامه بساز یا دریافت کن":"You have no active plan; create or receive a plan from the \"Plans\" tab","برای امروز حرکتی ننوشتی؛ روز استراحته":"You haven't written any exercise for today; it's a rest day","روی اسم هر حرکت بزن تا تصویر و توضیحش باز بشه. با تیک هر ست، تایمر استراحت شروع می‌شه":"Tap an exercise name to open its picture and description. Ticking each set starts the rest timer","حرکت؛ از امروز شروع می‌شه":"exercises; starts today","برای این روز حرکتی نیست (روز استراحت). از دکمه‌ی پایین حرکت اضافه کن":"There's no exercise for this day (rest day). Add one with the button below","افزودن حرکت از بانک":"Add exercise from the bank","هر برنامه‌ی ورزشی یه «برنامه»ی جداست با مدت مشخص. برای هر روز، حرکت‌ها رو از بانک انتخاب می‌کنی و ست، استراحت و یادداشتشون رو تنظیم می‌کنی":"Every workout plan is a separate \"plan\" with a set duration. For each day, you pick exercises from the bank and set their sets, rest and notes","یه برنامه‌ی ورزشی بساز":"Create a workout plan","امروز روز استراحته":"Today is a rest day","کالری امروز ثبت شده":"Today's calories are logged","غذای امروزت رو ثبت کن":"Log today's food","تغذیه‌ی امروز":"Today's nutrition","کالری و":"calories and","گرم پروتئین":"g protein","ماده‌ی غذایی ثبت شده":"ingredients logged","؛ هدف روزانه":"; daily goal","کالری و پروتئین":"calories and protein","برنامه‌ی ورزشی فعال":"Active workout plan","؛":";","حرکت":"exercises","و":"and","ست انجام شده":"sets done","آخرین محاسبه‌ی بدن":"Latest body calculation","وزن":"Weight","کیلو،":"kg,","، کالری هدف":", goal calories","بانک حرکات":"Exercise bank","جستجو: اسم حرکت، عضله یا وسیله (مثلاً سینه، دمبل":"Search: exercise name, muscle or equipment (e.g. chest, dumbbell","افزودن":"Add","سینه":"Chest","شانه":"Shoulders","جلو بازو":"Biceps","پشت بازو":"Triceps","ساعد":"Forearms","زیربغل (لت":"Lats","میان‌پشت":"Mid back","کمر":"Lower back","ذوزنقه":"Traps","گردن":"Neck","شکم":"Abs","جلو ران":"Quads","پشت ران":"Hamstrings","باسن":"Glutes","ساق پا":"Calves","ران بیرونی":"Outer thighs","ران داخلی":"Inner thighs","بدون وسیله":"No equipment","دستگاه":"Machine","سایر":"Other","فوم‌رولر":"Foam roller","کتل‌بل":"Kettlebell","دمبل":"Dumbbell","کابل":"Cable","هالتر":"Barbell","کش":"Resistance band","توپ طبی":"Medicine ball","توپ ورزشی":"Exercise ball","مبتدی":"Beginner","متوسط":"Medium","پیشرفته":"Advanced","قدرتی":"Strength","کششی":"Stretching","پلایومتریک":"Plyometrics","پاورلیفتینگ":"Powerlifting","وزنه‌برداری المپیک":"Olympic weightlifting","استرانگمن":"Strongman","هوازی":"Cardio","سیم‌کش":"Cable machine","اسمیت":"Smith machine","وزن بدن":"Body weight","نیمکت":"Bench","طناب":"Rope","دستگیره":"Handle","رولر":"Roller","لندماین":"Landmine","سورتمه":"Sled","تایر":"Tire","زنجیر":"Chain","سنگ":"Stone","کنده":"Log","شکم کناری":"Obliques","ران":"Thigh","لگن":"Pelvis","بازو":"Arm","مچ دست":"Wrist","مچ پا":"Ankle","میان‌تنه":"Core","کشاله‌ی ران":"Groin","زانو":"Knee","آرنج":"Elbow","سرشانه":"Shoulder","ساق جلو":"Shins","تنه":"Torso","ستون فقرات":"Spine","داخلی":"Inner","خارجی":"Outer","پرس":"Press","کرل":"Curl","روئینگ":"Row","نشر":"Raise","فلای":"Fly","اکستنشن":"Extension","فلکشن":"Flexion","اسکات":"Squat","ددلیفت":"Deadlift","لانج":"Lunge","پول‌داون":"Pulldown","پولاور":"Pullover","پوش‌داون":"Pushdown","شراگ":"Shrug","کرانچ":"Crunch","پلانک":"Plank","بریج":"Bridge","تراست":"Thrust","کیک‌بک":"Kickback","سوینگ":"Swing","اسنچ":"Snatch","کلین":"Clean","جرک":"Jerk","چرخش":"Rotation","کشش":"Stretch","راه رفتن":"Walking","دویدن":"Running","پرش":"Jump","استپ":"Step","دیپ":"Dip","کشیدن":"Pull","هل دادن":"Push","نگه داشتن":"Hold","لیفت":"Lift","حمل":"Carry","کراس‌اور":"Crossover","خم شدن":"Bend","دراز و نشست":"Sit-up","شنا":"Push-up","بارفیکس":"Pull-up","بارفیکس دست معکوس":"Chin-up","استپ‌آپ":"Step-up","ضربه":"Strike","اسلم":"Slam","پرتاب":"Throw","کوهنوردی":"Mountain climbing","کوهنورد":"Mountain climber","برپی":"Burpee","ایستادن":"Standing","شیب‌دار":"Incline","شیب منفی":"Decline","نشسته":"Seated","ایستاده":"Standing","خوابیده":"Lying","معکوس":"Reverse","متناوب":"Alternating","تک":"Single","تک‌دست":"Single-arm","تک‌پا":"Single-leg","دوبل":"Double","باز":"Open","جمع":"Close","باریک":"Narrow","بالای سر":"Overhead","جلو":"Front","کنار":"Side","جانبی":"Lateral","خمیده":"Bent","خم‌شده":"Bent","صاف":"Straight","سفت":"Stiff","پا صاف":"Straight-leg","رومانیایی":"Romanian","سومو":"Sumo","چکشی":"Hammer","پریچر":"Preacher","تمرکزی":"Concentration","زاتمن":"Zottman","آرنولد":"Arnold","نظامی":"Military","باکس":"Box","گوبلت":"Goblet","هک":"Hack","گود مورنینگ":"Good morning","بالا":"Up","وسط":"Middle","کامل":"Full","نیمه":"Half","پاور":"Power","ایستا":"Static","پویا":"Dynamic","زانو زده":"Kneeling","دمر":"Prone","کمکی":"Assisted","وزنه‌دار":"Weighted","حالت":"Position","فارمر":"Farmer","چپ":"Left","راست":"Right","کف دست":"Palm","تخت":"Flat","دیوار":"Wall","زمین":"Floor","آویزان":"Hanging","تکیه‌دار":"Supported","پنجه":"Toe","پاشنه":"Heel","تعادلی":"Balance","با":"with","روی":"on","در":"in","زیر":"under","برای":"for","فشاری":"Push","ترکیبی (چند مفصلی":"Compound (multi-joint","ایزوله (تک‌مفصلی":"Isolation (single-joint","این حرکت":"This exercise","کار می‌کنه":"works","یه حرکت":"An exercise","هست":"is","هم کمکش می‌کنن":"also assist","وسیله":"Equipment","سطح":"Level","؛ نوع حرکت":"; movement type","همه":"All","همه‌ی وسیله‌ها":"All equipment","نمایش بیشتر":"Show more","حرکتی پیدا نشد. اسم رو ساده‌تر بنویس یا فیلترها رو بردار":"No exercise found. Try a simpler name or clear the filters","برگشت به لیست":"Back to list","انتخاب شد":"Selected","انتخاب این حرکت":"Select this exercise","توضیح":"Description","طرز انجام (انگلیسی":"Steps (English","اسم فارسی و توضیح بالا خودکار از روی مشخصات حرکت ساخته شده؛ مراحل انجام فعلاً انگلیسیه":"The name and description above are generated automatically from the exercise details; the steps are in English for now","در حال دریافت بانک حرکات":"Loading the exercise bank","بانک حرکات دریافت نشد. اینترنت رو چک کن و دوباره امتحان کن؛ بعد از اولین دریافت، لیست حرکات آفلاین هم کار می‌کنه":"Couldn't load the exercise bank. Check your internet and try again; after the first load, the exercise list also works offline","بانک حرکات دریافت نشد؛ اینترنت رو چک کن":"Couldn't load the exercise bank; check your internet","برای خروج، یک بار دیگه برگشت رو بزن":"Press back once more to exit","خانه":"Home","عادت‌ها":"Habits","فیتنس":"Fitness","ژورنال":"Journal","آمار":"Stats","چت با لیانا":"Chat with Liana","چت‌های قبلی":"Previous chats","چت جدید":"New chat","لیانا":"Liana","دستیار هوشمند تو":"Your smart assistant","سلام، خوش اومدی":"Hello, welcome","لغو ریپلای":"Cancel reply","به لیانا بگو":"Tell Liana","ارسال":"Send","ژانویه":"January","فوریه":"February","مارس":"March","آوریل":"April","مه":"May","ژوئن":"June","ژوئیه":"July","اوت":"August","سپتامبر":"September","اکتبر":"October","نوامبر":"November","دسامبر":"December","فروردین":"Farvardin","اردیبهشت":"Ordibehesht","خرداد":"Khordad","تیر":"Tir","مرداد":"Mordad","شهریور":"Shahrivar","مهر":"Mehr","آبان":"Aban","آذر":"Azar","دی":"Dey","بهمن":"Bahman","اسفند":"Esfand","پیاده‌روی و قدم‌ها":"Walking & steps","ورزش":"Exercise","کشش و موبیلیتی":"Stretching & mobility","نوشیدن آب":"Drinking water","مطالعه / یادگیری":"Reading / learning","مراقبت شخصی":"Self-care","مرتب کردن خانه":"Tidying the house","مرتب کردن لباس‌ها":"Organizing clothes","مرتب کردن تخت‌خواب":"Making the bed","خواب آرام":"Peaceful sleep","قرص و دارو":"Pills & medicine","خلق‌وخو":"Mood","یادداشت روزانه":"Daily note","عالی":"Great","خوب":"Good","بد":"Bad","خیلی بد":"Very bad","معمولی":"Normal","تم‌های سفید":"White themes","پالت‌های پاستلی":"Pastel palettes","رنگ‌های پالت‌ها":"Palette colors","رنگ‌های اصلی":"Main colors","پاستلی":"Pastel","سفید و صورتی":"White & pink","سفید و سبز":"White & green","سفید و آبی":"White & blue","سفید و گرافیتی":"White & graphite","لوندر و نعنا":"Lavender & mint","غروب صورتی":"Pink sunset","بنفش رویایی":"Dreamy purple","هلویی":"Peach","ارکیده":"Orchid","بنفش لوندر":"Lavender purple","آبی لاجوردی":"Azure blue","آبی آسمانی":"Sky blue","نعنایی":"Mint","کِرِم":"Cream","آبی":"Blue","صورتی":"Pink","بنفش":"Purple","یاسی":"Lilac","صدفی":"Pearl","سبز پاستلی":"Pastel green","صورتی پاستلی":"Pastel pink","زرد پاستلی":"Pastel yellow","آبی پاستلی":"Pastel blue","بنفش پاستلی":"Pastel purple","وزیر متن":"Vazirmatn","یکان":"Yekan","نازنین":"Nazanin","زر":"Zar","میترا":"Mitra","لوتوس":"Lotus","رؤیا":"Roya","کودک (بامزه":"Koodak (cute","تیتر (درشت":"Titr (bold","ترافیک":"Traffic","کامران (دست‌نویس":"Kamran (handwritten","نستعلیق":"Nastaliq","نسخ":"Naskh","کوفی":"Kufi","نوتو سنس عربی":"Noto Sans Arabic","لاله‌زار (بامزه":"Lalezar (cute","مرکزی متن":"Markazi Text","امیری":"Amiri","خودکاری (میرزا":"Ballpoint (Mirza","عرف رقعه (خوشنویسی":"Roqeh style (calligraphy","ریم کوفی":"Reem Kufi","انگلیسی":"English","دست‌نویس انگلیسی":"English handwriting","طبیعی":"Natural","نشست ورودت تموم شده؛ دوباره وارد شو. اطلاعاتی که روی این گوشی داری حفظ می‌شه":"Your session has expired; log in again. The data you have on this phone is kept","ثبت‌نام":"Sign up","حساب داری؟ وارد شو":"Have an account? Log in","یه حساب جدید بساز":"Create a new account","ایمیل و رمز عبور رو وارد کن":"Enter your email and password","رمز عبور باید حداقل ۶ کاراکتر باشه":"Password must be at least 6 characters","در حال ارتباط":"Connecting","مشکلی پیش اومد، دوباره امتحان کن":"Something went wrong, try again","این ایمیل قبلاً ثبت‌نام شده، وارد شو":"This email is already registered, log in","حسابی با این ایمیل پیدا نشد، ثبت‌نام کن":"No account found with this email, sign up","رمز عبور اشتباهه":"Wrong password","ایمیل یا رمز عبور معتبر نیست":"Email or password is not valid","خوش اومدی":"Welcome","خطا در اتصال به سرور، دوباره امتحان کن":"Error connecting to the server, try again","ادامه بدون اتصال (فقط روی همین دستگاه ذخیره می‌شه":"Continue offline (saved only on this device","اتصال به سرور برقرار نشد":"Couldn't connect to the server","حالت بدون اتصال":"Offline mode","اطلاعات فقط روی همین دستگاه":"Data stays only on this device","وزن و اندازه‌های هفته":"This week's weight & measurements","وزن روزانه و اندازه‌های هفته":"Daily weight and this week's measurements","فعلی":"Current","برای BMI، قدت رو تو تنظیمات وارد کن":"Enter your height in Settings to see your BMI","وزن برای":"Weight for","ثبت می‌شه":"will be logged","صبح بخیر":"Good morning","ظهر بخیر":"Good afternoon","عصر بخیر":"Good evening","شب بخیر":"Good night","قدم":"steps","کالری سوزانده":"calories burned","لیوان آب":"glasses of water","روز در محدوده‌ی قند":"days within the sugar limit","روز بدون قند":"sugar-free days","در محدوده":"Within limit","بیشتر از سقف":"Over the limit","امروز چند وعده/تکه قند خوردی؟":"How many servings or sugar cubes did you have today?","سقف امروز":"Today's limit","وزن امروز (کیلوگرم":"Today's weight (kg","تعداد قدم":"Number of steps","نوع تمرین":"Workout type","دقیقه":"minutes","افزودن تمرین":"Add workout","مدت (دقیقه":"Duration (min","چی مطالعه کردی؟":"What did you read?","مثلاً اسم کتاب یا مقاله، شماره صفحه‌ها، یه نکته‌ی جالب":"e.g. a book or article title, page numbers, an interesting takeaway","خواب مفید (ساعت":"Quality sleep (hours","مثلاً ۶٫۵":"e.g. 6.5","دارو":"Medicine","ویرایش":"Edit","حذف":"Delete","امروز دارویی برنامه‌ریزی نشده":"No medicine scheduled for today","اسم دارو":"Medicine name","یک روز در میان":"Every other day","روزهای مشخص":"Specific days","یک روز در میان، بر اساس تاریخ ثبت اولیه":"Every other day, based on the initial log date","یک روز در میان، از امروز شروع می‌شه":"Every other day, starting today","افزودن دارو":"Add medicine","لیوان (هدف: ۸":"glasses (goal: 8","کالری دریافتی":"Calories consumed","پروتئین (گرم":"Protein (g","مقدار":"Amount","امروز چطور بود؟":"How was today?","هنوز عادتی نداری":"You don't have any habits yet","از تنظیمات":"From Settings","شخصی‌سازی عادت‌ها یکی اضافه کن":"customize habits and add one","اسم دارو رو بنویس":"Enter the medicine name","حداقل یه روز رو انتخاب کن":"Choose at least one day","برای همیشه حذف بشه؟":"Delete permanently?","عادتی برای نمایش نیست":"No habits to show","میانگین این هفته":"This week's average","بهترین عادت این هفته":"Best habit this week","برای محاسبه‌ی قدم‌ها از همین عدد استفاده می‌شه. خالیش کنی، با قد و وزنت حساب می‌شه (حدود":"This number is used to calculate steps. If you clear it, it's calculated from your height and weight (about","کالری به‌ازای ۱۰۰۰ قدم":"calories per 1,000 steps","اگه خالی بمونه، کالری قدم‌ها با قد و وزنت حساب می‌شه (الان حدود":"If left empty, step calories are calculated from your height and weight (currently about","کالری به‌ازای ۱۰۰۰ قدم). برای هماهنگی کامل با اپ قدم‌شمارت، کالری و قدمش رو تقسیم کن و عدد ۱۰۰۰ قدم رو اینجا بنویس":"calories per 1,000 steps). To match your pedometer app exactly, divide its calories by its steps and enter the 1,000-step figure here","وزن هفته‌ای یک بار، کنار اندازه‌ها تو کارت «وزن و اندازه‌ها» (بخش فیتنس) ثبت می‌شه و کارت وزن روزانه از برنامه‌ی امروز برداشته می‌شه":"Weight is logged once a week, next to the measurements in the \"Weight & measurements\" card (Fitness section), and the daily weight card is removed from today's plan","وزن هر روز تو کارت «وزن روزانه» توی برنامه‌ی امروز ثبت می‌شه":"Your weight is logged every day in the \"Daily weight\" card in today's plan","وزن هفتگی رو تو کارت «وزن و اندازه‌ها» توی بخش فیتنس وارد کن؛ BMI خودش حساب می‌شه":"Enter your weekly weight in the \"Weight & measurements\" card in the Fitness section; BMI is calculated automatically","وزن روزانه رو از کارت «وزن روزانه» تو صفحه‌ی اصلی وارد کن؛ BMI خودش حساب می‌شه":"Enter your daily weight from the \"Daily weight\" card on the home page; BMI is calculated automatically","هر روز تعداد وعده/تکه‌های قند رو وارد کن؛ تا وقتی از سقف بیشتر نشه اون روز موفق حساب می‌شه. سقف رو می‌تونی هفته‌به‌هفته کمتر کنی":"Enter the number of servings or sugar cubes each day; as long as you stay under the limit, that day counts as a success. You can lower the limit week by week","هر روزی که قند نخوری، تیک می‌خوره":"Every day you don't eat sugar gets a tick","برای هر کدوم که انتخاب کنی، جدا تو برنامه‌ی روزانه چک‌باکس داره":"Each one you choose gets its own checkbox in the daily plan","اگه هیچ‌کدوم رو انتخاب نکنی، مسواک زدن مثل بقیه‌ی عادت‌ها فقط یه تیک ساده می‌مونه":"If you choose none, brushing teeth stays a simple tick like the other habits","کاهش تدریجی قند":"Gradual sugar reduction","عادت جدید":"New habit","ویرایش عادت":"Edit habit","اسم عادت":"Habit name","مثلاً مصرف ویتامین":"e.g. take vitamins","ستاره‌ی عادت (نشونه‌ی عادت‌های سفارشی":"Habit star (marks custom habits","ستاره":"Star","آیکن (یه ایموجی بنویس یا از پایین انتخاب کن":"Icon (type an emoji or pick one below","رنگ":"Color","نوع عادت":"Habit type","تیک ساده":"Simple tick","مقدار عددی":"Numeric amount","واحد (مثلاً صفحه، لیوان، دقیقه":"Unit (e.g. pages, glasses, minutes","هدف روزانه (اختیاری":"Daily goal (optional","هیچ عادتی نداری. یکی اضافه کن":"You don't have any habits. Add one","افزودن عادت جدید":"Add new habit","عادت‌های حذف‌شده (اطلاعاتشون نگه داشته می‌شه":"Removed habits (their data is kept","بازگردانی":"Restore","اسم عادت رو بنویس":"Enter the habit name","از لیست حذف بشه؟ (اطلاعاتش می‌مونه و هر وقت خواستی برش می‌گردونی":"Remove from the list? (its data stays and you can bring it back anytime","عید نوروز":"Nowruz","روز جمهوری اسلامی":"Islamic Republic Day","روز طبیعت (سیزده‌به‌در":"Nature Day (Sizdah Bedar","رحلت امام خمینی (ره":"Demise of Imam Khomeini (RA","قیام ۱۵ خرداد":"Uprising of 15 Khordad","پیروزی انقلاب اسلامی":"Victory of the Islamic Revolution","روز ملی شدن صنعت نفت":"Oil Industry Nationalization Day","عید سعید فطر":"Eid al-Fitr","شهادت امام جعفر صادق (ع":"Martyrdom of Imam Ja'far al-Sadiq (AS","عید سعید قربان":"Eid al-Adha","عید سعید غدیر خم":"Eid al-Ghadir","تاسوعای حسینی":"Tasu'a","عاشورای حسینی":"Ashura","اربعین حسینی":"Arbaeen","رحلت پیامبر اکرم (ص) و شهادت امام حسن مجتبی (ع":"Demise of the Prophet (PBUH) and martyrdom of Imam Hasan al-Mujtaba (AS","شهادت امام رضا (ع":"Martyrdom of Imam Reza (AS","شهادت امام حسن عسکری (ع":"Martyrdom of Imam Hasan al-Askari (AS","میلاد پیامبر اکرم (ص) و امام جعفر صادق (ع":"Birth of the Prophet (PBUH) and Imam Ja'far al-Sadiq (AS","شهادت حضرت زهرا (س":"Martyrdom of Fatima al-Zahra (SA","ولادت امام علی (ع":"Birth of Imam Ali (AS","مبعث پیامبر اکرم (ص":"Mab'ath of the Prophet (PBUH","ولادت امام زمان (عج) و نیمه شعبان":"Birth of Imam al-Mahdi (AJ) and Mid-Sha'ban","شهادت امام علی (ع":"Martyrdom of Imam Ali (AS","تعطیل به مناسبت عید سعید فطر":"Holiday for Eid al-Fitr","هفته":"Week","اول":"1","دوم":"2","سوم":"3","چهارم":"4","پنجم":"5","ششم":"6","تعطیلات مذهبی (قمری) این سال هنوز اضافه نشده؛ فقط جمعه‌ها و تعطیلات ثابت قرمز شدن":"This year's religious (lunar) holidays haven't been added yet; only Fridays and fixed holidays are shown in red","پیشرفت هفته":"Week progress","درصد روز":"Day percentage","لیوان":"glasses","همه‌ی عادت‌ها":"All habits","عادتی برای گزارش نیست":"No habits to report","این بازه هنوز شروع نشده":"This period hasn't started yet","با فلش‌های بالا برو به زمان‌های قبل":"Use the arrows above to go to earlier periods","تو این بازه هنوز چیزی ثبت نکرده بودی":"You hadn't logged anything in this period","با فلش‌های بالا بین بازه‌ها بگرد":"Use the arrows above to browse between periods","میانگین سال":"Yearly average","میانگین ماه":"Monthly average","هر گلبرگ یه ماهه؛ هرچی بلندتر، ماه پرانرژی‌تر":"Each petal is one month; the longer, the more energetic the month","هر خط یه روزه؛ هرچی بلندتر، روز پربارتر":"Each line is one day; the longer, the more productive the day","روز انجام‌شده":"Completed days","بهترین رشته":"Best streak","رشته‌ی فعلی (تا امروز":"Current streak (up to today","مجموع":"Total","میانگین روزهای فعال":"Average of active days","میانگین روزهای ثبت‌شده":"Average of logged days","میانگین در هفته":"Average per week","بهترین ماه":"Best month","روز فعال":"Active day","روز کامل (همه‌ی عادت‌ها":"Full day (all habits","بهترین روز":"Best day","عادت انجام‌شده در هر روز":"Habits completed each day","نقشه‌ی روزهای سال":"Year at a glance","روزهای انجام‌شده":"Days completed","پیشرفت هر عادت":"Progress of each habit","برای گزارش کامل روش بزن":"Tap for the full report","نمودار روند":"Trend chart","۸ هفته":"8 weeks","۱ سال":"1 year","وزنت رو از کارت «وزن روزانه» توی برنامه‌ی امروز وارد کن":"Enter your weight from the \"Daily weight\" card in today's plan","این مقدار رو از کارت «وزن و اندازه‌ها» توی بخش فیتنس وارد کن":"Enter this value from the \"Weight & measurements\" card in the Fitness section","تو این بازه هنوز":"You haven't logged","ثبت نکردی":"in this period yet","تغییر":"Change","در این بازه":"In this period","ثابت":"Steady","آخرین ثبت":"Last entry","کمترین":"Lowest","روی هر نقطه بزن تا مقدارش رو ببینی":"Tap any point to see its value","آخرین پشتیبان":"Last backup","هنوز پشتیبانی نگرفتی":"You haven't made a backup yet","فایل پشتیبان ساخته شد؛ معمولاً تو پوشه‌ی Downloads گوشی ذخیره می‌شه. برای امنیت بیشتر یه کپی هم تو Drive یا تلگرام نگه دار":"Backup file created; it's usually saved in your phone's Downloads folder. For extra safety, keep a copy in Drive or Telegram too","پشتیبان":"Backup","پشتیبان فرستاده شد":"Backup sent","این فایل یه پشتیبان سالم از Liana Planner نیست":"This file isn't a valid Liana Planner backup","این پشتیبان":"This backup","مربوط به":"is from","شامل اطلاعات":"contains data from","هفته‌ست. با بازیابی، همه‌ی اطلاعات فعلی با اون جایگزین می‌شه":"weeks ago. Restoring replaces all current data with it","بله، بازیابی کن":"Yes, restore","بازیابی انجام شد":"Restore complete","برگردوندن به قبل از بازیابی":"Revert to before the restore","اطلاعات به حالت قبل از بازیابی برگشت":"Your data went back to how it was before the restore","که":"that","این":"this","آن":"that","را":"","هم":"also","یک":"a","می":"","است":"is","بود":"was","یا":"or","اگه":"if","اگر":"if","خیلی":"very","چی":"what","چیو":"what","چیه":"what's","بگو":"tell","کن":"do","کنم":"do","شد":"became","هستم":"am","هستی":"are","داره":"has","دارم":"have","بودم":"was","رو":"","چه":"what","چرا":"why","کجا":"where","کی":"when","یعنی":"meaning","دیروز":"Yesterday","پریروز":"Day before yesterday","پس فردا":"Day after tomorrow","پسفردا":"Day after tomorrow","گزارش":"Report","خلاصه":"Summary","ماهانه":"Monthly","سالانه":"Yearly","سالیانه":"Yearly","این ماه":"This month","ماه گذشته":"Last month","امسال":"This year","سال گذشته":"Last year","هفتگی":"Weekly","این هفته":"This week","هفته جاری":"This week","هفته‌ی جاری (از":"This week (from","تا امروز":"until today","ماه پیش":"Last month","پارسال":"Last year","این سال":"This year","یادداشت نوشته":"notes written","وزن: میانگین":"Weight: average","کیلو، از":"kg, from","روز ثبت‌شده":"days logged","قدم: مجموع":"Steps: total","، میانگین روزهای ثبت‌شده":", average of logged days","خواب: میانگین":"Sleep: average","آب: میانگین":"Water: average","لیوان در روزهای ثبت‌شده":"glasses on logged days","یادداشت":"Note","حال‌وهوا":"Mood","در این بازه انجام نشده":"Not done in this period","روز به روز":"Day by day","برای این بازه هیچ داده‌ای ثبت نشده":"No data logged for this period","روز از این بازه چیزی ثبت نشده":"days in this period have nothing logged","اسم عادت مشخص نبود":"The habit name wasn't clear","عادت":"Habit","ساخته شد":"created","عادتی به اسم":"I couldn't find a habit named","پیدا نکردم":"","بروزرسانی شد":"updated","حذف شد":"removed","عادت‌های پیش‌فرض کامل حذف نمی‌شن، ولی":"Default habits can't be deleted completely, but I hid","رو مخفی کردم":"","اسم دارو مشخص نبود":"The medicine name wasn't clear","داروی":"The medicine","به لیست اضافه شد":"was added to the list","دارویی به اسم":"I couldn't find a medicine named","این فیلد":"I don't recognize this field","رو نمی‌شناسم":"","ثبت شد":"logged","این اندازه‌گیری":"This measurement","اندازه‌گیری هفته‌ی":"Measurement for the week of","عدد وزن مشخص نبود":"The weight number wasn't clear","کیلوگرم برای":"kg for","حال‌وهوای":"Mood for","متن یادداشت خالی بود":"The note text was empty","ذخیره شد":"saved","این عادت":"This habit","رو با اکشن":"with the action","گزارش رو باز کردم":"I opened the report","رفتم به":"I went to","اندازه‌گیری‌ها رو باز کردم":"I opened the measurements","این بخش":"This section","یه مشکلی موقع انجام این کار پیش اومد":"Something went wrong while doing that","این کار درست انجام نشد، لطفاً دوباره امتحان کن":"That didn't work, please try again","نتونستم این کار رو انجام بدم":"I couldn't do that","در حال فکر کردن":"Thinking","کپی":"Copy","ریپلای":"Reply","هنوز چتی نداری":"You don't have any chats yet","این چت پاک بشه؟":"Delete this chat?","برای استفاده از چت اول باید وارد حسابت بشی":"To use chat, log in to your account first","در حال نوشتن":"Typing","در پاسخ به":"In reply to","یه مشکلی پیش اومد، دوباره امتحان کن":"Something went wrong, try again","الان اینترنت جهانی در دسترس نیست و نمی‌تونم جواب بدم":"The global internet isn't available right now and I can't answer","بقیه‌ی سایت کار می‌کنه، هر وقت نت برگشت دوباره بیا پیشم":"The rest of the site works; come back to me whenever the internet is back","روز از":"days out of","روز ثبت شده":"days logged","شیشه‌ی این ماه هنوز خالیه":"This month's jar is still empty","ممنونم بابت":"Thankful for","یه چیز خوب":"One good thing","چیزی که یاد گرفتم":"Something I learned","چیزی که ذهنم رو درگیر کرده":"Something on my mind","برای فردا":"For tomorrow","کاراکتر":"characters","امروز حالت چطوره؟":"How are you feeling today?","حالت اون روز چطور بود؟":"How did you feel that day?","چیزی پیدا نشد":"Nothing found","هنوز یادداشتی ننوشتی. اولین خاطره‌ت رو همین بالا بنویس":"You haven't written any notes yet. Write your first memory right above","در حال ذخیره":"Saving","هی، یادت نره":"Hey, don't forget","یه یادآوری کوچولو برات دارم":"I have a little reminder for you","اینو قرار بود بهت بگم":"I was supposed to tell you this","یه لحظه، این یادت نره":"One sec, don't forget this","لیانا اومده یادت بندازه":"Liana's here to remind you","باشه عزیزم":"Okay, dear","قبوله":"Deal","حله، گذاشتمش":"Done, I've set it","چشم، یادمه":"You got it, I'll remember","هر بار که سایت رو باز کنی، تا وقتی بگی انجامش دادی":"Every time you open the site, until you say it's done","هر بار که سایت رو باز کنی":"Every time you open the site","سر ساعت برات نوتیف هم میاد":"You'll also get a notification at that time","و وقتی اپ رو باز کنی یه بار نشونت می‌دم":"and I'll show it to you once when you open the app","اگه اون موقع سایت باز نبود، اولین باری که بیای نشونت می‌دم. برای نوتیف سر ساعت، از تنظیمات «اعلان‌ها» رو روشن کن":"If the site isn't open then, I'll show it the first time you come back. For a notification at that time, turn on \"Notifications\" in Settings","بهت یادآوری می‌کنم":"I'll remind you","فعلاً هیچ یادآوری‌ای نذاشتیم":"We haven't set any reminders yet","هر وقت خواستی بگو «یادم بنداز …» تا برات بذارم":"Whenever you like, say \"remind me …\" and I'll set one","اینا یادآورهای فعلیتن":"These are your current reminders","اگه خواستی یکی رو پاک کنم، شماره‌ش رو بگو":"If you want me to delete one, tell me its number","فعلاً یادآوری‌ای نداریم که پاک کنم":"We don't have any reminders to delete right now","تا یادآوری رو پاک کردم":"reminders deleted","کدوم یادآوری رو پاک کنم؟ شماره‌ش رو بگو":"Which reminder should I delete? Tell me its number","پاک شد":"Deleted","چی رو برات یادآوری کنم؟ بگو تا همین‌جا برات بذارم":"What should I remind you about? Tell me and I'll set it right here","چی رو یادآوری کنم؟ بگو تا برات بذارم":"What should I remind you about? Tell me and I'll set it","دیگه نشون نده":"Don't show again","بعداً یادم بنداز":"Remind me later","بک‌آپ هفتگی":"Weekly backup","یه نسخه‌ی کامل از اطلاعاتت رو ذخیره کردم؛ فایلش معمولاً توی پوشه‌ی Downloads گوشیته. اگه ذخیره نشد، دکمه‌ی پایین رو بزن":"I saved a full copy of your data; the file is usually in your phone's Downloads folder. If it didn't save, tap the button below","ذخیره / ارسال":"Save / Send","خاموش کردن اعلان‌ها":"Turn off notifications","این مرورگر اعلان رو پشتیبانی نمی‌کنه":"This browser doesn't support notifications","اعلان‌ها برای این اپ مسدوده. آیکون اپ رو روی صفحه‌ی گوشی نگه دار، «Site Settings» رو بزن و Notifications رو روی Allow بذار":"Notifications are blocked for this app. Long-press the app icon on your home screen, tap \"Site Settings\" and set Notifications to Allow","تو آیفون اول باید اپ رو با «Add to Home Screen» نصب کنی و از روی آیکونش باز کنی؛ بعد اینجا اعلان‌ها رو روشن کن":"On iPhone, first install the app with \"Add to Home Screen\" and open it from its icon; then turn on notifications here","روشنه":"On","یادآوری‌هایی که ساعت دارن سر همون ساعت برات نوتیف می‌شن، حتی وقتی اپ بسته‌ست":"Reminders that have a time notify you at that exact time, even when the app is closed","با روشن کردنش، یادآوری‌هایی که ساعت دارن (مثلاً «ساعت ۸ دارو») سر همون ساعت برات نوتیف می‌شن، حتی وقتی اپ بسته‌ست":"With this on, reminders that have a time (e.g. \"medicine at 8\") notify you at that exact time, even when the app is closed","اول وارد حسابت شو":"Log in to your account first","یه لحظه":"One moment","اعلان‌ها روشن شد":"Notifications turned on","اجازه داده نشد":"Permission not granted","اجازه‌ی اعلان رو ندادی":"You didn't allow notifications","روشن نشد. اینترنتت رو چک کن و دوباره امتحان کن":"Couldn't turn on. Check your internet and try again","اعلان‌ها خاموش شد":"Notifications turned off","خاموش شد":"Turned off","فرستادم، چند ثانیه صبر کن":"Sent, wait a few seconds","نشد بفرستم؛ یه بار خاموش و روشنش کن":"Couldn't send; turn it off and on once","نشد بفرستم؛ اینترنتت رو چک کن":"Couldn't send; check your internet","اعلان‌هات رو روشن کن":"Turn on your notifications","بدون اعلان، یادآوری‌ها و کارهات سر وقت بهت نمی‌رسن؛ حتی وقتی اپ بسته‌ست. فقط یه لمس طول می‌کشه و هر وقت خواستی می‌تونی خاموشش کنی":"Without notifications, your reminders and tasks won't reach you on time, even when the app is closed. It takes just one tap and you can turn it off anytime","روشن کن":"Turn on","الان نه":"Not now","از این به بعد یادآوری‌هات سر ساعتش می‌رسه":"From now on your reminders will arrive on time","اعلان‌ها مسدوده‌ست":"Notifications are blocked","برای روشن شدنش آیکون اپ رو روی صفحه‌ی گوشی نگه دار، «Site Settings» رو بزن و Notifications رو روی Allow بذار":"To turn them on, long-press the app icon on your home screen, tap \"Site Settings\" and set Notifications to Allow","هنوز روشن نشد":"Still not on","چند دقیقه‌ی دیگه دوباره یادت می‌ندازم؛ بدون اعلان، یادآوری‌هات سر ساعتش نمی‌رسه. اگه می‌خوای الان روشنش کنی، دوباره بزن":"I'll remind you again in a few minutes; without notifications, your reminders won't arrive on time. If you want to turn it on now, tap again","روشن نشد":"Couldn't turn on","اینترنتت رو چک کن و دوباره امتحان کن":"Check your internet and try again","یادآور دیگه":"Another reminder","جدید":"New","هنوز یادآوری‌ای نذاشتی. با":"You haven't set any reminders yet. With","جدید» متن، تاریخ و ساعت رو خودت مشخص کن":"New» set the text, date and time yourself","هنوز یادآوری‌ای نذاشتی":"You haven't set any reminders yet","نوتیف سر ساعت روشنه":"Timed notifications are on","حتی وقتی اپ بسته‌ست برات می‌فرستمش، و وقتی اپ بازه به‌شکل پاپ‌آپ نشونت می‌دم":"I'll send it even when the app is closed, and show it as a popup when the app is open","این مرورگر نوتیف رو پشتیبانی نمی‌کنه؛ یادآوری‌ها فقط وقتی اپ بازه به‌شکل پاپ‌آپ نشون داده می‌شن":"This browser doesn't support notifications; reminders only show as a popup while the app is open","نوتیف برای این اپ مسدوده. از تنظیمات گوشی (Site settings) اجازه‌ی Notifications رو بده تا سر ساعت نوتیف بیاد":"Notifications are blocked for this app. Allow Notifications in your phone's settings (Site settings) to get notifications on time","برای اینکه یادآورها سر ساعت نوتیف هم بشن (حتی وقتی اپ بسته‌ست)، اعلان‌ها رو روشن کن":"Turn on notifications so reminders also notify you on time (even when the app is closed)","اگه می‌خوای یادآورهای ساعت‌دار نوتیف هم بشن، اعلان‌ها رو روشن کن":"If you want timed reminders to notify you too, turn on notifications","این تاریخ وجود نداره":"This date doesn't exist","متن یادآور رو بنویس":"Write the reminder text","ساعت رو انتخاب کن":"Choose the time","حداقل یه روز از هفته رو انتخاب کن":"Choose at least one day of the week","این زمان گذشته؛ یه ساعت یا تاریخ بعدی انتخاب کن":"That time has passed; choose a later time or date","این یادآور پاک بشه؟":"Delete this reminder?","پاک کن":"Delete","وقت آب خوردنه":"Time to drink water","یه لیوان آب بخور و تو لیانا تیکش رو بزن":"Drink a glass of water and tick it off in Liana","چالش ۲ دقیقه‌ای امروز":"Today's 2-minute challenge","امروز یه کار کوچیک ۲ دقیقه‌ای داریم؛ بیا با هم انجامش بدیم":"We have a small 2-minute task today; let's do it together","قابلیت جدید تو لیانا":"A new feature in Liana","یه عنوان بنویس":"Write a title","متن اعلان رو بنویس":"Write the notification text","مطمئنی؟ دوباره بزن تا برای همه بره":"Are you sure? Tap again to send it to everyone","در حال ارسال":"Sending","در صف ارسال قرار گرفت":"Added to the send queue","نفر. هر دقیقه چند نفر می‌رسه":"people. A few people get it every minute","برای خودت فرستاده شد":"Sent to yourself","سرور هنوز این قابلیت رو نداره؛ Worker باید آپدیت بشه":"The server doesn't support this yet; the Worker needs to be updated","این حساب اجازه‌ی ارسال اعلان نداره":"This account isn't allowed to send notifications","زیاد فرستادی؛ یه کم بعد دوباره امتحان کن":"You sent too many; try again in a bit","برای دستگاه تو اعلانی ثبت نشده؛ اول اعلان‌ها رو روشن کن":"No notification is registered for your device; turn on notifications first","هنوز هیچ‌کس اعلان‌ها رو روشن نکرده":"Nobody has turned on notifications yet","عنوان یا متن اعلان درست نیست":"The notification title or text isn't valid","به دستگاهت نرسید؛ اعلان‌ها رو یه بار خاموش و روشن کن":"It didn't reach your device; turn notifications off and on once","نشد بفرستم؛ دوباره امتحان کن":"Couldn't send; try again","تموم شد":"Finished","دستگاه رسید":"Device received","نفر":"people","تا نرسید":"didn't receive","روز آروم":"Calm day","پرانرژی":"Energetic","سه نفس عمیق با لیانا":"Three deep breaths with Liana","یه دقیقه فقط نفس بکش":"Just breathe for a minute","یه لیوان آب بخور":"Drink a glass of water","همین الان، بدون فکر کردن":"Right now, without overthinking","کشش گردن و شونه":"Neck and shoulder stretch","۳۰ ثانیه آروم بکش":"Stretch gently for 30 seconds","۲ دقیقه راه برو":"Walk for 2 minutes","از جات پاشو و پاهات رو تکون بده":"Get up and move your legs","سه چیز خوبِ امروز":"Three good things from today","تو ذهنت بگو یا یه جا بنویس":"Say them in your head or write them down somewhere","برو کنار پنجره":"Go to the window","یه نگاه به بیرون و چند نفس تازه":"A glance outside and a few fresh breaths","به خودت لبخند بزن":"Smile at yourself","همین‌قدر ساده، جلوی آینه":"Just that simple, in front of the mirror","صاف بشین":"Sit up straight","کمرت رو راست کن و شونه‌هات رو شل کن":"Straighten your back and relax your shoulders","استراحت چشم":"Eye break","۲۰ ثانیه به یه نقطه‌ی دور نگاه کن":"Look at something far away for 20 seconds","یه پیام مهربون بفرست":"Send a kind message","برای یکی که دوستش داری":"To someone you love","یه گوشه رو مرتب کن":"Tidy one corner","فقط همون یه گوشه، ۲ دقیقه":"Just that one corner, 2 minutes","یه آهنگ دوست‌داشتنی":"A song you love","گوش بده و هیچ کار دیگه‌ای نکن":"Listen and do nothing else","شونه‌هات رو بچرخون":"Roll your shoulders","ده بار آروم به عقب، ده بار به جلو":"Ten times gently backward, ten times forward","مچ دست‌هات رو شل کن":"Loosen your wrists","۳۰ ثانیه آروم بچرخونشون":"Rotate them gently for 30 seconds","دست‌هات رو بالا ببر":"Raise your arms","خودت رو تا جایی که می‌شه بکش، بعد ول کن":"Stretch as far as you can, then let go","روی پنجه‌هات بلند شو":"Rise onto your toes","ده بار؛ آروم بالا، آروم پایین":"Ten times; slowly up, slowly down","پنج‌تا اسکات آروم":"Five slow squats","فقط پنج‌تا؛ بیشتر لازم نیست":"Just five; no need for more","فکت رو شل کن":"Relax your jaw","دندون‌هات رو از هم جدا کن و صورتت رو ماساژ بده":"Part your teeth and massage your face","صورتت رو آب خنک بزن":"Splash cool water on your face","یه دقیقه حس تازگی":"One minute of freshness","یه دقیقه نور آفتاب":"One minute of sunlight","صورتت رو به نور بگیر و نفس بکش":"Turn your face to the light and breathe","پنج چیز دور و برت رو ببین":"See five things around you","اسمشون رو تو ذهنت بگو و آروم باش":"Name them in your head and stay calm","دست‌هات رو کرم بزن":"Put cream on your hands","یه ماساژ کوچیک برای خودت":"A little massage for yourself","سه نفس آروم با لیانا":"Three calm breaths with Liana","قبل از ادامه‌ی کار یه استراحت کوتاه":"A short break before you continue","یه نفس عمیق و آروم":"One deep, calm breath","یه دقیقه فقط به نفست فکر کن":"For one minute, just think about your breath","یه کار کوچیک رو تموم کن":"Finish one small task","همونی که مدتیه عقبش انداختی":"The one you've been putting off","کار مهم فردا رو بنویس":"Write tomorrow's important task","فقط یه خط تا ذهنت سبک بشه":"Just one line to lighten your mind","کیفت رو مرتب کن":"Tidy your bag","یه چیز اضافه رو دور بنداز":"Throw away one extra thing","میزت رو مرتب کن":"Tidy your desk","فقط چیزایی که لازم نیست رو جمع کن":"Just clear away what you don't need","تختت رو مرتب کن":"Make your bed","ملافه رو صاف کن و بالشت رو سر جاش بذار":"Smooth the sheet and put the pillow in place","یه چیز رو سر جاش بذار":"Put one thing back in its place","همونی که وسط راه مونده":"The one that got left halfway","گوشی رو کنار بذار":"Put your phone aside","یه دقیقه فقط به اطرافت نگاه کن":"For one minute, just look around you","یه اپ اضافه رو پاک کن":"Delete one extra app","همونی که ماهه بازش نکردی":"The one you haven't opened in months","یه عکس قشنگ نگاه کن":"Look at a beautiful photo","از یه روز خوب تو گالری":"From a good day in your gallery","یه ویس کوتاه بفرست":"Send a short voice message","برای یکی که دلت براش تنگ شده":"To someone you miss","از یه نفر تعریف کن":"Compliment someone","یه جمله‌ی صادقانه و قشنگ":"One honest, nice sentence","از یه نفر تشکر کن":"Thank someone","بابت یه کار کوچیکش":"For something small they did","یه بغل کوچیک":"A little hug","برای یه نفر که کنارته؛ وگرنه برای خودت":"For someone beside you; otherwise for yourself","به یه گیاه سر بزن":"Check on a plant","آب بده یا فقط یه نگاه مهربون بهش بنداز":"Water it or just give it a kind look","یه خط تو ژورنال بنویس":"Write a line in your journal","فقط همین الان چی تو دلته":"Just what's on your mind right now","یه کلمه‌ی جدید یاد بگیر":"Learn a new word","از هر زبونی که دوست داری":"From any language you like","یه صفحه بخون":"Read a page","از کتابی که کنارته":"From the book beside you","یه آهنگ رو زمزمه کن":"Hum a song","بدون خجالت؛ یه خطش هم کافیه":"Don't be shy; even one line is enough","۳۰ ثانیه برقص":"Dance for 30 seconds","یه آهنگ شاد بذار و بی‌هدف تکون بخور":"Put on a happy song and move aimlessly","یه خط‌خطی بکش":"Doodle something","هرچی دلت خواست، بدون قضاوت":"Whatever you feel like, without judgment","مهم‌ترین کار امروز؟":"Today's most important task?","فقط یه کار رو انتخاب کن":"Just choose one task","یه میوه یا آجیل بخور":"Eat a fruit or some nuts","آروم و با لذت":"Slowly and with enjoyment","نخ دندون بکش":"Floss","فقط همین امشب، یه دقیقه":"Just tonight, one minute","ضدآفتاب یادت نره":"Don't forget sunscreen","اگه می‌خوای بری بیرون، همین الان بزن":"If you're going out, put it on right now","کمرت رو خم و راست کن":"Bend and straighten your back","روی صندلی هم می‌شه؛ ده بار آروم":"You can do it on a chair; ten times, gently","کمرت رو آروم بپیچون":"Gently twist your back","روی صندلی، به هر طرف ۱۵ ثانیه":"On a chair, 15 seconds each side","ساعت خوابت رو بذار":"Set your sleep time","یه ساعت ثابت برای امشب":"A fixed time for tonight","لباس فردا رو آماده کن":"Prepare tomorrow's clothes","که صبح راحت‌تر شروع کنی":"So you can start the morning more easily","بطری آبت رو پر کن":"Fill your water bottle","جایی بذارش که چشمت بهش بیفته":"Put it where you can see it","از خودت تعریف کن":"Praise yourself","به یه کار خوبِ امروزت آفرین بگو":"Say well done for one good thing you did today","یه نگرانی رو رها کن":"Let go of one worry","بنویسش یا بگو «فعلاً کنارش می‌ذارم":"Write it down or say \"I'll set it aside for now","یه کار رو آروم انجام بده":"Do one thing slowly","مثلاً آب خوردن؛ فقط حواست به همون باشه":"Like drinking water; just focus on that","آسمون رو نگاه کن":"Look at the sky","یه نگاه به ابرها یا ستاره‌ها":"A glance at the clouds or the stars","یه هزینه رو ثبت کن":"Log an expense","حساب‌وکتاب ساده، ذهن آروم":"Simple bookkeeping, calm mind","هر وقت خواستی چندتا عادت بساز تا با هم شروع کنیم":"Whenever you like, create a few habits so we can start together","امروز انرژیت چقدره؟ بر اساسش برنامه‌ات رو سبک یا پرتکان می‌کنم":"How's your energy today? I'll make your plan light or full based on it","همه‌ی تمرکز امروز انجام شد! افتخار می‌کنم بهت":"All of today's focus is done! I'm proud of you","همون چیزی که لازم بود رو انجام دادی. امروز رو بردی":"You did exactly what was needed. You won today","حلقه‌ی امروز بسته شد! افتخار می‌کنم بهت":"Today's ring is closed! I'm proud of you","روز آرومه؛ فقط":"It's a calm day; just","تا کار دیگه کافیه":"more tasks is enough","چه انرژی‌ای":"What energy","تا مونده تا حلقه ببنده":"left until the ring closes","قدم‌به‌قدم؛":"Step by step;","تا کار تا بستن حلقه":"tasks until the ring closes","عادت‌های تمرکز امروز":"Today's focus habits","عادت‌هایی که می‌خوای توی «تمرکز امروز» ببینی رو انتخاب کن. هر وقت خواستی عوضش کن":"Choose the habits you want to see in \"Today's focus\". Change them whenever you like","انتخاب خودکار":"Auto select","انرژیت امروز چقدره؟":"How's your energy today?","دوباره بزن تا لغو بشه":"Tap again to cancel","تمرکز امروز":"Today's focus","انتخاب":"Choose","از ۸ لیوان":"of 8 glasses","کم کن":"Less","یه لیوان بیشتر":"One more glass","یه شروع تازه؟ امروز اولین حلقه‌ی زنجیره‌ات رو ببند":"A fresh start? Close the first ring of your chain today","این هفته یه روز استراحت داشتی و زنجیره نشکست":"You had a rest day this week and your streak didn't break","هر هفته یه روز استراحت رایگان داری؛ یه روز جا افتادن زنجیره‌ات رو نمی‌شکنه":"Every week you get one free rest day; missing one day doesn't break your streak","امروز رو هم ببندی می‌شه":"You can close today too","روز پشت هم":"days in a row","رکورد":"Record","ماموریت یک‌دقیقه‌ای امروز":"Today's one-minute mission","شروع":"Start","ستاره از ماموریت‌ها":"stars from missions","آماده‌ای؟":"Ready?","یه نفس عمیق با من":"One deep breath with me","آفرین! حالت بهتر شد؟":"Well done! Do you feel better?","نفس بکش":"Breathe in","نگه دار":"Hold","آروم بیرون بده":"Breathe out slowly","دقیقه و":"minutes and","از اول":"Start over","توقف":"Pause","ادامه":"Resume","در جریان":"Running","متوقف شد":"Paused","آماده":"Ready","مدت تایمر":"Timer duration","تأیید":"Confirm","یه مشکلی پیش اومد. صفحه رو دوباره باز کن":"Something went wrong. Reopen the page","کارت‌های امروز":"Today's cards","کارت‌های تیک‌دار امروز توی کاروسل نشون داده می‌شن. هر کدوم رو نمی‌خوای، تیکش رو بردار، یا یه کارت دیگه رو تیک بزن تا جاش بیاد. این انتخاب فقط برای امروزه و فردا دوباره خودکار عوض می‌شه":"Today's ticked cards appear in the carousel. Untick any you don't want, or tick another card to bring it in. This choice is only for today and changes automatically again tomorrow","کارت‌های پریود":"Period cards","حداقل یه کارت باید تیک داشته باشه":"At least one card must be ticked","تنفس شکمی":"Belly breathing","راحت بنشین و یک دست را روی شکم بگذار. تا ۴ بشمر و نفس بگیر تا شکم بیاید جلو، بعد تا ۶ بشمر و آرام بیرون بده":"Sit comfortably and place one hand on your belly. Count to 4 as you breathe in so your belly rises, then count to 6 and breathe out slowly","تنفس متناوب بینی":"Alternate nostril breathing","با انگشت شست، سوراخ راست بینی را ببند و از چپ نفس بگیر. بعد چپ را ببند و از راست بیرون بده. همین‌طور ادامه بده":"With your thumb, close your right nostril and breathe in through the left. Then close the left and breathe out through the right. Keep going like this","تنفس ۴-۷-۸":"4-7-8 breathing","تا ۴ بشمر و از بینی نفس بگیر، تا ۷ نگه دار و تا ۸ آرام از دهان بیرون بده. مناسب قبل از خواب و وقتی ذهنت شلوغ است":"Count to 4 as you breathe in through your nose, hold for 7 and breathe out slowly through your mouth for 8. Good before sleep and when your mind is busy","اسکن بدن":"Body scan","چشم‌ها را ببند. توجه‌ات را از سر تا پا ببر و هر جا که سفت بود، با بازدم شلش کن":"Close your eyes. Move your attention from head to toe, and wherever you feel tightness, soften it with your exhale","حالت کوه":"Mountain pose","صاف بایست، کف پاها محکم روی زمین، شانه‌ها شل. چند نفس آرام بکش و قدت را بلند حس کن":"Stand tall, feet firmly on the ground, shoulders relaxed. Take a few calm breaths and feel yourself grow taller","کشش گردن به طرفین":"Side neck stretch","صاف بنشین. گوش را به سمت شانه ببر، هر طرف ۱۵ ثانیه. شانه‌ی مقابل را پایین نگه دار":"Sit up straight. Bring your ear toward your shoulder, 15 seconds each side. Keep the opposite shoulder down","چرخش آرام گردن":"Gentle neck rolls","چانه را به سینه نزدیک کن و گردن را خیلی آرام و با دایره‌های کوچک بچرخان. نیمی از زمان یک طرف، نیمی طرف دیگر":"Bring your chin toward your chest and roll your neck very slowly in small circles. Half the time one way, half the other","چرخش شانه‌ها":"Shoulder rolls","شانه‌ها را بالا بیاور، به عقب بچرخان و پایین بده. بعد همین را رو به جلو انجام بده":"Lift your shoulders, roll them back and down. Then do the same going forward","دست‌های قفل پشت کمر":"Hands clasped behind the back","دست‌ها را پشت کمر قفل کن، سینه را باز کن و دست‌ها را کمی از بدن دور کن. نفس عمیق بکش":"Clasp your hands behind your back, open your chest and lift your hands slightly away from your body. Take a deep breath","کشش دست‌ها بالای سر":"Overhead arm stretch","انگشتان را در هم قفل کن، کف دست‌ها رو به سقف، و تمام بدن را به بالا بکش. با بازدم شل شو":"Interlace your fingers, palms facing the ceiling, and stretch your whole body upward. Relax with your exhale","دست‌های عقاب":"Eagle arms","دست‌ها را جلوی بدن در هم بپیچ و آرنج‌ها را بالا بیاور تا بین کتف‌ها باز شود. هر طرف ۱۵ ثانیه":"Wrap your arms around each other in front of you and lift your elbows so the space between your shoulder blades opens. 15 seconds each side","کشش مچ و انگشتان":"Wrist and finger stretch","یک دست را جلو دراز کن و با دست دیگر انگشتانش را آرام به عقب بکش. بعد جهت را عوض کن. مچ‌ها را هم بچرخان":"Extend one arm forward and gently pull its fingers back with your other hand. Then switch directions. Roll your wrists too","باز کردن سینه":"Chest opener","دست‌ها را پشت سر بگذار، آرنج‌ها را به طرفین باز کن و سینه را کمی به بالا بده. نفس عمیق بکش":"Place your hands behind your head, open your elbows to the sides and lift your chest slightly. Take a deep breath","گربه و گاو":"Cat-cow","چهار دست و پا شو. با دم کمر را گود کن و سر را بالا ببر، با بازدم کمر را گرد کن و چانه را به سینه بچسبان":"Get on all fours. As you breathe in, arch your back and lift your head; as you breathe out, round your back and tuck your chin to your chest","حالت کودک":"Child's pose","روی پاشنه‌ها بنشین، پیشانی را روی زمین بگذار و دست‌ها را دراز جلو ببر. نفس‌های آرام بکش":"Sit on your heels, rest your forehead on the floor and stretch your arms forward. Breathe calmly","پیچش نشسته":"Seated twist","صاف بنشین و بالاتنه را آرام به یک سمت بچرخان. دست را روی زانو بگذار. هر طرف ۱۵ ثانیه":"Sit up straight and gently turn your torso to one side. Place your hand on your knee. 15 seconds each side","خم شدن رو به جلو":"Forward fold","زانوها را کمی خم کن و بالاتنه را به جلو بینداز. سر و دست‌ها سنگین آویزان باشند":"Bend your knees slightly and let your torso fall forward. Let your head and arms hang heavy","زانو به سینه":"Knees to chest","به پشت بخواب، زانوها را بغل کن و آرام به طرفین تاب بخور تا کمرت ماساژ شود":"Lie on your back, hug your knees and gently rock side to side to massage your lower back","پیچش خوابیده":"Lying twist","به پشت بخواب و زانوها را خم کن. هر دو را آرام به یک سمت بینداز و سر را به سمت مخالف بچرخان. هر طرف حدود ۲۵ ثانیه":"Lie on your back with your knees bent. Gently drop both to one side and turn your head the opposite way. About 25 seconds each side","سگ رو به پایین ملایم":"Gentle downward dog","باسن را بالا ببر و بدن را به شکل V وارونه دربیاور. زانوها کمی خم بماند و گردن آزاد باشد":"Lift your hips and make an upside-down V with your body. Keep your knees slightly bent and your neck free","کشش جانبی ایستاده":"Standing side stretch","یک دست را بالا ببر و به پهلو خم شو. هر طرف ۱۵ ثانیه، نفس‌ها آرام":"Raise one arm and bend to the side. 15 seconds each side, breathing calmly","پروانه":"Butterfly","کف پاها را به هم بچسبان و بنشین. زانوها را به طرفین بیفکن و آرام کمی به جلو خم شو":"Press the soles of your feet together and sit. Let your knees fall to the sides and fold slightly forward","پاها روی دیوار":"Legs up the wall","به پشت بخواب و پاها را بالا روی دیوار بگذار. دست‌ها کنار بدن. مخصوص پاهای خسته است":"Lie on your back and rest your legs up on the wall. Arms by your sides. Perfect for tired legs","پل ملایم":"Gentle bridge","به پشت بخواب، زانوها خم. باسن را کمی بالا ببر و آرام پایین بیاور":"Lie on your back with your knees bent. Lift your hips slightly and lower them slowly","کشش پشت پا نشسته":"Seated hamstring stretch","پاها را دراز کن و آرام به جلو خم شو. اگر نمی‌رسی، زانوها را کمی خم نگه دار":"Stretch your legs out and fold forward slowly. If you can't reach, keep your knees slightly bent","نوزاد شاد":"Happy baby","به پشت بخواب، پاها را از کنار بگیر و آرام به طرفین تکان بخور":"Lie on your back, hold your feet from the outside and gently rock side to side","کشش ران جلو":"Front thigh stretch","یک زانو روی زمین، پای دیگر جلو. باسن را آرام به جلو بده تا جلوی ران کشیده شود. هر طرف ۱۵ ثانیه":"One knee on the floor, the other foot forward. Gently push your hips forward until the front of your thigh stretches. 15 seconds each side","شل‌سازی کامل":"Full relaxation","به پشت بخواب، دست‌ها و پاها شل، چشم‌ها بسته. همه‌ی بدن را به زمین بسپار و فقط نفس بکش":"Lie on your back, arms and legs relaxed, eyes closed. Give your whole body to the floor and just breathe","تنفس و تمرکز":"Breathing & focus","گردن، شانه و دست":"Neck, shoulders & arms","کمر و ستون فقرات":"Lower back & spine","پا و باسن":"Legs & glutes","شل‌سازی پایانی":"Final relaxation","باران":"Rain","رعد":"Thunder","موج دریا":"Ocean waves","جنگل":"Forest","باد":"Wind","رود":"River","آتش":"Fire","جیرجیرک":"Crickets","خرخر گربه":"Cat purring","ضربان قلب":"Heartbeat","قطار":"Train","کافه":"Café","نویز سفید":"White noise","نویز قهوه‌ای":"Brown noise","کاسه‌ی تبتی":"Tibetan bowl","طبیعت":"Nature","خانه و محیط":"Home & ambience","نویز و آرامش":"Noise & calm","شب بارانی":"Rainy night","کنار آتش":"By the fire","خواب گربه‌ای":"Cat nap","ساحل":"Beach","ذهن آرام":"Calm mind","قطار شبانه":"Night train","آوا":"Sound","آوای آرامش":"Calming sounds","پخش / توقف":"Play / Pause","در حال پخش":"Playing","چند صدا را با هم ترکیب کن؛ مثلاً باران":"Mix several sounds together; e.g. rain","ترکیب‌های آماده":"Ready-made mixes","ترکیب‌های من":"My mixes","اسم این ترکیب":"Name this mix","فایل نیست":"File missing","خاموش شدن خودکار":"Auto shut-off","خاموش":"Off","با شروع و توقف تایمر، صدا هم شروع و متوقف بشه":"Start and stop the sound with the timer","ترکیب":"Mix","یوگای امروز":"Today's yoga","حدود":"about","بانک حرکات یوگا":"Yoga pose bank","آفرین، تمومش کردی":"Well done, you finished","حرکت آرامش برای امروز. حالا چند نفس عمیق بکش":"A calming pose for today. Now take a few deep breaths","دوباره از اول":"Start over","قبلی":"Previous","رفتن خودکار به حرکت بعد":"Automatically move to the next pose","بعدی":"Next","پایان":"Finish","دم":"Inhale","بازدم":"Exhale","برای شروع بزن":"Tap to start","روی هر حرکت بزن تا به برنامه‌ی امروز اضافه یا از اون حذف بشه. شماره‌ها ترتیب حرکت‌ها هستن":"Tap a pose to add it to or remove it from today's plan. The numbers show the order of the poses","برنامه‌ی تصادفی امروز":"Today's random plan","به لیانا پلنر خوش اومدی":"Welcome to Liana Planner","عادت‌های روزانه‌ات، زیبا و مرتب":"Your daily habits, beautiful and organized","سلام، خوش اومدی! من لیانام، دستیار تو و کنارتم تا عادت‌هات رو راحت‌تر بسازی و دنبال کنی":"Hi, welcome! I'm Liana, your assistant, here with you so you can build and track your habits more easily","درباره‌ی خودت بگو":"Tell us about yourself","این به شخصی‌سازی تجربه‌ی تو کمک می‌کنه":"This helps personalize your experience","اسمت":"Your name","هدف‌های اصلیت چیه؟":"What are your main goals?","چیزی که برات مهم‌تره رو انتخاب کن":"Choose what matters most to you","عادت‌های بهتر":"Better habits","تناسب اندام":"Fitness","تغذیه‌ی سالم‌تر":"Healthier eating","کاهش استرس":"Less stress","یادگیری و رشد":"Learning & growth","خواب بهتر":"Better sleep","از پسش برمی‌آی":"You've got this","قدم‌های کوچیک امروز، تغییرهای بزرگ فردا":"Small steps today, big changes tomorrow","خیلی خوشحالیم که توی این مسیر همراهتیم":"We're so happy to be with you on this journey","حالا بریم سراغ لیانا پلنر و روز اولت":"Now let's go to Liana Planner and your first day","بزن بریم":"Let's go","کد بازیابی تو":"Your recovery code","اگه یه روزی رمزت یادت رفت، با این کد می‌تونی رمز جدید بسازی. این کد همیشه همینه و هیچ‌وقت عوض نمی‌شه":"If you ever forget your password, you can create a new one with this code. This code never changes","همین الان ازش اسکرین‌شات بگیر یا یه جای امن ذخیره‌ش کن":"Take a screenshot of it right now or save it somewhere safe","این کد رو به هیچ‌کس نده":"Don't give this code to anyone","کپی کد":"Copy code","ذخیره‌ش کردم":"I saved it","در حال گرفتن کد":"Getting the code","برای دیدن کد باید به اینترنت وصل باشی":"You need to be online to see the code","کد بازیابی مخصوص حساب‌های ثبت‌شده‌ست؛ اول وارد شو یا ثبت‌نام کن":"The recovery code is only for registered accounts; log in or sign up first","دوباره امتحان کن":"Try again","رمز جدید بساز":"Create a new password","یه رمز تازه برای حسابت بنویس":"Write a new password for your account","رمز جدید (حداقل ۶ کاراکتر":"New password (at least 6 characters","تکرار رمز":"Repeat password","ذخیره و ورود":"Save and log in","رمزت رو فراموش کردی؟":"Forgot your password?","ایمیلت رو بنویس تا لینک تغییر رمز برات بفرستیم":"Enter your email and we'll send you a password reset link","ایمیل و کد بازیابی‌ت رو بنویس و رمز جدید بساز":"Enter your email and recovery code and create a new password","کد بازیابی":"Recovery code","کدت رو توی تنظیمات اپ، بخش «کد بازیابی حساب» می‌بینی. اگه ذخیره‌ش نکردی و جایی وارد نیستی، بازیابی ممکن نیست":"You can see your code in the app settings under \"Account recovery code\". If you didn't save it and aren't logged in anywhere, recovery isn't possible","ارسال لینک":"Send link","تغییر رمز و ورود":"Change password and log in","ایمیل یا کد بازیابی درست نیست":"The email or recovery code isn't correct","چند بار تلاش کردی؛ یه ساعت دیگه دوباره امتحان کن":"You tried too many times; try again in an hour","اطلاعات رو کامل و درست بنویس (رمز حداقل ۶ کاراکتر":"Fill in the information completely and correctly (password at least 6 characters","ارسال ایمیل هنوز فعال نیست؛ از تب «کد بازیابی» استفاده کن":"Sending email isn't active yet; use the \"Recovery code\" tab","ایمیل ارسال نشد؛ از کد بازیابی استفاده کن یا بعداً امتحان کن":"The email wasn't sent; use the recovery code or try again later","این لینک منقضی شده یا قبلاً استفاده شده. دوباره درخواست بده":"This link has expired or was already used. Request a new one","یه مشکلی پیش اومد؛ دوباره امتحان کن":"Something went wrong; try again","اتصال برقرار نشد. نت آزاد لازمه":"Couldn't connect. An open internet is needed","رمز عوض شد":"Password changed","در حال ورود":"Logging in","اگه این ایمیل حساب داشته باشه، لینک تغییر رمز تا چند دقیقه دیگه می‌رسه. پوشه‌ی اسپم رو هم نگاه کن":"If this email has an account, the password reset link will arrive in a few minutes. Check your spam folder too","دو رمز با هم یکی نیستن":"The two passwords don't match","لکه‌بینی":"Spotting","خیلی زیاد":"Very heavy","پریود (شدت نامشخص":"Period (flow unspecified","نامشخص":"Unspecified","درد و بدن":"Pain & body","گرفتگی و دل‌درد":"Cramps & stomach pain","کمردرد":"Back pain","سردرد":"Headache","میگرن":"Migraine","حساسیت سینه":"Breast tenderness","نفخ":"Bloating","تهوع":"Nausea","اسهال":"Diarrhea","یبوست":"Constipation","خستگی زیاد":"Extreme fatigue","جوش صورت":"Acne","هوس غذا":"Food cravings","بی‌خوابی":"Insomnia","گرگرفتگی / تعریق شبانه":"Hot flashes / night sweats","سرگیجه":"Dizziness","درد لگن بین دوره‌ها":"Pelvic pain between periods","سوزش ادرار":"Burning urination","علائم هشدار":"Warning signs","غش یا حالت غش":"Fainting or near-fainting","سرگیجه شدید / تاری دید":"Severe dizziness / blurred vision","تب و لرز":"Fever and chills","استفراغ شدید":"Severe vomiting","درد شدید لگن (تحمل‌ناپذیر":"Severe pelvic pain (unbearable","تنگی نفس یا تپش قلب شدید":"Shortness of breath or severe palpitations","رنگ‌پریدگی و ضعف شدید":"Paleness and severe weakness","خونریزی بعد از رابطه":"Bleeding after intercourse","آروم":"Calm","حساس":"Sensitive","عصبی":"Irritable","مضطرب":"Anxious","بی‌انگیزه":"Unmotivated","بدون ترشح":"No discharge","خشک":"Dry","کرمی":"Creamy","آبکی":"Watery","شفاف و کشسان":"Clear and stretchy","غیرعادی (بدبو / زرد / سبز":"Unusual (smelly / yellow / green","قاعدگی":"Menstruation","پیش از تخمک‌گذاری":"Before ovulation","پنجره‌ی باروری (تخمین":"Fertile window (estimate","روز احتمالی تخمک‌گذاری":"Likely ovulation day","پیش از پریود":"Before period","تأخیر در پریود":"Late period","فاصله‌ی خیلی کم از پریود قبلی":"Very short interval from the previous period","روز)؛ شاید خونریزی بین دوره‌ای یا ثبت ناقص":"days); maybe intermenstrual bleeding or incomplete logging","فاصله‌ی خیلی کم بین دو پریود":"Very short interval between two periods","چرخه‌ی کوتاه":"Short cycle","روز؛ کمتر از ۲۱":"days; less than 21","چرخه‌ی کوتاه (کمتر از ۲۱ روز":"Short cycle (less than 21 days","بیش از ۹۰ روز بین این پریود و قبلی":"More than 90 days between this period and the previous one","فاصله‌ی بیش از ۹۰ روز بین دو پریود":"More than 90 days between two periods","چرخه‌ی خیلی طولانی":"Very long cycle","چرخه‌ی خیلی طولانی (بیش از ۴۵ روز":"Very long cycle (more than 45 days","چرخه‌ی طولانی":"Long cycle","روز؛ بیشتر از ۳۵":"days; more than 35","چرخه‌ی طولانی (بیش از ۳۵ روز":"Long cycle (more than 35 days","روز دیرتر از زمان پیش‌بینی‌شده شروع شد":"days later than predicted","شروع پریود با تأخیر نسبت به الگوی خودت":"Period started late compared to your own pattern","روز زودتر از زمان پیش‌بینی‌شده شروع شد":"days earlier than predicted","شروع زودتر از الگوی خودت":"Started earlier than your own pattern","مدت پریود خیلی طولانی":"Very long period","پریود خیلی طولانی (بیش از ۱۰ روز":"Very long period (more than 10 days","مدت پریود طولانی":"Long period","روز؛ بیشتر از ۷":"days; more than 7","پریود طولانی (بیش از ۷ روز":"Long period (more than 7 days","مدت پریود فقط ۱ روز ثبت شده":"Period length logged as only 1 day","پریود خیلی کوتاه (۱ روز":"Very short period (1 day","روز «خیلی زیاد":"days \"very heavy","روز «زیاد":"days \"heavy","نوار/تامپون در یک روز":"pads/tampons in one day","خونریزی خیلی شدید":"Very heavy bleeding","خونریزی زیاد":"Heavy bleeding","خونریزی بیشتر از معمول":"Heavier than usual bleeding","خونریزی زیاد یا بیشتر از معمول":"Heavy or heavier-than-usual bleeding","خونریزی خیلی کم (فقط لکه‌بینی یا کم":"Very light bleeding (only spotting or light","خونریزی خیلی کم":"Very light bleeding","خونریزی کمتر از معمول":"Lighter than usual bleeding","لخته‌ی بزرگ (بزرگ‌تر از سکه) در":"Large clot (bigger than a coin) on","لخته‌ی بزرگ":"Large clot","درد شدید (حداکثر":"Severe pain (up to","از ۱۰":"out of 10","درد شدید (۸ از ۱۰ یا بیشتر":"Severe pain (8 out of 10 or more","درد نسبتاً شدید (حداکثر":"Fairly severe pain (up to","درد نسبتاً شدید":"Fairly severe pain","علائم قابل‌توجه":"Notable symptoms","ترشح غیرعادی":"Unusual discharge","لکه‌بینی بین دوره‌ها در":"Spotting between periods on","لکه‌بینی بین دوره‌ها":"Spotting between periods","منظم":"Regular","کمی نامنظم":"Slightly irregular","نامنظم":"Irregular","از شروع آخرین پریود":"since the start of your last period","روز گذشته و پریود جدیدی ثبت نشده":"days have passed and no new period is logged","الان":"Now","روز از زمان پیش‌بینی‌شده‌ی پریود گذشته (آخرین پریود":"days have passed since the predicted period time (last period","روز تأخیر نسبت به زمان پیش‌بینی‌شده داری":"days late compared to the predicted time","مورد از":"cases of","پریود":"Period","میانگین فاصله‌ی پریودها در":"Average interval between periods over","دوره‌ی اخیر از":"recent cycles, from","بیشتر":"more","کمتر":"less","مدت پریود از میانگین":"Period length compared to the average","شدت خونریزی در":"Bleeding intensity over","دوره‌ی اخیر نسبت به قبل":"recent cycles compared to before","گزارش پریود برای پزشک":"Period report for your doctor","لیانا پلنر":"Liana Planner","تاریخ تهیه":"Date prepared","بازه":"Range","میانگین فاصله‌ی پریودها":"Average interval between periods","روز (از":"days (from","میانگین مدت پریود":"Average period length","شروع آخرین پریود":"Start of last period","نکات مهم":"Key points","مورد نگران‌کننده‌ای در داده‌های ثبت‌شده دیده نشد":"Nothing concerning was found in the logged data","داده‌ی کافی برای تحلیل نیست":"Not enough data for analysis","جزئیات هر پریود":"Details of each period","، ادامه دارد":", ongoing","فاصله از پریود قبل":"Interval since previous period","روز دیرتر":"days later","روز زودتر":"days earlier","از پیش‌بینی":"than predicted","خونریزی":"Bleeding","بیشترین مصرف نوار/تامپون در یک روز":"Most pads/tampons in one day","لخته":"Clots","روز بزرگ":"days large","روز کوچک":"days small","حداکثر درد":"Max pain","علائم":"Symptoms","این گزارش فقط بر اساس چیزی است که خودم در اپ ثبت کرده‌ام و تشخیص پزشکی نیست":"This report is based only on what I logged in the app and is not a medical diagnosis","روز ۱":"Day 1","درد":"Pain","خونریزی، درد، علائم و حال‌وهوات رو اینجا ثبت کن":"Log bleeding, pain, symptoms and your mood here","هنوز پریودی ثبت نشده":"No period logged yet","اگه پریودت همین الان شروع شده «شروع پریود» رو بزن، یا آخرین پریودت رو با تاریخ ثبت کن تا پیش‌بینی‌ها شروع بشه":"If your period just started, tap \"Start period\", or log your last period with its date to start getting predictions","شروع پریود":"Start period","ثبت آخرین پریود":"Log last period","مدت معمول پریودت حدود":"Your usual period length is about","روز تأخیر":"days late","پریودت از":"Your period was predicted for","پیش‌بینی شده بود":"was predicted","پریود پیش‌بینی شده":"Predicted period","پیش‌بینی":"Prediction","روز تا پریود بعدی":"days until next period","چرخه":"Cycle","باروری (تخمین":"Fertile (estimate","تخمک‌گذاری":"Ovulation","پایان پریود":"End of period","ثبت علائم امروز":"Log today's symptoms","روز از زمان پیش‌بینی‌شده گذشته. اگه امکان بارداری هست تست بارداری بزن، و اگه تأخیر ادامه پیدا کرد یا نگرانی داری با پزشک مشورت کن":"days past the predicted time. If pregnancy is possible, take a pregnancy test, and if the delay continues or you're worried, consult a doctor","بیشتر از ۳ ماه از شروع آخرین پریودت گذشته؛ حتماً با پزشک مشورت کن":"More than 3 months have passed since the start of your last period; please consult a doctor","پریود بعدی":"Next period","تخمک‌گذاری (تخمین":"Ovulation (estimate","این‌ها فقط تخمین بر اساس چرخه‌های ثبت‌شده‌ی خودته و جایگزین روش پیشگیری از بارداری یا نظر پزشک نیست":"These are only estimates based on your own logged cycles and are not a substitute for contraception or a doctor's advice","مشاهده":"View","ثبت روزهای پریود":"Log period days","پیش‌بینی پریود":"Period prediction","علامت هشدار":"Warning sign","روی روزهایی که پریود بودی بزن؛ دوباره بزنی برداشته می‌شه. برای گزارش دقیق‌تر پزشک، پریودهای قبلی رو هم ثبت کن و شدت و علائم رو از «ثبت روز» اضافه کن":"Tap the days you had your period; tap again to remove. For a more accurate doctor report, log earlier periods too and add flow and symptoms from \"Log day\"","روی هر روز بزن تا خونریزی، درد، علائم و حال‌وهواش رو ثبت کنی":"Tap any day to log bleeding, pain, symptoms and mood","برو به این ماه":"Go to this month","بدون درد":"No pain","درد خفیف":"Mild pain","درد متوسط":"Moderate pain","درد شدید":"Severe pain","این روز هنوز نرسیده؛ فقط تا امروز می‌تونی ثبت کنی":"This day hasn't arrived yet; you can only log up to today","برای برداشتن، دوباره بزن":"Tap again to remove","کوچک (کوچک‌تر از سکه":"Small (smaller than a coin","بزرگ (بزرگ‌تر از سکه":"Large (bigger than a coin","تعداد نوار یا تامپون امروز":"Number of pads or tampons today","زیاد کن":"Increase","اگه چند ساعت پشت‌سرهم هر ساعت یا دو ساعت یک‌بار نوار یا تامپونت پر می‌شه، یا لخته‌ی بزرگ، سرگیجه یا ضعف داری، حتماً زود به پزشک مراجعه کن":"If your pad or tampon fills every hour or two for several hours in a row, or you have a large clot, dizziness or weakness, see a doctor soon","ثبت نشده":"Not logged","اگه همین الان این علائم رو داری، منتظر گزارش نمون و به پزشک یا اورژانس مراجعه کن. این اپ جای معاینه‌ی پزشک رو نمی‌گیره. علامت‌ها توی گزارش پزشک هم با رنگ قرمز نشون داده می‌شن":"If you have these symptoms right now, don't wait for the report; see a doctor or go to the ER. This app doesn't replace a medical examination. Symptoms are also shown in red in the doctor report","ترشح":"Discharge","هر چیزی که برای پزشک یا خودت مهمه":"Anything important to your doctor or yourself","پاک کردن ثبت این روز":"Clear this day's log","هنوز داده‌ی کافی نیست":"Not enough data yet","بعد از ثبت حداقل دو پریود، میانگین‌ها و نمودارها اینجا ظاهر می‌شن":"After logging at least two periods, averages and charts will appear here","نظم چرخه":"Cycle regularity","اختلاف":"Variation","پریودهای ثبت‌شده":"Logged periods","آخرین":"Latest","فاصله‌ی پریودها (روز":"Interval between periods (days","محدوده‌ی سبز: ۲۱ تا ۳۵":"Green range: 21 to 35","مدت هر پریود (روز":"Length of each period (days","پرتکرارترین علائم":"Most frequent symptoms","۶ پریود اخیر":"Last 6 periods","پریودها و علائمت رو ثبت کن تا گزارش ساخته بشه":"Log your periods and symptoms so the report can be built","داده‌ی کافی نیست":"Not enough data","حداقل ۴ پریود لازمه":"At least 4 periods are needed","آخرین پریود":"Last period","ادامه دارد":"Ongoing","روز پیش":"days ago","نکات مهم برای پزشک":"Key points for your doctor","برای تحلیل کامل‌تر حداقل دو پریود ثبت کن":"Log at least two periods for a fuller analysis","خلاصه‌ی پریودها":"Period summary","جدیدترین بالا":"Newest first","مدت":"Length","فاصله":"Interval","نسبت به پیش‌بینی":"vs. prediction","به‌موقع":"On time","بدون شدت":"No intensity","بیشترین نوار/تامپون در روز":"Most pads/tampons in a day","علائم ثبت‌شده":"Logged symptoms","موارد قابل‌توجه":"Notable items","مورد خاصی ثبت نشده":"Nothing specific logged","معیارها: فاصله‌ی ۲۱ تا ۳۵ روز و مدت ۲ تا ۷ روز معمول در نظر گرفته شده. «خونریزی خیلی شدید» یعنی دست‌کم یک روز «خیلی زیاد»، یا سه روز «زیاد»، یا ۸ نوار/تامپون در روز. «خیلی کم» یعنی فقط لکه‌بینی یا کم. این گزارش فقط از روی ثبت‌های خودته و تشخیص پزشکی نیست":"Criteria: an interval of 21 to 35 days and a length of 2 to 7 days are considered typical. \"Very heavy bleeding\" means at least one \"very heavy\" day, or three \"heavy\" days, or 8 pads/tampons in a day. \"Very light\" means only spotting or light. This report is only based on your own logs and is not a medical diagnosis","۳ پریود اخیر":"Last 3 periods","۶ پریود":"6 periods","۱۲ پریود":"12 periods","اشتراک‌گذاری متن گزارش":"Share report text","ذخیره PDF / چاپ":"Save PDF / Print","مقدارهای پیش‌فرض":"Default values","تا وقتی داده‌ی کافی داری":"until you have enough data","طول معمول چرخه (روز":"Usual cycle length (days","مدت معمول پریود (روز":"Usual period length (days","وقتی چند پریود ثبت کنی، پیش‌بینی خودکار از چرخه‌های واقعی خودت حساب می‌شه":"Once you log several periods, predictions are calculated automatically from your own real cycles","نمایش در صفحه‌ی خانه":"Show on the home page","نمایش در خانه":"Show on Home","ثبت دوباره‌ی آخرین پریود":"Re-log last period","اطلاعات پریود ترکر مثل بقیه‌ی اطلاعاتت توی حساب خودت ذخیره می‌شه":"Period tracker data is saved in your account like the rest of your data","پاک کردن همه‌ی اطلاعات پریود ترکر":"Delete all period tracker data","آخرین پریودت کی شروع شد؟":"When did your last period start?","معمولاً پریودت چند روز طول می‌کشه؟":"How many days does your period usually last?","معمولاً چند روز بین دو پریودت فاصله‌ست؟":"How many days are usually between your periods?","ذخیره و شروع":"Save and start","بعداً":"Later","اگه دقیق یادت نیست، حدودی وارد کن؛ بعداً از تب تقویم می‌تونی اصلاحش کنی و پریودهای قبلی رو هم اضافه کنی":"If you don't remember exactly, enter an approximate date; you can fix it later from the Calendar tab and add earlier periods too","ثبت روز":"Log day","تنظیمات پریود ترکر":"Period tracker settings","شروع کنیم":"Let's start","با ثبت پریودت پیش‌بینی و گزارش پزشک ساخته می‌شه":"Log your period to get predictions and a doctor report","روز تأخیر نسبت به زمان پیش‌بینی‌شده":"days late compared to the predicted time","تأخیر":"Late","امروز پریودت پیش‌بینی شده":"Your period is predicted for today","پریود بعدی حدود":"Next period in about","پریود امروز ثبت شد؛ شدت خونریزی رو انتخاب کن":"Period logged for today; choose the bleeding intensity","گزارش پریود":"Period report","گزارش کپی شد؛ هر جا خواستی پیست کن":"Report copied; paste it anywhere you like","کپی نشد":"Couldn't copy","چاپ اینجا پشتیبانی نمی‌شه؛ از اشتراک‌گذاری متن استفاده کن":"Printing isn't supported here; use Share report text","پریود شروع شد؛ شدت خونریزی رو انتخاب کن":"Period started; choose the bleeding intensity","پایان پریود ثبت شد":"End of period logged","ثبت این روز پاک بشه؟":"Clear this day's log?","فقط تا امروز می‌تونی ثبت کنی":"You can only log up to today","همه‌ی اطلاعات پریود ترکر برای همیشه پاک بشه؟":"Delete all period tracker data permanently?","مطمئنی؟ این کار برگشت‌پذیر نیست":"Are you sure? This can't be undone","روز بیشتر نداره":"days at most","تاریخ نمی‌تونه توی آینده باشه":"The date can't be in the future","تاریخ خیلی قدیمیه؛ تاریخ آخرین پریودت رو وارد کن":"That date is too old; enter the date of your last period","ذخیره شد. هرچی بیشتر ثبت کنی، پیش‌بینی بهتر می‌شه":"Saved. The more you log, the better the predictions get","کل برنامه دوزبانه‌ست؛ هر وقت خواستی زبان رو عوض کن":"The whole app is bilingual; switch the language whenever you like","آب":"Water","خواب":"Sleep","وضعیت":"Status","میانگین":"Average","پیشرفت":"Progress","روند":"Trend","یادآور":"Reminder","یادآوری":"Reminder","لیست":"List","فهرست":"List","عملکرد":"Performance","امشب":"Tonight","روزانه":"Daily","پاک":"Clear","خوشحال":"Happy","غمگین":"Sad","تم":"Theme","حالت تک‌رنگ":"Single-color mode","پروفایل سلامت":"Health profile","کالری هر ۱۰۰۰ قدم (اختیاری":"Calories per 1,000 steps (optional","بک‌آپ خودکار هفتگی":"Weekly auto-backup","سقف روزانه":"Daily limit","شخصی‌سازی عادت‌ها":"Customize habits","همگام‌سازی فعلاً متوقفه":"Syncing is paused for now","ورود دوباره":"Log in again","با مداد بالای «برنامه امروز» یکی اضافه کن":"Add one with the pencil above \"Today's plan\"","برای چت با لیانا باید یک بار دوباره وارد بشی (تنظیمات ← ورود دوباره":"To chat with Liana you need to log in once more (Settings ← Log in again"},"x":{"به":"Quince","توپ":"Ball","میله":"Bar","بدن":"Body","صفحه":"Plate","فوم":"Foam","رول":"Roll","طبی":"Medicine","ورزشی":"Exercise","زیربغل":"Lats","پشت":"Back","پا":"Leg","دست":"Hand","سر":"Head","پایین":"Lower","بالایی":"Upper","دو":"Two","ش":"S","د":"M","س":"T","چ":"W","پ":"T","ج":"F","ی":"S","کم":"Light","زیاد":"Heavy"}};</script>
+<script id="lp-i18n">
+/* Liana Planner — English mode.
+   When Settings → Language is English, every visible text is translated on the fly from the built-in dictionary,
+   numbers/punctuation become Latin, and the layout flips to left-to-right. Persian mode is left exactly as it was. */
+(function(){
+  "use strict";
+  var DATA=window.__LP_EN||{d:{},x:{}};
+  var D=new Map(Object.keys(DATA.d).map(function(k){return [k,DATA.d[k]];}));
+  var X=new Map(Object.keys(DATA.x).map(function(k){return [k,DATA.x[k]];}));
+  var FW=new Map([["به","to"],["از","of"],["و","and"],["در","in"],["با","with"],["را",""],["که","that"],["این","this"],["آن","that"],["برای","for"],["تا","until"],["یا","or"],["هم","also"],["یک","a"],["یه","a"],["هر","every"],["روی","on"],["زیر","under"],["بعد","after"],["قبل","before"],["هنوز","yet"],["فقط","only"],["باید","should"],["اگه","if"],["اگر","if"],["ولی","but"],["اما","but"],["خیلی","very"],["بیشتر","more"],["کمتر","less"],["رو",""],["می",""]]);
+  var LS="lp_lang", cur="fa", started=false, mo=null, raf=0, tmo=0;
+  var pending=new Set(), orig=new WeakMap(), outv=new WeakMap(), aorig=new WeakMap();
+  var RUN=/[\u0600-\u06FF](?:[\u0600-\u06FF\u200c A-Za-z0-9.:!\-?()\/%…«»]*[\u0600-\u06FF])?|[\u0600-\u06FF]/g;
+  var HAS=/[\u0600-\u06FF]/;
+  var ATTRS=["placeholder","title","aria-label","alt"];
+  var SKIPSEL="script,style,textarea,noscript,#lpOnb,#lpPg,#lpNp,[data-notr],[data-l]";
+
+  function lat(s){
+    return s.replace(/[۰-۹]/g,function(c){return String(c.charCodeAt(0)-1776);})
+            .replace(/[٠-٩]/g,function(c){return String(c.charCodeAt(0)-1632);})
+            .replace(/٫/g,".").replace(/٬/g,",").replace(/٪/g,"%").replace(/،/g,",").replace(/؟/g,"?").replace(/؛/g,";");
+  }
+  var D2=new Map(), X2=new Map();
+  D.forEach(function(v,k){ D2.set(lat(k),v); });
+  X.forEach(function(v,k){ X2.set(lat(k),v); });
+  var NUM=/^[«"'(\[]*[0-9][0-9.,\/:%]*[.,;:!?)\]»"'…]*$/, LATW=/^[«"'(\[]*[A-Za-z][A-Za-z0-9\-+]*[.,;:!?)\]»"'…]*$/;
+  function trRun(r,whole){
+    var k=lat(r.replace(/\s+/g," ").trim());
+    if(whole&&X2.has(k)) return X2.get(k);
+    if(D2.has(k)) return D2.get(k);
+    var w=k.split(" "), n=w.length, out=[], i=0, L, ch, m, v, hit, lead, tail, core;
+    while(i<n){
+      hit=false;
+      for(L=Math.min(40,n-i);L>=1;L--){
+        ch=w.slice(i,i+L).join(" "); lead=""; tail="";
+        v=(L===1&&FW.has(ch))?FW.get(ch):D2.get(ch);
+        if(v===undefined){
+          m=ch.match(/^([«"'(\[]*)(.*?)([.,;:!?)\]»"'…]*)$/);
+          if(m[2]&&(m[1]||m[3])){ core=m[2]; v=(L===1&&FW.has(core))?FW.get(core):D2.get(core); if(v!==undefined){ lead=m[1]; tail=m[3]; } }
+        }
+        if(v!==undefined){ out.push(lead+v+tail); i+=L; hit=true; break; }
+      }
+      if(!hit){
+        if(NUM.test(w[i])||LATW.test(w[i])){ out.push(w[i]); i++; }
+        else return r;
+      }
+    }
+    return out.join(" ").replace(/\s+/g," ").trim();
+  }
+  var CACHE=new Map();
+  function tx(s,whole){
+    var ck=(whole?"1":"0")+s, hit=CACHE.get(ck); if(hit!==undefined) return hit;
+    var tl=s.trim().length;
+    var s2=s.replace(/([0-9۰-۹])(\s*)ساعت(?![\u0600-\u06FF\u200c])/g,"$1$2hours");
+    var o=s2.replace(RUN,function(m){ return trRun(m,whole&&m.length===tl); });
+    o=lat(o).replace(/\b([A-Za-z][A-Za-z ]*?) \/ \1\b/g,"$1");
+    o=o.replace(/\b1 (minute|day|hour|second|week|month|year|period|set|meal|exercise|case|step|ingredient)s\b/g,"1 $1").replace(/\b1 glasses\b/g,"1 glass");
+    if(CACHE.size>6000) CACHE.clear();
+    CACHE.set(ck,o);
+    return o;
+  }
+  function skipEl(p){
+    if(!p||p.nodeType!==1) return false;
+    var t=p.tagName; if(t==="SCRIPT"||t==="STYLE"||t==="TEXTAREA"||t==="NOSCRIPT") return true;
+    return !!(p.closest&&p.closest(SKIPSEL));
+  }
+  var ARW=/^\s*[‹›«»]\s*$/, AR={"‹":"›","›":"‹","«":"»","»":"«"};
+  function procText(n){
+    var v=n.nodeValue; if(!v||outv.get(n)===v) return;
+    if(v.length<6&&ARW.test(v)){
+      if(!skipEl(n.parentNode)){ var sw=v.replace(/[‹›«»]/g,function(c){ return AR[c]; }); orig.set(n,v); outv.set(n,sw); n.nodeValue=sw; }
+      return;
+    }
+    if(!HAS.test(v)) return;
+    if(skipEl(n.parentNode)) return;
+    var pe=n.parentNode, t=(pe&&pe.nodeType===1&&pe.hasAttribute&&pe.hasAttribute("data-en"))?pe.getAttribute("data-en"):tx(v,true);
+    if(t!==v){ orig.set(n,v); outv.set(n,t); n.nodeValue=t; }
+  }
+  function skipCont(p){
+    var t=p.tagName; if(t==="SCRIPT"||t==="STYLE"||t==="NOSCRIPT") return true;
+    return !!(p.closest&&p.closest("#lpOnb,#lpPg,#lpNp,[data-notr],[data-l]"));
+  }
+  function procEl(e){
+    if(e.nodeType!==1||skipCont(e)) return;
+    if(e.getAttribute("dir")==="rtl"&&!e.hasAttribute("data-lp-rtl")){ e.setAttribute("data-lp-rtl","1"); e.setAttribute("dir","ltr"); }
+    var i,a,v,t,rec;
+    for(i=0;i<ATTRS.length;i++){
+      a=ATTRS[i]; v=e.getAttribute(a); if(!v||!HAS.test(v)) continue;
+      rec=aorig.get(e); if(rec&&rec[a]&&rec[a].o!==undefined&&rec[a].v===v) continue;
+      t=tx(v,true);
+      if(t!==v){ rec=rec||{}; rec[a]={o:v,v:t}; aorig.set(e,rec); e.setAttribute(a,t); }
+    }
+  }
+  function walk(root){
+    if(!root) return;
+    if(root.nodeType===3){ procText(root); return; }
+    if(root.nodeType!==1&&root.nodeType!==9&&root.nodeType!==11) return;
+    if(root.nodeType===1){ if(skipCont(root)) return; procEl(root); }
+    var tw=document.createTreeWalker(root,5,{acceptNode:function(n){
+      if(n.nodeType===1){ var t=n.tagName; if(t==="SCRIPT"||t==="STYLE"||t==="NOSCRIPT") return 2; if(n.id==="lpOnb"||n.id==="lpPg"||n.id==="lpNp"||n.hasAttribute("data-notr")||n.hasAttribute("data-l")) return 2; }
+      return 1;
+    }}), n;
+    while((n=tw.nextNode())){ if(n.nodeType===3) procText(n); else procEl(n); }
+  }
+  function flush(){
+    raf=0; clearTimeout(tmo); tmo=0;
+    if(cur!=="en"){ pending.clear(); return; }
+    var arr=Array.from(pending); pending.clear();
+    for(var i=0;i<arr.length;i++){ var n=arr[i]; if(n.isConnected||n===document.documentElement) walk(n); }
+  }
+  function sched(){
+    if(raf||tmo) return;
+    raf=requestAnimationFrame(flush); tmo=setTimeout(flush,120);
+  }
+  function startObs(){
+    if(mo) return;
+    mo=new MutationObserver(function(recs){
+      for(var i=0;i<recs.length;i++){
+        var r=recs[i];
+        if(r.type==="childList"){ for(var j=0;j<r.addedNodes.length;j++) pending.add(r.addedNodes[j]); }
+        else if(r.type==="characterData"){ pending.add(r.target); }
+        else if(r.type==="attributes"){ pending.add(r.target); }
+      }
+      if(pending.size) sched();
+    });
+    mo.observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["placeholder","title","aria-label","alt","dir"]});
+  }
+  function stopObs(){ if(mo){ mo.disconnect(); mo=null; } pending.clear(); }
+  function restoreAll(){
+    var tw=document.createTreeWalker(document.documentElement,5), n, o;
+    while((n=tw.nextNode())){
+      if(n.nodeType===3){ o=orig.get(n); if(o!==undefined&&outv.get(n)===n.nodeValue){ n.nodeValue=o; } orig.delete(n); outv.delete(n); }
+      else if(n.nodeType===1){
+        var rec=aorig.get(n);
+        if(rec){ for(var a in rec){ if(n.getAttribute(a)===rec[a].v) n.setAttribute(a,rec[a].o); } aorig.delete(n); }
+      }
+    }
+    var fl=document.querySelectorAll("[data-lp-rtl]");
+    for(var i=0;i<fl.length;i++){ fl[i].setAttribute("dir","rtl"); fl[i].removeAttribute("data-lp-rtl"); }
+  }
+  function setLang(l){
+    if(started&&l===cur) return;
+    var first=!started; started=true; cur=l; window.__lpLang=l;
+    try{ localStorage.setItem(LS,l); }catch(e){}
+    var h=document.documentElement;
+    if(l==="en"){ h.setAttribute("lang","en"); h.setAttribute("dir","ltr"); h.classList.add("lp-en"); walk(h); startObs(); }
+    else if(!first){ stopObs(); restoreAll(); h.setAttribute("lang","fa"); h.setAttribute("dir","rtl"); h.classList.remove("lp-en"); }
+    try{ document.dispatchEvent(new CustomEvent("lp-lang",{detail:l})); }catch(e){}
+  }
+  function stateLang(){
+    try{
+      var s=window.lpBridge&&window.lpBridge.state; if(!s||!s.settings) return null;
+      return s.settings.lang==="en"?"en":"fa";
+    }catch(e){ return null; }
+  }
+  function want(){
+    var s=stateLang(); if(s) return s;
+    try{ return localStorage.getItem(LS)==="en"?"en":"fa"; }catch(e){ return "fa"; }
+  }
+  /* native dialogs, clipboard and share also speak English */
+  ["alert","confirm","prompt"].forEach(function(k){
+    var f=window[k]; if(typeof f!=="function") return;
+    window[k]=function(){ var a=[].slice.call(arguments); if(cur==="en"&&typeof a[0]==="string") a[0]=tx(a[0],false); return f.apply(window,a); };
+  });
+  try{
+    var cb=navigator.clipboard, cw=cb&&cb.writeText;
+    if(cw) cb.writeText=function(t){ return cw.call(cb,(cur==="en"&&typeof t==="string")?tx(t,false):t); };
+  }catch(e){}
+  try{
+    var ns=navigator.share;
+    if(ns) navigator.share=function(d){
+      if(cur==="en"&&d){ d=Object.assign({},d); ["title","text"].forEach(function(k){ if(typeof d[k]==="string") d[k]=tx(d[k],false); }); }
+      return ns.call(navigator,d);
+    };
+  }catch(e){}
+
+  window.lpI18n={ set:function(l){ setLang(l==="en"?"en":"fa"); }, get lang(){ return cur; }, tx:function(s){ return cur==="en"?tx(String(s),false):s; }, rescan:function(){ if(cur==="en") walk(document.documentElement); } };
+  window.__lpLang="fa";
+
+  function boot(){
+    setLang(want());
+    setInterval(function(){ var w=want(); if(w!==cur) setLang(w); },400);
+    document.addEventListener("click",function(e){ if(e.target.closest&&e.target.closest("#lgSeg button")) setTimeout(function(){ var w=want(); if(w!==cur) setLang(w); },30); },true);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
+
+</script>
+<style id="lp-en-css">
+/* English (left-to-right) layout fixes */
+html.lp-en .auth-field,
+html.lp-en .auth-field input,
+html.lp-en .car-card.cp .cp-tx,
+html.lp-en .fx-card.fx-img .fx-tx,
+html.lp-en .fx-card[data-fx="measure"],
+html.lp-en .fx-card[data-fx="measure"] .ms-tx,
+html.lp-en .hm-row,
+html.lp-en .hp-link,
+html.lp-en .jr-ent,
+html.lp-en .meas-toggle,
+html.lp-en .nt-pick,
+html.lp-en .nt-ta,
+html.lp-en .pd-card,
+html.lp-en .pd-hc,
+html.lp-en .pd-tb th,
+html.lp-en .rep-row,
+html.lp-en .rep-tile,
+html.lp-en .stt-card.fx-card,
+html.lp-en .wk-h small,
+html.lp-en .wk-t small,
+html.lp-en .yb-n small,
+html.lp-en .yb-r,
+html.lp-en .yg-top,
+html.lp-en body[class] .car-card.cp,
+html.lp-en body[class] .fx-card.fx-img,
+html.lp-en select.kc-in{text-align:left!important}
+html.lp-en #pdPrint .pd-doc,
+html.lp-en .tm-inrow{direction:ltr!important}
+html.lp-en [style*="text-align:right"],html.lp-en [style*="text-align: right"]{text-align:left!important}
+html.lp-en [style*="direction:rtl"],html.lp-en [style*="direction: rtl"]{direction:ltr!important}
+html.lp-en select{direction:ltr!important;text-align:left;text-align-last:left}
+</style>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -56,7 +317,7 @@
 html,body{margin:0;padding:0;}
 body{
   background:var(--bg); color:var(--text); font-family:var(--font-main);
-  min-height:100vh; padding-bottom:40px; transition:background .3s,color .3s;
+  min-height:calc(100vh / var(--lp-z,1)); padding-bottom:40px; transition:background .3s,color .3s;
   position:relative; overflow-x:hidden;
 }
 h1,h2,h3{font-family:var(--font-main); margin:0;}
@@ -258,6 +519,10 @@ body.style-glass.mode-dark .topbar{ background:rgba(20,18,32,.35); }
 
 /* ---------- section headers ---------- */
 .section-title{font-size:15px; font-weight:800; margin:18px 0 10px; display:flex; align-items:center; gap:6px;}
+.hb-pencil{margin-inline-start:auto; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.65); background:var(--card); color:var(--accent-dk,var(--accent)); display:inline-flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-shadow:0 4px 12px rgba(80,60,140,.12); -webkit-tap-highlight-color:transparent; transition:transform .15s;}
+.hb-pencil:active{transform:scale(.92);}
+.hb-save{display:block; margin:10px 0 2px; padding:8px 22px; border:none; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent-dk,var(--accent))); color:#fff; font:inherit; font-size:13px; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(110,80,200,.28); -webkit-tap-highlight-color:transparent;}
+.hb-save:active{transform:scale(.96);}
 
 /* ---------- habit cards ---------- */
 .habit-cards{max-width:480px; margin:0 auto; padding:0 14px;}
@@ -358,7 +623,7 @@ textarea.journal{width:100%; min-height:64px; resize:vertical;}
 .sheet{
   position:fixed; left:0; right:0; bottom:0; z-index:50; background:var(--card);
   border-radius:24px 24px 0 0; padding:16px 18px 26px; max-width:480px; margin:0 auto;
-  box-shadow:0 -10px 30px rgba(0,0,0,.2); max-height:82vh; overflow-y:auto;
+  box-shadow:0 -10px 30px rgba(0,0,0,.2); max-height:calc(82vh / var(--lp-z,1)); overflow-y:auto;
 }
 .hidden{display:none !important;}
 .cc-overlay{position:fixed; inset:0; z-index:90; background:rgba(20,15,35,.45); display:flex; align-items:center; justify-content:center; padding:20px;}
@@ -391,7 +656,7 @@ body.mode-dark .chat-fab{color:#fff; background:linear-gradient(145deg, rgba(255
 
 .chat-sheet{
   position:fixed; left:0; right:0; top:var(--chat-top,0px); z-index:55; max-width:480px; margin:0 auto;
-  height:var(--chat-h,100dvh); display:flex; flex-direction:column; overflow:hidden;
+  height:var(--chat-h,calc(100dvh / var(--lp-z,1))); display:flex; flex-direction:column; overflow:hidden;
   background:
     radial-gradient(circle at 50% 14%, hsla(var(--accent-h),100%,82%,.65), transparent 52%),
     radial-gradient(circle at 8% 92%, hsla(calc(var(--accent-h) + 60),95%,78%,.42), transparent 50%),
@@ -682,7 +947,7 @@ body.style-glass .cal-day.sel{
 .rep-tile svg{flex-shrink:0;}
 .rep-hint{margin:-4px 2px 8px;}
 
-.rep-modal{position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:calc(100% - 24px); max-width:440px; max-height:90vh; overflow-y:auto;
+.rep-modal{position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:calc(100% - 24px); max-width:440px; max-height:calc(90vh / var(--lp-z,1)); overflow-y:auto;
   z-index:55; background:var(--card); border-radius:28px; padding:16px 16px 22px; box-shadow:0 20px 60px rgba(0,0,0,.35);
   animation:repIn .3s cubic-bezier(.2,.8,.2,1); scrollbar-width:none;}
 .rep-modal::-webkit-scrollbar{display:none;}
@@ -1452,7 +1717,7 @@ html body .dash-card::before, html body.style-glass .dash-card::before, html bod
 .tm{display:flex; flex-direction:column; gap:14px; padding:12px 0 104px; color:var(--text);}
 .tm button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
 .tm-card{position:relative; display:flex; flex-direction:column; align-items:center; gap:18px; padding:10px 0 6px; text-align:center;}
-.tm-dial{position:relative; width:min(92vw,360px); aspect-ratio:1; margin:-6px 0;}
+.tm-dial{position:relative; width:min(calc(92vw / var(--lp-z,1)),360px); aspect-ratio:1; margin:-6px 0;}
 .tm-svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
 .tm-svg .fl{fill:none; stroke:var(--accent); stroke-width:1.1; stroke-linejoin:round;}
 .tm-svg .fa{stroke:none;} .tm-svg .f1.fa,.tm-svg .f2.fa{fill:url(#tmG1);} .tm-svg .f3.fa{fill:url(#tmG2);}
@@ -1463,7 +1728,7 @@ html body .dash-card::before, html body.style-glass .dash-card::before, html bod
 .tm-core{position:absolute; left:50%; top:50%; width:56%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
   background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.35),rgba(255,255,255,.08) 70%); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);}
 body.mode-dark .tm-core{background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.12),rgba(255,255,255,.02) 70%);}
-.tm-time{direction:ltr; font-size:clamp(28px,8.5vw,36px); font-weight:300; line-height:1.15; letter-spacing:.02em; font-variant-numeric:tabular-nums; color:var(--text);}
+.tm-time{direction:ltr; font-size:clamp(28px,calc(8.5vw / var(--lp-z,1)),36px); font-weight:300; line-height:1.15; letter-spacing:.02em; font-variant-numeric:tabular-nums; color:var(--text);}
 .tm-lbl{min-height:1.6em; font-size:12px; font-weight:500; color:var(--text-soft); animation:tmFade .5s ease;}
 @keyframes tmFade{from{opacity:0; transform:translateY(3px);} to{opacity:1; transform:none;}}
 .tm-ctl{display:flex; align-items:center; justify-content:center; gap:14px;}
@@ -1499,7 +1764,7 @@ body.mode-dark .tm-sheet .fp-act .fp-ok{background:color-mix(in srgb,var(--accen
 .hm-edit{padding:2px 10px; border-radius:12px; font-size:12px; font-weight:800; color:var(--text); background:color-mix(in srgb,var(--accent) 16%,transparent); border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);}
 .fp{position:fixed; inset:0; z-index:80; display:flex; align-items:flex-end; justify-content:center;}
 .fp-ov{position:absolute; inset:0; background:rgba(20,15,35,.45); animation:fpF .2s;}
-.fp-box{position:relative; width:100%; max-width:480px; max-height:84vh; overflow-y:auto; background:var(--card); color:var(--text); border-radius:24px 24px 0 0; padding:16px 18px 24px; box-shadow:0 -10px 30px rgba(0,0,0,.2); animation:fpUp .28s cubic-bezier(.2,.8,.2,1);}
+.fp-box{position:relative; width:100%; max-width:480px; max-height:calc(84vh / var(--lp-z,1)); overflow-y:auto; background:var(--card); color:var(--text); border-radius:24px 24px 0 0; padding:16px 18px 24px; box-shadow:0 -10px 30px rgba(0,0,0,.2); animation:fpUp .28s cubic-bezier(.2,.8,.2,1);}
 body.style-glass .fp-box{background:rgba(255,255,255,.82); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);}
 body.style-glass.mode-dark .fp-box{background:rgba(28,24,44,.86);}
 .fp-hint{margin:0 0 6px; font-size:12.5px; line-height:1.8; opacity:.7;}
@@ -1681,7 +1946,7 @@ body.mode-dark .pd-modal,body.mode-dark .pd-homewrap{--pd-p:#E0647F;--pd-pl:rgba
 .pd-hc.late .pd-hp{background:rgba(194,59,59,.14);color:var(--pd-w);}
 .pd-hbtn{display:block;width:100%;margin-top:12px;padding:11px;border:none;border-radius:13px;background:var(--accent);color:#fff;font-weight:700;font-size:13.5px;}
 
-.pd-modal{max-height:92vh;}
+.pd-modal{max-height:calc(92vh / var(--lp-z,1));}
 .pd-modal .sheet-head{align-items:center;gap:8px;}
 .pd-modal .sheet-head h2{flex:1;min-width:0;}
 .pd-ic{display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;margin-left:8px;color:var(--pd-p);vertical-align:middle;}
@@ -1856,7 +2121,7 @@ body.mode-dark .pd-modal,body.mode-dark .pd-homewrap{--pd-p:#E0647F;--pd-pl:rgba
 .pd-bar i{flex:1;height:9px;border-radius:9px;background:var(--border);overflow:hidden;}
 .pd-bar u{display:block;height:100%;border-radius:9px;background:var(--accent);}
 .pd-bar u.w1{background:var(--pd-i);} .pd-bar u.w2{background:var(--pd-w);}
-.pd-toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;max-width:88vw;padding:10px 18px;border-radius:999px;background:rgba(30,26,46,.92);color:#fff;font-size:13px;font-weight:700;text-align:center;animation:pdToast .25s ease-out;}
+.pd-toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:90;max-width:calc(88vw / var(--lp-z,1));padding:10px 18px;border-radius:999px;background:rgba(30,26,46,.92);color:#fff;font-size:13px;font-weight:700;text-align:center;animation:pdToast .25s ease-out;}
 .pd-toast.out{opacity:0;transition:opacity .4s;}
 @keyframes pdToast{from{opacity:0;transform:translate(-50%,10px);}}
 @media (prefers-reduced-motion:reduce){ .pd-toast{animation:none;} }
@@ -2102,7 +2367,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
 <div class="view" data-view="habits">
 <div class="day-strip" id="dayStrip"></div>
 
-<div class="section-title"><img class="st-icon" data-icon="today" alt="">برنامه امروز</div>
+<div class="section-title"><img class="st-icon" data-icon="today" alt="">برنامه امروز<button type="button" class="hb-pencil" id="habitEditBtn" aria-label="شخصی‌سازی عادت‌ها"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
 <div class="habit-cards" id="habitCards"></div>
 
 </div>
@@ -2176,6 +2441,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
 <div class="jr-prompts" id="jrPrompts"></div>
 <textarea class="journal jr-text" id="jrText" placeholder="هرچی تو دلته بنویس؛ خاطره، فکر، یه جمله‌ی کوتاه..."></textarea>
 <div class="jr-meta"><span id="jrCnt"></span><span id="jrSaved"></span></div>
+<button type="button" class="hb-save" id="jrSave" data-en="Save">ثبت</button>
 </div>
 <div class="jr-card"><div class="jr-t">یادداشت‌های قبلی</div><input type="search" class="jr-search" id="jrSearch" placeholder="جستجو توی یادداشت‌ها..."><div id="jrList"></div></div>
 </div></div>
@@ -2259,6 +2525,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
     <div class="mini-field"><label>دور ران (cm)</label><input type="number" min="0" id="m_thigh"></div>
     <div class="mini-field"><label>دور باسن (cm)</label><input type="number" min="0" id="m_hip"></div>
     <div class="mini-field"><label>دور سینه (cm)</label><input type="number" min="0" id="m_chest"></div>
+    <button type="button" class="hb-save" data-en="Save" data-saveclose="msClose">ثبت</button>
     <div class="hp-links">
       <button type="button" class="hp-link" id="openBodyPath"><span><img class="st-icon" data-icon="measure" alt="" style="width:18px;height:18px;vertical-align:-4px;margin-left:4px;">مسیر تغییرات بدن</span><span class="arrow">‹</span></button>
     </div>
@@ -2300,13 +2567,20 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
 </div>
 
 <div class="overlay hidden" id="overlay"></div>
+<div class="sheet hidden" id="habitSheet">
+  <div class="sheet-head"><h2><img class="st-icon" data-icon="personalize" alt="">شخصی‌سازی عادت‌ها</h2>
+    <div class="head-actions"><button id="closeHabitSheet">✕</button></div>
+  </div>
+  <div id="habitMgr"></div>
+</div>
+
 <div class="sheet hidden" id="settingsSheet">
   <div class="sheet-head"><h2><img class="st-icon" data-icon="settings" alt="">تنظیمات</h2>
     <div class="head-actions"><button id="modeCircle" class="mode-circle" aria-label="روشن / تیره"><img id="modeIconImg" alt=""></button><button id="closeSheet">✕</button></div>
   </div>
 
   <button class="meas-toggle" id="themeToggle">
-    <span class="lbl"><img class="st-icon" data-icon="theme" alt=""><span>تم (رنگ، پس‌زمینه، سبک، فونت)</span></span>
+    <span class="lbl"><img class="st-icon" data-icon="theme" alt=""><span>تم</span></span>
     <span class="arrow">▾</span>
   </button>
   <div class="theme-box hidden" id="themeBox">
@@ -2317,7 +2591,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   </div>
 
   <div class="set-row">
-    <div class="row-between"><span>حالت تک‌رنگ (به‌جای سفید، همه‌چیز از رنگ خودش)</span>
+    <div class="row-between"><span>حالت تک‌رنگ</span>
       <button class="switch" id="monoSwitch"></button>
     </div>
   </div>
@@ -2337,14 +2611,9 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
 
   </div>
 
-  <button class="meas-toggle" id="habitsToggle" style="margin-top:10px;">
-    <span class="lbl"><img class="st-icon" data-icon="personalize" alt=""><span>شخصی‌سازی عادت‌ها (افزودن، حذف، ویرایش)</span></span>
-    <span class="arrow">▾</span>
-  </button>
-  <div class="theme-box hidden" id="habitsBox"><div id="habitMgr"></div></div>
 
   <button class="meas-toggle" id="healthProfileToggle" style="margin-top:10px;">
-    <span class="lbl"><img class="st-icon" data-icon="healthProfile" alt=""><span>پروفایل سلامت (برای محاسبه BMI)</span></span>
+    <span class="lbl"><img class="st-icon" data-icon="healthProfile" alt=""><span>پروفایل سلامت</span></span>
     <span class="arrow">▾</span>
   </button>
   <div class="theme-box hidden" id="healthProfileBox">
@@ -2352,16 +2621,17 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   <div class="set-row" style="margin-top:0;">
     <div class="habit-body" style="gap:10px;">
       <div class="mini-field"><div class="ht-wrap"><img class="st-icon ht-ic" data-icon="height" alt=""><div class="ht-col"><label>قد (سانتی‌متر)</label><input type="number" min="0" id="heightInput"></div></div></div>
-      <div class="mini-field"><label>کالری هر ۱۰۰۰ قدم در اپ قدم‌شمارت (اختیاری)</label><input type="number" min="0" step="1" id="kcalStepInput"></div>
-      <div class="hint" id="kcalStepHint"></div>
+      <div class="mini-field"><label>کالری هر ۱۰۰۰ قدم (اختیاری)</label><input type="number" min="0" step="1" id="kcalStepInput"></div>
+      <div class="hint hidden" id="kcalStepHint"></div>
+      <button type="button" class="hb-save" data-en="Save" data-for="heightInput,kcalStepInput">ثبت</button>
     </div>
     <div class="row-between" style="justify-content:flex-start; gap:8px; margin-top:14px; margin-bottom:8px; font-size:13px; font-weight:700;"><img class="st-icon" data-icon="weight" alt="" style="width:26px;height:26px;"><span>ثبت وزن</span></div>
     <div class="seg" id="weightSeg">
       <button data-v="daily">وزن روزانه</button>
       <button data-v="weekly">وزن هفتگی</button>
     </div>
-    <div class="hint" id="weightHint"></div>
-    <div class="hint" id="bmiHint"></div>
+    <div class="hint hidden" id="weightHint"></div>
+    <div class="hint hidden" id="bmiHint"></div>
   </div>
 
   <div class="set-row hidden" id="toothbrushRow" style="margin-top:16px;">
@@ -2371,7 +2641,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
       <button type="button" data-v="noon">ظهر</button>
       <button type="button" data-v="night">شب</button>
     </div>
-    <div class="hint" id="toothbrushHint"></div>
+    <div class="hint hidden" id="toothbrushHint"></div>
   </div>
 
   <div class="set-row hidden" id="sugarRow" style="margin-top:16px;">
@@ -2380,8 +2650,8 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
       <button data-v="full">حذف کامل قند</button>
       <button data-v="gradual">حذف تدریجی قند</button>
     </div>
-    <div class="mini-field hidden" id="sugarLimitField" style="margin-top:8px;"><label>سقف روزانه (تعداد وعده یا تکه‌ی قند)</label><input type="number" min="0" step="1" id="sugarLimitInput"></div>
-    <div class="hint" id="sugarHint"></div>
+    <div class="mini-field hidden" id="sugarLimitField" style="margin-top:8px;"><label>سقف روزانه</label><input type="number" min="0" step="1" id="sugarLimitInput"><button type="button" class="hb-save" data-en="Save" data-for="sugarLimitInput">ثبت</button></div>
+    <div class="hint hidden" id="sugarHint"></div>
   </div>
 
   </div>
@@ -2394,12 +2664,12 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   <div class="set-row" id="backupRow" style="margin-top:0;">
     <div class="seg bk-seg">
       <button type="button" id="bkDownload"><img class="st-icon" data-icon="downloadFile" alt="" style="width:16px;height:16px;vertical-align:-3px;margin-left:4px;">دانلود فایل</button>
-      <button type="button" id="bkShare" class="hidden"><img class="st-icon" data-icon="sendDrive" alt="" style="width:16px;height:16px;vertical-align:-3px;margin-left:4px;">ارسال به Drive، تلگرام...</button>
+      <button type="button" id="bkShare" class="hidden"><img class="st-icon" data-icon="sendDrive" alt="" style="width:16px;height:16px;vertical-align:-3px;margin-left:4px;">ارسال</button>
       <button type="button" id="bkRestore"><img class="st-icon" data-icon="restore" alt="" style="width:16px;height:16px;vertical-align:-3px;margin-left:4px;">بازیابی از فایل</button>
     </div>
     <input type="file" id="bkFile" accept=".json,application/json" class="hidden">
     <div class="hint" id="bkLast"></div>
-    <label class="bk-auto"><input type="checkbox" id="bkAuto" checked><span>بک‌آپ خودکار هفتگی: هر هفته که سایت رو باز کنی، خودش فایل پشتیبان رو ذخیره می‌کنه</span></label>
+    <label class="bk-auto"><input type="checkbox" id="bkAuto" checked><span>بک‌آپ خودکار هفتگی</span></label>
     <div class="hint bk-msg" id="bkMsg"></div>
   </div>
   </div>
@@ -2410,7 +2680,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   </button>
   <div class="theme-box hidden" id="pushBox">
   <div class="set-row" style="margin-top:0;">
-    <div class="hint" id="pnStatus" style="margin-top:0;"></div>
+    <div class="hint hidden" id="pnStatus" style="margin-top:0;"></div>
     <div class="seg bk-seg" style="margin-top:10px;">
       <button type="button" id="pnToggle">روشن کردن اعلان‌ها</button>
       <button type="button" id="pnTest" class="hidden">اعلان آزمایشی</button>
@@ -2437,19 +2707,17 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   <div class="set-row">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="language" alt="" style="width:34px;height:28px;"><span>زبان / Language</span></div>
     <div class="lg-seg" id="lgSeg"><button type="button" data-l="fa">فارسی</button><button type="button" data-l="en">English</button></div>
-    <div class="hint">فعلاً آنبوردینگ دوزبانه‌ست؛ بقیه‌ی بخش‌ها به‌مرور ترجمه می‌شن.</div>
     <button type="button" class="ob-redo" id="obRedo">دیدن دوباره‌ی آنبوردینگ</button>
   </div>
 
   <div class="set-row">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="recovery" alt="" style="width:28px;height:28px;"><span>کد بازیابی حساب</span></div>
-    <div class="hint">اگه رمزت یادت رفت، با این کد رمز جدید می‌سازی. همیشه همینه و عوض نمی‌شه.</div>
     <div class="lg-seg"><button type="button" class="on" id="rcOpen">نمایش کد بازیابی</button></div>
   </div>
 
   <div class="set-row">
     <div class="row-between" style="justify-content:flex-start; gap:8px;"><img class="st-icon" data-icon="account" alt="" style="width:26px;height:26px;"><span>حساب کاربری</span></div>
-    <div class="mini-field"><label>نام نمایشی</label><input type="text" id="displayNameInput" placeholder="مثلاً لیانا"></div>
+    <div class="mini-field"><label>نام نمایشی</label><input type="text" id="displayNameInput" placeholder="مثلاً لیانا"><button type="button" class="hb-save" data-en="Save" data-for="displayNameInput">ثبت</button></div>
     <div class="account-email" id="accountEmailLabel"></div>
     <button class="logout-btn" id="logoutBtn">خروج از حساب</button>
   </div>
@@ -3004,7 +3272,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   function fa(n){return Number(n).toLocaleString("fa-IR");}
   function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
   function nz(t){return String(t).replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/\u200c/g," ").toLowerCase();}
-  function tr(x,m){return (m&&m[x])||esc(x||"");}
+  function tr(x,m){ if(window.__lpLang==="en"){ x=String(x||""); return esc(x.charAt(0).toUpperCase()+x.slice(1)); } return (m&&m[x])||esc(x||""); }
   var GL={}; ("barbell=هالتر;dumbbell=دمبل;cable=سیم‌کش;machine=دستگاه;band=کش;kettlebell=کتل‌بل;ball=توپ;bar=میله;ez-bar=هالتر EZ;smith=اسمیت;bodyweight=وزن بدن;body=بدن;bench=نیمکت;rope=طناب;handle=دستگیره;plate=صفحه;roller=رولر;foam=فوم;roll=رول;landmine=لندماین;sled=سورتمه;tire=تایر;chain=زنجیر;stone=سنگ;log=کنده;medicine=طبی;exercise=ورزشی;"+
   "chest=سینه;shoulder=شانه;bicep=جلو بازو;tricep=پشت بازو;forearm=ساعد;lat=زیربغل;back=پشت;trap=ذوزنقه;neck=گردن;ab=شکم;abdominal=شکم;oblique=شکم کناری;quad=جلو ران;quadricep=جلو ران;hamstring=پشت ران;glute=باسن;calve=ساق پا;calf=ساق پا;leg=پا;thigh=ران;hip=لگن;arm=بازو;wrist=مچ دست;ankle=مچ پا;core=میان‌تنه;groin=کشاله‌ی ران;hand=دست;foot=پا;feet=پا;head=سر;knee=زانو;elbow=آرنج;pec=سینه;delt=سرشانه;shin=ساق جلو;torso=تنه;spine=ستون فقرات;lower=پایین;upper=بالایی;inner=داخلی;outer=خارجی;"+
   "press=پرس;curl=کرل;row=روئینگ;raise=نشر;fly=فلای;flye=فلای;extension=اکستنشن;flexion=فلکشن;squat=اسکات;deadlift=ددلیفت;lunge=لانج;pulldown=پول‌داون;pullover=پولاور;pushdown=پوش‌داون;shrug=شراگ;crunch=کرانچ;plank=پلانک;bridge=بریج;thrust=تراست;kickback=کیک‌بک;swing=سوینگ;snatch=اسنچ;clean=کلین;jerk=جرک;twist=چرخش;rotation=چرخش;stretch=کشش;walk=راه رفتن;run=دویدن;jump=پرش;hop=پرش;step=استپ;dip=دیپ;pull=کشیدن;push=هل دادن;hold=نگه داشتن;lift=لیفت;carry=حمل;crossover=کراس‌اور;bend=خم شدن;sit-up=دراز و نشست;push-up=شنا;pull-up=بارفیکس;chin-up=بارفیکس دست معکوس;step-up=استپ‌آپ;kick=ضربه;slam=اسلم;toss=پرتاب;throw=پرتاب;climb=کوهنوردی;climber=کوهنورد;burpee=برپی;stand=ایستادن;"+
@@ -3028,6 +3296,11 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
     }).filter(Boolean).join(" – ");
   }
   function sum(e){
+    if(window.__lpLang==="en"){
+      var cp=function(x){return x?x.charAt(0).toUpperCase()+x.slice(1):"";};
+      var pm=e.primaryMuscles.map(cp).join(", ").toLowerCase(), sm=e.secondaryMuscles.map(cp).join(", ").toLowerCase();
+      return "This exercise "+(pm?"works the "+pm:"is a "+(e.category||"")+" exercise")+(sm?" and also engages the "+sm:"")+". "+(e.equipment?"Equipment: "+cp(e.equipment)+". ":"")+"Level: "+cp(e.level||"")+(e.force?"; force: "+e.force:"")+(e.mechanic?"; "+e.mechanic:"")+".";
+    }
     var p=e.primaryMuscles.map(function(x){return tr(x,MU);}).join("، "), s=e.secondaryMuscles.map(function(x){return tr(x,MU);}).join("، ");
     var f={push:"فشاری",pull:"کششی","static":"ایستا"}[e.force], m={compound:"ترکیبی (چند مفصلی)",isolation:"ایزوله (تک‌مفصلی)"}[e.mechanic];
     return "این حرکت "+(p?"روی «"+p+"» کار می‌کنه":"یه حرکت "+tr(e.category,CT)+" هست")+(s?" و «"+s+"» هم کمکش می‌کنن":"")+". "+(e.equipment?"وسیله: "+tr(e.equipment,EQ)+". ":"")+"سطح: "+tr(e.level,LV)+(f?"؛ نوع حرکت: "+f:"")+(m?"؛ "+m:"")+".";
@@ -3051,7 +3324,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   function renderList(){
     var qq=nz(q.trim()), r=D.filter(function(e){ return (!mu||e.primaryMuscles.indexOf(mu)>-1)&&(!eq||e.equipment===eq)&&(!qq||e._s.indexOf(qq)>-1); });
     var h='<div class="kc-note">'+fa(r.length)+' حرکت</div>'+r.slice(0,shown).map(function(e){
-      return '<div class="ex-row'+(selMode&&sel[e.id]?" sel":"")+'" data-id="'+esc(e.id)+'">'+(selMode?'<span class="ex-ck">'+(sel[e.id]?"✓":"")+'</span>':"")+'<img loading="lazy" alt="" src="'+esc(base+((e.images||[])[0]||""))+'"><div><b>'+esc(e._fa)+'</b><small dir="ltr" style="text-align:right">'+esc(e.name)+'</small><small>'+e.primaryMuscles.map(function(x){return tr(x,MU);}).join("، ")+(e.equipment?' · '+tr(e.equipment,EQ):"")+' · '+tr(e.level,LV)+'</small></div>'+(selMode?'<button type="button" class="ex-i" data-info="'+esc(e.id)+'">ⓘ</button>':"")+'</div>';
+      return '<div class="ex-row'+(selMode&&sel[e.id]?" sel":"")+'" data-id="'+esc(e.id)+'">'+(selMode?'<span class="ex-ck">'+(sel[e.id]?"✓":"")+'</span>':"")+'<img loading="lazy" alt="" src="'+esc(base+((e.images||[])[0]||""))+'"><div><b>'+esc(window.__lpLang==="en"?e.name:e._fa)+'</b>'+(window.__lpLang==="en"?'':'<small dir="ltr" style="text-align:right">'+esc(e.name)+'</small>')+'<small>'+e.primaryMuscles.map(function(x){return tr(x,MU);}).join("، ")+(e.equipment?' · '+tr(e.equipment,EQ):"")+' · '+tr(e.level,LV)+'</small></div>'+(selMode?'<button type="button" class="ex-i" data-info="'+esc(e.id)+'">ⓘ</button>':"")+'</div>';
     }).join("");
     if(r.length>shown) h+='<button type="button" class="nt-add" data-more="1">نمایش بیشتر</button>';
     if(!r.length) h='<div class="kc-note">حرکتی پیدا نشد. اسم رو ساده‌تر بنویس یا فیلترها رو بردار.</div>';
@@ -3060,7 +3333,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   function detail(e){
     var tags=e.primaryMuscles.map(function(x){return '<span>🎯 '+tr(x,MU)+'</span>';}).concat(e.secondaryMuscles.map(function(x){return '<span>'+tr(x,MU)+'</span>';}));
     if(e.equipment) tags.push('<span>🏋️ '+tr(e.equipment,EQ)+'</span>'); tags.push('<span>'+tr(e.level,LV)+'</span>'); if(e.category) tags.push('<span>'+tr(e.category,CT)+'</span>');
-    $("exBody").innerHTML='<button type="button" class="nt-add" data-back="1">← برگشت به لیست</button>'+(selMode?'<button type="button" class="nt-add" data-selone="1">'+(sel[e.id]?"✓ انتخاب شد":"انتخاب این حرکت")+'</button>':"")+'<div class="kc-box"><h4>'+esc(e._fa)+'</h4><div class="kc-note" dir="ltr" style="text-align:right;margin:0 0 4px">'+esc(e.name)+'</div><img class="ex-hero" id="exHero" alt=""><div class="ex-tags">'+tags.join("")+'</div></div>'+
+    $("exBody").innerHTML='<button type="button" class="nt-add" data-back="1">← برگشت به لیست</button>'+(selMode?'<button type="button" class="nt-add" data-selone="1">'+(sel[e.id]?"✓ انتخاب شد":"انتخاب این حرکت")+'</button>':"")+'<div class="kc-box"><h4>'+esc(window.__lpLang==="en"?e.name:e._fa)+'</h4>'+(window.__lpLang==="en"?'':'<div class="kc-note" dir="ltr" style="text-align:right;margin:0 0 4px">'+esc(e.name)+'</div>')+'<img class="ex-hero" id="exHero" alt=""><div class="ex-tags">'+tags.join("")+'</div></div>'+
     '<div class="kc-box"><h4>توضیح</h4>'+sum(e)+'</div><div class="kc-box"><h4>طرز انجام (انگلیسی)</h4><ol class="ex-ol">'+(e.instructions||[]).map(function(s){return '<li>'+esc(s)+'</li>';}).join("")+'</ol><div class="kc-note">اسم فارسی و توضیح بالا خودکار از روی مشخصات حرکت ساخته شده؛ مراحل انجام فعلاً انگلیسیه.</div></div>';
     Promise.all((e.images||[]).map(function(p){return img(base+p);})).then(function(a){
       var hero=$("exHero"); if(!hero||cur!==e||!a.length) return; var i=0; hero.src=a[0];
@@ -3138,7 +3411,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
   function reseal(){clearTimeout(armT);seal();}
   function exitHint(){
     var t=document.createElement("div");t.textContent="برای خروج، یک بار دیگه برگشت رو بزن";
-    t.style.cssText="position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;max-width:88vw;padding:10px 18px;border-radius:999px;background:rgba(30,26,46,.92);color:#fff;font-weight:700;font-size:13px;line-height:1.6;font-family:inherit;text-align:center;pointer-events:none;transition:opacity .35s";
+    t.style.cssText="position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;max-width:calc(88vw / var(--lp-z,1));padding:10px 18px;border-radius:999px;background:rgba(30,26,46,.92);color:#fff;font-weight:700;font-size:13px;line-height:1.6;font-family:inherit;text-align:center;pointer-events:none;transition:opacity .35s";
     document.body.appendChild(t);setTimeout(function(){t.style.opacity="0";},1700);setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},2200);
   }
   window.addEventListener("popstate",function(){
@@ -3712,8 +3985,17 @@ var sessionExpiredShown=false;
 // the server no longer accepts this login (for example after the secret key was changed):
 // show the login screen instead of silently working without saving to the server.
 // Data on this phone is kept, and the next login pushes it to the server before reading anything back.
+var syncPaused=false;
 function sessionExpired(){
-  if(sessionExpiredShown || !getToken()) return;
+  if(sessionExpiredShown || syncPaused || !getToken()) return;
+  // This phone already holds the user's data: keep them inside the app (no login screen).
+  // Cloud sync simply pauses; the data stays on the phone and is pushed on the next login.
+  if(loadLocal()){
+    syncPaused=true;
+    var _al=document.getElementById("accountEmailLabel"); if(_al) _al.textContent=(getEmail()||"")+" — همگام‌سازی فعلاً متوقفه";
+    var _lb=document.getElementById("logoutBtn"); if(_lb) _lb.textContent="ورود دوباره";
+    return;
+  }
   sessionExpiredShown=true;
   clearSession();
   document.body.classList.remove("booting");
@@ -3721,7 +4003,7 @@ function sessionExpired(){
   setAuthMsg("نشست ورودت تموم شده؛ دوباره وارد شو. اطلاعاتی که روی این گوشی داری حفظ می‌شه 💛","err");
 }
 function setSession(token,email){
-  sessionExpiredShown=false;
+  sessionExpiredShown=false; syncPaused=false;
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(EMAIL_KEY, email);
 }
@@ -3731,6 +4013,7 @@ function clearSession(){
 }
 
 function apiCall(path, method, body, useAuth){
+  if(useAuth && syncPaused) return Promise.resolve({ok:false,status:401,data:{}});
   var headers={"Content-Type":"application/json"};
   if(useAuth){ headers["Authorization"]="Bearer "+getToken(); }
   return fetch(API_BASE+path,{
@@ -3932,8 +4215,21 @@ document.getElementById("bsRetry").addEventListener("click",function(){ resetBoo
 document.getElementById("bsOffline").addEventListener("click",continueOffline);
 
 var bgSyncing=false;
+var tokenRefreshed=false;
+/* The login token is renewed once per launch (the server hands out a 10-year one), so nobody ever has to log in again. */
+function refreshToken(){
+  if(tokenRefreshed) return; tokenRefreshed=true;
+  try{
+    var t=getToken(); if(!t || syncPaused) return;
+    var exp=Number(atob(t.split(".")[0]).split("|").pop());
+    if(exp>0 && exp-Date.now()>1000*60*60*24*365*2) return;       /* already a long one */
+    apiCall("/api/refresh","POST",{},true).then(function(r){
+      if(r && r.ok && r.data && r.data.token) setSession(r.data.token, r.data.email||getEmail());
+    }).catch(function(){});
+  }catch(e){}
+}
 function syncInBackground(){
-  if(bgSyncing || !getToken() || offlineOnly) return; bgSyncing=true;
+  if(bgSyncing || !getToken() || offlineOnly) return; refreshToken(); bgSyncing=true;
   withTimeout(apiCall("/api/data","PUT",state,true),15000).catch(function(){}).then(function(){ bgSyncing=false; });
 }
 window.addEventListener("online",syncInBackground);
@@ -4459,12 +4755,44 @@ function renderHabitCards(){
     '</div>';
   }).join("");
   if(!habits.length){
-    html='<div class="empty-note">هنوز عادتی نداری 🌱<br>از تنظیمات ← شخصی‌سازی عادت‌ها یکی اضافه کن</div>';
+    html='<div class="empty-note">هنوز عادتی نداری 🌱<br>با مداد بالای «برنامه امروز» یکی اضافه کن</div>';
   }
   document.getElementById("habitCards").innerHTML=html;
+  addSaveButtons();
   wireHabitCards();
   fitCups();
 }
+var HB_FIELDS="input[data-field],input[data-sugarf],input[data-cfield],input[data-minf],input[data-nutf],input[data-exf],textarea[data-field],textarea[data-readnote]";
+function addSaveButtons(){
+  Array.prototype.forEach.call(document.querySelectorAll("#habitCards .habit-card"),function(card){
+    var body=card.querySelector(".habit-body"); if(!body || !body.querySelector(HB_FIELDS)) return;
+    var b=document.createElement("button"); b.type="button"; b.className="hb-save"; b.setAttribute("data-en","Save"); b.textContent="ثبت"; body.appendChild(b);
+  });
+}
+function lpToast(t){
+  var el=document.createElement("div"); el.className="pd-toast"; el.textContent=t; document.body.appendChild(el);
+  setTimeout(function(){ el.classList.add("out"); },1800); setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },2300);
+}
+window.lpToast=lpToast;
+var hbLast=0;
+function hbElems(b){
+  var f=b.getAttribute("data-for");
+  if(f) return f.split(",").map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var c=b.closest(".habit-card,.meas-box,[data-savebox]");
+  return c?Array.prototype.slice.call(c.querySelectorAll("input,textarea")):[];
+}
+function hbCommit(b){
+  hbLast=Date.now();
+  var ae=document.activeElement, ch=[];
+  hbElems(b).forEach(function(el){ if(el.type!=="checkbox" && el.type!=="button" && el.value!==el.defaultValue) ch.push(el); });
+  ch.forEach(function(el){ el.dispatchEvent(new Event("change",{bubbles:true})); });
+  if(ae && ae.blur) ae.blur();
+  lpToast(window.__lpLang==="en"?"Saved ✓":"ثبت شد ✓");
+  var cl=b.getAttribute("data-saveclose");
+  if(cl){ setTimeout(function(){ var x=document.getElementById(cl); if(x) x.click(); },350); }
+}
+document.addEventListener("pointerdown",function(e){ var b=e.target.closest&&e.target.closest(".hb-save"); if(b) hbCommit(b); },true);
+document.addEventListener("click",function(e){ var b=e.target.closest&&e.target.closest(".hb-save"); if(b && Date.now()-hbLast>700) hbCommit(b); },true);
 function fitCups(){
   Array.prototype.forEach.call(document.querySelectorAll("#habitCards .cups"),function(el){
     el.classList.remove("wrap","tight"); el.style.removeProperty("width"); el.style.removeProperty("--cw");
@@ -5223,10 +5551,18 @@ document.getElementById("menuBtn").addEventListener("click",function(){
 });
 function closeSheet(){
   habitForm=null;
+  document.getElementById("habitSheet").classList.add("hidden");
   document.getElementById("overlay").classList.add("hidden");
   document.getElementById("settingsSheet").classList.add("hidden");
 }
 document.getElementById("closeSheet").addEventListener("click",closeSheet);
+document.getElementById("closeHabitSheet").addEventListener("click",closeSheet);
+document.getElementById("habitEditBtn").addEventListener("click",function(){
+  habitForm=null;
+  document.getElementById("overlay").classList.remove("hidden");
+  document.getElementById("habitSheet").classList.remove("hidden");
+  renderHabitManager();
+});
 document.getElementById("overlay").addEventListener("click",closeSheet);
 
 
@@ -6691,7 +7027,7 @@ function fitChatToViewport(){
     chatFitRaf=0;
     var sh=document.getElementById("chatSheet"); if(!sh) return;
     var vv=window.visualViewport; if(!vv) return;
-    var h=Math.round(vv.height)+"px", t=Math.round(vv.offsetTop)+"px";
+    var z=window.__lpZoom||1; var h=Math.round(vv.height/z)+"px", t=Math.round(vv.offsetTop/z)+"px";
     if(sh.style.getPropertyValue("--chat-h")!==h) sh.style.setProperty("--chat-h",h);
     if(sh.style.getPropertyValue("--chat-top")!==t) sh.style.setProperty("--chat-top",t);
   });
@@ -6872,6 +7208,7 @@ function sendChatMessage(){
   var todayJ; try{ var jt=gregorianToJalali(new Date()); todayJ=jt.jy+"/"+jt.jm+"/"+jt.jd; }catch(e){ todayJ=""; }
   var digest=buildDataDigest(text);
 
+  if(window.__lpLang==="en"&&contextMsgs.length){ var lm_=contextMsgs[contextMsgs.length-1]; if(lm_&&lm_.role==="user"&&typeof lm_.content==="string") lm_.content+="\n\n(Please reply in English.)"; }
   apiCall("/api/chat","POST",{messages:contextMsgs, context:oldContext, todayGregorian:todayG, todayJalali:todayJ, dataDigest:digest},true).then(function(r){
     typingEl.remove();
     if(r.ok && r.data && r.data.reply){
@@ -6880,7 +7217,7 @@ function sendChatMessage(){
       if(/\[\[ACTION\]\]/.test(rawReply)){ lianaEmo=/tick|done|complete/i.test(rawReply)?"checkDone":"gotIt"; }
       lianaShowMood();
     }else{
-      chat.messages=chat.messages.concat([{role:"assistant",content:"یه مشکلی پیش اومد، دوباره امتحان کن."}]);
+      chat.messages=chat.messages.concat([{role:"assistant",content:(r&&r.status===401&&syncPaused)?"برای چت با لیانا باید یک بار دوباره وارد بشی (تنظیمات ← ورود دوباره)":"یه مشکلی پیش اومد، دوباره امتحان کن."}]);
       lianaFlash("worriedChin",3200);
     }
     if(chat.messages.length>CHAT_HISTORY_LIMIT){
@@ -7147,6 +7484,11 @@ $("jrText").addEventListener("input",function(){
   var o=getDayByDate(sel); o.day.journal=this.value; scheduleSave(); cnt(); fit();
   $("jrSaved").textContent="در حال ذخیره…"; clearTimeout(st); st=setTimeout(function(){ $("jrSaved").textContent="ذخیره شد ✓"; },700);
   clearTimeout(et); et=setTimeout(list,600);
+});
+$("jrSave").addEventListener("click",function(){
+  var o=getDayByDate(sel); o.day.journal=$("jrText").value; scheduleSave(); try{ flushSave(); }catch(e){}
+  cnt(); $("jrSaved").textContent="ذخیره شد ✓"; list();
+  if(window.lpToast) window.lpToast(window.__lpLang==="en"?"Saved ✓":"ثبت شد ✓");
 });
 window.lpOnView=function(v){
   if(v==="journal"){ openMonth(); showSel(); list(); }
@@ -8414,9 +8756,10 @@ setTimeout(function(){
       if(!per2.length) return '';
       var tn=dn(tk), last=per2[per2.length-1], len=dn(last.e)-dn(last.s)+1;
       var ended=E[last.s]&&dn(E[last.s])>=dn(last.e);
-      if(!ended&&dn(last.e)<=tn&&tn-dn(last.e)<=1) return 'during';
+      var xpl=(p.pl>=1&&p.pl<=14)?p.pl:5, pvl=[]; for(var q2=0;q2<per2.length-1;q2++) pvl.push(dn(per2[q2].e)-dn(per2[q2].s)+1);
+      if(pvl.length){ var pst=0; pvl.forEach(function(x){ pst+=x; }); xpl=Math.max(xpl,Math.round(pst/pvl.length)); }
+      if(!ended&&dn(last.e)<=tn&&tn-dn(last.e)<=1&&!(tn-dn(last.e)===1&&len>=xpl)) return 'during';
       if(tn-dn(last.s)+1<=len) return 'during';
-      var since=tn-dn(last.e); if(since>=1&&since<=2) return 'after';
       var lens=[]; for(var i=0;i<per2.length-1;i++) lens.push(dn(per2[i+1].s)-dn(per2[i].s));
       var v=lens.filter(function(x){ return x>=15&&x<=90; }).slice(-6), def=(p.cl>=15&&p.cl<=60)?p.cl:28, avg=def;
       if(v.length){ var s=0; v.forEach(function(x){ s+=x; }); avg=v.length===1?(s+def)/2:s/v.length; }
@@ -8670,7 +9013,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
 .sm-open .eq i{width:3px; border-radius:2px; background:var(--accent); animation:smEq 1s ease-in-out infinite;} .sm-open .eq i:nth-child(2){animation-delay:.2s} .sm-open .eq i:nth-child(3){animation-delay:.4s}
 @keyframes smEq{0%,100%{height:4px}50%{height:14px}}
 .sm-sheet .fp-ov{background:rgba(25,35,70,.25); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);}
-.sm-sheet .fp-box{max-height:88vh; background:color-mix(in srgb,var(--card) 74%,transparent); border:1px solid var(--g-line,rgba(255,255,255,.7)); border-bottom:0; backdrop-filter:blur(30px) saturate(180%); -webkit-backdrop-filter:blur(30px) saturate(180%);}
+.sm-sheet .fp-box{max-height:calc(88vh / var(--lp-z,1)); background:color-mix(in srgb,var(--card) 74%,transparent); border:1px solid var(--g-line,rgba(255,255,255,.7)); border-bottom:0; backdrop-filter:blur(30px) saturate(180%); -webkit-backdrop-filter:blur(30px) saturate(180%);}
 .sm-h{display:flex; align-items:center; justify-content:space-between; font-size:16px; font-weight:800; color:var(--text); margin-bottom:10px;}
 .sm-h button,.sm-sec button,.sm-pre button{font-family:inherit;}
 .sm-x{width:34px; height:34px; border-radius:50%; border:1px solid var(--g-line,rgba(255,255,255,.7)); background:var(--g-fill,rgba(255,255,255,.35)); color:var(--text); font-size:16px;}
@@ -8818,11 +9161,11 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
 .yg-top b{display:block; font-size:18px; font-weight:800;} .yg-top span{font-size:12px; color:var(--text-soft);}
 .yg-steps{display:flex; gap:5px; margin:0 6px 4px;} .yg-steps i{flex:1; height:4px; border-radius:4px; background:color-mix(in srgb,var(--text) 12%,transparent); transition:background .3s;}
 .yg-steps i.d{background:var(--accent); opacity:.55;} .yg-steps i.c{background:var(--accent);}
-.yg-stage{position:relative; width:min(94vw,380px); aspect-ratio:1/1; margin:0 auto;}
+.yg-stage{position:relative; width:min(calc(94vw / var(--lp-z,1)),380px); aspect-ratio:1/1; margin:0 auto;}
 .yg-aura{position:absolute; left:0; top:0; width:100%; aspect-ratio:1; overflow:visible; pointer-events:none;}
 .yg-aura .fl{fill:none; stroke:var(--accent); stroke-width:1.1; stroke-linejoin:round;} .yg-aura .fa{stroke:none;}
 .yg-fig{position:absolute; left:19%; top:19%; width:62%; aspect-ratio:1; display:grid; place-items:center;}
-.yg-fig em{font-style:normal; font-size:clamp(64px,22vw,96px); opacity:.85;} .yg-fig.has em{display:none;}
+.yg-fig em{font-style:normal; font-size:clamp(64px,calc(22vw / var(--lp-z,1)),96px); opacity:.85;} .yg-fig.has em{display:none;}
 .yg-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain;}
 .yg-time{display:flex; justify-content:center; align-items:center; gap:8px; margin-top:2px; font-size:11.5px; font-weight:500; color:var(--text-soft); line-height:1.4; opacity:.9;}
 .yg-time .tv{direction:ltr; font-variant-numeric:tabular-nums; letter-spacing:.3px;}
@@ -8839,8 +9182,8 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
 .yg-end em{font-style:normal; font-size:48px;} .yg-end b{display:block; font-size:19px; margin:8px 0 4px;} .yg-end span{font-size:13px; color:var(--text-soft);}
 
 /* --- yoga: big figure stage, smooth angle/pose crossfades, pose bank --- */
-.yg-stage{width:min(100%,520px); height:clamp(340px,52vh,500px); aspect-ratio:auto;}
-.yg-aura{left:50%; top:50%; width:min(100%,clamp(340px,52vh,500px)); transform:translate(-50%,-50%) scale(1.08);}
+.yg-stage{width:min(100%,520px); height:clamp(340px,calc(52vh / var(--lp-z,1)),500px); aspect-ratio:auto;}
+.yg-aura{left:50%; top:50%; width:min(100%,clamp(340px,calc(52vh / var(--lp-z,1)),500px)); transform:translate(-50%,-50%) scale(1.08);}
 .yg-fig{left:0; top:0; width:100%; height:100%; aspect-ratio:auto; animation:ygFloat 7s ease-in-out infinite;}
 @keyframes ygFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.012)}}
 .yg-img{opacity:0; transform:translateY(10px) scale(.955); pointer-events:none; will-change:opacity,transform; transition:opacity 1.1s ease-in-out .45s, transform 1.3s ease .45s; filter:drop-shadow(0 14px 22px color-mix(in srgb,var(--accent) 22%,transparent));}
@@ -8896,7 +9239,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
 .yb-a svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
 .yb-r.on .yb-a{background:var(--accent);border-color:var(--accent);}
 /* yoga: calm sci-fi halo + slow motion behind Liana */
-.yg-sf{position:absolute;left:50%;top:50%;width:min(100%,clamp(340px,52vh,500px));aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
+.yg-sf{position:absolute;left:50%;top:50%;width:min(100%,clamp(340px,calc(52vh / var(--lp-z,1)),500px));aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none}
 .yg-sf .hl{position:absolute;inset:6%;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 34%,transparent) 0,color-mix(in srgb,var(--c-yoga,var(--accent)) 14%,transparent) 46%,transparent 70%);animation:ygHl 9s ease-in-out infinite}
 .yg-sf .rn{position:absolute;border-radius:50%}
 .yg-sf .r1{inset:9%;border:1.5px dashed color-mix(in srgb,var(--accent) 45%,transparent);animation:ygSp 70s linear infinite}
@@ -8939,7 +9282,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
     cur=-1; clearInterval(vt); vs=0; if(p.n>1) vt=setInterval(function(){ if(!root.offsetParent) return; vs++; setVar(Y.vi(p,vs)); },3000);
     for(i=0;i<p.n;i++){ var im=new Image(); im.className="yg-img"; im.alt=p.en; im.decoding="async"; im.setAttribute("data-v",i); im.onerror=function(){ this.remove(); }; im.onload=function(){ E.fig.classList.add("has"); }; im.src=Y.img(p,i); E.fig.appendChild(im); }
     void E.fig.offsetWidth; setVar(0);
-    E.info.innerHTML='<div class="yg-name">'+p.fa+'</div><div class="yg-en">'+p.en+'</div><div class="yg-desc">'+p.desc+'</div>';
+    E.info.innerHTML='<div class="yg-name">'+(window.__lpLang==="en"?p.en:p.fa)+'</div>'+(window.__lpLang==="en"?'':'<div class="yg-en">'+p.en+'</div>')+'<div class="yg-desc">'+p.desc+'</div>';
     E.info.classList.remove("in"); void E.info.offsetWidth; E.info.classList.add("in");
     E.pv.disabled=!idx; E.nx.textContent=idx<list.length-1?"بعدی":"پایان"; E.au.classList.toggle("on",auto);
     var nx=list[idx+1]; if(nx) for(i=0;i<nx.n;i++) new Image().src=Y.img(nx,i);
@@ -8978,7 +9321,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
     Y.groups.forEach(function(g){
       var ps=Y.poses.filter(function(p){ return p.g===g[0]; }); if(!ps.length) return;
       h+='<div class="yb-t">'+g[1]+'</div>'+ps.map(function(p){ var n=pos[p.id];
-        return '<button type="button" class="yb-r'+(n?' on':'')+'" data-b="t" data-id="'+p.id+'"><span class="yb-im'+(STAND[p.id]?' st':'')+'"><img src="'+Y.thumb(p)+'" alt="" loading="lazy" onerror="this.onerror=null;this.src=\''+Y.img(p,0)+'\'">'+(n?'<i>'+fd(n)+'</i>':'')+'</span><span class="yb-n"><b>'+p.fa+'</b><small>'+p.en.replace(/\s*\(.*$/,'')+'</small></span><span class="yb-a">'+(n?LP_IC.check:LP_IC.plus)+'</span></button>'; }).join('');
+        return '<button type="button" class="yb-r'+(n?' on':'')+'" data-b="t" data-id="'+p.id+'"><span class="yb-im'+(STAND[p.id]?' st':'')+'"><img src="'+Y.thumb(p)+'" alt="" loading="lazy" onerror="this.onerror=null;this.src=\''+Y.img(p,0)+'\'">'+(n?'<i>'+fd(n)+'</i>':'')+'</span><span class="yb-n"><b>'+(window.__lpLang==="en"?p.en.replace(/\s*\(.*$/,''):p.fa)+'</b>'+(window.__lpLang==="en"?'':'<small>'+p.en.replace(/\s*\(.*$/,'')+'</small>')+'</span><span class="yb-a">'+(n?LP_IC.check:LP_IC.plus)+'</span></button>'; }).join('');
     });
     h+='<div class="yb-ft"><button type="button" data-b="rs">برنامه‌ی تصادفی امروز</button></div>';
     box.innerHTML=h; box.scrollTop=top;
@@ -9056,7 +9399,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
 .lang{display:inline-flex;background:#fff9;border:1px solid #e3dcf5;border-radius:20px;padding:3px;margin-bottom:6px}
 .lang button{border:0;background:none;padding:6px 16px;border-radius:16px;font:inherit;font-size:13px;color:#6a6190;cursor:pointer;transition:.3s}
 .lang button.on{background:linear-gradient(135deg,#8f78e8,#6f55d1);color:#fff;box-shadow:0 4px 12px #6f55d155}
-.hero{position:relative;width:100%;height:min(38vh,290px);display:flex;justify-content:center;align-items:flex-end;margin:4px 0 10px}
+.hero{position:relative;width:100%;height:min(calc(38vh / var(--lp-z,1)),290px);display:flex;justify-content:center;align-items:flex-end;margin:4px 0 10px}
 .hero.sm{height:120px;align-items:center}
 .hero .glow{position:absolute;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#cdbdff 0%,#e9defe66 55%,transparent 72%);animation:ob-breath 4s ease-in-out infinite;bottom:0}
 .hero.sm .glow{bottom:auto}@keyframes ob-breath{50%{transform:scale(1.12);opacity:.75}}
@@ -9093,7 +9436,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
 .ob-nx:before{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,#fff7,transparent);animation:ob-sh 3.2s infinite}
 @keyframes ob-sh{60%,100%{left:130%}}.ob-nx.go{animation:ob-pulse 1.8s ease-in-out infinite}@keyframes ob-pulse{50%{transform:scale(1.07);box-shadow:0 14px 30px #6f55d177}}
 .cf{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;background:var(--c);animation:ob-cf 3.2s linear forwards;animation-delay:var(--d);z-index:2;pointer-events:none}
-@keyframes ob-cf{to{transform:translateY(105vh) rotate(var(--r));opacity:.8}}
+@keyframes ob-cf{to{transform:translateY(calc(105vh / var(--lp-z,1))) rotate(var(--r));opacity:.8}}
 @media (prefers-reduced-motion:reduce){#lpOnb *,#lpPg *{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
 .lg-seg{display:flex;gap:8px;margin-top:8px}.lg-seg button{flex:1;padding:10px;border-radius:12px;border:1.5px solid rgba(128,128,160,.35);background:none;color:inherit;font:inherit;cursor:pointer}
 .lg-seg button.on{border-color:#7b61d9;background:rgba(123,97,217,.18);font-weight:700}
@@ -9170,7 +9513,7 @@ body.lp-onb-open>*:not(#lpOnb){visibility:hidden}
 .frm .f:not(.bad){animation-delay:calc(var(--i,0)*55ms + 100ms)}
 .cfw{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2;contain:strict}
 .cf{will-change:transform}
-@keyframes ob-cf{to{transform:translate3d(0,105vh,0) rotate(var(--r));opacity:.8}}
+@keyframes ob-cf{to{transform:translate3d(0,calc(105vh / var(--lp-z,1)),0) rotate(var(--r));opacity:.8}}
 /* goals page: 3x2 grid, full uncropped pictures with motion */
 .gg{grid-template-columns:repeat(3,1fr);gap:9px}
 .g{padding:6px 6px 8px;border-radius:18px;gap:7px;font-size:12.5px;line-height:1.45;animation:ob-gin .55s cubic-bezier(.2,.9,.3,1.25) backwards;animation-delay:calc(var(--i,0)*70ms + 140ms)}
@@ -9499,7 +9842,9 @@ function model(){
   per.forEach(function(r,i){
     r.i=i; r.len=dn(r.e)-dn(r.s)+1;
     var ended=p.ends[r.s]&&dn(p.ends[r.s])>=dn(r.e);
-    r.ongoing=(i===per.length-1)&&!ended&&dn(r.e)<=tn&&tn-dn(r.e)<=1;
+    var xpl=(p.pl>=1&&p.pl<=14)?p.pl:5, pv=per.slice(0,i).map(function(x){ return x.len; });
+    if(pv.length){ var pt=0; pv.forEach(function(x){ pt+=x; }); xpl=Math.max(xpl,Math.round(pt/pv.length)); }
+    r.ongoing=(i===per.length-1)&&!ended&&dn(r.e)<=tn&&tn-dn(r.e)<=1&&!(tn-dn(r.e)===1&&r.len>=xpl);
   });
   m.per=per; m.pset=pset; m.keys=keys;
   m.spot=keys.filter(function(k){ return (L[k].f|0)===1&&!pset[k]; });
@@ -9846,6 +10191,7 @@ function vCal(m){
   h+='</div>';
   h+='<div class="pd-legend wide"><span><i class="lp"></i>پریود</span><span><i class="lpr"></i>پیش‌بینی پریود</span><span><i class="lf"></i>باروری (تخمین)</span><span><i class="lo"></i>تخمک‌گذاری</span><span><i class="ls"></i>لکه‌بینی</span><span><i class="lw"></i>علامت هشدار</span></div>';
   h+=calMark?'<p class="pd-note">روی روزهایی که پریود بودی بزن؛ دوباره بزنی برداشته می‌شه. برای گزارش دقیق‌تر پزشک، پریودهای قبلی رو هم ثبت کن و شدت و علائم رو از «ثبت روز» اضافه کن.</p>':'<p class="pd-note">روی هر روز بزن تا خونریزی، درد، علائم و حال‌وهواش رو ثبت کنی.</p>';
+  if(calMark) h+='<button type="button" class="pd-btn" data-a="csave" data-en="Save">ثبت</button>';
   h+='<button type="button" class="pd-btn ghost" data-a="ctoday">برو به این ماه</button>';
   return h;
 }
@@ -9877,6 +10223,7 @@ function vDay(m){
   h+='<div class="pd-card"><div class="pd-ct"><b>ترشح</b></div><div class="pd-chips">'+C.DISC.map(function(x){ return chip("disc",x.id,x.l,r.ds===x.id,"w"+x.w); }).join("")+'</div></div>';
   h+='<div class="pd-card"><div class="pd-ct"><b>حال‌وهوا</b></div><div class="pd-chips">'+C.MOOD.map(function(x){ return chip("mood",x.id,x.l,(r.md||[]).indexOf(x.id)>-1); }).join("")+'</div></div>';
   h+='<div class="pd-card"><div class="pd-ct"><b>یادداشت</b></div><textarea class="pd-ta" id="pdNote" rows="3" placeholder="هر چیزی که برای پزشک یا خودت مهمه...">'+esc(r.nt||"")+'</textarea></div>';
+  h+='<button type="button" class="pd-btn" data-a="dsave" data-en="Save">ثبت</button>';
   if(m.p.logs[k]) h+='<button type="button" class="pd-del" data-a="ddel">پاک کردن ثبت این روز</button>';
   return h;
 }
@@ -9980,6 +10327,7 @@ function vSet(m){
     '<div class="pd-set"><label>مدت معمول پریود (روز)</label><input class="kc-in" id="pdSetPl" type="number" min="1" max="14" value="'+p.pl+'"></div>'+
     '<p class="pd-note">وقتی چند پریود ثبت کنی، پیش‌بینی خودکار از چرخه‌های واقعی خودت حساب می‌شه.</p></div>'+
     '<div class="pd-card"><div class="pd-set row"><label>نمایش در صفحه‌ی خانه</label><button type="button" class="switch'+(p.hideHome?'':' on')+'" id="pdSetHome" data-a="sethome" aria-label="نمایش در خانه"></button></div></div>'+
+    '<button type="button" class="pd-btn" data-a="setsave" data-en="Save">ثبت</button>'+
     '<button type="button" class="pd-btn ghost" data-a="setup">ثبت دوباره‌ی آخرین پریود</button>'+
     '<p class="pd-note">اطلاعات پریود ترکر مثل بقیه‌ی اطلاعاتت توی حساب خودت ذخیره می‌شه.</p>'+
     '<button type="button" class="pd-del" data-a="wipe">پاک کردن همه‌ی اطلاعات پریود ترکر</button>';
@@ -10087,6 +10435,9 @@ function onClick(e){
     case "mood": pd.mut(dayK,function(r){ r.md=r.md||[]; var i=r.md.indexOf(id); if(i>-1) r.md.splice(i,1); else r.md.push(id); }); render(); return;
     case "disc": pd.mut(dayK,function(r){ r.ds=(r.ds===id)?"":id; }); render(); return;
     case "ddel": if(window.confirm("ثبت این روز پاک بشه؟")){ var P1=pd.P(); delete P1.logs[dayK]; U.sv(); view="main"; render(); } return;
+    case "dsave": var _ta=$("pdNote"); if(_ta){ var _nv=_ta.value; pd.mut(dayK,function(r){ r.nt=_nv; }); } view="main"; render(); $("pdModal").scrollTop=0; if(window.lpToast) window.lpToast(window.__lpLang==="en"?"Saved ✓":"ثبت شد ✓"); return;
+    case "csave": calMark=false; render(); if(window.lpToast) window.lpToast(window.__lpLang==="en"?"Saved ✓":"ثبت شد ✓"); return;
+    case "setsave": var _c=+($("pdSetCl")||{}).value, _q=+($("pdSetPl")||{}).value; if(_c>=15&&_c<=60) pd.P().cl=_c; if(_q>=1&&_q<=14) pd.P().pl=_q; U.sv(); view="main"; render(); $("pdModal").scrollTop=0; if(window.lpToast) window.lpToast(window.__lpLang==="en"?"Saved ✓":"ثبت شد ✓"); return;
     case "cmode": calMark=(v==="1"); render(); return;
     case "cnav": calM+=(+v); if(calM>12){ calM=1; calY++; } if(calM<1){ calM=12; calY--; } render(); return;
     case "ctoday": calY=0; render(); return;
