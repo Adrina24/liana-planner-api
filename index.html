@@ -4758,16 +4758,8 @@ function renderHabitCards(){
     html='<div class="empty-note">هنوز عادتی نداری 🌱<br>با مداد بالای «برنامه امروز» یکی اضافه کن</div>';
   }
   document.getElementById("habitCards").innerHTML=html;
-  addSaveButtons();
   wireHabitCards();
   fitCups();
-}
-var HB_FIELDS="input[data-field],input[data-sugarf],input[data-cfield],input[data-minf],input[data-nutf],input[data-exf],textarea[data-field],textarea[data-readnote]";
-function addSaveButtons(){
-  Array.prototype.forEach.call(document.querySelectorAll("#habitCards .habit-card"),function(card){
-    var body=card.querySelector(".habit-body"); if(!body || !body.querySelector(HB_FIELDS)) return;
-    var b=document.createElement("button"); b.type="button"; b.className="hb-save"; b.setAttribute("data-en","Save"); b.textContent="ثبت"; body.appendChild(b);
-  });
 }
 function lpToast(t){
   var el=document.createElement("div"); el.className="pd-toast"; el.textContent=t; document.body.appendChild(el);
