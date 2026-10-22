@@ -8756,7 +8756,7 @@ setTimeout(function(){
 /* Halloween edition: splash + card are automatic until 1 Nov; floating decorations are opt-in from the theme box. Delete this block, halloween/ and the hwRow/halloween card to remove. */
 (function(){
 var D="halloween/", on=Date.now()<new Date(2026,10,2).getTime(); window.lpHW={on:on};
-if(!on){ var c=document.querySelector('.car-card[data-cid="halloween"]'); if(c) c.remove(); var r=document.getElementById("hwRow"); if(r) r.remove(); return; }
+if(!on){ var c=document.querySelector('.car-card[data-cid="halloween"]'); if(c) c.remove(); }
 var fx=null, K="lpHw";
 (function(){ var t=new Date(), n=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5), a=document.getElementById("hwCardT"), b=document.getElementById("hwCardS");
   function fa(x){ return String(x).replace(/\d/g,function(d){ return "۰۱۲۳۴۵۶۷۸۹"[d]; }); }
@@ -8802,7 +8802,7 @@ window.addEventListener("resize",size);
 apply();
 var shown=false, mo=new MutationObserver(try1);
 function try1(){ if(!shown&&!document.body.classList.contains("booting")){ shown=true; mo.disconnect(); setTimeout(splash,300); } }
-mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); try1();
+if(on){ mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); try1(); }
 })();
 </script>
 <script>
