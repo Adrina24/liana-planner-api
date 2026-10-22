@@ -2591,7 +2591,6 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
     <div id="paletteGroups"></div>
   </div>
 
-  <div class="set-row" id="hwRow"><div class="row-between"><span>🎃 تم هالووین</span><button class="switch" id="hwSwitch"></button></div></div>
 
   <div class="set-row">
     <div class="row-between"><span>حالت تک‌رنگ</span>
@@ -8720,27 +8719,6 @@ setTimeout(function(){
 },25000);
 </script>
 <style id="hwCss">
-#hwFx{position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden;direction:ltr;--ox:max(10px,calc((100vw - 452px)/2 + 6px))}
-#hwFx.p *{animation-play-state:paused!important}
-.hw-g{position:absolute;height:var(--s);display:grid;will-change:transform;animation:hwSw var(--t) ease-in-out infinite alternate}
-.hw-g::before{content:"";position:absolute;inset:-20%;border-radius:50%;background:radial-gradient(circle,rgba(235,228,255,.55),rgba(235,228,255,0) 68%)}
-.hw-g img{grid-area:1/1;justify-self:center;position:relative;height:100%;width:auto;display:block;opacity:0;transition:opacity 1.8s ease-in-out;animation:hwBob 8s ease-in-out infinite}
-.hw-g img.on{opacity:1}
-.hw-g.r img{scale:-1 1}
-@keyframes hwSw{from{transform:translateX(0)}to{transform:translateX(var(--d))}}
-@keyframes hwBob{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
-.hw-cn{position:absolute;left:var(--cl,10px);bottom:calc(var(--hwb,70px) - 2px);height:36px;will-change:transform;animation:hwCn 26s ease-in-out infinite alternate}
-.hw-cn img{height:100%;width:auto;display:block;transform-origin:50% 100%;animation:hwHop 1.2s ease-in-out infinite,hwFp 52s step-end infinite}
-@keyframes hwCn{from{transform:translateX(0)}to{transform:translateX(var(--cw,200px))}}
-@keyframes hwHop{0%,100%{translate:0 0}50%{translate:0 -3px}}
-@keyframes hwFp{0%{scale:1 1}50%{scale:-1 1}100%{scale:-1 1}}
-.hw-tt{position:relative}
-.hw-tp{position:absolute;top:50%;height:30px;width:auto;margin-top:-15px;pointer-events:none;filter:drop-shadow(0 0 5px rgba(255,150,40,.55));transform-origin:50% 100%;animation:hwPk 5s ease-in-out infinite}
-.hw-tp.l{right:100%;margin-right:7px}
-.hw-tp.r{left:100%;margin-left:7px;animation-delay:-2.5s}
-@keyframes hwPk{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
-.hw-bt{position:absolute;top:-2px;left:62px;height:46px;width:auto;pointer-events:none;transform-origin:50% 0;animation:hwBt 6s ease-in-out infinite}
-@keyframes hwBt{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 #hwSplash{position:fixed;inset:0;z-index:120;background:#120a24;opacity:0;transition:opacity .6s;overflow:hidden}
 #hwSplash.in{opacity:1}
 .hw-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
@@ -8752,14 +8730,18 @@ setTimeout(function(){
 .hw-cb{position:absolute;left:10px;bottom:8px;font-size:11px;font-weight:700;color:#fff;padding:2px 9px;border-radius:999px;background:rgba(18,8,36,.42);border:1px solid rgba(255,255,255,.25);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);pointer-events:none}
 .hw-cw{position:absolute;left:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;justify-content:flex-start;animation:hwIn .7s .5s cubic-bezier(.2,1.2,.4,1) both}
 .hw-cd{padding:7px 20px;border-radius:999px;font-size:17px;font-weight:700;color:#fff;background:rgba(18,8,36,.38);border:1px solid rgba(255,255,255,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-shadow:0 0 10px rgba(255,150,40,.85),0 2px 6px rgba(0,0,0,.5)}
-@media(prefers-reduced-motion:reduce){#hwFx *,.hw-ti,.hw-cw{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.hw-ti,.hw-cw{animation:none!important;transition:none!important}}
 </style>
 <script id="hwJs">
-/* Halloween edition: splash + card are automatic until 1 Nov; floating decorations are on by default until then and stay as an opt-in theme afterwards. */
+/* Halloween edition: only the open-app splash (4 Liana images + close button) and the carousel card are left; both are automatic until 2 Nov.
+   While the splash is open the home carousel is held (window.lpCarHold) so the card cannot flip away before the close button is tapped.
+   Future occasions (Yalda, Christmas, Nowruz) can reuse the same hold: set window.lpCarHold=true when their splash opens, then set it false and call window.lpCarResume() when it closes. */
 (function(){
 var D="halloween/", on=Date.now()<new Date(2026,10,2).getTime(); window.lpHW={on:on};
+try{ localStorage.removeItem("lpHw"); localStorage.removeItem("lpHwG1"); }catch(e){}
+window.lpCarHold=!!on;
+function release(){ if(!window.lpCarHold) return; window.lpCarHold=false; if(window.lpCarResume) window.lpCarResume(); }
 if(!on){ var c=document.querySelector('.car-card[data-cid="halloween"]'); if(c) c.remove(); }
-var fx=null, K="lpHw";
 (function(){ var t=new Date(), n=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5), e=document.getElementById("hwCardC");
   if(!e) return;
   if(n>1) e.textContent=String(n).replace(/\d/g,function(x){ return "۰۱۲۳۴۵۶۷۸۹"[x]; })+" روز تا هالووین";
@@ -8767,82 +8749,23 @@ var fx=null, K="lpHw";
   else if(n===0) e.textContent="امروز هالووینه";
   else e.remove();
 })();
-function I(n,c){ return '<img'+(c?' class="'+c+'"':'')+' data-n="'+n+'" src="'+D+n+'.webp" alt="" draggable="false">'; }
-var pool=["ghost1","ghost4","ghost5","ghost7"], PK="lpHwG1";
-/* find which ghost files exist (once, then remembered): single ghosts rotate, the wide one (4 ghosts holding hands) walks on the nav bar */
-function probe(cb){
-  var c=null; try{ c=JSON.parse(localStorage.getItem(PK)||"null"); }catch(e){}
-  if(c&&c.v===1){ cb(c); return; }
-  var nm=[],q; for(q=1;q<=12;q++) nm.push("ghost"+q);
-  ["ghosts","ghost-group","ghost-chain","ghost-hands","ghosts-hands","ghost-row"].forEach(function(x){ nm.push(x); });
-  var res={}, left=nm.length, fin=false;
-  function end(){ if(fin) return; fin=true;
-    var g=[], ch=null, cr=0;
-    nm.forEach(function(x){ var r=res[x]; if(!r) return; if(r>=2.1){ if(r>cr){ cr=r; ch=x; } } else g.push(x); });
-    var o={v:1,g:g,c:ch}; if(g.length+(ch?1:0)>=3){ try{ localStorage.setItem(PK,JSON.stringify(o)); }catch(e){} }
-    cb(o); }
-  nm.forEach(function(x){ var im=new Image(); im.onload=function(){ if(im.naturalHeight) res[x]=im.naturalWidth/im.naturalHeight; if(--left===0) end(); }; im.onerror=function(){ if(--left===0) end(); }; im.src=D+x+".webp"; });
-  setTimeout(end,8000);
-}
-function swap(el){
-  var on=el.querySelector("img.on"), off=el.querySelector("img:not(.on)"); if(!on||!off||!fx) return;
-  var used=[].map.call(fx.querySelectorAll(".hw-g img.on"),function(i){ return i.getAttribute("data-n"); });
-  var c=pool.filter(function(n){ return used.indexOf(n)<0; }); if(!c.length) return;
-  var n=c[Math.floor(Math.random()*c.length)];
-  off.setAttribute("data-n",n); off.src=D+n+".webp";
-  var go=function(){ off.classList.add("on"); on.classList.remove("on"); };
-  if(off.decode) off.decode().then(go,go); else off.onload=go;
-}
-function build(){
-  fx=document.createElement("div"); fx.id="hwFx"; var h="";
-  [[1,24,0,34,13],[4,41,1,32,15],[5,58,0,32,14],[7,75,1,34,16]].forEach(function(g,i){
-    h+='<div class="hw-g'+(g[2]?' r':'')+'" style="top:'+g[1]+'%;'+(g[2]?'right':'left')+':var(--ox);--s:'+g[3]+'px;--d:'+(g[2]?'-30px':'30px')+';--t:'+g[4]+'s;animation-delay:-'+(i*5)+'s">'+I("ghost"+g[0],"on")+'<img alt="" draggable="false"></div>'; });
-  fx.innerHTML=h; document.body.appendChild(fx);
-  [].forEach.call(fx.querySelectorAll(".hw-g"),function(el){ var k=0;
-    el.addEventListener("animationiteration",function(e){ if(e.target!==el||e.animationName!=="hwSw") return; if(++k%2) return; swap(el); }); });
-  var tb=document.querySelector(".topbar"), tt=tb&&tb.querySelector(".app-title");
-  if(tt){ tt.classList.add("hw-tt");
-    tt.insertAdjacentHTML("beforeend",'<img class="hw-tp l" src="'+D+'pumpkin1.webp" alt="" draggable="false"><img class="hw-tp r" src="'+D+'pumpkin6.webp" alt="" draggable="false">');
-    tb.insertAdjacentHTML("beforeend",'<img class="hw-bt" src="'+D+'bat4.webp" alt="" draggable="false">'); }
-  size();
-  probe(function(o){ if(!fx) return;
-    (o.g||[]).forEach(function(x){ if(pool.indexOf(x)<0) pool.push(x); });
-    if(o.c){ var cn=document.createElement("div"); cn.className="hw-cn"; cn.innerHTML='<img alt="" draggable="false">';
-      var im=cn.firstChild; im.onload=size; im.src=D+o.c+".webp"; fx.appendChild(cn); size(); } });
-}
-function size(){ if(!fx) return;
-  var n=document.getElementById("bnav"), r=n&&n.getBoundingClientRect(), ok=r&&r.height>20, cn=fx.querySelector(".hw-cn");
-  fx.style.setProperty("--hwb",(ok?innerHeight-r.top:70)+"px");
-  if(cn){ if(!ok){ cn.style.visibility="hidden"; return; }
-    var w=cn.offsetWidth, pd=14;
-    fx.style.setProperty("--cl",(r.left+pd)+"px"); fx.style.setProperty("--cw",Math.max(0,r.width-2*pd-w)+"px"); cn.style.visibility=""; } }
-function kill(){ if(fx){ fx.remove(); fx=null; }
-  var t=document.querySelector(".topbar"); if(t){ [].forEach.call(t.querySelectorAll(".hw-tp,.hw-bt"),function(x){ x.remove(); }); var tt=t.querySelector(".hw-tt"); if(tt) tt.classList.remove("hw-tt"); } }
-function cur(){ var v=localStorage.getItem(K); return v===null?on:v==="1"; }
-function apply(){
-  var a=cur();
-  if(a&&!fx) build(); if(!a&&fx) kill();
-  var s=document.getElementById("hwSwitch"); if(s) s.classList.toggle("on",a);
-}
 function show(n){
   if(document.getElementById("hwSplash")) return;
+  window.lpCarHold=true;
   var t=new Date(), d=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5),
       cd=d>1?String(d).replace(/\d/g,function(x){ return "۰۱۲۳۴۵۶۷۸۹"[x]; })+" روز تا هالووین":(d===1?"فقط یه روز تا هالووین":"");
   var s=document.createElement("div"); s.id="hwSplash";
   s.innerHTML='<img class="hw-bg" src="'+D+'liana'+n+'.webp" alt=""><div class="hw-sh"></div><img class="hw-ti" src="'+D+'title.webp" alt="Happy Halloween"><button type="button" class="hw-x" aria-label="بستن">✕</button>'+(cd?'<div class="hw-cw"><span class="hw-cd">'+cd+'</span></div>':'');
   document.body.appendChild(s); requestAnimationFrame(function(){ s.classList.add("in"); });
-  var done=function(){ s.classList.remove("in"); setTimeout(function(){ s.remove(); },650); };
+  var done=function(){ s.classList.remove("in"); setTimeout(function(){ s.remove(); },650); release(); };
   s.querySelector(".hw-x").onclick=done;
 }
-function splash(){ var n=1+Math.floor(Math.random()*4), t=new Image(), im=new Image(); t.src=D+"title.webp"; im.onload=function(){ show(n); }; im.src=D+"liana"+n+".webp"; }
+function splash(){ var n=1+Math.floor(Math.random()*4), t=new Image(), im=new Image(); t.src=D+"title.webp"; im.onload=function(){ show(n); }; im.onerror=release; im.src=D+"liana"+n+".webp"; }
 window.lpHW.splash=splash;
-var sw=document.getElementById("hwSwitch"); if(sw) sw.addEventListener("click",function(){ localStorage.setItem(K,cur()?"0":"1"); apply(); });
-document.addEventListener("visibilitychange",function(){ if(fx) fx.classList.toggle("p",document.hidden); });
-window.addEventListener("resize",size); window.addEventListener("load",function(){ setTimeout(size,700); setTimeout(size,1800); });
-apply();
 var shown=false, mo=new MutationObserver(try1);
 function try1(){ if(!shown&&!document.body.classList.contains("booting")){ shown=true; mo.disconnect(); setTimeout(splash,300); } }
 if(on){ mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); try1(); }
+window.addEventListener("load",function(){ setTimeout(function(){ if(!document.getElementById("hwSplash")) release(); },30000); });
 })();
 </script>
 <script>
@@ -8968,7 +8891,9 @@ if(on){ mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); t
     i=(n+cards.length)%cards.length; layout(0);
     [].forEach.call(dots.children, function(d,k){ d.classList.toggle('on', k===i); });
   }
-  function run(){ clearInterval(timer); timer=setInterval(function(){ if(car.offsetParent && !drag) show(i+1); }, 4200); }
+  function run(){ clearInterval(timer); timer=setInterval(function(){ if(window.lpCarHold) return; if(car.offsetParent && !drag) show(i+1); }, 4200); }
+  /* an occasion splash (Halloween...) closed: restart the timer so the first card gets its full time on screen */
+  window.lpCarResume=function(){ run(); };
   /* ---- "today's cards": tick which cards show in today's carousel (resets by itself tomorrow) ---- */
   window.lpCarSet=function(list){
     var cat=window.lpCarCat, next=(list||[]).map(function(id){ return cat.byId[id]; }).filter(Boolean);
