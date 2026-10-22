@@ -8720,19 +8720,27 @@ setTimeout(function(){
 },25000);
 </script>
 <style id="hwCss">
-#hwFx{position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden;direction:ltr}
+#hwFx{position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden;direction:ltr;--ox:max(10px,calc((100vw - 452px)/2 + 6px))}
 #hwFx.p *{animation-play-state:paused!important}
-.hw-g{position:absolute;height:var(--s);will-change:transform;animation:hwSw var(--t) ease-in-out infinite alternate}
-.hw-g::before{content:"";position:absolute;inset:-20%;border-radius:50%;background:radial-gradient(circle,rgba(235,228,255,.6),rgba(235,228,255,0) 68%)}
-.hw-g img{position:relative;height:100%;width:auto;display:block;animation:hwBob 10s ease-in-out infinite}
+.hw-g{position:absolute;height:var(--s);display:grid;will-change:transform;animation:hwSw var(--t) ease-in-out infinite alternate}
+.hw-g::before{content:"";position:absolute;inset:-20%;border-radius:50%;background:radial-gradient(circle,rgba(235,228,255,.55),rgba(235,228,255,0) 68%)}
+.hw-g img{grid-area:1/1;justify-self:center;position:relative;height:100%;width:auto;display:block;opacity:0;transition:opacity 1.8s ease-in-out;animation:hwBob 8s ease-in-out infinite}
+.hw-g img.on{opacity:1}
 .hw-g.r img{scale:-1 1}
-.hw-h,.hw-p{position:absolute;height:var(--s)}
-.hw-h{top:-2px}
-.hw-p{bottom:calc(var(--hwb,70px) - 5px)}
-.hw-h img,.hw-p img{height:100%;width:auto;display:block}
-.hw-p img{filter:drop-shadow(0 0 4px rgba(255,150,40,.6))}
 @keyframes hwSw{from{transform:translateX(0)}to{transform:translateX(var(--d))}}
-@keyframes hwBob{0%,100%{transform:translateY(-14px) rotate(-3deg)}50%{transform:translateY(14px) rotate(3deg)}}
+@keyframes hwBob{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+.hw-cn{position:absolute;left:var(--cl,10px);bottom:calc(var(--hwb,70px) - 2px);height:36px;will-change:transform;animation:hwCn 26s ease-in-out infinite alternate}
+.hw-cn img{height:100%;width:auto;display:block;transform-origin:50% 100%;animation:hwHop 1.2s ease-in-out infinite,hwFp 52s step-end infinite}
+@keyframes hwCn{from{transform:translateX(0)}to{transform:translateX(var(--cw,200px))}}
+@keyframes hwHop{0%,100%{translate:0 0}50%{translate:0 -3px}}
+@keyframes hwFp{0%{scale:1 1}50%{scale:-1 1}100%{scale:-1 1}}
+.hw-tt{position:relative}
+.hw-tp{position:absolute;top:50%;height:30px;width:auto;margin-top:-15px;pointer-events:none;filter:drop-shadow(0 0 5px rgba(255,150,40,.55));transform-origin:50% 100%;animation:hwPk 5s ease-in-out infinite}
+.hw-tp.l{right:100%;margin-right:7px}
+.hw-tp.r{left:100%;margin-left:7px;animation-delay:-2.5s}
+@keyframes hwPk{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.hw-bt{position:absolute;top:-2px;left:62px;height:46px;width:auto;pointer-events:none;transform-origin:50% 0;animation:hwBt 6s ease-in-out infinite}
+@keyframes hwBt{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 #hwSplash{position:fixed;inset:0;z-index:120;background:#120a24;opacity:0;transition:opacity .6s;overflow:hidden}
 #hwSplash.in{opacity:1}
 .hw-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
@@ -8742,7 +8750,7 @@ setTimeout(function(){
 @keyframes hwFl{0%,100%{transform:translateY(0) rotate(-1.6deg)}50%{transform:translateY(-10px) rotate(1.6deg) scale(1.03)}}
 .hw-x{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 14px);left:14px;width:40px;height:40px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(18,8,36,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .hw-cb{position:absolute;left:10px;bottom:8px;font-size:11px;font-weight:700;color:#fff;padding:2px 9px;border-radius:999px;background:rgba(18,8,36,.42);border:1px solid rgba(255,255,255,.25);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);pointer-events:none}
-.hw-cw{position:absolute;left:0;right:0;display:flex;justify-content:center;top:calc(env(safe-area-inset-top,0px) + 6vh + min(80vw,340px)*.341 + 12px);animation:hwIn .7s .5s cubic-bezier(.2,1.2,.4,1) both}
+.hw-cw{position:absolute;left:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;justify-content:flex-start;animation:hwIn .7s .5s cubic-bezier(.2,1.2,.4,1) both}
 .hw-cd{padding:7px 20px;border-radius:999px;font-size:17px;font-weight:700;color:#fff;background:rgba(18,8,36,.38);border:1px solid rgba(255,255,255,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-shadow:0 0 10px rgba(255,150,40,.85),0 2px 6px rgba(0,0,0,.5)}
 @media(prefers-reduced-motion:reduce){#hwFx *,.hw-ti,.hw-cw{animation:none!important;transition:none!important}}
 </style>
@@ -8759,21 +8767,61 @@ var fx=null, K="lpHw";
   else if(n===0) e.textContent="امروز هالووینه";
   else e.remove();
 })();
-function I(n){ return '<img src="'+D+n+'.webp" alt="" draggable="false">'; }
-function build(){
-  fx=document.createElement("div"); fx.id="hwFx"; var h="", ox="max(10px,(100vw - 452px)/2 + 6px)";
-  [[1,24,0,34,26],[4,41,1,32,31],[5,58,0,32,28],[7,75,1,34,34]].forEach(function(g,i){
-    h+='<div class="hw-g'+(g[2]?' r':'')+'" style="top:'+g[1]+'%;'+(g[2]?'right':'left')+':-14px;--s:'+g[3]+'px;--d:'+(g[2]?'-20px':'20px')+';--t:'+g[4]+'s;animation-delay:-'+(i*7)+'s">'+I("ghost"+g[0])+'</div>'; });
-  h+='<div class="hw-h" style="left:17%;--s:46px">'+I("bat4")+'</div><div class="hw-h" style="left:78%;--s:38px">'+I("bat4")+'</div>';
-  [["pumpkin1",0,0,34],["pumpkin3",0,31,26],["pumpkin6",1,0,34],["pumpkin2",1,31,26]].forEach(function(p){
-    h+='<div class="hw-p" style="'+(p[1]?'right':'left')+':calc('+ox+' + '+p[2]+'px);--s:'+p[3]+'px">'+I(p[0])+'</div>'; });
-  fx.innerHTML=h; document.body.appendChild(fx); size();
+function I(n,c){ return '<img'+(c?' class="'+c+'"':'')+' data-n="'+n+'" src="'+D+n+'.webp" alt="" draggable="false">'; }
+var pool=["ghost1","ghost4","ghost5","ghost7"], PK="lpHwG1";
+/* find which ghost files exist (once, then remembered): single ghosts rotate, the wide one (4 ghosts holding hands) walks on the nav bar */
+function probe(cb){
+  var c=null; try{ c=JSON.parse(localStorage.getItem(PK)||"null"); }catch(e){}
+  if(c&&c.v===1){ cb(c); return; }
+  var nm=[],q; for(q=1;q<=12;q++) nm.push("ghost"+q);
+  ["ghosts","ghost-group","ghost-chain","ghost-hands","ghosts-hands","ghost-row"].forEach(function(x){ nm.push(x); });
+  var res={}, left=nm.length, fin=false;
+  function end(){ if(fin) return; fin=true;
+    var g=[], ch=null, cr=0;
+    nm.forEach(function(x){ var r=res[x]; if(!r) return; if(r>=2.1){ if(r>cr){ cr=r; ch=x; } } else g.push(x); });
+    var o={v:1,g:g,c:ch}; if(g.length+(ch?1:0)>=3){ try{ localStorage.setItem(PK,JSON.stringify(o)); }catch(e){} }
+    cb(o); }
+  nm.forEach(function(x){ var im=new Image(); im.onload=function(){ if(im.naturalHeight) res[x]=im.naturalWidth/im.naturalHeight; if(--left===0) end(); }; im.onerror=function(){ if(--left===0) end(); }; im.src=D+x+".webp"; });
+  setTimeout(end,8000);
 }
-function size(){ if(!fx) return; var n=document.getElementById("bnav"), r=n&&n.getBoundingClientRect(); fx.style.setProperty("--hwb",(r&&r.height>20?innerHeight-r.top:70)+"px"); }
+function swap(el){
+  var on=el.querySelector("img.on"), off=el.querySelector("img:not(.on)"); if(!on||!off||!fx) return;
+  var used=[].map.call(fx.querySelectorAll(".hw-g img.on"),function(i){ return i.getAttribute("data-n"); });
+  var c=pool.filter(function(n){ return used.indexOf(n)<0; }); if(!c.length) return;
+  var n=c[Math.floor(Math.random()*c.length)];
+  off.setAttribute("data-n",n); off.src=D+n+".webp";
+  var go=function(){ off.classList.add("on"); on.classList.remove("on"); };
+  if(off.decode) off.decode().then(go,go); else off.onload=go;
+}
+function build(){
+  fx=document.createElement("div"); fx.id="hwFx"; var h="";
+  [[1,24,0,34,13],[4,41,1,32,15],[5,58,0,32,14],[7,75,1,34,16]].forEach(function(g,i){
+    h+='<div class="hw-g'+(g[2]?' r':'')+'" style="top:'+g[1]+'%;'+(g[2]?'right':'left')+':var(--ox);--s:'+g[3]+'px;--d:'+(g[2]?'-30px':'30px')+';--t:'+g[4]+'s;animation-delay:-'+(i*5)+'s">'+I("ghost"+g[0],"on")+'<img alt="" draggable="false"></div>'; });
+  fx.innerHTML=h; document.body.appendChild(fx);
+  [].forEach.call(fx.querySelectorAll(".hw-g"),function(el){ var k=0;
+    el.addEventListener("animationiteration",function(e){ if(e.target!==el||e.animationName!=="hwSw") return; if(++k%2) return; swap(el); }); });
+  var tb=document.querySelector(".topbar"), tt=tb&&tb.querySelector(".app-title");
+  if(tt){ tt.classList.add("hw-tt");
+    tt.insertAdjacentHTML("beforeend",'<img class="hw-tp l" src="'+D+'pumpkin1.webp" alt="" draggable="false"><img class="hw-tp r" src="'+D+'pumpkin6.webp" alt="" draggable="false">');
+    tb.insertAdjacentHTML("beforeend",'<img class="hw-bt" src="'+D+'bat4.webp" alt="" draggable="false">'); }
+  size();
+  probe(function(o){ if(!fx) return;
+    (o.g||[]).forEach(function(x){ if(pool.indexOf(x)<0) pool.push(x); });
+    if(o.c){ var cn=document.createElement("div"); cn.className="hw-cn"; cn.innerHTML='<img alt="" draggable="false">';
+      var im=cn.firstChild; im.onload=size; im.src=D+o.c+".webp"; fx.appendChild(cn); size(); } });
+}
+function size(){ if(!fx) return;
+  var n=document.getElementById("bnav"), r=n&&n.getBoundingClientRect(), ok=r&&r.height>20, cn=fx.querySelector(".hw-cn");
+  fx.style.setProperty("--hwb",(ok?innerHeight-r.top:70)+"px");
+  if(cn){ if(!ok){ cn.style.visibility="hidden"; return; }
+    var w=cn.offsetWidth, pd=14;
+    fx.style.setProperty("--cl",(r.left+pd)+"px"); fx.style.setProperty("--cw",Math.max(0,r.width-2*pd-w)+"px"); cn.style.visibility=""; } }
+function kill(){ if(fx){ fx.remove(); fx=null; }
+  var t=document.querySelector(".topbar"); if(t){ [].forEach.call(t.querySelectorAll(".hw-tp,.hw-bt"),function(x){ x.remove(); }); var tt=t.querySelector(".hw-tt"); if(tt) tt.classList.remove("hw-tt"); } }
 function cur(){ var v=localStorage.getItem(K); return v===null?on:v==="1"; }
 function apply(){
   var a=cur();
-  if(a&&!fx) build(); if(!a&&fx){ fx.remove(); fx=null; }
+  if(a&&!fx) build(); if(!a&&fx) kill();
   var s=document.getElementById("hwSwitch"); if(s) s.classList.toggle("on",a);
 }
 function show(n){
@@ -8790,7 +8838,7 @@ function splash(){ var n=1+Math.floor(Math.random()*4), t=new Image(), im=new Im
 window.lpHW.splash=splash;
 var sw=document.getElementById("hwSwitch"); if(sw) sw.addEventListener("click",function(){ localStorage.setItem(K,cur()?"0":"1"); apply(); });
 document.addEventListener("visibilitychange",function(){ if(fx) fx.classList.toggle("p",document.hidden); });
-window.addEventListener("resize",size); window.addEventListener("load",function(){ setTimeout(size,700); });
+window.addEventListener("resize",size); window.addEventListener("load",function(){ setTimeout(size,700); setTimeout(size,1800); });
 apply();
 var shown=false, mo=new MutationObserver(try1);
 function try1(){ if(!shown&&!document.body.classList.contains("booting")){ shown=true; mo.disconnect(); setTimeout(splash,300); } }
@@ -8831,13 +8879,15 @@ if(on){ mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); t
       var ended=E[last.s]&&dn(E[last.s])>=dn(last.e);
       var xpl=(p.pl>=1&&p.pl<=14)?p.pl:5, pvl=[]; for(var q2=0;q2<per2.length-1;q2++) pvl.push(dn(per2[q2].e)-dn(per2[q2].s)+1);
       if(pvl.length){ var pst=0; pvl.forEach(function(x){ pst+=x; }); xpl=Math.max(xpl,Math.round(pst/pvl.length)); }
-      if(!ended&&dn(last.e)<=tn&&tn-dn(last.e)<=1&&!(tn-dn(last.e)===1&&len>=xpl)) return 'during';
-      if(tn-dn(last.s)+1<=len) return 'during';
+      function dur(t){ var d=t-dn(last.e); if(!ended&&d>=0&&d<=1&&!(d===1&&len>=xpl)) return true; return t-dn(last.s)+1<=len; }
+      if(dur(tn)) return 'during';
       var lens=[]; for(var i=0;i<per2.length-1;i++) lens.push(dn(per2[i+1].s)-dn(per2[i].s));
       var v=lens.filter(function(x){ return x>=15&&x<=90; }).slice(-6), def=(p.cl>=15&&p.cl<=60)?p.cl:28, avg=def;
       if(v.length){ var s=0; v.forEach(function(x){ s+=x; }); avg=v.length===1?(s+def)/2:s/v.length; }
       var until=dn(ak(last.s,Math.max(15,Math.round(avg))))-tn;
-      if(until>=-3&&until<=3) return 'before';
+      if(until<0) return until>=-90?'late':'';
+      if(until<=3) return 'before';
+      if(dur(tn-1)) return 'after';
       return '';
     }
     var hidePd=false, phase='';
@@ -8866,11 +8916,12 @@ if(on){ mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); t
       if(gOf[id]!==undefined){ if(seen[gOf[id]]) return; seen[gOf[id]]=1; pool.push(GROUPS[gOf[id]]); } else pool.push(id);
     });
     var phaseOn=!hidePd&&phase!=='';
-    if(!hidePd&&!phaseOn&&byId['period-1']) pool.push('period-1');
     function resolve(e){ if(typeof e==='string') return e; return e[(day+gOf[e[0]])%e.length]; }
     var idx=pool.length<=per?pool.map(function(_,q){ return q; }):window.lpDailyCards(pool.length,day);
     var auto=idx.map(function(q){ return resolve(pool[q]); });
-    if(phaseOn){
+    if(phaseOn&&(phase==='after'||phase==='late')){
+      auto=['period-1'].concat(auto.slice(0,6));
+    } else if(phaseOn){
       /* period-1 always first, then two tip cards; the three are spread out so they never sit next to each other */
       var tips=['period-2','period-3','period-4','period-5','period-6','period-7','period-8'], rest=auto.slice(0,6);
       auto=['period-1'].concat(rest.slice(0,2),[tips[(2*day)%7]],rest.slice(2,4),[tips[(2*day+1)%7]],rest.slice(4,6));
@@ -10451,6 +10502,14 @@ function renderHome(){
   else if(m.until===0){ t2="امروز پریودت پیش‌بینی شده"; pill='<b>امروز</b>'; cls=" per"; }
   else { t2="پریود بعدی حدود "+fmtD(m.eff); pill='<b>'+fd(m.until)+'</b><small>روز</small>'; }
   var cs=$("pdCarSub"); if(cs) cs.textContent=l?t2:"با ثبت پریودت پیش‌بینی و گزارش پزشک ساخته می‌شه";
+  var pc=$("pdCarCard"); if(pc&&l){ var pb=pc.querySelector("b"), T="پریود ترکر", S=t2;
+    if(l.ongoing){ S="روز "+fd(m.cd)+" پریود"; }
+    else if(m.late>0){ T="پریودت دیر کرده"; S=(m.late===1?"یک روز":fd(m.late)+" روز")+" عقب افتاده"; }
+    else if(m.until===0){ T="امروز پریودته"; S="پریودت برای امروز پیش‌بینی شده"; }
+    else if(m.until===1){ T="فردا پریودته"; S="فقط یک روز مونده"; }
+    else if(m.until<=3){ T="روزشمار پریود"; S=fd(m.until)+" روز مونده به پریودت"; }
+    else { T="پریود بعدی"; S=fd(m.until)+" روز مونده به پریودت (حدود "+fmtD(m.eff)+")"; }
+    if(pb) pb.textContent=T; if(cs) cs.textContent=S; }
   var btn=(l&&l.ongoing)?'<button type="button" class="pd-hbtn" data-pdlog="1">ثبت امروز</button>':'<button type="button" class="pd-hbtn" data-pdstart="1">شروع پریود</button>';
   host.innerHTML='<div class="hm-card pd-hc'+cls+'" role="button" tabindex="0" data-pdopen="1"><div class="pd-hr"><span class="pd-hic">'+iconHTML()+'</span><div class="pd-hc-tx"><b>پریود ترکر</b><span>'+t2+'</span></div>'+(l?'<em class="pd-hp">'+pill+'</em>':'')+'</div>'+btn+'</div>';
 }
