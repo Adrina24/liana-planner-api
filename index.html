@@ -2325,6 +2325,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
 <div class="view" data-view="home">
 <div class="greeting-card" id="greetingCard"></div>
 <div class="car" id="car">
+  <button type="button" class="car-card cp" data-cid="halloween" data-act="halloween" style="--fl:0.6"><img class="cp-img" src="halloween/card.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b id="hwCardT">هالووینت مبارک</b><span class="cp-sub" id="hwCardS">امشب لیانا جادوگر شده</span></span></button>
   <button type="button" class="car-card cp" data-cid="habits" data-go="habits" style="--fl:0.76"><img class="cp-img" src="cards/habits.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>عادت‌های امروز</b><span class="cp-sub">یه نگاه بنداز، چندتاشون مونده؟</span></span></button>
   <button type="button" class="car-card cp" data-cid="water" data-go="habits" style="--fl:0.73"><img class="cp-img" src="cards/water.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>امروز آب خوردی؟</b><span class="cp-sub">یه لیوان بخور و تیکش بزن</span></span></button>
   <button type="button" class="car-card cp" data-cid="sleep" data-go="habits" data-habit="sleep" style="--fl:0.67"><img class="cp-img" src="cards/sleep.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>دیشب چقدر خوابیدی؟</b><span class="cp-sub">ساعت خوابت رو بنویس</span></span></button>
@@ -2589,6 +2590,8 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
     <div>پالت رنگی</div>
     <div id="paletteGroups"></div>
   </div>
+
+  <div class="set-row" id="hwRow"><div class="row-between"><span>🎃 تم هالووین</span><button class="switch" id="hwSwitch"></button></div></div>
 
   <div class="set-row">
     <div class="row-between"><span>حالت تک‌رنگ</span>
@@ -8716,6 +8719,92 @@ setTimeout(function(){
   }
 },25000);
 </script>
+<style id="hwCss">
+#hwFx{position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden;direction:ltr}
+#hwFx.p *{animation-play-state:paused!important}
+.hw-g{position:absolute;height:var(--s);animation:hwSw var(--t) ease-in-out infinite}
+.hw-g::before{content:"";position:absolute;inset:-45%;border-radius:50%;background:radial-gradient(circle,rgba(200,185,255,.55),rgba(200,185,255,0) 66%);animation:hwHalo 3.2s ease-in-out infinite}
+.hw-g img{position:relative;height:100%;width:auto;display:block;animation:hwBob 4.2s ease-in-out infinite}
+.hw-b{position:absolute;left:-14vw;height:var(--s);animation:hwFly var(--t) linear infinite}
+.hw-b.r{left:auto;right:-14vw;animation-name:hwFlyR}
+.hw-b img{height:100%;width:auto;display:block;animation:hwFlap .9s ease-in-out infinite}
+.hw-b.r img{scale:-1 1}
+.hw-h{position:absolute;top:-4px;height:var(--s);transform-origin:50% 0;animation:hwSwing 4s ease-in-out infinite}
+.hw-h img,.hw-p img{height:100%;width:auto;display:block}
+.hw-p{position:absolute;bottom:calc(var(--hwb,64px) - 6px);height:var(--s);transform-origin:50% 100%;filter:drop-shadow(0 0 7px rgba(255,150,30,.6));animation:hwPop 3.4s ease-in-out infinite}
+@keyframes hwSw{0%{transform:translateX(0) scaleX(1)}47%{transform:translateX(calc(var(--d)*1vw)) scaleX(1)}50%{transform:translateX(calc(var(--d)*1vw)) scaleX(-1)}97%{transform:translateX(0) scaleX(-1)}100%{transform:translateX(0) scaleX(1)}}
+@keyframes hwBob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+@keyframes hwHalo{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes hwFly{to{transform:translateX(130vw)}}
+@keyframes hwFlyR{to{transform:translateX(-130vw)}}
+@keyframes hwFlap{0%,100%{transform:translateY(0) scaleY(1)}25%{transform:translateY(-5px) scaleY(.62)}50%{transform:translateY(0) scaleY(1)}75%{transform:translateY(5px) scaleY(.62)}}
+@keyframes hwSwing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes hwPop{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#hwSplash{position:fixed;inset:0;z-index:120;background:#120a24;opacity:0;transition:opacity .6s;overflow:hidden}
+#hwSplash.in{opacity:1}
+.hw-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;transform:scale(1.08);transition:transform 4s ease-out}
+#hwSplash.in .hw-bg{transform:scale(1)}
+.hw-sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,8,36,.72),rgba(18,8,36,0) 38%,rgba(18,8,36,0) 70%,rgba(18,8,36,.5))}
+.hw-ti{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 6vh);width:min(80vw,340px);margin-left:calc(min(80vw,340px)/-2);filter:drop-shadow(0 0 12px rgba(255,140,30,.65)) drop-shadow(0 4px 10px rgba(0,0,0,.5));animation:hwIn .9s cubic-bezier(.2,1.4,.4,1) both,hwFl 3.6s ease-in-out .9s infinite}
+@keyframes hwIn{from{opacity:0;transform:translateY(-34px) scale(.8)}to{opacity:1;transform:none}}
+@keyframes hwFl{0%,100%{transform:translateY(0) rotate(-1.6deg)}50%{transform:translateY(-10px) rotate(1.6deg) scale(1.03)}}
+.hw-cw{position:absolute;left:0;right:0;display:flex;justify-content:center;top:calc(env(safe-area-inset-top,0px) + 6vh + min(80vw,340px)*.341 + 12px);animation:hwIn .7s .5s cubic-bezier(.2,1.2,.4,1) both}
+.hw-cd{padding:7px 20px;border-radius:999px;font-size:17px;font-weight:700;color:#fff;background:rgba(18,8,36,.38);border:1px solid rgba(255,255,255,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-shadow:0 0 10px rgba(255,150,40,.85),0 2px 6px rgba(0,0,0,.5)}
+@media(prefers-reduced-motion:reduce){#hwFx *,.hw-ti,.hw-bg,.hw-cw{animation:none!important;transition:none!important}}
+</style>
+<script id="hwJs">
+/* Halloween edition: splash + card are automatic until 1 Nov; floating decorations are opt-in from the theme box. Delete this block, halloween/ and the hwRow/halloween card to remove. */
+(function(){
+var D="halloween/", on=Date.now()<new Date(2026,10,2).getTime(); window.lpHW={on:on};
+if(!on){ var c=document.querySelector('.car-card[data-cid="halloween"]'); if(c) c.remove(); var r=document.getElementById("hwRow"); if(r) r.remove(); return; }
+var fx=null, K="lpHw";
+(function(){ var t=new Date(), n=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5), a=document.getElementById("hwCardT"), b=document.getElementById("hwCardS");
+  function fa(x){ return String(x).replace(/\d/g,function(d){ return "۰۱۲۳۴۵۶۷۸۹"[d]; }); }
+  if(!a||!b) return;
+  if(n>1){ a.textContent=fa(n)+" روز تا هالووین"; b.textContent="لیانا داره جادوگر می‌شه"; }
+  else if(n===1){ a.textContent="فقط یه روز تا هالووین"; b.textContent="لیانا داره جادوگر می‌شه"; }
+  else if(n===0){ a.textContent="هپی هالووین"; b.textContent="امشب لیانا جادوگر شده"; }
+  else { a.textContent="هالووینت مبارک"; b.textContent="لیانا هنوز جادوگره"; }
+})();
+function I(n){ return '<img src="'+D+n+'.webp" alt="" draggable="false">'; }
+function build(){
+  fx=document.createElement("div"); fx.id="hwFx"; var h="";
+  [[1,9,4,40,46,24,0],[2,21,50,44,40,29,-9],[3,34,10,38,50,22,-5],[4,47,60,42,32,27,-14],[5,58,6,36,52,31,-3],[6,69,52,44,38,25,-18],[7,28,72,34,22,20,-7],[9,78,20,40,45,33,-11],[8,15,28,30,36,38,-20]].forEach(function(g){
+    h+='<div class="hw-g" style="top:'+g[1]+'%;left:'+g[2]+'%;--s:'+g[3]+'px;--d:'+g[4]+';--t:'+g[5]+'s;animation-delay:'+g[6]+'s">'+I("ghost"+g[0])+'</div>'; });
+  [[1,12,34,19,0,0],[2,44,40,26,-8,1],[3,66,30,22,-15,0]].forEach(function(b){
+    h+='<div class="hw-b'+(b[5]?' r':'')+'" style="top:'+b[1]+'%;--s:'+b[2]+'px;--t:'+b[3]+'s;animation-delay:'+b[4]+'s">'+I("bat"+b[0])+'</div>'; });
+  h+='<div class="hw-h" style="left:14%;--s:54px">'+I("bat4")+'</div><div class="hw-h" style="left:82%;--s:40px;animation-delay:-2s">'+I("bat4")+'</div>';
+  [["pumpkin1","left:3%",46,0],["pumpkin3","left:15%",30,-1],["pumpkin6","right:4%",44,-2],["pumpkin2","right:15%",30,-.5]].forEach(function(p){
+    h+='<div class="hw-p" style="'+p[1]+';--s:'+p[2]+'px;animation-delay:'+p[3]+'s">'+I(p[0])+'</div>'; });
+  fx.innerHTML=h; document.body.appendChild(fx); size();
+}
+function size(){ if(!fx) return; var n=document.getElementById("bnav"); fx.style.setProperty("--hwb",(n?n.offsetHeight:64)+"px"); }
+function apply(){
+  var a=localStorage.getItem(K)==="1";
+  if(a&&!fx) build(); if(!a&&fx){ fx.remove(); fx=null; }
+  var s=document.getElementById("hwSwitch"); if(s) s.classList.toggle("on",a);
+}
+function show(n){
+  if(document.getElementById("hwSplash")) return;
+  var t=new Date(), d=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5),
+      cd=d>1?String(d).replace(/\d/g,function(x){ return "۰۱۲۳۴۵۶۷۸۹"[x]; })+" روز تا هالووین":(d===1?"فقط یه روز تا هالووین":"");
+  var s=document.createElement("div"); s.id="hwSplash";
+  s.innerHTML='<img class="hw-bg" src="'+D+'liana'+n+'.webp" alt=""><div class="hw-sh"></div><img class="hw-ti" src="'+D+'title.webp" alt="Happy Halloween">'+(cd?'<div class="hw-cw"><span class="hw-cd">'+cd+'</span></div>':'');
+  document.body.appendChild(s); requestAnimationFrame(function(){ s.classList.add("in"); });
+  var done=function(){ s.classList.remove("in"); setTimeout(function(){ s.remove(); },650); };
+  s.onclick=done; setTimeout(done,3600);
+}
+function splash(){ var n=1+Math.floor(Math.random()*4), t=new Image(), im=new Image(); t.src=D+"title.webp"; im.onload=function(){ show(n); }; im.src=D+"liana"+n+".webp"; }
+window.lpHW.splash=splash;
+var sw=document.getElementById("hwSwitch"); if(sw) sw.addEventListener("click",function(){ localStorage.setItem(K,localStorage.getItem(K)==="1"?"0":"1"); apply(); });
+document.addEventListener("visibilitychange",function(){ if(fx) fx.classList.toggle("p",document.hidden); });
+window.addEventListener("resize",size);
+apply();
+var shown=false, mo=new MutationObserver(try1);
+function try1(){ if(!shown&&!document.body.classList.contains("booting")){ shown=true; mo.disconnect(); setTimeout(splash,300); } }
+mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); try1();
+})();
+</script>
 <script>
 (function(){
   var views=[].slice.call(document.querySelectorAll('.view')), btns=[].slice.call(document.querySelectorAll('#bnav button'));
@@ -8794,6 +8883,7 @@ setTimeout(function(){
       var tips=['period-2','period-3','period-4','period-5','period-6','period-7','period-8'], rest=auto.slice(0,6);
       auto=['period-1'].concat(rest.slice(0,2),[tips[(2*day)%7]],rest.slice(2,4),[tips[(2*day+1)%7]],rest.slice(4,6));
     } else if(auto.indexOf('period-1')>0){ auto.splice(auto.indexOf('period-1'),1); auto.unshift('period-1'); }
+    if(window.lpHW&&lpHW.on&&byId.halloween){ auto=auto.filter(function(x){return x!=='halloween';}); auto.unshift('halloween'); if(auto.length>per) auto.length=per; }
     var ids=auto, ov=null;
     try{ var o=JSON.parse(localStorage.getItem('lp-car-today')||'null'); if(o&&o.k===tk&&o.ids&&o.ids.length) ov=o.ids; }catch(e){}
     if(ov){ ov=ov.filter(function(id){ return byId[id]&&!(hidePd&&isPd(id)); }); if(ov.length) ids=ov; }
@@ -8805,6 +8895,7 @@ setTimeout(function(){
       i=0, timer, drag=null, suppress=false, s=(getComputedStyle(car).direction==='rtl')?-1:1;
   function bindCard(c){ if(c._b) return; c._b=1; c.addEventListener('click', function(){
       var g=c.getAttribute('data-go'), hb=c.getAttribute('data-habit'), ac=c.getAttribute('data-act');
+      if(ac==='halloween'){ if(window.lpHW&&lpHW.splash) lpHW.splash(); return; }
       if(ac==='period'){ if(window.lpPeriod&&window.lpPeriod.open) window.lpPeriod.open(); return; }
       if(g==='chat'){ document.getElementById('chatFab').click(); return; }
       if(ac==='cal'){ window.lpOpenCal(); return; }
