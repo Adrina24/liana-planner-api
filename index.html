@@ -2325,7 +2325,7 @@ html body.style-glass .bnav#bnav{background:color-mix(in srgb, var(--bg) 88%, tr
 <div class="view" data-view="home">
 <div class="greeting-card" id="greetingCard"></div>
 <div class="car" id="car">
-  <button type="button" class="car-card cp" data-cid="halloween" data-act="halloween" style="--fl:0.6"><img class="cp-img" src="halloween/card.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b id="hwCardT">هالووینت مبارک</b><span class="cp-sub" id="hwCardS">امشب لیانا جادوگر شده</span></span></button>
+  <button type="button" class="car-card cp" data-cid="halloween" data-act="halloween" style="--fl:0.6"><img class="cp-img" src="halloween/card.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b id="hwCardT">هالووینت مبارک</b><span class="cp-sub" id="hwCardS">امشب لیانا جادوگر شده</span></span><span class="hw-cb" id="hwCardC"></span></button>
   <button type="button" class="car-card cp" data-cid="habits" data-go="habits" style="--fl:0.76"><img class="cp-img" src="cards/habits.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>عادت‌های امروز</b><span class="cp-sub">یه نگاه بنداز، چندتاشون مونده؟</span></span></button>
   <button type="button" class="car-card cp" data-cid="water" data-go="habits" style="--fl:0.73"><img class="cp-img" src="cards/water.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>امروز آب خوردی؟</b><span class="cp-sub">یه لیوان بخور و تیکش بزن</span></span></button>
   <button type="button" class="car-card cp" data-cid="sleep" data-go="habits" data-habit="sleep" style="--fl:0.67"><img class="cp-img" src="cards/sleep.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>دیشب چقدر خوابیدی؟</b><span class="cp-sub">ساعت خوابت رو بنویس</span></span></button>
@@ -8748,6 +8748,8 @@ setTimeout(function(){
 .hw-ti{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 6vh);width:min(80vw,340px);margin-left:calc(min(80vw,340px)/-2);filter:drop-shadow(0 0 12px rgba(255,140,30,.65)) drop-shadow(0 4px 10px rgba(0,0,0,.5));animation:hwIn .9s cubic-bezier(.2,1.4,.4,1) both,hwFl 3.6s ease-in-out .9s infinite}
 @keyframes hwIn{from{opacity:0;transform:translateY(-34px) scale(.8)}to{opacity:1;transform:none}}
 @keyframes hwFl{0%,100%{transform:translateY(0) rotate(-1.6deg)}50%{transform:translateY(-10px) rotate(1.6deg) scale(1.03)}}
+.hw-x{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 14px);left:14px;width:40px;height:40px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(18,8,36,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hw-cb{position:absolute;left:10px;bottom:8px;font-size:11px;font-weight:700;color:#fff;padding:2px 9px;border-radius:999px;background:rgba(18,8,36,.42);border:1px solid rgba(255,255,255,.25);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);pointer-events:none}
 .hw-cw{position:absolute;left:0;right:0;display:flex;justify-content:center;top:calc(env(safe-area-inset-top,0px) + 6vh + min(80vw,340px)*.341 + 12px);animation:hwIn .7s .5s cubic-bezier(.2,1.2,.4,1) both}
 .hw-cd{padding:7px 20px;border-radius:999px;font-size:17px;font-weight:700;color:#fff;background:rgba(18,8,36,.38);border:1px solid rgba(255,255,255,.28);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-shadow:0 0 10px rgba(255,150,40,.85),0 2px 6px rgba(0,0,0,.5)}
 @media(prefers-reduced-motion:reduce){#hwFx *,.hw-ti,.hw-bg,.hw-cw{animation:none!important;transition:none!important}}
@@ -8758,13 +8760,12 @@ setTimeout(function(){
 var D="halloween/", on=Date.now()<new Date(2026,10,2).getTime(); window.lpHW={on:on};
 if(!on){ var c=document.querySelector('.car-card[data-cid="halloween"]'); if(c) c.remove(); }
 var fx=null, K="lpHw";
-(function(){ var t=new Date(), n=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5), a=document.getElementById("hwCardT"), b=document.getElementById("hwCardS");
-  function fa(x){ return String(x).replace(/\d/g,function(d){ return "۰۱۲۳۴۵۶۷۸۹"[d]; }); }
-  if(!a||!b) return;
-  if(n>1){ a.textContent=fa(n)+" روز تا هالووین"; b.textContent="لیانا داره جادوگر می‌شه"; }
-  else if(n===1){ a.textContent="فقط یه روز تا هالووین"; b.textContent="لیانا داره جادوگر می‌شه"; }
-  else if(n===0){ a.textContent="هپی هالووین"; b.textContent="امشب لیانا جادوگر شده"; }
-  else { a.textContent="هالووینت مبارک"; b.textContent="لیانا هنوز جادوگره"; }
+(function(){ var t=new Date(), n=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5), e=document.getElementById("hwCardC");
+  if(!e) return;
+  if(n>1) e.textContent=String(n).replace(/\d/g,function(x){ return "۰۱۲۳۴۵۶۷۸۹"[x]; })+" روز تا هالووین";
+  else if(n===1) e.textContent="فردا هالووینه";
+  else if(n===0) e.textContent="امروز هالووینه";
+  else e.remove();
 })();
 function I(n){ return '<img src="'+D+n+'.webp" alt="" draggable="false">'; }
 function build(){
@@ -8779,8 +8780,9 @@ function build(){
   fx.innerHTML=h; document.body.appendChild(fx); size();
 }
 function size(){ if(!fx) return; var n=document.getElementById("bnav"); fx.style.setProperty("--hwb",(n?n.offsetHeight:64)+"px"); }
+function cur(){ var v=localStorage.getItem(K); return v===null?on:v==="1"; }
 function apply(){
-  var a=localStorage.getItem(K)==="1";
+  var a=cur();
   if(a&&!fx) build(); if(!a&&fx){ fx.remove(); fx=null; }
   var s=document.getElementById("hwSwitch"); if(s) s.classList.toggle("on",a);
 }
@@ -8789,14 +8791,14 @@ function show(n){
   var t=new Date(), d=Math.round((new Date(2026,9,31)-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/864e5),
       cd=d>1?String(d).replace(/\d/g,function(x){ return "۰۱۲۳۴۵۶۷۸۹"[x]; })+" روز تا هالووین":(d===1?"فقط یه روز تا هالووین":"");
   var s=document.createElement("div"); s.id="hwSplash";
-  s.innerHTML='<img class="hw-bg" src="'+D+'liana'+n+'.webp" alt=""><div class="hw-sh"></div><img class="hw-ti" src="'+D+'title.webp" alt="Happy Halloween">'+(cd?'<div class="hw-cw"><span class="hw-cd">'+cd+'</span></div>':'');
+  s.innerHTML='<img class="hw-bg" src="'+D+'liana'+n+'.webp" alt=""><div class="hw-sh"></div><img class="hw-ti" src="'+D+'title.webp" alt="Happy Halloween"><button type="button" class="hw-x" aria-label="بستن">✕</button>'+(cd?'<div class="hw-cw"><span class="hw-cd">'+cd+'</span></div>':'');
   document.body.appendChild(s); requestAnimationFrame(function(){ s.classList.add("in"); });
   var done=function(){ s.classList.remove("in"); setTimeout(function(){ s.remove(); },650); };
-  s.onclick=done; setTimeout(done,3600);
+  s.querySelector(".hw-x").onclick=done;
 }
 function splash(){ var n=1+Math.floor(Math.random()*4), t=new Image(), im=new Image(); t.src=D+"title.webp"; im.onload=function(){ show(n); }; im.src=D+"liana"+n+".webp"; }
 window.lpHW.splash=splash;
-var sw=document.getElementById("hwSwitch"); if(sw) sw.addEventListener("click",function(){ localStorage.setItem(K,localStorage.getItem(K)==="1"?"0":"1"); apply(); });
+var sw=document.getElementById("hwSwitch"); if(sw) sw.addEventListener("click",function(){ localStorage.setItem(K,cur()?"0":"1"); apply(); });
 document.addEventListener("visibilitychange",function(){ if(fx) fx.classList.toggle("p",document.hidden); });
 window.addEventListener("resize",size);
 apply();
