@@ -8789,10 +8789,22 @@ function show(n){
 }
 function splash(){ var n=1+Math.floor(Math.random()*4), t=new Image(), im=new Image(); t.src=D+"title.webp"; im.onload=function(){ show(n); }; im.onerror=release; im.src=D+"liana"+n+".webp"; }
 window.lpHW.splash=splash;
-var shown=false, mo=new MutationObserver(try1);
-function try1(){ if(!shown&&!document.body.classList.contains("booting")){ shown=true; mo.disconnect(); setTimeout(splash,300); } }
-if(on){ mo.observe(document.body,{attributes:true,attributeFilter:["class"]}); try1(); }
-window.addEventListener("load",function(){ setTimeout(function(){ if(!document.getElementById("hwSplash")) release(); },30000); });
+/* The splash opens only when the app is fully ready AND the sign-up flow is finished: no onboarding (#lpOnb), no recovery-code page (#lpPg),
+   and a new user's onboarding is done. It must stay clear for 1 s in a row, which also covers the short gap between onboarding closing
+   and the recovery-code page opening. So a new user sees: sign up -> onboarding -> recovery code -> Halloween splash (with its sound) -> app. */
+var shown=false, iv=0, okSince=0;
+function busy(){ return !!document.getElementById("lpOnb") || !!document.getElementById("lpPg") || document.body.classList.contains("lp-onb-open"); }
+function pend(){ try{ var o=state.settings.onb; return !(o&&o.done); }catch(e){ return false; } }
+function try1(){
+  if(shown) return;
+  var b=document.body;
+  if(b.classList.contains("booting")||!b.classList.contains("ready")||busy()||pend()){ okSince=0; return; }
+  if(!okSince){ okSince=Date.now(); return; }
+  if(Date.now()-okSince<1000) return;
+  shown=true; clearInterval(iv); splash();
+}
+if(on){ iv=setInterval(try1,250); }
+window.addEventListener("load",function(){ setTimeout(function(){ if(shown&&!document.getElementById("hwSplash")) release(); },30000); });
 })();
 </script>
 <script>
@@ -10754,16 +10766,17 @@ window.lpTick=play;
 .wl-h span{display:block; font-size:12.5px; color:var(--text-soft); font-weight:600; margin-top:3px; line-height:1.8;}
 .wj{--ge:#6d82b6; position:relative; width:260px; height:320px; max-width:100%; margin:10px auto 0;}
 body.style-glass .wj{--ge:#fff;} body.mode-dark:not(.style-glass) .wj{--ge:#aebbe6;} body.style-glass.mode-dark .wj{--ge:#dfe7ff;}
-.wj::before{content:""; position:absolute; left:-30px; right:-30px; top:70px; bottom:-4px; pointer-events:none; background:radial-gradient(closest-side,color-mix(in srgb,#ffd36e 38%,transparent),transparent 72%); filter:blur(10px);}
+.wj::before{content:""; position:absolute; left:-30px; right:-30px; top:70px; bottom:-4px; pointer-events:none; background:radial-gradient(closest-side,rgba(255,211,110,.34),rgba(255,211,110,.12) 45%,rgba(255,211,110,0) 75%);}
 .wj svg{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible;}
 .wj .bk{z-index:0;} .wj .fr{z-index:3;}
 .wj-ff{position:absolute; inset:0; z-index:1; pointer-events:none;}
 .wj-ff i{position:absolute; width:4px; height:4px; border-radius:50%; background:#ffe9a8; box-shadow:0 0 8px 2px rgba(255,214,110,.85); opacity:0; animation:wlFly 9s ease-in-out infinite;}
 @keyframes wlFly{0%{opacity:0; transform:translate(0,0);} 15%{opacity:.95;} 50%{transform:translate(16px,-26px); opacity:.5;} 85%{opacity:.95;} 100%{opacity:0; transform:translate(-12px,-50px);}}
 .wj-st{position:absolute; inset:0; z-index:2;}
-.wj .st{position:absolute; left:0; top:0; width:38px; height:38px; cursor:pointer; will-change:transform; pointer-events:auto; filter:drop-shadow(0 0 5px rgba(255,220,130,.6)) drop-shadow(0 2px 3px rgba(40,30,80,.25));}
-.wj .st svg{position:static; width:38px; height:38px; display:block; overflow:visible;}
-.wj .st.sel{filter:drop-shadow(0 0 9px #fff) drop-shadow(0 0 14px rgba(255,220,130,.95));}
+.wj .st{position:absolute; left:0; top:0; width:38px; height:38px; cursor:pointer; pointer-events:auto;}
+.wj .st::before{content:""; position:absolute; inset:-7px; border-radius:50%; pointer-events:none; background:radial-gradient(circle,rgba(255,214,110,.5),rgba(255,214,110,.16) 50%,rgba(255,214,110,0) 72%);}
+.wj .st svg{position:relative; z-index:1; width:38px; height:38px; display:block; overflow:visible;}
+.wj .st.sel::before{inset:-12px; background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,226,140,.65) 45%,rgba(255,226,140,0) 72%);}
 .wj .st.fly{transition:transform .95s cubic-bezier(.3,0,.3,1),opacity .95s ease; opacity:0; pointer-events:none;}
 #wjLid{transform-origin:196px 40px; transition:transform .5s cubic-bezier(.45,1.25,.5,1);} #wjLid.open{transform:rotate(74deg);}
 .wl-sp{position:absolute; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; border-radius:50%; pointer-events:none; z-index:6; animation:wlSp .95s cubic-bezier(.2,.7,.3,1) both;}
@@ -10818,7 +10831,24 @@ body.mode-dark .wj-bub{background:rgba(30,26,46,.5); border-color:rgba(255,255,2
 .lt-sheet p{margin:0; font-size:15px; line-height:2.05; white-space:pre-wrap; word-break:break-word; max-height:42vh; overflow:auto;}
 .lt-box.rd .lt-env{height:0; margin:0; opacity:0; transform:scale(.6); overflow:hidden;}
 .lt-box .hb-save{margin:10px auto 0;}
-@media (prefers-reduced-motion:reduce){ .wj-ff i,.wl-dot,.lt-row.due .lt-chip{animation:none;} #wjLid,.lt-pp,.lt-fl{transition:none;} }
+.wl-two{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;}
+.wl-nav{display:flex; align-items:center; gap:8px; padding:12px 12px; border-radius:var(--radius); border:1px solid var(--border); background:rgba(255,255,255,.42); color:var(--text); font:inherit; text-align:right; box-shadow:var(--shadow); -webkit-tap-highlight-color:transparent; cursor:pointer;}
+body.mode-dark .wl-nav{background:rgba(30,26,46,.5); border-color:rgba(255,255,255,.14);}
+.wl-nav:active{transform:scale(.97);}
+.wl-nav .ws{flex:none; width:30px; height:30px;} .wl-nav .ws svg{width:30px; height:30px; display:block;}
+.wl-nav .nt{flex:1; min-width:0;} .wl-nav .nt b{display:block; font-size:14px; font-weight:800; line-height:1.6;} .wl-nav .nt span{display:block; font-size:11.5px; color:var(--text-soft); font-weight:700;}
+.wl-nav .ch{flex:none; font-size:22px; line-height:1; color:var(--text-soft);}
+.wl-pg{position:fixed; inset:0; z-index:9998; display:flex; flex-direction:column; background:linear-gradient(165deg,#f8f4ff,#efe8fc 55%,#f7f1ff); color:var(--text); opacity:0; transform:translateY(18px); transition:opacity .28s ease,transform .32s cubic-bezier(.2,.8,.2,1);}
+body.mode-dark .wl-pg{background:linear-gradient(165deg,#1d1830,#151124 60%,#1b1630);}
+.wl-pg.on{opacity:1; transform:none;}
+.wl-pg-top{flex:none; display:flex; align-items:center; gap:10px; padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 10px;}
+.wl-pg-t{flex:1; min-width:0; font-size:18px; font-weight:800; color:var(--accent-text,var(--accent-dk));}
+.wl-pg-t small{display:block; font-size:12px; font-weight:700; color:var(--text-soft); margin-top:2px;}
+.wl-pg-x{flex:none; width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:rgba(255,255,255,.55); color:var(--text); font:inherit; font-size:17px; line-height:1; -webkit-tap-highlight-color:transparent;}
+body.mode-dark .wl-pg-x{background:rgba(255,255,255,.1);}
+.wl-pg-b{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px calc(env(safe-area-inset-bottom,0px) + 28px);}
+.wl-pg-b .jr-card:first-child{margin-top:6px;}
+@media (prefers-reduced-motion:reduce){ .wj-ff i,.wl-dot,.lt-row.due .lt-chip{animation:none;} #wjLid,.lt-pp,.lt-fl,.wl-pg{transition:none;} }
 </style>
 <script id="wlJs">
 /* wishes jar + letter to the future (inside the Journal tab) */
@@ -10844,7 +10874,7 @@ function ago(k){ var n=-until(k); return n<=0?T("امروز","today"):T(N(n)+" �
 function W(){ var s=S(); if(!Array.isArray(s.wishes)) s.wishes=[]; return s.wishes; }
 function L(){ var s=S(); if(!Array.isArray(s.letters)) s.letters=[]; return s.letters; }
 var RM=false; try{ RM=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches); }catch(e){}
-var COL=[["#ffb3d1","#ff6fa5"],["#ffe39a","#ffb53f"],["#b4f3d7","#4fd1a5"],["#aed9ff","#5aa9ff"],["#d9c6ff","#9a7bff"],["#ffcfb3","#ff8f6b"]];
+var COL=[["#fff2b8","#ffc93a"],["#ffeaa0","#ffbd2e"],["#fff4c4","#ffcf4d"],["#ffe88f","#ffb627"],["#fff0ae","#ffc53d"],["#ffec9c","#ffbf33"]];
 function defs(){
   if($("wlDefs")) return;
   var s='<svg id="wlDefs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs>';
@@ -10854,7 +10884,7 @@ function defs(){
 }
 function star(k){ var g="url(#wg"+(k%6)+")"; return '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l3.6 7.6 8.4 1.1-6.1 5.8 1.6 8.3L16 21.6l-7.5 4.2 1.6-8.3L4 11.7l8.4-1.1z" fill="'+g+'" stroke="'+g+'" stroke-width="3" stroke-linejoin="round"/><path d="M12.4 12.6l2.1-1.3" stroke="#fff" stroke-opacity=".85" stroke-width="1.8" stroke-linecap="round"/></svg>'; }
 function burst(par,x,y,cols){
-  cols=cols||["#ffe39a","#ff9ec4","#aed9ff","#fff"];
+  cols=cols||["#ffe39a","#fff3c4","#ffd24d","#fff"];
   if(RM) return;
   for(var i=0;i<12;i++){ var e=document.createElement("i"), a=Math.random()*6.283, d=26+Math.random()*34;
     e.className="wl-sp"; e.style.cssText="left:"+x+"px;top:"+y+"px;background:"+cols[i%cols.length]+";--dx:"+Math.cos(a)*d+"px;--dy:"+Math.sin(a)*d+"px;box-shadow:0 0 7px "+cols[i%cols.length];
@@ -10895,7 +10925,7 @@ function jarHTML(){
   '<div class="wj-ff">'+ff+'</div><div class="wj-st" id="wjSt"></div>'+
   '<svg class="fr" viewBox="0 0 260 320" aria-hidden="true"><path d="M70,48 V62 Q22,86 22,150 V262 Q22,306 66,306 H194 Q238,306 238,262 V150 Q238,86 190,62 V48" fill="none" style="stroke:var(--ge)" stroke-opacity=".95" stroke-width="2.4" stroke-linecap="round"/>'+
   '<path d="M78,54 V66 Q32,90 32,150 V262 Q32,296 66,296" fill="none" style="stroke:var(--ge)" stroke-opacity=".18"/><path d="M40,128 Q33,160 34,214" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="5" stroke-linecap="round"/><path d="M44,250 Q46,282 66,291" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/><path d="M214,150 Q219,184 216,224" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>'+
-  '<ellipse cx="130" cy="48" rx="60" ry="7" fill="none" style="stroke:var(--ge)" stroke-opacity=".6" stroke-width="1.4"/>'+
+  '<ellipse cx="130" cy="42" rx="56" ry="5" fill="none" style="stroke:var(--ge)" stroke-opacity=".6" stroke-width="1.4"/>'+
   '<g id="wjLid"><rect x="64" y="30" width="132" height="22" rx="8" fill="url(#wgG)"/><rect x="68" y="32" width="124" height="5" rx="2.5" fill="#fff" opacity=".4"/><path d="M70,46 H190" stroke="#6b5127" stroke-opacity=".3"/><circle cx="130" cy="25" r="9" fill="url(#wgG)"/></g></svg></div>';
 }
 function head(){
@@ -10903,14 +10933,76 @@ function head(){
   $("wlHead").innerHTML='<b>'+T("شیشه‌ی آرزوها","Wish jar")+'</b><span>'+(W().length?T(N(a)+" آرزو توی شیشه‌ست"+(g?" · "+N(g)+" تا برآورده شده 🎉":""),a+" wish"+(a===1?"":"es")+" in the jar"+(g?" · "+g+" granted 🎉":"")):T("هر آرزو یه ستاره می‌شه و می‌افته توی شیشه ✨","Every wish becomes a star in the jar ✨"))+'</span>';
 }
 function rows(){
-  var act=W().filter(function(w){return !w.g;}).slice().reverse(), gr=W().filter(function(w){return w.g;}).slice().reverse(), h="";
-  h+='<div class="jr-card"><div class="jr-t">'+T("آرزوهای توی شیشه","Wishes in the jar")+'</div>'+(act.length?act.map(function(w){
-    return '<div class="wl-row" data-id="'+w.id+'"><span class="ws">'+star(w.k)+'</span><div class="wt"><b data-notr>'+esc(w.t)+'</b><span>'+dl(w.c)+'</span></div><button type="button" class="wl-b ok" data-wa="ok" data-id="'+w.id+'">'+T("برآورده شد","Granted")+'</button><button type="button" class="wl-b" data-wa="del" data-id="'+w.id+'" aria-label="'+T("حذف","Delete")+'">✕</button></div>';
-  }).join(""):'<div class="jr-empty">'+T("شیشه خالیه؛ اولین آرزوت رو بنویس.","The jar is empty. Write your first wish.")+'</div>')+'</div>';
-  if(gr.length) h+='<div class="jr-card"><div class="jr-t">'+T("آرزوهای برآورده‌شده 🎉","Granted wishes 🎉")+'</div>'+gr.map(function(w){
-    return '<div class="wl-row"><span class="ws">'+star(w.k)+'</span><div class="wt"><b data-notr>'+esc(w.t)+'</b><span>'+T("برآورده شد در ","Granted on ")+dl(w.g)+'</span></div></div>'; }).join("")+'</div>';
-  $("wlRows").innerHTML=h;
+  var a=W().filter(function(w){return !w.g;}).length, g=W().length-a;
+  $("wlRows").innerHTML='<div class="wl-two"><button type="button" class="wl-nav" data-pg="act"><span class="ws">'+star(0)+'</span><span class="nt"><b>'+T("آرزوها","Wishes")+'</b><span>'+T(N(a)+" تا توی شیشه",a+" in the jar")+'</span></span><span class="ch">‹</span></button>'+
+  '<button type="button" class="wl-nav" data-pg="done"><span class="ws">'+star(3)+'</span><span class="nt"><b>'+T("برآورده‌شده‌ها","Granted")+'</b><span>'+T(N(g)+" تا 🎉",g+" 🎉")+'</span></span><span class="ch">‹</span></button></div>';
 }
+/* ---------- full page for each list ---------- */
+var PG=null, PK=null;
+function pgList(k){ return W().filter(function(w){ return k==="act"?!w.g:!!w.g; }).slice().reverse(); }
+function pgBody(k){
+  var l=pgList(k);
+  if(!l.length) return '<div class="jr-card"><div class="jr-empty">'+(k==="act"?T("شیشه خالیه؛ اولین آرزوت رو بنویس.","The jar is empty. Write your first wish."):T("هنوز آرزویی برآورده نشده. هر کدوم که برآورده بشه اینجا جمع می‌شه 🎉","Nothing granted yet. Every granted wish will gather here 🎉"))+'</div></div>';
+  return '<div class="jr-card">'+l.map(function(w){
+    var x='<button type="button" class="wl-b" data-wa="del" data-id="'+w.id+'" aria-label="'+T("حذف","Delete")+'">✕</button>';
+    return k==="act"
+      ? '<div class="wl-row" data-id="'+w.id+'"><span class="ws">'+star(w.k)+'</span><div class="wt"><b data-notr>'+esc(w.t)+'</b><span>'+dl(w.c)+'</span></div><button type="button" class="wl-b ok" data-wa="ok" data-id="'+w.id+'">'+T("برآورده شد","Granted")+'</button>'+x+'</div>'
+      : '<div class="wl-row" data-id="'+w.id+'"><span class="ws">'+star(w.k)+'</span><div class="wt"><b data-notr>'+esc(w.t)+'</b><span>'+T("برآورده شد در ","Granted on ")+dl(w.g)+'</span></div><button type="button" class="wl-b" data-wa="undo" data-id="'+w.id+'">↩ '+T("برگشت","Undo")+'</button>'+x+'</div>';
+  }).join("")+'</div>';
+}
+function pgHTML(k){
+  var n=pgList(k).length;
+  return '<div class="wl-pg-top"><div class="wl-pg-t">'+(k==="act"?T("آرزوهای توی شیشه","Wishes in the jar"):T("آرزوهای برآورده‌شده 🎉","Granted wishes 🎉"))+'<small>'+(EN()?n+(n===1?" wish":" wishes"):N(n)+" آرزو")+'</small></div><button type="button" class="wl-pg-x" data-pgx="1" aria-label="'+T("بستن","Close")+'">✕</button></div><div class="wl-pg-b">'+pgBody(k)+'</div>';
+}
+function renderPg(){
+  if(!PG||!PK) return; var b=PG.querySelector(".wl-pg-b"), y=b?b.scrollTop:0;
+  PG.innerHTML=pgHTML(PK); var nb=PG.querySelector(".wl-pg-b"); if(nb) nb.scrollTop=y;
+}
+function openPg(k){
+  closePg(true); PK=k; PG=document.createElement("div"); PG.className="wl-pg"; PG.setAttribute("role","dialog"); PG.innerHTML=pgHTML(k);
+  PG.addEventListener("click",function(e){ var t=e.target, b; if(t.closest("[data-pgx]")) return closePg(); if((b=t.closest("[data-wa]"))) waClick(b); });
+  document.body.appendChild(PG); requestAnimationFrame(function(){ requestAnimationFrame(function(){ if(PG) PG.classList.add("on"); }); });
+}
+function closePg(now){
+  var p=PG; PG=null; PK=null; if(!p) return;
+  if(now){ if(p.parentNode) p.parentNode.removeChild(p); return; }
+  p.classList.remove("on"); setTimeout(function(){ if(p.parentNode) p.parentNode.removeChild(p); },340);
+}
+function waClick(b){
+  var id=b.getAttribute("data-id"), a=b.getAttribute("data-wa");
+  if(a==="ok") return grant(id);
+  if(a==="undo") return undo(id);
+  if(b.getAttribute("data-armed")) return del(id);
+  b.setAttribute("data-armed","1"); b.textContent=T("مطمئنی؟","Sure?");
+  setTimeout(function(){ if(b.parentNode){ b.removeAttribute("data-armed"); b.textContent="✕"; } },2500);
+}
+/* ---------- sounds: synthesised with WebAudio (nothing to upload) ---------- */
+var AC=null, OUT=null;
+function mkIR(c){ var n=Math.floor(c.sampleRate*1.5), b=c.createBuffer(2,n,c.sampleRate), ch, d, i; for(ch=0;ch<2;ch++){ d=b.getChannelData(ch); for(i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.6); } return b; }
+function rig(c){
+  var comp=c.createDynamicsCompressor(); comp.threshold.value=-16; comp.ratio.value=6; comp.connect(c.destination);
+  var dry=c.createGain(); dry.gain.value=1.5; dry.connect(comp);
+  var rv=c.createConvolver(); rv.buffer=mkIR(c); var wet=c.createGain(); wet.gain.value=.5; rv.connect(wet); wet.connect(comp);
+  return {dry:dry,rev:rv};
+}
+function bell(c,o,f,t,v,d){
+  [[1,1],[2,.26],[3.01,.09]].forEach(function(p){
+    var os=c.createOscillator(), g=c.createGain(); os.type="sine"; os.frequency.value=f*p[0];
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(v*p[1],t+.006); g.gain.exponentialRampToValueAtTime(.0001,t+d*(p[0]>1?.6:1));
+    os.connect(g); g.connect(o.dry); g.connect(o.rev); os.start(t); os.stop(t+d+.05);
+  });
+}
+function sweep(c,o,f1,f2,t,v,d){
+  var os=c.createOscillator(), g=c.createGain(); os.type="sine"; os.frequency.setValueAtTime(f1,t); os.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(v,t+d*.3); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  os.connect(g); g.connect(o.dry); g.connect(o.rev); os.start(t); os.stop(t+d+.05);
+}
+/* a star slips in: soft sparkle, three falling chimes, then a glassy "tink" when it lands */
+function dropSnd(c,o,t,q){ q=q||1; sweep(c,o,700,2200,t,.05*q,.16); [1568,1319,1047].forEach(function(f,i){ bell(c,o,f,t+.14+i*.1,.16*q,.55); }); bell(c,o,1976,t+.72,.12*q,.5); bell(c,o,2637,t+.78,.06*q,.4); }
+/* wish granted: warm rising bell arpeggio with a sparkle shower on top */
+function grantSnd(c,o,t){ var i; [523.25,659.25,783.99,1046.5,1318.5,1568].forEach(function(f,k){ bell(c,o,f,t+k*.085,.17,k===5?1.7:.9); }); bell(c,o,261.63,t,.1,1.5); bell(c,o,392,t,.07,1.5); for(i=0;i<7;i++) bell(c,o,2400+Math.random()*1800,t+.35+i*.1+Math.random()*.05,.05,.35); }
+function playSnd(fn,a){ try{ if(document.hidden) return; var A=window.AudioContext||window.webkitAudioContext; if(!A) return; if(!AC){ AC=new A(); OUT=rig(AC); } if(AC.state==="suspended") AC.resume(); fn(AC,OUT,AC.currentTime+.03,a); }catch(e){} }
+var sfx={drop:function(q){ playSnd(dropSnd,q); }, grant:function(){ playSnd(grantSnd); }, _d:dropSnd, _g:grantSnd, _rig:rig};
 function bub(id){
   var w=W().filter(function(x){return x.id===id;})[0], b=$("wjBub"); sel=id;
   bodies.forEach(function(o){ o.el.classList.toggle("sel",o.id===id); });
@@ -10920,7 +11012,7 @@ function bub(id){
 function addWish(){
   var inp=$("wlIn"), t=inp.value.trim(); if(t.length<2){ inp.focus(); return; }
   var w={id:"w"+Date.now().toString(36)+Math.floor(Math.random()*999),t:t.slice(0,140),c:toDateKey(new Date()),g:null,k:Math.floor(Math.random()*6)};
-  W().push(w); scheduleSave(); inp.value=""; cnt(); head(); rows();
+  W().push(w); scheduleSave(); inp.value=""; cnt(); head(); rows(); sfx.drop();
   if(bodies.length>=36){ var o=bodies.shift(); if(o.el.parentNode) o.el.parentNode.removeChild(o.el); }
   lid(true); var b=mk(w,26); burst($("wj"),130,40);
   if(RM){ for(var i=0;i<260;i++) step(); paint(); } else kick();
@@ -10932,12 +11024,22 @@ function grant(id){
   var i=bodies.map(function(b){return b.id;}).indexOf(id);
   if(i>-1){ var b=bodies[i]; bodies.splice(i,1); burst($("wj"),b.x,b.y,["#ffe39a","#fff",COL[b.k%6][1]]);
     b.el.classList.add("fly"); b.el.style.transform="translate("+(b.x-19)+"px,-90px) scale(1.9) rotate(180deg)"; setTimeout(function(){ if(b.el.parentNode) b.el.parentNode.removeChild(b.el); },1000); kick(); }
-  $("wjBub").hidden=true; head(); rows();
+  $("wjBub").hidden=true; head(); rows(); renderPg(); sfx.grant();
+}
+function undo(id){
+  var w=W().filter(function(x){return x.id===id;})[0]; if(!w||!w.g) return;
+  w.g=null; scheduleSave();
+  if(!bodies.some(function(b){return b.id===id;})){
+    if(bodies.length>=36){ var o=bodies.shift(); if(o.el.parentNode) o.el.parentNode.removeChild(o.el); }
+    lid(true); mk(w,26); if(RM){ for(var i=0;i<260;i++) step(); paint(); } else kick();
+    setTimeout(function(){ lid(false); },1100);
+  }
+  head(); rows(); renderPg(); sfx.drop(.55);
 }
 function del(id){
   S().wishes=W().filter(function(x){return x.id!==id;}); scheduleSave();
   var i=bodies.map(function(b){return b.id;}).indexOf(id); if(i>-1){ var b=bodies[i]; bodies.splice(i,1); if(b.el.parentNode) b.el.parentNode.removeChild(b.el); kick(); }
-  $("wjBub").hidden=true; head(); rows();
+  $("wjBub").hidden=true; head(); rows(); renderPg();
 }
 function cnt(){ var c=$("wlInC"); if(c) c.textContent=N($("wlIn").value.length)+" / "+N(140); }
 /* ---------- letters ---------- */
@@ -11004,8 +11106,8 @@ function wire(){
     var t=e.target, b;
     if((b=t.closest(".st"))) return bub(b.getAttribute("data-id")===sel?null:b.getAttribute("data-id"));
     if(t.closest("#wlAdd")) return addWish();
-    if((b=t.closest("[data-wa]"))){ var id=b.getAttribute("data-id"); if(b.getAttribute("data-wa")==="ok") return grant(id);
-      if(b.getAttribute("data-armed")){ return del(id); } b.setAttribute("data-armed","1"); b.textContent=T("مطمئنی؟","Sure?"); setTimeout(function(){ if(b.parentNode){ b.removeAttribute("data-armed"); b.textContent="✕"; } },2500); return; }
+    if((b=t.closest("[data-pg]"))) return openPg(b.getAttribute("data-pg"));
+    if((b=t.closest("[data-wa]"))) return waClick(b);
     if(t.closest("#ltNew")){ $("ltComp").hidden=false; $("ltNew").hidden=true; $("ltIn").focus(); return; }
     if(t.closest("#ltCancel")){ $("ltComp").hidden=true; $("ltNew").hidden=false; return; }
     if(t.closest("#ltSeal")) return sealIt();
@@ -11018,7 +11120,7 @@ function wire(){
   r.addEventListener("change",function(e){ if(e.target.id==="ltDate") when(); });
 }
 function mode(s){
-  var w=s==="w", seg=$("jrSeg"), jr=document.querySelector('[data-view="journal"] .jr');
+  closePg(true); var w=s==="w", seg=$("jrSeg"), jr=document.querySelector('[data-view="journal"] .jr');
   Array.prototype.forEach.call(seg.children,function(x){ x.classList.toggle("on",x.getAttribute("data-s")===s); });
   if(jr) jr.hidden=w; $("wlRoot").hidden=!w; if(w){ build(); window.scrollTo(0,0); }
 }
@@ -11028,7 +11130,7 @@ function init(){
   $("jrSeg").addEventListener("click",function(e){ var b=e.target.closest("button[data-s]"); if(b) mode(b.getAttribute("data-s")); });
   dot(); setTimeout(dot,2500); setTimeout(dot,9000); setInterval(dot,60000);
   document.addEventListener("visibilitychange",function(){ if(!document.hidden) dot(); });
-  window.lpWL={mode:mode,dot:dot};
+  window.lpWL={mode:mode,dot:dot,sfx:sfx};
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
 })();
