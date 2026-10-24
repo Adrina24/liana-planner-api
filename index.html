@@ -8261,16 +8261,27 @@ window.lpNewReminder=function(){ openForm(null); };
 
 /* ===== Admin: send a notification to other users (the server decides who is an admin) ===== */
 (function(){
-var isAdmin=null, armT=null, busy=false;
+var isAdmin=null, armT=null, busy=false, verified=false, verifying=false, lastId="";
+var CK="lpAdmin1";
+function ident(){ try{ return (typeof getEmail==="function"&&getEmail())||""; }catch(e){ return ""; } }
+function cached(){ try{ var o=JSON.parse(localStorage.getItem(CK)||"null"); if(o&&o.e&&o.e===ident()) return !!o.a; }catch(e){} return null; }
+function remember(v){ try{ localStorage.setItem(CK,JSON.stringify({e:ident(),a:v?1:0})); }catch(e){} }
 function $(id){ return document.getElementById(id); }
 function say(t,cls){ var m=$("pnaMsg"); if(!m) return; m.textContent=t||""; m.className="hint bk-msg"+(cls?" "+cls:""); }
 function show(v){ var p=$("pnAdmin"); if(p) p.classList.toggle("hidden",!v); }
 function check(){
-  if(isAdmin!==null){ show(isAdmin); return; }
-  if(!getToken()){ show(false); return; }
+  if(!getToken()){ isAdmin=null; verified=false; show(false); return; }
+  var id=ident(); if(id!==lastId){ lastId=id; isAdmin=null; verified=false; }
+  if(isAdmin===null){ var c=cached(); if(c!==null) isAdmin=c; }   /* last known answer: show it right away */
+  if(isAdmin!==null) show(isAdmin);
+  if(verified||verifying) return;
+  verifying=true;
   apiCall("/api/admin/me","GET",null,true).then(function(r){
-    isAdmin=!!(r.ok && r.data && r.data.admin); show(isAdmin);
-  }).catch(function(){ show(false); });
+    verifying=false;
+    if(r.ok && r.data){ verified=true; isAdmin=!!r.data.admin; remember(isAdmin); show(isAdmin); }
+    else if(r.status===401||r.status===403){ verified=true; isAdmin=false; remember(false); show(false); }
+    /* server busy or no internet: keep showing what we already knew */
+  }).catch(function(){ verifying=false; });
 }
 function fill(k){
   var T={
@@ -8322,7 +8333,10 @@ function poll(id,tries){
     }).catch(function(){ if(tries>0) poll(id,tries-1); });
   },6000);
 }
-var tg=$("pushToggle"); if(tg) tg.addEventListener("click",function(){ setTimeout(check,50); });
+var tg=$("pushToggle"); if(tg) tg.addEventListener("click",function(){ check(); });
+check();                                  /* show the box immediately if this account was an admin last time */
+(function(){ var n=0, t=setInterval(function(){ n++; check(); if((verified&&n>2)||n>30) clearInterval(t); },4000); })();
+document.addEventListener("visibilitychange",function(){ if(!document.hidden) check(); });
 var q=document.querySelectorAll(".pn-q button"); Array.prototype.forEach.call(q,function(b){ b.addEventListener("click",function(){ fill(b.getAttribute("data-q")); }); });
 var bs=$("pnaSend"), bf=$("pnaSelf");
 if(bs) bs.addEventListener("click",function(){ send("all",bs); });
@@ -10924,6 +10938,10 @@ body.mode-dark .wl-pg-x{background:rgba(255,255,255,.1);}
 .jr-more{display:block; width:100%; margin-top:6px; padding:11px; border-radius:14px; border:1px solid var(--border); background:rgba(255,255,255,.4); color:var(--text); font:inherit; font-weight:700; font-size:13px; -webkit-tap-highlight-color:transparent;}
 body.mode-dark .jr-more{background:rgba(255,255,255,.08);}
 @media (prefers-reduced-motion:reduce){ .wj-ff i,.wl-dot,.lt-row.due .lt-chip{animation:none;} #wjLid,.lt-pp,.lt-fl,.wl-pg{transition:none;} }
+/* ===== habit form (شخصی‌سازی عادت‌ها ← عادت جدید): the save button was white on white in the glass themes ===== */
+html body.style-glass #habitMgr .hm-actions button.primary{ background:linear-gradient(135deg,var(--accent),var(--accent-dk,var(--accent))) !important; border-color:transparent !important; color:#fff !important; box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 38%,transparent); }
+html body.style-glass #habitMgr .hm-actions button.primary:active{ transform:scale(.97); }
+#habitMgr .hm-actions{ position:sticky; bottom:0; z-index:2; padding:8px 0 2px; }
 </style>
 <script id="lpSnd">
 /* soft glassy sounds, synthesised with WebAudio (nothing to upload): wish stars, closing a letter, mood-jar balls and shaking the jar */
@@ -11173,7 +11191,11 @@ function dropSnd(c,o,t,q){ q=q||1; sweep(c,o,700,2200,t,.05*q,.16); [1568,1319,1
 /* wish granted: warm rising bell arpeggio with a sparkle shower on top */
 function grantSnd(c,o,t){ var i; [523.25,659.25,783.99,1046.5,1318.5,1568].forEach(function(f,k){ bell(c,o,f,t+k*.085,.17,k===5?1.7:.9); }); bell(c,o,261.63,t,.1,1.5); bell(c,o,392,t,.07,1.5); for(i=0;i<7;i++) bell(c,o,2400+Math.random()*1800,t+.35+i*.1+Math.random()*.05,.05,.35); }
 function playSnd(fn,a){ try{ if(document.hidden) return; var A=window.AudioContext||window.webkitAudioContext; if(!A) return; if(!AC){ AC=new A(); OUT=rig(AC); } if(AC.state==="suspended") AC.resume(); fn(AC,OUT,AC.currentTime+.03,a); }catch(e){} }
-var sfx={drop:function(q){ playSnd(dropSnd,q); }, grant:function(){ playSnd(grantSnd); }, _d:dropSnd, _g:grantSnd, _rig:rig};
+/* the first sound used to build the whole audio engine inside the tap (hundreds of ms on a phone), so the star came late; now it is prepared quietly in the background and the sound itself starts after the star */
+function later(f){ if(AC) f(); else setTimeout(f,60); }
+function prepAudio(){ try{ var A=window.AudioContext||window.webkitAudioContext; if(!A) return; if(!AC){ AC=new A(); OUT=rig(AC); } setTimeout(function(){ try{ if(window.lpSnd&&window.lpSnd.unlock) window.lpSnd.unlock(); }catch(e){} },350); }catch(e){} }
+function idleAudio(){ if(AC&&!(window.lpSnd&&window.lpSnd.unlock)) return; if(window.requestIdleCallback) requestIdleCallback(prepAudio,{timeout:1200}); else setTimeout(prepAudio,300); }
+var sfx={drop:function(q){ later(function(){ playSnd(dropSnd,q); }); }, grant:function(){ later(function(){ playSnd(grantSnd); }); }, _d:dropSnd, _g:grantSnd, _rig:rig, prep:idleAudio};
 function bub(id){
   var w=W().filter(function(x){return x.id===id;})[0], b=$("wjBub"); sel=id;
   bodies.forEach(function(o){ o.el.classList.toggle("sel",o.id===id); });
@@ -11260,6 +11282,8 @@ function overlay(l,mode){
   } else { box.classList.add("rd"); sheet(); }
 }
 /* ---------- build ---------- */
+var built=false, builtSig="";
+function sig(){ return (EN()?"e":"f")+"#"+W().map(function(w){ return w.id+(w.g?"g":"a")+w.k; }).join("|"); }
 function build(){
   defs(); var r=$("wlRoot");
   r.innerHTML='<div class="wl-h" id="wlHead"></div>'+jarHTML()+'<div class="wj-bub" id="wjBub" hidden></div>'+
@@ -11270,7 +11294,7 @@ function build(){
   '<div id="ltComp" hidden><textarea class="jr-search wl-in lt-in" id="ltIn" placeholder="'+T("سلام به خودِ آینده‌م...","Hello to my future self...")+'"></textarea><div class="jr-t" style="margin:12px 0 0">'+T("کِی باز بشه؟","When should it open?")+'</div><div class="lt-chips" id="ltChips">'+
   OPTS.map(function(o){ return '<button type="button" class="lt-ch" data-d="'+o[0]+'">'+T(o[1],o[2])+'</button>'; }).join("")+'</div><input type="date" class="jr-search" id="ltDate" min="'+addDays(1)+'" hidden><div class="lt-when" id="ltWhen"></div>'+
   '<div class="lt-acts"><button type="button" class="hb-save" id="ltSeal">'+T("مهر و موم کن 💌","Seal it 💌")+'</button><button type="button" class="wl-b" id="ltCancel">'+T("بیخیال","Cancel")+'</button></div></div></div>';
-  fill(); head(); rows(); letters(); cnt();
+  fill(); head(); rows(); letters(); cnt(); built=true; builtSig=sig();
 }
 function wire(){
   var r=$("wlRoot");
@@ -11291,16 +11315,32 @@ function wire(){
   r.addEventListener("input",function(e){ if(e.target.id==="wlIn") cnt(); if(e.target.id==="ltDate") when(); });
   r.addEventListener("change",function(e){ if(e.target.id==="ltDate") when(); });
 }
+/* the jar is prepared quietly in the background while its tab is hidden, so opening it is only un-hiding it */
+function showJar(){
+  if(built&&builtSig===sig()){
+    sel=null; bodies.forEach(function(o){ o.el.classList.remove("sel"); }); var bb=$("wjBub"); if(bb) bb.hidden=true;
+    head(); rows(); letters(); cnt();
+    if(bodies.some(function(b){ return b.vx||b.vy; })) kick();
+  } else build();
+}
+function warm(){
+  var r=$("wlRoot"); if(!r||!r.hidden||(built&&builtSig===sig())) return;
+  if(!(window.lpBridge&&window.lpBridge.state)) return;
+  try{ build(); }catch(e){}
+}
+function idleWarm(){ if(window.requestIdleCallback) requestIdleCallback(warm,{timeout:700}); else setTimeout(warm,200); }
 function mode(s){
   closePg(true); var w=s==="w", seg=$("jrSeg"), jr=document.querySelector('[data-view="journal"] .jr');
   Array.prototype.forEach.call(seg.children,function(x){ x.classList.toggle("on",x.getAttribute("data-s")===s); });
-  if(jr) jr.hidden=w; $("wlRoot").hidden=!w; if(w){ build(); window.scrollTo(0,0); } else if(window.lpJrDirty&&window.lpJrRender){ window.lpJrRender(); }
+  if(jr) jr.hidden=w; $("wlRoot").hidden=!w; if(w){ showJar(); window.scrollTo(0,0); setTimeout(idleAudio,250); } else if(window.lpJrDirty&&window.lpJrRender){ window.lpJrRender(); }
 }
 function init(){
   if(!$("jrSeg")||!$("wlRoot")) return;
   $("wlRoot").hidden=true; wire();
   $("jrSeg").addEventListener("click",function(e){ var b=e.target.closest("button[data-s]"); if(b) mode(b.getAttribute("data-s")); });
   dot(); setTimeout(dot,2500); setTimeout(dot,9000); setInterval(dot,60000);
+  setTimeout(idleWarm,500); setInterval(function(){ if(!document.hidden) idleWarm(); },2000);
+  var nv=$("bnav"); if(nv) nv.addEventListener("click",function(e){ var b=e.target.closest&&e.target.closest("button[data-v=\"journal\"]"); if(b) setTimeout(idleWarm,0); },true);
   document.addEventListener("visibilitychange",function(){ if(!document.hidden) dot(); });
   window.lpWL={mode:mode,dot:dot,sfx:sfx};
 }
