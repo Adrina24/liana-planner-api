@@ -10855,7 +10855,7 @@ window.lpTick=play;
 body.style-glass .wj{--ge:#fff;} body.mode-dark:not(.style-glass) .wj{--ge:#aebbe6;} body.style-glass.mode-dark .wj{--ge:#dfe7ff;}
 .wj::before{content:""; position:absolute; left:-30px; right:-30px; top:70px; bottom:-4px; pointer-events:none; background:radial-gradient(closest-side,rgba(255,211,110,.34),rgba(255,211,110,.12) 45%,rgba(255,211,110,0) 75%);}
 .wj svg{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible;}
-.wj .bk{z-index:0;} .wj .fr{z-index:3;}
+.wj .bk{z-index:0;} .wj .fr{z-index:3; animation:none; margin:0;} /* the glass outline + lid used to inherit the onboarding ".fr" fade-in (0.5 s wait + 0.8 s fade), so they showed up long after the stars */
 .wj-ff{position:absolute; inset:0; z-index:1; pointer-events:none;}
 .wj-ff i{position:absolute; width:4px; height:4px; border-radius:50%; background:#ffe9a8; box-shadow:0 0 8px 2px rgba(255,214,110,.85); opacity:0; animation:wlFly 9s ease-in-out infinite;}
 @keyframes wlFly{0%{opacity:0; transform:translate(0,0);} 15%{opacity:.95;} 50%{transform:translate(16px,-26px); opacity:.5;} 85%{opacity:.95;} 100%{opacity:0; transform:translate(-12px,-50px);}}
