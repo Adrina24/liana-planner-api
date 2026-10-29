@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
+<head><script>
+/* animations stay on even when the phone says "reduce motion" (battery saver / remove animations); the in-app switch decides */
+(function(){ var q0=window.matchMedia, rm=false; if(!q0) return;
+  try{ rm=localStorage.getItem("lpRM")==="1"; }catch(e){}
+  if(rm) document.documentElement.classList.add("lp-rm");
+  window.matchMedia=function(q){ var r=q0.call(window,q);
+    if(typeof q==="string"&&q.indexOf("prefers-reduced-motion")>-1){ var m=/no-preference/.test(q)?!rm:rm;
+      return {matches:m,media:q,onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false;}}; }
+    return r; };
+})();
+</script>
 <meta charset="UTF-8">
 <style id="lp-pre">html{background:#17212A}</style>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, interactive-widget=resizes-content">
@@ -2711,6 +2721,13 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
     <div class="row-between"><span>حالت تک‌رنگ</span>
       <button class="switch" id="monoSwitch"></button>
     </div>
+  </div>
+
+  <div class="set-row">
+    <div class="row-between"><span data-en="Reduce motion">کاهش حرکت‌ها</span>
+      <button class="switch" id="rmSwitch" type="button" aria-label="کاهش حرکت‌ها"></button>
+    </div>
+    <div style="font-size:11px; opacity:.7; margin-top:6px;" data-en="For slower phones, or if motion bothers you">برای گوشی‌های ضعیف یا وقتی حرکت‌ها اذیتت می‌کنن</div>
   </div>
 
   <div class="set-row">
@@ -11439,6 +11456,7 @@ body.mode-dark .jr-more{background:rgba(255,255,255,.08);}
 .tm-go::before{content:""; display:inline-block; width:0; height:0; border-left:9px solid currentColor; border-top:6px solid transparent; border-bottom:6px solid transparent; margin-inline-end:9px; vertical-align:-1px;}
 .tm-go[data-s=run]::before{width:4px; height:12px; border-top:0; border-bottom:0; border-left:4px solid currentColor; border-right:4px solid currentColor;}
 @media (prefers-reduced-motion:reduce){ .tm-sp circle,#tmRoot.run .tm-time,#tmRoot.run .tm-core::before{animation:none;} }
+html.lp-rm *,html.lp-rm *::before,html.lp-rm *::after{animation-duration:.001ms !important; animation-delay:0s !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; transition-delay:0s !important; scroll-behavior:auto !important;}
 @media (prefers-reduced-motion:reduce){ .wj-ff i,.wl-dot,.lt-row.due .lt-chip{animation:none;} #wjLid,.lt-pp,.lt-fl,.wl-pg{transition:none;} }
 /* ===== habit form (شخصی‌سازی عادت‌ها ← عادت جدید): the save button was white on white in the glass themes ===== */
 html body.style-glass #habitMgr .hm-actions button.primary{ background:linear-gradient(135deg,var(--accent),var(--accent-dk,var(--accent))) !important; border-color:transparent !important; color:#fff !important; box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 38%,transparent); }
@@ -12078,6 +12096,20 @@ window.addEventListener("load",function(){ setTimeout(function(){ load(function(
   }
   try{ if(localStorage.getItem(KEY)==="1") enable(false); }catch(e){}
   if(!on){ setTimeout(probe,6000); setTimeout(function(){ if(!on) probe(); },30000); }
+})();
+</script>
+<script>
+(function(){
+  var rm=false; try{ rm=localStorage.getItem("lpRM")==="1"; }catch(e){}
+  function strip(c){ var l=c.cssRules, i, r, t;
+    for(i=l.length-1;i>=0;i--){ r=l[i]; t=r.media?r.media.mediaText:"";
+      if(t&&/prefers-reduced-motion/.test(t)&&/reduce/.test(t)&&!/no-preference/.test(t)){ try{ c.deleteRule(i); }catch(e){} }
+      else if(r.cssRules&&r.cssRules.length&&r.deleteRule&&!r.style) strip(r); } }
+  function run(){ var k, sh=document.styleSheets; for(k=0;k<sh.length;k++){ try{ strip(sh[k]); }catch(e){} } }
+  run(); window.addEventListener("load",function(){ run(); setTimeout(run,3000); });
+  var sw=document.getElementById("rmSwitch");
+  if(sw){ sw.classList.toggle("on",rm);
+    sw.onclick=function(){ rm=!rm; try{ localStorage.setItem("lpRM",rm?"1":"0"); }catch(e){} document.documentElement.classList.toggle("lp-rm",rm); sw.classList.toggle("on",rm); }; }
 })();
 </script>
 </body>
