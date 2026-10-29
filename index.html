@@ -12043,5 +12043,42 @@ window.lpWx={open:function(){ $("wxPage").hidden=false; $("wxPage").scrollTop=0;
 window.addEventListener("load",function(){ setTimeout(function(){ load(function(ok){ if(ok) paint(); }); },1200); });
 })();
 </script>
+<script>
+/* lite glass: on phones that struggle, keep the glass look but make the blur much cheaper (smaller radius, no saturate) */
+(function(){
+  var KEY="lpLite", on=false;
+  function cut(list){
+    var i, r;
+    for(i=0;i<list.length;i++){ r=list[i];
+      if(r.style){
+        ["backdrop-filter","-webkit-backdrop-filter"].forEach(function(p){
+          var v=r.style.getPropertyValue(p), n; if(!v||v==="none") return;
+          n=v.replace(/blur\(\s*([\d.]+)px\s*\)/g,function(m,a){ return "blur("+Math.max(4,Math.round(a*.4))+"px)"; }).replace(/\s*saturate\([^)]*\)/g,"").trim();
+          if(n!==v) r.style.setProperty(p,n,r.style.getPropertyPriority(p));
+        });
+      }
+      if(r.cssRules&&r.cssRules.length){ try{ cut(r.cssRules); }catch(e){} }
+    }
+  }
+  function apply(){ var k, sh=document.styleSheets; for(k=0;k<sh.length;k++){ try{ cut(sh[k].cssRules); }catch(e){} } }
+  function enable(save){
+    if(!on){ on=true; document.documentElement.classList.add("lp-lite"); apply(); setTimeout(apply,3000); }
+    if(save){ try{ localStorage.setItem(KEY,"1"); }catch(e){} }
+  }
+  window.lpLite=enable;
+  function probe(){
+    var n=0, t0=0;
+    function f(t){
+      if(document.hidden){ return setTimeout(probe,5000); }
+      if(!t0) t0=t; n++;
+      if(t-t0<2500) return requestAnimationFrame(f);
+      if(n/((t-t0)/1000)<42) enable(true);
+    }
+    requestAnimationFrame(f);
+  }
+  try{ if(localStorage.getItem(KEY)==="1") enable(false); }catch(e){}
+  if(!on){ setTimeout(probe,6000); setTimeout(function(){ if(!on) probe(); },30000); }
+})();
+</script>
 </body>
 </html>
