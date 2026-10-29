@@ -2425,9 +2425,10 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
       <label>ایمیل</label>
       <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="username">
     </div>
-    <div class="auth-field">
+    <div class="auth-field pw">
       <label>رمز عبور</label>
       <input type="password" id="authPassword" placeholder="حداقل ۶ کاراکتر" autocomplete="current-password">
+      <button type="button" id="authEye" class="au-eye" aria-label="نمایش رمز عبور" aria-pressed="false" data-en-label="Show password"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
 
     <button class="auth-btn" id="authSubmitBtn">ورود</button>
@@ -4273,6 +4274,7 @@ document.getElementById("logoutBtn").addEventListener("click",function(){
 
 /* when the server can't be reached (e.g. the page is opened inside a sandboxed preview), let the user continue locally */
 function showOfflineOption(){
+  if(!getToken()) return;   /* only people who already have an account can continue offline */
   if(document.getElementById("authOfflineBtn")) return;
   var b=document.createElement("div");
   b.id="authOfflineBtn";
@@ -4322,6 +4324,7 @@ function resetBootUI(){
   document.getElementById("bsActions").classList.add("hidden");
 }
 function continueOffline(){
+  if(!getToken()) return;   /* no account, no entry */
   offlineOnly=true;
   applyGlassDefaultOnce();
   hideAuthScreen();
@@ -4386,7 +4389,7 @@ function initPersistence(){
     else afterLogin();
   } else {
     lpBootHold(function(){
-      showAuthScreen(); showOfflineOption();
+      if(!local){ authMode="signup"; updateAuthUI(); } showAuthScreen();
       document.body.classList.remove("booting");
     });
   }
@@ -11457,6 +11460,11 @@ body.mode-dark .jr-more{background:rgba(255,255,255,.08);}
 .tm-go[data-s=run]::before{width:4px; height:12px; border-top:0; border-bottom:0; border-left:4px solid currentColor; border-right:4px solid currentColor;}
 @media (prefers-reduced-motion:reduce){ .tm-sp circle,#tmRoot.run .tm-time,#tmRoot.run .tm-core::before{animation:none;} }
 html.lp-rm *,html.lp-rm *::before,html.lp-rm *::after{animation-duration:.001ms !important; animation-delay:0s !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; transition-delay:0s !important; scroll-behavior:auto !important;}
+.auth-field.pw{position:relative;}
+html body #authScreen .auth-field input#authPassword{padding-left:48px;}
+#authScreen .au-eye{position:absolute; left:6px; bottom:0; width:44px; height:50px; display:flex; align-items:center; justify-content:center; background:none; border:0; padding:0; color:var(--text-soft); cursor:pointer; -webkit-tap-highlight-color:transparent;}
+#authScreen .au-eye[aria-pressed="true"]{color:var(--accent);}
+#authScreen .au-eye:active{transform:scale(.9);}
 @media (prefers-reduced-motion:reduce){ .wj-ff i,.wl-dot,.lt-row.due .lt-chip{animation:none;} #wjLid,.lt-pp,.lt-fl,.wl-pg{transition:none;} }
 /* ===== habit form (شخصی‌سازی عادت‌ها ← عادت جدید): the save button was white on white in the glass themes ===== */
 html body.style-glass #habitMgr .hm-actions button.primary{ background:linear-gradient(135deg,var(--accent),var(--accent-dk,var(--accent))) !important; border-color:transparent !important; color:#fff !important; box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 38%,transparent); }
@@ -12110,6 +12118,20 @@ window.addEventListener("load",function(){ setTimeout(function(){ load(function(
   var sw=document.getElementById("rmSwitch");
   if(sw){ sw.classList.toggle("on",rm);
     sw.onclick=function(){ rm=!rm; try{ localStorage.setItem("lpRM",rm?"1":"0"); }catch(e){} document.documentElement.classList.toggle("lp-rm",rm); sw.classList.toggle("on",rm); }; }
+})();
+</script>
+<script>
+(function(){
+  var b=document.getElementById("authEye"), i=document.getElementById("authPassword"); if(!b||!i) return;
+  var ON='<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+      OFF='<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M3.5 3.5l17 17"/></svg>';
+  b.addEventListener("pointerdown",function(e){ e.preventDefault(); });
+  b.addEventListener("click",function(){
+    var show=i.type==="password", f=document.activeElement===i, p=i.selectionStart;
+    i.type=show?"text":"password"; b.innerHTML=show?OFF:ON; b.setAttribute("aria-pressed",show?"true":"false");
+    b.setAttribute("aria-label",show?"پنهان کردن رمز عبور":"نمایش رمز عبور");
+    if(f){ i.focus(); try{ i.setSelectionRange(p,p); }catch(e){} }
+  });
 })();
 </script>
 </body>
