@@ -1918,7 +1918,7 @@ select.kc-in{text-align:right;padding:11px 10px;}
 .wk-r{padding:8px 0;border-bottom:1px solid var(--border)}.wk-r .row{display:flex;align-items:center;gap:6px;margin-top:6px}.wk-n{width:72px;padding:6px 4px;font-size:13px}
 .ex-row small{display:block}
 .wk-c{padding-bottom:12px}
-.wk-h{position:relative;padding-left:100px}.wk-h b{display:block;font-size:14px}.wk-h small{display:block;font-size:11px;color:var(--text-soft);direction:ltr;text-align:right}
+.wk-h{position:relative;padding-left:100px}.wk-h.hth{padding-right:82px;min-height:68px}.wk-th{position:absolute;right:0;top:0;width:68px;height:68px;border-radius:14px;object-fit:cover;background:#fff;border:1px solid rgba(127,127,127,.22)}.wk-h b{display:block;font-size:14px}.wk-h small{display:block;font-size:11px;color:var(--text-soft);direction:ltr;text-align:right}
 .wk-ac{position:absolute;left:0;top:0;display:flex;gap:4px}.wk-ac button{border:none;background:var(--border);color:var(--text);width:26px;height:26px;border-radius:50%;font-size:12px}
 .wk-sr{display:grid;grid-template-columns:26px 1fr 1fr 30px;gap:6px;align-items:center;margin-top:6px;font-size:12.5px;text-align:center}
 .wk-sr.wk-st{grid-template-columns:26px 1fr 1fr 96px}.wk-sh{color:var(--text-soft);font-size:11.5px}
@@ -3264,7 +3264,7 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
       b.innerHTML='<span>⏱ استراحت: <b>'+U.fa(Math.floor(l/60))+':'+(l%60<10?"۰":"")+U.fa(l%60)+'</b></span><button type="button" data-tmx="1">رد کردن</button>'; }
     tick(); tmr=setInterval(tick,500);
   }
-  function head(x,extra){return '<div class="wk-h"><b>'+esc(x.f||x.n)+'</b><small>'+esc(x.n)+'</small>'+(extra||"")+'</div>';}
+  function head(x,extra){return '<div class="wk-h hth"><img class="wk-th" data-th="'+esc(x.id)+'" alt="" decoding="async"><b>'+esc(x.f||x.n)+'</b><small>'+esc(x.n)+'</small>'+(extra||"")+'</div>';}
   function card(x,i,n){
     norm(x);
     return '<div class="kc-box wk-c">'+head(x,'<span class="wk-ac"><button type="button" data-mv="'+i+':-1">↑</button><button type="button" data-mv="'+i+':1">↓</button><button type="button" data-del="'+i+'">✕</button></span>')+
@@ -3306,6 +3306,7 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
       h+='<button type="button" class="kc-go" data-new="1">+ برنامه‌ی جدید</button><button type="button" class="nt-add" data-imp="1">دریافت برنامه (کد یا لینک)</button>';
     }
     $("wkBody").innerHTML=h;
+    try{ if(window.lpEx&&window.lpEx.hydrate) window.lpEx.hydrate($("wkBody")); }catch(e){}
   }
   var B=$("wkBody");
   B.addEventListener("click",function(ev){
@@ -3516,6 +3517,10 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
     openId:function(id){ ensure().then(function(d){ var e=byid(d,id); if(!e) return; ext=true; cur=e; $("exOverlay").classList.remove("hidden"); $("exModal").classList.remove("hidden"); $("exModal").scrollTop=0; render(); }); },
     get:function(id){ return D?(byid(D,id)||null):null; },
     all:function(){ return ensure(); },
+    hydrate:function(root){ if(!root) return; var ims=root.querySelectorAll("img[data-th]"); if(!ims.length) return;
+      ensure().then(function(d){ if(!d) return; [].forEach.call(ims,function(im){ var e=byid(d,im.getAttribute("data-th")), u=e&&(e.images||[])[0];
+        function none(){ im.style.display="none"; if(im.parentNode) im.parentNode.classList.remove("hth"); }
+        if(!u){ none(); return; } im.onerror=none; im.src=base+u; }); }); },
     catalog:function(maxChars){ return ensure().then(function(d){
       if(!d) return "";
       var TAG={"body only":"bw","dumbbell":"db","barbell":"bb","machine":"mc","cable":"cb","kettlebells":"kb","bands":"bd","e-z curl bar":"ez"};
@@ -9331,15 +9336,18 @@ document.addEventListener("visibilitychange",function(){
 <script>
 (function(){
   var views=[].slice.call(document.querySelectorAll('.view')), btns=[].slice.call(document.querySelectorAll('#bnav button'));
-  function go(v){
+  try{ var nv=navigator, low=(nv.hardwareConcurrency&&nv.hardwareConcurrency<=4)||(nv.deviceMemory&&nv.deviceMemory<=3)||(nv.connection&&nv.connection.saveData); if(low) document.documentElement.classList.add('lp-lite'); }catch(e){}
+  /* tapping a tab: switch the view and the bar at once, and do the heavy re-drawing a moment later so the bar glides smoothly */
+  function go(v,defer){
     views.forEach(function(e){ e.classList.toggle('on', e.getAttribute('data-view')===v); });
     btns.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-v')===v); });
-    window.scrollTo(0,0);
-    if(v==='home') layout(0);
-    if(window.lpOnView){ try{ window.lpOnView(v); }catch(e){} }
+    if((window.pageYOffset||document.documentElement.scrollTop)>0) window.scrollTo(0,0);
+    function after(){ if(v==='home') layout(0); if(window.lpOnView){ try{ window.lpOnView(v); }catch(e){} } }
+    if(defer) requestAnimationFrame(function(){ requestAnimationFrame(function(){ setTimeout(after,0); }); }); else after();
   }
+  window.addEventListener('load',function(){ var run=window.requestIdleCallback||function(f){ setTimeout(f,600); }; run(function(){ try{ [].forEach.call(document.images,function(i){ i.decoding='async'; }); }catch(e){} }); });
   window.lpGo=go;
-  btns.forEach(function(b){ b.addEventListener('click', function(){ go(b.getAttribute('data-v')); }); });
+  btns.forEach(function(b){ b.addEventListener('click', function(){ go(b.getAttribute('data-v'),true); }); });
   (function pickDaily(){
     var host=document.getElementById('car'), dotsEl=host.querySelector('.car-dots');
     var all=[].slice.call(host.querySelectorAll('.car-card')), byId={}, per=7;
@@ -11735,6 +11743,10 @@ body.mode-dark .jr-more{background:rgba(255,255,255,.08);}
 @keyframes tmSt{0%,100%{opacity:.35;transform:scale(.55) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
 #tmRoot.run .tm-ob{opacity:.55} #tmRoot.run .tm-star{filter:drop-shadow(0 0 6px var(--accent))}
 @media (prefers-reduced-motion:reduce){ .tm-ob,.tm-os,.tm-star,.lt-bs{animation:none} }
+/* jar higher; lighter first frames when switching tabs */
+html body .jar{margin-top:-34px; pointer-events:none;}
+html body .jar .ball{pointer-events:auto;}
+html body .view.on > *:nth-child(n+7){animation:none !important;}
 .lp-tips{margin:8px 0 0;padding:0 16px 0 0;font-size:12px;line-height:1.9;opacity:.92}.lp-opts{display:flex;flex-wrap:wrap;gap:8px;margin:8px 2px 4px}#chatSheet .chat-chip.on{outline:2px solid currentColor;outline-offset:-2px}#chatSheet .chat-chip:disabled:not(.on){opacity:.4}
 .wl-ring{position:fixed;z-index:9998;pointer-events:none;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:2px solid rgba(255,225,140,.95);box-shadow:0 0 18px rgba(255,200,80,.8),inset 0 0 14px rgba(255,220,120,.5);animation:ringOut .8s ease-out forwards;}
 @keyframes ringOut{from{opacity:.95;transform:scale(.3);}to{opacity:0;transform:scale(2.6);}}
@@ -11913,11 +11925,14 @@ function burst(par,x,y,cols){
     par.appendChild(e); (function(n){ setTimeout(function(){ if(n.parentNode) n.parentNode.removeChild(n); },1000); })(e); }
 }
 /* ---------- physics ---------- */
-var bodies=[], raf=0, calm=0, FL=300, R=18, sel=null, EX=0, busy=false, STEP=80;
+var bodies=[], raf=0, calm=0, FL=300, R=18, sel=null, EX=0, busy=false, STEP=80, GM=1, SC=1, SKS=[1,.82,.66,.52,.42];
 function lv(){ var s=S(); if(!s.settings) s.settings={}; return s.settings.wjLevel|0; }
-function cap(){ return 36+lv()*10; }
+function skv(l){ if(l==null) l=lv(); return SKS[Math.min(SKS.length-1,Math.max(0,l-GM))]; }
+function capL(l){ var k=skv(l); return Math.round((36+Math.min(l,GM)*10)/(k*k)); }
+function cap(){ return capL(lv()); }
+function setSk(){ SC=skv(); R=18*SC; }
 function nAct(){ return W().filter(function(w){return !w.g;}).length; }
-function need(n){ return n>=36?Math.floor((n-36)/10)+1:0; }
+function need(n){ var l=0, mx=GM+SKS.length-1; while(l<mx&&n>=capL(l)) l++; return l; }
 function lx(y){ return y>=150?30:(y<=62?72:30+(150-y)/88*42); }
 function step(){
   var i,j,a,b,dx,dy,d,nx,ny,o,rv,imp,e=0,l,r,it;
@@ -11932,7 +11947,7 @@ function step(){
   for(i=0;i<bodies.length;i++){ b=bodies[i]; b.a+=b.vx*3; e+=Math.abs(b.vx)+Math.abs(b.vy); }
   return e;
 }
-function paint(){ bodies.forEach(function(b){ b.el.style.transform="translate("+(b.x-19).toFixed(1)+"px,"+(b.y-19).toFixed(1)+"px) rotate("+b.a.toFixed(1)+"deg)"; }); }
+function paint(){ bodies.forEach(function(b){ b.el.style.transform="translate("+(b.x-19).toFixed(1)+"px,"+(b.y-19).toFixed(1)+"px) rotate("+b.a.toFixed(1)+"deg) scale("+SC.toFixed(3)+")"; }); }
 function loop(){ raf=0; if(!$("wj")||$("wlRoot").hidden) return; var e=step(); paint(); calm=(e<.4*Math.max(1,bodies.length))?calm+1:0;
   if(calm<40) raf=requestAnimationFrame(loop); else bodies.forEach(function(b){ b.vx=0; b.vy=0; }); }
 function kick(){ calm=0; if(!raf) raf=requestAnimationFrame(loop); }
@@ -11941,7 +11956,7 @@ function mk(w,y){ var b={id:w.id,k:w.k,x:95+Math.random()*70,y:y,vx:(Math.random
 function fill(){
   bodies=[]; $("wjSt").innerHTML="";
   W().filter(function(w){ return !w.g; }).slice(-cap()).forEach(function(w,i){ var b=mk(w,150+((i*37)%120)); b.x=60+((i*53)%140); });
-  for(var i=0;i<260;i++) step(); bodies.forEach(function(b){ b.vx=0; b.vy=0; }); paint();
+  for(var i=0,ns=bodies.length>120?110:260;i<ns;i++) step(); bodies.forEach(function(b){ b.vx=0; b.vy=0; }); paint();
 }
 /* ---------- wishes ---------- */
 function lid(open){ var l=$("wjLid"); if(l) l.classList.toggle("open",open); }
@@ -11966,16 +11981,17 @@ function jarHTML(){
 }
 /* the jar is full: it grows taller (80 more units, room for 10 more stars) and the stars settle into the new space */
 function grow(){
+  if(lv()>=GM+SKS.length-1) return;
   var st=S(); if(!st.settings) st.settings={}; var from=EX; st.settings.wjLevel=lv()+1; scheduleSave();
-  var to=lv()*STEP, w=$("wj"), m=$("wjBub"), i;
-  if(!w||$("wlRoot").hidden){ EX=to; FL=300+to; return; }
+  var to=Math.min(lv(),GM)*STEP, oSC=SC, nSC=skv(), w=$("wj"), m=$("wjBub"), i;
+  if(!w||$("wlRoot").hidden){ EX=to; FL=300+to; SC=nSC; R=18*nSC; return; }
   sel=null; bodies.forEach(function(o){ o.el.classList.remove("sel"); });
-  m.innerHTML='<p>'+T("شیشه پر شد؛ بزرگ‌ترش کردم ✨","The jar was full, so I made it bigger ✨")+'</p>'; m.hidden=false;
+  m.innerHTML='<p>'+(nSC<oSC?T("شیشه دوباره پر شد؛ ستاره‌ها کوچیک‌تر شدن تا جای آرزوهای بیشتری باشه ✨","The jar filled up again, so the stars got smaller to make room for more wishes ✨"):T("شیشه پر شد؛ بزرگ‌ترش کردم ✨","The jar was full, so I made it bigger ✨"))+'</p>'; m.hidden=false;
   setTimeout(function(){ if(!sel) m.hidden=true; },3400); sfx.grant();
-  if(RM){ setEx(to); for(i=0;i<120;i++) step(); paint(); return; }
+  if(RM){ SC=nSC; R=18*nSC; setEx(to); for(i=0;i<120;i++) step(); paint(); return; }
   burst(w,130,40); burst(w,45,150); burst(w,215,150);
   var t0=performance.now(), D=950;
-  function f(t){ var k=Math.min(1,(t-t0)/D), q=1+2.4*Math.pow(k-1,3)+1.4*Math.pow(k-1,2); setEx(from+(to-from)*q); kick(); if(k<1) requestAnimationFrame(f); else setEx(to); }
+  function f(t){ var k=Math.min(1,(t-t0)/D), q=1+2.4*Math.pow(k-1,3)+1.4*Math.pow(k-1,2); setEx(from+(to-from)*q); SC=oSC+(nSC-oSC)*k; R=18*SC; kick(); if(k<1) requestAnimationFrame(f); else{ setEx(to); SC=nSC; R=18*nSC; kick(); } }
   requestAnimationFrame(f);
 }
 /* the wish star with a face that twirls, winks and hops into the jar */
@@ -12208,7 +12224,7 @@ function overlay(l,mode){
 var built=false, builtSig="";
 function sig(){ return (EN()?"e":"f")+"#"+W().map(function(w){ return w.id+(w.g?"g":"a")+w.k; }).join("|"); }
 function build(){
-  defs(); var r=$("wlRoot"); var L0=Math.max(lv(),need(nAct())); if(L0!==lv()){ S().settings.wjLevel=L0; scheduleSave(); } EX=L0*STEP; FL=300+EX;
+  defs(); var r=$("wlRoot"); var L0=Math.max(lv(),need(nAct())); if(L0!==lv()){ S().settings.wjLevel=L0; scheduleSave(); } EX=Math.min(L0,GM)*STEP; FL=300+EX; setSk();
   r.innerHTML='<div class="wl-h" id="wlHead"></div>'+jarHTML()+'<div class="wj-bub" id="wjBub" hidden></div>'+
   '<div class="jr-card"><textarea class="jr-search wl-in" id="wlIn" maxlength="1000" placeholder="'+T("آرزوت رو بنویس...","Write your wish...")+'"></textarea><div class="jr-meta"><span id="wlInC"></span></div><button type="button" class="hb-save" id="wlAdd">'+T("بنداز توی شیشه ✨","Drop it in the jar ✨")+'</button></div>'+
   '<div id="wlRows"></div>'+
