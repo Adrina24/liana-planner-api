@@ -1,0 +1,10 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>بررسی فایل‌های آب‌وهوا</title>
+<style>body{margin:0;font-family:Vazirmatn,"Noto Sans Arabic",Tahoma,sans-serif;background:#17212A;color:#fff;padding:20px;line-height:2}h1{font-size:20px;margin:0 0 10px}.ok{color:#6ee7a8}.bad{color:#ff9b9b}code{display:block;background:#0e151b;border-radius:10px;padding:10px;direction:ltr;text-align:left;word-break:break-all;line-height:1.9;margin-top:8px}</style></head><body>
+<h1>بررسی فایل‌های پوشه‌ی weather</h1><div id="r">در حال بررسی…</div>
+<script>
+var names=[],i,p;for(i=0;i<62;i++){p=i<10?"0"+i:""+i;names.push("o"+p)}for(i=0;i<80;i++){p=i<10?"0"+i:""+i;names.push("b"+p)}
+var miss=[],done=0,fa=function(n){return String(n).replace(/\d/g,function(d){return"۰۱۲۳۴۵۶۷۸۹".charAt(d)})};
+names.forEach(function(n){var t=new Image();t.onload=t.onerror=function(){done++;if(!t.naturalWidth)miss.push(n);if(done===names.length)show()};t.src="weather/"+n+".webp?v="+Date.now()});
+function show(){var r=document.getElementById("r");miss.sort();if(!miss.length){r.innerHTML='<span class="ok">✔ همه‌ی '+fa(names.length)+' فایل سر جاشونن. عکس‌ها باید درست نمایش داده بشن.</span>';return}
+var o=miss.filter(function(x){return x[0]=="o"}).length,b=miss.length-o;r.innerHTML='<span class="bad">✘ '+fa(miss.length)+' فایل از '+fa(names.length)+' تا نیست</span> (لباس‌ها: '+fa(o)+'، پس‌زمینه‌ها: '+fa(b)+')<br>این‌ها رو آپلود کن:<code>'+miss.map(function(x){return"weather/"+x+".webp"}).join("<br>")+'</code>'}
+</script></body></html>
