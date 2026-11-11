@@ -4098,6 +4098,7 @@ function loadLocal(){
   return null;
 }
 function saveLocal(){
+  try{ lpScan(); }catch(e){}
   try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
 }
 function scheduleSave(){
@@ -4106,24 +4107,11 @@ function scheduleSave(){
   clearTimeout(remoteSaveTimer);
   remoteSaveTimer=setTimeout(saveRemote,700);
 }
-/* Saves right away instead of waiting for the debounce timers. Use this after
-   important, discrete actions (adding/editing/deleting a medication, etc.) so the
-   data reaches the server before the phone locks or the tab is backgrounded —
-   on mobile, a pending setTimeout can get frozen before it ever fires, and the
-   next time the app opens, the server's (stale) copy would silently replace it. */
-function flushSave(){
-  clearTimeout(saveTimer);
-  clearTimeout(remoteSaveTimer);
-  saveLocal();
-  saveRemote();
-}
-document.addEventListener("visibilitychange",function(){
-  if(document.visibilityState==="hidden") flushSave();
-});
-window.addEventListener("pagehide",flushSave);
+
 
 function mergeState(loaded){
   if(!loaded || typeof loaded!=="object") return;
+  if(loaded._m && typeof loaded._m==="object" && !Array.isArray(loaded._m)) state._m=loaded._m;
   if(loaded.settings) state.settings=Object.assign(state.settings, loaded.settings);
   if(loaded.profile) state.profile=Object.assign(state.profile, loaded.profile);
   if(loaded.habitCfg) state.habitCfg=Object.assign(defaultHabitCfg(), loaded.habitCfg);
@@ -4151,7 +4139,7 @@ function getEmail(){ return localStorage.getItem(EMAIL_KEY); }
 var sessionExpiredShown=false;
 // the server no longer accepts this login (for example after the secret key was changed):
 // show the login screen instead of silently working without saving to the server.
-// Data on this phone is kept, and the next login pushes it to the server before reading anything back.
+// Data on this phone is kept, and the next login merges it with what the server holds (newest change wins).
 var syncPaused=false;
 function sessionExpired(){
   if(sessionExpiredShown || syncPaused || !getToken()) return;
@@ -4195,20 +4183,6 @@ function apiCall(path, method, body, useAuth){
   });
 }
 
-var remoteSaveRetryTimer=null;
-function saveRemote(){
-  if(!getToken() || offlineOnly) return;
-  clearTimeout(remoteSaveRetryTimer);
-  apiCall("/api/data","PUT",state,true).catch(function(){
-    // network hiccup or the request got interrupted (phone locked, tab backgrounded, etc.) —
-    // try once more shortly after, instead of silently giving up and risking the next
-    // login overwriting this device's newer data with the server's stale copy.
-    remoteSaveRetryTimer=setTimeout(function(){
-      if(!getToken() || offlineOnly) return;
-      apiCall("/api/data","PUT",state,true).catch(function(){});
-    },4000);
-  });
-}
 
 function withTimeout(promise,ms){
   return new Promise(function(resolve,reject){
@@ -4216,16 +4190,225 @@ function withTimeout(promise,ms){
     promise.then(function(v){ clearTimeout(t); resolve(v); }, function(e){ clearTimeout(t); reject(e); });
   });
 }
+
+/* ================= Smart sync =================
+   Every piece of data (one day, a week's measurements, one setting, one chat ...) remembers when it last changed (state._m).
+   A device first PULLS what the server holds, keeps the newest version of every piece, and only then pushes.
+   Nothing is ever replaced wholesale, so the website, the phone and any other device can no longer wipe each other's data.
+   Data that belongs to another account is never mixed in (see lpOwnerCheck). */
+var LP_OWNER_KEY="fa-planner-owner";
+var lpSigs=null, lpDef=null, lpPulled=false, lastPullAt=0, lpBusy=null, lpAgain=false, lpRfTries=0;
+
+function lpHash(s){ var h=5381, i=s.length; while(i){ h=(h*33)^s.charCodeAt(--i); } return s.length+":"+(h>>>0).toString(36); }
+function lpLen(s){ return parseInt(s,10)||0; }
+
+/* the state as a flat map: path -> value. Paths are the smallest pieces that are merged independently. */
+function lpFlat(st){
+  var o={}, k, wk, w, f, i, v;
+  for(k in st){
+    if(!Object.prototype.hasOwnProperty.call(st,k) || k==="_m" || k==="activeChatId") continue;
+    v=st[k];
+    if(k==="weeks" && v && typeof v==="object" && !Array.isArray(v)){
+      for(wk in v){
+        w=v[wk];
+        if(!w || typeof w!=="object" || Array.isArray(w)){ o["weeks|"+wk]=w; continue; }
+        for(f in w){
+          if(f==="days" && Array.isArray(w.days)){ for(i=0;i<w.days.length;i++) o["weeks|"+wk+"|days|"+i]=w.days[i]; }
+          else o["weeks|"+wk+"|"+f]=w[f];
+        }
+      }
+    }else if((k==="settings"||k==="chats"||k==="home") && v && typeof v==="object" && !Array.isArray(v)){
+      for(f in v) o[k+"|"+f]=v[f];
+    }else o[k]=v;
+  }
+  return o;
+}
+/* what "nothing entered here yet" looks like, per path */
+function lpDefSig(p){
+  if(!lpDef){
+    lpDef={}; var f=lpFlat(defaultState()), q;
+    for(q in f) lpDef[q]=JSON.stringify(f[q]);
+    lpDef.__day=JSON.stringify(emptyDay());
+    lpDef.__meas=JSON.stringify(emptyWeek().measurements);
+  }
+  if(p.indexOf("weeks|")===0){ var a=p.split("|"); if(a[2]==="days") return lpDef.__day; if(a[2]==="measurements") return lpDef.__meas; return undefined; }
+  return lpDef[p];
+}
+/* signature of a value: "~" means absent / still the empty default (so an untouched page never counts as data) */
+function lpN(p,v){
+  if(v===undefined) return "~";
+  var s=JSON.stringify(v), d=lpDefSig(p);
+  if(d!==undefined && s===d) return "~";
+  return lpHash(s);
+}
+function lpAssign(t,s){
+  if(Array.isArray(t)){ t.length=0; for(var i=0;i<s.length;i++) t.push(s[i]); }
+  else{ Object.keys(t).forEach(function(k){ delete t[k]; }); Object.keys(s).forEach(function(k){ t[k]=s[k]; }); }
+}
+/* writes in place when it can, so other code that still holds the old object keeps working */
+function lpSet(box,key,val){
+  if(val===undefined){ delete box[key]; return; }
+  var cur=box[key];
+  if(cur && val && typeof cur==="object" && typeof val==="object" && Array.isArray(cur)===Array.isArray(val)) lpAssign(cur,val);
+  else box[key]=val;
+}
+function lpPut(st,p,val){
+  var a=p.split("|"), t=a[0], w;
+  if(a.length===1){ lpSet(st,t,val); return; }
+  if(t==="weeks"){
+    if(!st.weeks || typeof st.weeks!=="object") st.weeks={};
+    if(a.length===2){ lpSet(st.weeks,a[1],val); return; }
+    w=st.weeks[a[1]];
+    if(!w || typeof w!=="object" || Array.isArray(w)){ if(val===undefined) return; w=st.weeks[a[1]]=emptyWeek(); }
+    if(a[2]==="days"){ if(!Array.isArray(w.days)) w.days=[]; if(val===undefined) val=emptyDay(); lpSet(w.days,+a[3],val); return; }
+    lpSet(w,a[2],val); return;
+  }
+  if(!st[t] || typeof st[t]!=="object" || Array.isArray(st[t])){ if(val===undefined) return; st[t]={}; }
+  lpSet(st[t],a[1],val);
+}
+function lpBaseline(){ lpSigs={}; var f=lpFlat(state), p; for(p in f) lpSigs[p]=lpN(p,f[p]); }
+/* called on every local save: pieces that changed since the last look get "changed just now" */
+function lpScan(){
+  if(!lpSigs) return;
+  var m=state._m; if(!m || typeof m!=="object" || Array.isArray(m)) m=state._m={};
+  var f=lpFlat(state), now=Date.now(), p, s;
+  for(p in f){ s=lpN(p,f[p]); if(lpSigs[p]===undefined ? s!=="~" : lpSigs[p]!==s) m[p]=now; lpSigs[p]=s; }
+  for(p in lpSigs){ if(!(p in f)){ if(lpSigs[p]!=="~") m[p]=now; delete lpSigs[p]; } }   /* deleted pieces are remembered too */
+  for(p in m){ if(!(p in f) && now-m[p]>5184e6) delete m[p]; }                           /* forget deletions older than 60 days */
+}
+/* true when nothing real has been entered on this device yet (only look/feel settings) */
+function lpPristine(){ var f=lpFlat(state), p; for(p in f){ if(p.indexOf("settings|")===0) continue; if(lpN(p,f[p])!=="~") return false; } return true; }
+
+/* data kept on this device belongs to ONE account; another account never gets to see it or receive it */
+function lpOwnerCheck(){
+  var em=String(getEmail()||"").toLowerCase(), ow=null, wiped=false;
+  if(!em) return false;
+  try{ ow=localStorage.getItem(LP_OWNER_KEY); }catch(e){}
+  if(ow && ow!==em){
+    wiped=true;
+    try{ localStorage.removeItem(LS_KEY); }catch(e){}
+    Object.keys(state).forEach(function(k){ delete state[k]; });
+    Object.assign(state,defaultState());
+    lpSigs=null; lpPulled=false;
+  }
+  try{ localStorage.setItem(LP_OWNER_KEY,em); }catch(e){}
+  return wiped;
+}
+
+/* merges the server copy into this device, newest change wins for every single piece.
+   returns {changed: something on this device was updated from the server, push: this device holds newer pieces the server lacks} */
+function lpMergeRemote(rem){
+  lpScan();
+  var lm=state._m; if(!lm || typeof lm!=="object" || Array.isArray(lm)) lm=state._m={};
+  var rm=(rem._m && typeof rem._m==="object" && !Array.isArray(rem._m)) ? rem._m : {};
+  var lf=lpFlat(state), rf=lpFlat(rem), all={}, p, changed=false, push=false;
+  for(p in lf) all[p]=1; for(p in rf) all[p]=1; for(p in lm) all[p]=1; for(p in rm) all[p]=1;
+  for(p in all){
+    var lv=lf[p], rv=rf[p], ls=lpN(p,lv), rs=lpN(p,rv), lt=lm[p]||0, rt=rm[p]||0, useRem;
+    if(ls===rs){ if(rt>lt) lm[p]=rt; continue; }
+    if(rt>lt) useRem=true;
+    else if(lt>rt) useRem=false;
+    else if(ls==="~") useRem=true;            /* same age, ours is empty -> theirs */
+    else if(rs==="~") useRem=false;           /* same age, theirs is empty -> ours */
+    else useRem=lpLen(rs)>=lpLen(ls);         /* same age, both filled (old data without times): keep the one with more in it */
+    if(useRem){ lpPut(state,p,rv===undefined?undefined:JSON.parse(JSON.stringify(rv))); if(rt) lm[p]=rt; changed=true; }
+    else{ if(lt) lm[p]=lt; push=true; }
+  }
+  var wk, w, i;
+  for(wk in (state.weeks||{})){
+    w=state.weeks[wk]; if(!w || typeof w!=="object" || Array.isArray(w)) continue;
+    if(!Array.isArray(w.days)) w.days=[];
+    for(i=0;i<7;i++){ if(!w.days[i] || typeof w.days[i]!=="object") w.days[i]=emptyDay(); }
+    if(!w.measurements || typeof w.measurements!=="object") w.measurements=emptyWeek().measurements;
+  }
+  if(state.activeChatId && !(state.chats && state.chats[state.activeChatId])) state.activeChatId=null;
+  lpBaseline();
+  return {changed:changed, push:push};
+}
+
+/* after the server copy changed this device: redraw (but never while the person is typing) */
+function lpRefresh(){
+  var ae=document.activeElement;
+  if(ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName) && lpRfTries++<8){ setTimeout(lpRefresh,3000); return; }
+  lpRfTries=0;
+  try{ renderAll(); }catch(e){}
+  try{ document.dispatchEvent(new Event("lp-synced")); }catch(e){}
+}
+
 function loadRemote(){
   return withTimeout(apiCall("/api/data","GET",null,true),12000).then(function(r){
-    if(r.ok && r.data && r.data.data){
-      var rs=r.data.data.settings;
-      mergeState(r.data.data);
-      // data saved before the glass default existed → let the one-time switch run again
-      if(!rs || !rs.glassDefault) state.settings.glassDefault=false;
+    r.merge={changed:false, push:false};
+    if(r.ok){
+      var rd=r.data && r.data.data;
+      if(rd && typeof rd==="object") r.merge=lpMergeRemote(rd);
+      else r.merge={changed:false, push:!lpPristine()};     /* the server has nothing yet: upload ours, unless ours is empty too */
+      lpPulled=true; lastPullAt=Date.now();
     }
     return r;
   });
+}
+function lpPushNow(retry){
+  if(!getToken() || offlineOnly) return;
+  apiCall("/api/data","PUT",state,true).catch(function(){
+    if(!retry) return;
+    clearTimeout(remoteSaveRetryTimer);
+    remoteSaveRetryTimer=setTimeout(function(){
+      if(!getToken() || offlineOnly) return;
+      apiCall("/api/data","PUT",state,true).catch(function(){});
+    },4000);
+  });
+}
+var remoteSaveRetryTimer=null;
+/* pull -> merge -> push (only when this device has something the server lacks) */
+function lpSyncNow(retry){
+  if(!getToken() || offlineOnly || syncPaused) return Promise.resolve();
+  if(lpBusy) return lpBusy;
+  lpBusy=loadRemote().then(function(r){
+    var mg=r && r.merge;
+    if(mg && mg.changed) lpRefresh();
+    if(mg && mg.push) return apiCall("/api/data","PUT",state,true);
+  }).catch(function(){
+    if(retry){ clearTimeout(remoteSaveRetryTimer); remoteSaveRetryTimer=setTimeout(function(){ lpSyncNow(false); },5000); }
+  }).then(function(){
+    lpBusy=null;
+    if(lpAgain){ lpAgain=false; saveRemote(); }
+  });
+  return lpBusy;
+}
+function saveRemote(urgent){
+  if(!getToken() || offlineOnly) return;
+  clearTimeout(remoteSaveRetryTimer);
+  if(lpBusy){ lpAgain=true; return; }
+  /* already looked at the server a moment ago (or the page is being closed): push straight away; otherwise look first */
+  if(lpPulled && (urgent===true || Date.now()-lastPullAt<60000)){ lpPushNow(true); return; }
+  lpSyncNow(true);
+}
+function flushSave(urgent){
+  clearTimeout(saveTimer);
+  clearTimeout(remoteSaveTimer);
+  saveLocal();
+  saveRemote(urgent===true);
+}
+document.addEventListener("visibilitychange",function(){
+  if(document.visibilityState==="hidden") flushSave(true);
+  else if(document.visibilityState==="visible" && lpPulled && Date.now()-lastPullAt>20000) lpSyncNow(false);
+});
+window.addEventListener("pagehide",function(){ flushSave(true); });
+
+function afterLogin(){
+  lpOwnerCheck(); if(!lpSigs) lpBaseline();
+  /* look at what the server holds FIRST; this device's data is merged into it, never the other way round */
+  loadRemote().then(function(r){
+    finishBoot();
+    if(r && r.merge && r.merge.push) lpPushNow(true);
+  }, function(){
+    if(document.body.classList.contains("booting")) showBootError();
+    else { setAuthMsg("خطا در اتصال به سرور، دوباره امتحان کن","err"); showOfflineOption(); }
+  });
+}
+function syncInBackground(){
+  if(!getToken() || offlineOnly) return; refreshToken();
+  lpSyncNow(false);
 }
 
 function showAuthScreen(){
@@ -4365,21 +4548,6 @@ function finishBoot(){
   saveLocal();
   markReady();
 }
-function afterLogin(){
-  // push whatever's cached on this device first: if a previous remote save never
-  // finished (app closed/backgrounded right after an edit), pulling from the server
-  // now would otherwise silently overwrite those unsynced local changes with its
-  // older copy. This makes sure the device's newest data is on the server before
-  // the GET below reads it back.
-  var localHasData = !!loadLocal();
-  var prePush = (getToken() && localHasData) ? apiCall("/api/data","PUT",state,true).catch(function(){}) : Promise.resolve();
-  prePush.then(function(){
-    loadRemote().then(finishBoot, function(){
-      if(document.body.classList.contains("booting")) showBootError();
-      else { setAuthMsg("خطا در اتصال به سرور، دوباره امتحان کن","err"); showOfflineOption(); }
-    });
-  });
-}
 document.getElementById("bsRetry").addEventListener("click",function(){ resetBootUI(); afterLogin(); });
 document.getElementById("bsOffline").addEventListener("click",continueOffline);
 
@@ -4397,14 +4565,12 @@ function refreshToken(){
     }).catch(function(){});
   }catch(e){}
 }
-function syncInBackground(){
-  if(bgSyncing || !getToken() || offlineOnly) return; refreshToken(); bgSyncing=true;
-  withTimeout(apiCall("/api/data","PUT",state,true),15000).catch(function(){}).then(function(){ bgSyncing=false; });
-}
 window.addEventListener("online",syncInBackground);
 function initPersistence(){
-  var local=loadLocal();
+  var wiped=getToken()?lpOwnerCheck():false;   // saved data of another account is never reused
+  var local=wiped?null:loadLocal();
   if(local) mergeState(local);
+  lpBaseline();
   applyTheme();                       // saved colours right from the very first paint (splash included)
   if(getToken()){
     document.getElementById("accountEmailLabel").textContent=getEmail()||"";
@@ -6586,7 +6752,9 @@ function handleBackupFile(file){
   reader.readAsText(file);
 }
 function replaceStateWith(data){
+  var keepM=state._m;
   state=defaultState(); mergeState(data);
+  state._m=keepM||{};
   state.settings.glassDefault=true;
   saveLocal(); scheduleSave();
   renderAll(); renderSettingsSheet();
