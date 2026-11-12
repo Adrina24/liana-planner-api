@@ -60,6 +60,7 @@
 <script id="lpWxDict2">Object.assign(window.__LP_EN.d,{"مه": "Fog", "نم‌نم باران": "Drizzle", "باران شدید": "Heavy rain", "باران یخ‌زده": "Freezing rain", "کولاک": "Blizzard", "تگرگ": "Hail", "باد شدید": "Strong wind", "یه چتر کوچیک بردار": "Take a small umbrella", "هوا مه‌آلوده، اگه بیرون می‌ری احتیاط کن": "It's foggy, be careful if you go out", "بارون شدیده، بهتره بیرون نری": "The rain is heavy, better not go out", "زمین یخ زده، با احتیاط راه برو": "The ground is icy, walk carefully", "تگرگ میاد، از بیرون دوری کن": "Hail is coming, stay away from outside", "کولاکه، مگه ضروری باشه بیرون نرو": "It's a blizzard, don't go out unless you must", "باد شدیده، مراقب باش": "The wind is strong, be careful"});</script>
 <script id="lpWxDict3">Object.assign(window.__LP_EN.d,{"در حال دریافت آب‌وهوا": "Getting the weather", "جستجو": "Search", "فشار": "Pressure", "شاخص کیفیت هوا": "Air quality index", "متوسط": "Moderate", "زیاد": "High", "خیلی زیاد": "Very high", "شدید": "Extreme", "هوای پاک": "Clean air", "قابل قبول": "Acceptable", "ناسالم برای گروه‌های حساس": "Unhealthy for sensitive groups", "ناسالم": "Unhealthy", "خیلی ناسالم": "Very unhealthy", "خطرناک": "Hazardous"});</script>
 <script id="lpWnDict">Object.assign(window.__LP_EN.d,{"اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره": "Your account data now syncs properly between your phone and the website, and nothing gets lost", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت": "The opening screen has a nicer font and background", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد": "Ways to reach us (Telegram channel and email) were added to Settings", "بخش آب‌وهوا برداشته شد": "The weather section was removed"});</script>
+<script id="lpWxDict">Object.assign(window.__LP_EN.d,{"بخش آب‌وهوا برگشت، این بار شیشه‌ای و سبک، با دمای الان و ساعت‌به‌ساعت و پیش‌بینی چند روز بعد": "Weather is back, now light and glassy, with the current temperature, an hourly view and a forecast for the next days", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه، روی عکس‌های پس‌زمینه‌ی قشنگ": "Liana shows up in an outfit that fits the temperature and the weather, on beautiful photo backgrounds", "کارت آب‌وهوا هر چند ثانیه از بالا به پایین جای کارت صبح بخیر می‌آد": "The weather card slides in over the good morning card every few seconds", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن": "Pick your city from the list or search for it"});</script>
 <script id="lpWxDict4">Object.assign(window.__LP_EN.d,{"اپ بروز شد": "App updated", "این‌ها تازه اضافه یا بهتر شدن": "Here is what's new", "عالیه، بریم": "Great, let's go", "آب‌وهوای کامل با دمای لحظه‌ای، ساعت‌به‌ساعت، ۷ روز آینده و کیفیت هوا؛ با پس‌زمینه‌ی طبیعی و لیانا با لباس مناسب هوا و دما": "Full weather with current temperature, hourly and 7-day forecast and air quality; natural backgrounds and Liana in an outfit that suits the weather and temperature", "جستجوی آب‌وهوای همه‌ی شهرها و روستاها": "Weather search for any city or village", "اسم پریود ترکر به پریود یار تغییر کرد": "The Period tracker was renamed to Period Buddy", "اپ سریع‌تر بالا میاد": "The app opens faster", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد": "English translation of the new sections is complete"});</script>
 <script id="lp-i18n">
 /* Liana Planner — English mode.
@@ -2463,7 +2464,7 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
 
 <div class="wrap">
 <div class="view" data-view="home">
-<div class="greeting-card" id="greetingCard"></div>
+<div class="gw-wrap" id="gwWrap"><div class="greeting-card" id="greetingCard"></div><div class="wx-bar gw-above" id="wxCard" role="button" tabindex="0" aria-hidden="true" data-notr></div></div>
 <div class="car" id="car">
   <button type="button" class="car-card cp" data-cid="halloween" data-act="halloween" style="--fl:0.6"><img class="cp-img" src="halloween/card.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>هالووینت مبارک</b><span class="cp-sub">امشب لیانا جادوگر شده</span></span><span class="hw-cb" id="hwCardC"></span></button>
   <button type="button" class="car-card cp" data-cid="habits" data-go="habits" style="--fl:0.76"><img class="cp-img" src="cards/habits.webp" alt="" loading="lazy" decoding="async" draggable="false"><i class="cp-bl"></i><span class="cp-tx"><b>عادت‌های امروز</b><span class="cp-sub">یه نگاه بنداز، چندتاشون مونده؟</span></span></button>
@@ -2679,6 +2680,12 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
 <div class="rep-modal wt-modal hidden" id="wtModal" role="dialog" aria-modal="true">
   <div class="sheet-head"><h2><img class="st-icon" data-icon="measure" alt="">مسیر تغییرات بدن</h2><button id="wtClose" aria-label="بستن">✕</button></div>
   <div class="chart-card wt-card" id="wtCard"></div>
+</div>
+
+<div class="overlay hidden" id="wxOverlay"></div>
+<div class="sheet hidden" id="wxSheet">
+  <div class="sheet-head"><h2>🌤 آب‌وهوا</h2><button id="closeWx" type="button">✕</button></div>
+  <div id="wxBody" data-notr></div>
 </div>
 
 <div class="overlay hidden" id="calOverlay"></div>
@@ -12584,11 +12591,440 @@ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded"
 #lpWn ul{margin:8px 0 0;padding:0;list-style:none}#lpWn li{display:flex;gap:10px;line-height:1.85;font-size:14.5px;margin-top:6px}#lpWn li:before{content:"✦";color:var(--accent-dk,#7a5cf0);flex:none}
 #lpWn button{margin-top:18px;width:100%;padding:12px;border-radius:16px;border:0;font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent-dk,#8a6cf7),var(--accent,#6a4ce0))}
 </style>
+<style id="lpWxCss">
+/* ---------- weather: Home card (switches with the greeting card, top to bottom) + glass weather page ---------- */
+.gw-wrap{display:grid; position:relative;}
+.gw-wrap>.greeting-card,.gw-wrap>.wx-bar{grid-area:1/1; min-width:0; transition:transform .75s cubic-bezier(.22,.9,.28,1), opacity .55s ease, visibility 0s linear 0s;}
+.gw-wrap>.gw-above,.gw-wrap>.gw-below{opacity:0; visibility:hidden; pointer-events:none; transition-delay:0s,0s,.75s;}
+.gw-wrap>.gw-above{transform:translateY(-55%) scale(.97);}
+.gw-wrap>.gw-below{transform:translateY(55%) scale(.97);}
+.gw-wrap>.gw-nt{transition:none !important;}
+.gw-wrap.gw-tall>#greetingCard{align-self:stretch;}
+#wxCard{cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none;}
+.wx-i{display:block; filter:drop-shadow(0 2px 3px rgba(40,60,100,.22));}
+
+#wxBody{display:flex; flex-direction:column; gap:8px; padding-bottom:4px;}
+.wx-hero{position:relative; height:224px; border-radius:20px; overflow:hidden; color:#fff; isolation:isolate;
+  background:var(--wxg,linear-gradient(160deg,#8fb9ee,#dfeaf7)) center/cover no-repeat;
+  box-shadow:0 10px 26px rgba(20,30,70,.2), inset 0 1px 0 rgba(255,255,255,.5);}
+.wx-hero::before{content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(to top,rgba(8,14,36,.58),rgba(8,14,36,.06) 55%,rgba(8,14,36,.2));}
+.wx-night .wx-hero::after,.wx-bar.wx-night::after{content:""; position:absolute; inset:0; z-index:0; background:rgba(14,18,56,.34); pointer-events:none;}
+.wx-top{position:absolute; top:10px; inset-inline:10px; z-index:3; display:flex; justify-content:space-between; align-items:center; gap:8px;}
+.wx-pill{display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:999px; font:inherit; font-size:13px; font-weight:800; color:#fff; cursor:pointer;
+  border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.22); text-shadow:0 1px 2px rgba(0,0,0,.28);
+  backdrop-filter:blur(12px) saturate(160%); -webkit-backdrop-filter:blur(12px) saturate(160%); -webkit-tap-highlight-color:transparent;}
+.wx-pill svg{width:14px; height:14px; flex:none;}
+.wx-pill:active{transform:scale(.95);}
+.wx-rf{width:34px; height:34px; padding:0; justify-content:center;}
+.wx-rf svg{width:16px; height:16px;}
+.wx-rf.spin svg{animation:wxSpin 1s linear infinite;}
+@keyframes wxSpin{to{transform:rotate(360deg);}}
+.wx-lia{position:absolute; bottom:0; inset-inline-end:6px; height:90%; z-index:2; display:flex; align-items:flex-end; pointer-events:none; filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));}
+.wx-lia img{height:100%; width:auto; max-width:200px; object-fit:contain; object-position:bottom; display:block;}
+.wx-main{position:absolute; inset-inline-start:14px; bottom:14px; max-width:56%; z-index:3;}
+.wx-big{font-size:46px; line-height:1; font-weight:800; letter-spacing:-1px; text-shadow:0 2px 12px rgba(0,0,0,.4);}
+.wx-cd{display:flex; align-items:center; gap:6px; font-size:15px; font-weight:800; margin-top:6px; text-shadow:0 1px 6px rgba(0,0,0,.45);}
+.wx-cd .wx-i{width:24px; height:24px; flex:none; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));}
+.wx-tip{font-size:12px; font-weight:600; opacity:.96; margin-top:4px; line-height:1.55; text-shadow:0 1px 6px rgba(0,0,0,.5);}
+
+/* Home bar: photo + half Liana + temperature (switches with the greeting card) */
+.wx-bar{position:relative; display:block; height:92px; margin-top:8px; border-radius:var(--radius,20px); overflow:hidden; color:#fff; isolation:isolate; padding:0;
+  background:var(--wxg,linear-gradient(160deg,#8fb9ee,#dfeaf7)) center/cover no-repeat;
+  border:1.5px solid rgba(255,255,255,.55); box-shadow:0 8px 28px rgba(31,38,135,.22), inset 0 1px 0 rgba(255,255,255,.55);}
+.wx-bar::before{content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(to left,rgba(8,14,36,.62),rgba(8,14,36,.1) 66%);}
+html[dir="ltr"] .wx-bar::before{background:linear-gradient(to right,rgba(8,14,36,.62),rgba(8,14,36,.1) 66%);}
+.wxb-lia{position:absolute; top:0; bottom:0; inset-inline-end:8px; z-index:2; display:flex; align-items:flex-start; overflow:hidden; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));}
+.wxb-lia img{width:auto; max-width:none; display:block; flex:none;}
+.wxb-txt{position:absolute; inset-inline-start:14px; top:0; bottom:0; z-index:3; display:flex; flex-direction:column; justify-content:center; max-width:68%;}
+.wxb-row{display:flex; align-items:center; gap:8px;}
+.wxb-t{font-size:30px; line-height:1; font-weight:800; letter-spacing:-.5px; text-shadow:0 2px 10px rgba(0,0,0,.4);}
+.wxb-row .wx-i{width:30px; height:30px; flex:none; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));}
+.wxb-cd{font-size:13.5px; font-weight:800; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:0 1px 6px rgba(0,0,0,.5);}
+.wxb-sub{font-size:11px; font-weight:600; margin-top:2px; opacity:.95; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:0 1px 6px rgba(0,0,0,.5);}
+.wx-k-clear{--wxg:linear-gradient(160deg,#6fb7ff,#bfe3ff 55%,#ffe3a3);}
+.wx-k-partly{--wxg:linear-gradient(160deg,#7fb0ea,#dbe8f6 70%,#fff0c8);}
+.wx-k-cloudy{--wxg:linear-gradient(160deg,#8d9db6,#cfd8e6);}
+.wx-k-fog{--wxg:linear-gradient(160deg,#aeb8c6,#e4e8ee);}
+.wx-k-rain{--wxg:linear-gradient(160deg,#587aa6,#9db4d0);}
+.wx-k-storm{--wxg:linear-gradient(160deg,#394463,#7c86a6);}
+.wx-k-snow{--wxg:linear-gradient(160deg,#a9c7ea,#f1f6fd);}
+.wx-night{--wxg:linear-gradient(160deg,#18204f,#3d4291);}
+
+.wx-tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+.wx-t,.wx-h,.wx-dl{background:color-mix(in srgb,var(--accent) 9%,transparent); border:1px solid color-mix(in srgb,var(--accent) 18%,transparent);}
+.wx-t{padding:6px 2px; border-radius:14px; text-align:center;}
+.wx-t b{display:block; font-size:15px; color:var(--text); font-weight:800;}
+.wx-t span{display:block; font-size:10.5px; color:var(--text-soft); font-weight:700; margin-top:2px;}
+.wx-hrs{display:flex; gap:6px; overflow-x:auto; padding:1px 0 3px; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+.wx-hrs::-webkit-scrollbar{display:none;}
+.wx-h{flex:0 0 52px; text-align:center; padding:6px 0 5px; border-radius:14px;}
+.wx-h small{display:block; font-size:10.5px; color:var(--text-soft); font-weight:700;}
+.wx-h .wx-i{width:24px; height:24px; margin:3px auto;}
+.wx-h b{display:block; font-size:13.5px; color:var(--text); font-weight:800;}
+.wx-h.now{background:color-mix(in srgb,var(--accent) 22%,transparent); border-color:color-mix(in srgb,var(--accent) 38%,transparent);}
+.wx-dl{border-radius:16px; padding:4px 10px;}
+.wx-d{display:grid; grid-template-columns:64px 26px 1fr; align-items:center; gap:10px; padding:3px 0; font-size:13px; font-weight:700; color:var(--text);}
+.wx-d+.wx-d{border-top:1px solid color-mix(in srgb,var(--text) 8%,transparent);}
+.wx-d .wx-i{width:24px; height:24px;}
+.wx-d em{display:block; font-style:normal; font-size:10px; color:var(--text-soft); font-weight:700; line-height:1.2;}
+.wx-rg{display:flex; align-items:center; gap:8px;}
+.wx-rg>span{flex:0 0 30px; text-align:center; font-size:12.5px;}
+.wx-rg>span:last-child{color:var(--accent-text,var(--accent-dk)); font-weight:800;}
+.wx-rbar{flex:1; height:6px; border-radius:6px; background:color-mix(in srgb,var(--text) 10%,transparent); position:relative; overflow:hidden;}
+.wx-rbar i{position:absolute; top:0; bottom:0; border-radius:6px; background:linear-gradient(90deg,#5aa9ff,#ffb454);}
+.wx-ft{display:flex; justify-content:space-between; gap:8px; font-size:11px; color:var(--text-soft); font-weight:600; padding:0 2px;}
+.wx-ft a{color:inherit; text-decoration:underline;}
+.wx-msg{text-align:center; color:var(--text-soft); font-size:13px; font-weight:700; line-height:1.9; padding:18px 6px;}
+.wx-sk{height:224px; border-radius:20px; background:linear-gradient(110deg,color-mix(in srgb,var(--accent) 10%,transparent) 30%,color-mix(in srgb,var(--accent) 22%,transparent) 50%,color-mix(in srgb,var(--accent) 10%,transparent) 70%) 0 0/220% 100%; animation:wxSk 1.3s linear infinite;}
+@keyframes wxSk{to{background-position:-220% 0;}}
+.wx-btn{display:block; width:100%; padding:11px; border-radius:14px; font:inherit; font-size:13px; font-weight:800; cursor:pointer; color:var(--accent-text,var(--accent-dk)); background:color-mix(in srgb,var(--accent) 14%,transparent); border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);}
+.wx-btn:active{transform:scale(.98);}
+.wx-q{width:100%; box-sizing:border-box; padding:11px 14px; border-radius:14px; font:inherit; font-size:14px; color:var(--text); background:color-mix(in srgb,var(--accent) 7%,transparent); border:1.5px solid var(--border); outline:none;}
+.wx-q:focus{border-color:var(--accent);}
+.wx-chips{display:flex; flex-wrap:wrap; gap:8px;}
+.wx-chip{padding:8px 14px; border-radius:999px; font:inherit; font-size:13px; font-weight:700; cursor:pointer; color:var(--text); background:color-mix(in srgb,var(--accent) 9%,transparent); border:1px solid color-mix(in srgb,var(--accent) 20%,transparent); -webkit-tap-highlight-color:transparent;}
+.wx-chip:active{transform:scale(.96);}
+.wx-row{display:flex; justify-content:space-between; align-items:center; gap:8px; width:100%; padding:11px 12px; border-radius:14px; font:inherit; font-size:14px; font-weight:700; color:var(--text); cursor:pointer; text-align:start; background:color-mix(in srgb,var(--accent) 7%,transparent); border:1px solid color-mix(in srgb,var(--accent) 14%,transparent);}
+.wx-row small{font-size:11px; color:var(--text-soft); font-weight:600;}
+.wx-list{display:flex; flex-direction:column; gap:6px;}
+.wx-lbl{font-size:12px; color:var(--text-soft); font-weight:800; padding:2px 2px 0;}
+.wx-sadl{display:block; width:88px; margin:4px auto 0;}
+</style>
+<script id="lpWxJs">
+(function(){
+"use strict";
+var LSC="lpWxCity", LSD="lpWxData", SHOW_G=7000, SHOW_W=5500, FRESH=10*60e3, MAXOLD=6*3600e3;
+function EN(){ return window.__lpLang==="en" || document.documentElement.lang==="en"; }
+function L(f,e){ return EN()?e:f; }
+function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function sv(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function esc(x){ return String(x==null?"":x).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function dg(x){ x=String(x); return EN()?x:x.replace(/\d/g,function(d){ return "۰۱۲۳۴۵۶۷۸۹".charAt(+d); }); }
+function N(x){ x=Math.round(Number(x)); if(!isFinite(x)) return "–"; return (x<0?"−":"")+dg(Math.abs(x)); }
+function T(x){ return '<bdi dir="ltr">'+N(x)+"°</bdi>"; }
+function load(k){ try{ var v=g(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+
+/* ---------- cities [fa, en, lat, lon] ---------- */
+var CITIES=[["تهران","Tehran",35.6892,51.389],["مشهد","Mashhad",36.2605,59.6168],["اصفهان","Isfahan",32.6546,51.668],["کرج","Karaj",35.84,50.9391],["شیراز","Shiraz",29.5918,52.5837],["تبریز","Tabriz",38.0962,46.2738],["قم","Qom",34.6399,50.8759],["اهواز","Ahvaz",31.3183,48.6706],["کرمانشاه","Kermanshah",34.3142,47.065],["ارومیه","Urmia",37.5527,45.076],["رشت","Rasht",37.2808,49.5832],["زاهدان","Zahedan",29.4963,60.8629],["کرمان","Kerman",30.2839,57.0834],["همدان","Hamedan",34.7989,48.515],["یزد","Yazd",31.8974,54.3569],["اردبیل","Ardabil",38.2498,48.2933],["بندرعباس","Bandar Abbas",27.1865,56.2808],["اراک","Arak",34.0917,49.6892],["ساری","Sari",36.5659,53.0586],["زنجان","Zanjan",36.6736,48.4787],["قزوین","Qazvin",36.2688,50.0041],["سنندج","Sanandaj",35.3219,46.9862],["گرگان","Gorgan",36.8427,54.4439],["خرم‌آباد","Khorramabad",33.4878,48.3558],["بوشهر","Bushehr",28.9234,50.8203],["بیرجند","Birjand",32.8649,59.2262],["ایلام","Ilam",33.6374,46.4227],["بجنورد","Bojnord",37.4747,57.329],["شهرکرد","Shahrekord",32.3256,50.8644],["یاسوج","Yasuj",30.6682,51.5879],["سمنان","Semnan",35.5769,53.392],["کیش","Kish",26.5579,53.98]];
+
+/* ---------- state ---------- */
+var city=load(LSC), W=load(LSD), view="main", loading=false, err=false, inflight=null, sheetOpen=false;
+function ckey(){ return city?(Number(city.la).toFixed(2)+","+Number(city.lo).toFixed(2)):""; }
+function cname(){ return city?(EN()?(city.e||city.n):city.n):""; }
+function data(){ return (city&&W&&W.k===ckey()&&W.d)?W.d:null; }
+function age(){ var d=data(); return d?Date.now()-d.t:Infinity; }
+
+/* ---------- conditions ---------- */
+function cond(code,day){
+  code=+code;
+  if(code===0) return {k:"clear",fa:day?"آفتابی":"صاف",en:day?"Sunny":"Clear"};
+  if(code===1) return {k:"clear",fa:"تقریباً صاف",en:"Mostly clear"};
+  if(code===2) return {k:"partly",fa:"کمی ابری",en:"Partly cloudy"};
+  if(code===3) return {k:"cloudy",fa:"ابری",en:"Overcast"};
+  if(code===45||code===48) return {k:"fog",fa:"مه‌آلود",en:"Foggy"};
+  if(code>=51&&code<=55) return {k:"rain",fa:"نم‌نم باران",en:"Drizzle"};
+  if(code===56||code===57) return {k:"rain",fa:"نم‌نم یخ‌زده",en:"Freezing drizzle"};
+  if(code===61) return {k:"rain",fa:"باران ملایم",en:"Light rain"};
+  if(code===63) return {k:"rain",fa:"باران",en:"Rain"};
+  if(code===65) return {k:"rain",fa:"باران شدید",en:"Heavy rain"};
+  if(code===66||code===67) return {k:"rain",fa:"باران یخ‌زده",en:"Freezing rain"};
+  if(code===71) return {k:"snow",fa:"برف ملایم",en:"Light snow"};
+  if(code===73) return {k:"snow",fa:"برف",en:"Snow"};
+  if(code===75) return {k:"snow",fa:"برف سنگین",en:"Heavy snow"};
+  if(code===77) return {k:"snow",fa:"دانه‌های برف",en:"Snow grains"};
+  if(code===80||code===81) return {k:"rain",fa:"رگبار",en:"Showers"};
+  if(code===82) return {k:"rain",fa:"رگبار شدید",en:"Heavy showers"};
+  if(code===85||code===86) return {k:"snow",fa:"بارش برف",en:"Snow showers"};
+  if(code===95) return {k:"storm",fa:"رعدوبرق",en:"Thunderstorm"};
+  if(code===96||code===99) return {k:"storm",fa:"رعدوبرق با تگرگ",en:"Thunderstorm with hail"};
+  return {k:"cloudy",fa:"—",en:"—"};
+}
+function ctext(c){ return EN()?c.en:c.fa; }
+function tip(c){
+  var k=cond(c.code,c.day).k, t=c.t;
+  if(k==="storm") return L("رعدوبرقه؛ تا می‌تونی بیرون نرو","Thunderstorm — better stay indoors");
+  if(k==="snow") return L("برفه؛ گرم بپوش و مراقب لیز بودن باش","Snowy — dress warm and watch for ice");
+  if(k==="rain") return L("چتر یادت نره ☂️","Don't forget an umbrella ☂️");
+  if(k==="fog") return L("هوا مه‌آلوده؛ موقع رانندگی احتیاط کن","Foggy — drive carefully");
+  if(t>=34) return L("خیلی گرمه؛ آب زیاد بخور","Very hot — drink plenty of water");
+  if(t<=3) return L("سرده؛ لباس گرم بپوش","Cold — dress warmly");
+  if(c.day&&k==="clear"&&t>=22) return L("آفتابیه؛ ضدآفتاب یادت نره","Sunny — don't forget sunscreen");
+  return c.day?L("هوا خوبه؛ یه کم بیرون برو 🌿","Nice out — take a little walk 🌿"):L("شب خوبی داشته باشی 🌙","Have a lovely night 🌙");
+}
+
+/* ---------- icons ---------- */
+function rays(cx,cy,r1,r2,w){ var o=""; for(var i=0;i<8;i++){ var a=i*Math.PI/4, c=Math.cos(a), s=Math.sin(a); o+='M'+(cx+r1*c).toFixed(1)+' '+(cy+r1*s).toFixed(1)+'L'+(cx+r2*c).toFixed(1)+' '+(cy+r2*s).toFixed(1); } return '<path d="'+o+'" stroke="#FFB547" stroke-width="'+w+'" stroke-linecap="round" fill="none"/>'; }
+function SUN(cx,cy,r,r1,r2){ return rays(cx,cy,r1,r2,3)+'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="url(#wxgSun)"/>'; }
+var MOON='<path d="M38 12a19 19 0 1 0 15 32A16 16 0 0 1 38 12z" fill="url(#wxgMoon)"/>';
+var CL='<path d="M19 47h27a11 11 0 0 0 1.6-21.9A15 15 0 0 0 19.2 29.6 9.2 9.2 0 0 0 19 47z" fill="url(#wxgCl)" stroke="rgba(110,135,175,.6)" stroke-width="1.4" stroke-linejoin="round"/>';
+var CLD='<path d="M19 47h27a11 11 0 0 0 1.6-21.9A15 15 0 0 0 19.2 29.6 9.2 9.2 0 0 0 19 47z" fill="url(#wxgClD)" stroke="rgba(70,85,115,.7)" stroke-width="1.4" stroke-linejoin="round"/>';
+function icon(k,day){
+  var x="";
+  if(k==="clear") x=day?SUN(32,32,12,18,25):MOON;
+  else if(k==="partly") x=(day?SUN(23,23,9,14,19):'<g transform="translate(-9 -9) scale(.68)">'+MOON+'</g>')+'<g transform="translate(11 11) scale(.8)">'+CL+'</g>';
+  else if(k==="cloudy") x='<g transform="translate(-7 -5) scale(.78)" opacity=".75">'+CL+'</g><g transform="translate(2 1)">'+CL+'</g>';
+  else if(k==="fog") x='<g transform="translate(5 -6) scale(.86)">'+CL+'</g><path d="M14 46h34M20 53h34M14 60h26" stroke="#9FB1CF" stroke-width="3.2" stroke-linecap="round" fill="none"/>';
+  else if(k==="rain") x='<g transform="translate(0 -9)">'+CL+'</g><path d="M24 44l-3.5 9M34 44l-3.5 9M44 44l-3.5 9M29 53l-3 8M39 53l-3 8" stroke="#4D9BFF" stroke-width="3.2" stroke-linecap="round" fill="none"/>';
+  else if(k==="storm") x='<g transform="translate(0 -9)">'+CLD+'</g><path d="M35 36l-9 14h7l-3 12 12-17h-7l4-9z" fill="url(#wxgBolt)" stroke="#E69500" stroke-width="1" stroke-linejoin="round"/>';
+  else if(k==="snow") x='<g transform="translate(0 -9)">'+CL+'</g><g fill="#fff" stroke="#9DB6D9" stroke-width="1.2"><circle cx="23" cy="48" r="2.6"/><circle cx="32" cy="53" r="2.6"/><circle cx="41" cy="48" r="2.6"/><circle cx="27" cy="59" r="2.6"/><circle cx="37" cy="59" r="2.6"/></g>';
+  return '<svg class="wx-i" viewBox="0 0 64 64" aria-hidden="true">'+x+'</svg>';
+}
+var PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+var CHEV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+var RF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>';
+function sprite(){
+  if($("wxSprite")) return;
+  var d=document.createElement("div"); d.id="wxSprite"; d.setAttribute("aria-hidden","true"); d.style.cssText="position:absolute;width:0;height:0;overflow:hidden";
+  d.innerHTML='<svg width="0" height="0"><defs>'+
+   '<linearGradient id="wxgSun" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE27A"/><stop offset="1" stop-color="#FF9F43"/></linearGradient>'+
+   '<linearGradient id="wxgMoon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF6D5"/><stop offset="1" stop-color="#F2CF72"/></linearGradient>'+
+   '<linearGradient id="wxgCl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CFDDF2"/></linearGradient>'+
+   '<linearGradient id="wxgClD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4EAF5"/><stop offset="1" stop-color="#8FA2C4"/></linearGradient>'+
+   '<linearGradient id="wxgBolt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF08A"/><stop offset="1" stop-color="#FFB300"/></linearGradient>'+
+   '</defs></svg>';
+  document.body.appendChild(d);
+}
+
+/* ---------- network ---------- */
+function jget(url,ms){
+  return new Promise(function(res,rej){
+    var done=false, c=("AbortController" in window)?new AbortController():null;
+    var t=setTimeout(function(){ if(done) return; done=true; try{ if(c) c.abort(); }catch(e){} rej(new Error("timeout")); },ms||10000);
+    fetch(url,c?{signal:c.signal}:undefined).then(function(r){ if(!r.ok) throw new Error("http "+r.status); return r.json(); })
+      .then(function(j){ if(done) return; done=true; clearTimeout(t); res(j); },function(e){ if(done) return; done=true; clearTimeout(t); rej(e); });
+  });
+}
+function parse(j){
+  var c=j&&j.current, h=j&&j.hourly, d=j&&j.daily;
+  if(!c||!h||!d||!h.time||!d.time||typeof c.temperature_2m!=="number") throw new Error("bad data");
+  var cur={t:c.temperature_2m, fl:c.apparent_temperature, rh:c.relative_humidity_2m, w:c.wind_speed_10m, code:c.weather_code, day:c.is_day?1:0};
+  var ct=String(c.time).slice(0,13), i0=0, i, k;
+  for(i=0;i<h.time.length;i++){ if(String(h.time[i]).slice(0,13)>=ct){ i0=i; break; } }
+  var hrs=[]; for(k=0;k<24&&i0+k<h.time.length;k++){ i=i0+k; hrs.push({h:String(h.time[i]).slice(11,16), t:h.temperature_2m[i], code:h.weather_code[i], day:h.is_day?h.is_day[i]:1, p:h.precipitation_probability?h.precipitation_probability[i]:0}); }
+  var days=[]; for(k=0;k<d.time.length&&k<5;k++){ days.push({d:d.time[k], code:d.weather_code[k], mx:d.temperature_2m_max[k], mn:d.temperature_2m_min[k], p:d.precipitation_probability_max?d.precipitation_probability_max[k]:0}); }
+  if(!hrs.length||!days.length) throw new Error("bad data");
+  return {t:Date.now(), cur:cur, hrs:hrs, days:days};
+}
+function refresh(){
+  if(!city) return Promise.resolve();
+  if(inflight) return inflight;
+  loading=true; err=false; if(sheetOpen) render(); if(!data()) renderCard();
+  var url="https://api.open-meteo.com/v1/forecast?latitude="+city.la+"&longitude="+city.lo+
+    "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m"+
+    "&hourly=temperature_2m,weather_code,precipitation_probability,is_day"+
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max"+
+    "&timezone=auto&forecast_days=6&wind_speed_unit=kmh";
+  var want=ckey();
+  inflight=jget(url,10000).then(function(j){ var d=parse(j); if(want===ckey()){ W={k:want,d:d}; sv(LSD,JSON.stringify(W)); err=false; } },function(){ err=true; })
+    .then(function(){ loading=false; inflight=null; renderCard(); if(sheetOpen) render(); rot(); });
+  return inflight;
+}
+
+/* ---------- looks: photo backgrounds (3 per weather) + Liana outfits by weather and temperature ---------- */
+var P_COLD=[7,8,9,10,50,51,53,54,55,56,57,58,59], P_COOL=[2,3,4,5,6,26,27,28,29,30,52,60],
+    P_MILD=[21,22,11,12,13,14,23,24,25,31,32,33,34,18,20], P_HOT=[15,16,17,19,35,40,41,42,43,36,37,38,39],
+    R_COOL=[47,48,49,61], R_WARM=[44,45,46];
+var pickMem={};
+function pickIn(tag,arr){ if(pickMem[tag]==null) pickMem[tag]=Math.floor(Math.random()*arr.length); return arr[pickMem[tag]%arr.length]; }
+function bgN(k){ if(pickMem["bg"+k]==null) pickMem["bg"+k]=Math.floor(Math.random()*3); return pickMem["bg"+k]+1; }
+function two(n){ return (n<10?"0":"")+n; }
+function look(c){
+  var cd=cond(c.code,c.day), k=cd.k, t=(typeof c.fl==="number"?c.fl:c.t), tag, pool;
+  if(k==="rain"||k==="storm"){ if(t<=16){ tag="rc"; pool=R_COOL; } else { tag="rw"; pool=R_WARM; } }
+  else if(k==="snow"||t<=8){ tag="cold"; pool=P_COLD; }
+  else if(t<=16){ tag="cool"; pool=P_COOL; }
+  else if(t<=24){ tag="mild"; pool=P_MILD; }
+  else { tag="hot"; pool=P_HOT; }
+  return {k:k, night:!c.day, n:bgN(k), lia:two(pickIn(tag,pool)), text:cd};
+}
+var BARPOS={"clear-1":36,"clear-2":45,"clear-3":41,"partly-1":36,"partly-2":45,"partly-3":50,"cloudy-1":50,"cloudy-2":50,"cloudy-3":41,"fog-1":59,"fog-2":59,"fog-3":64,"rain-1":50,"rain-2":50,"rain-3":50,"storm-1":45,"storm-2":55,"storm-3":36,"snow-1":55,"snow-2":50,"snow-3":50};
+var UMB={44:1,45:1,46:1,47:1,48:1,49:1,61:1};
+function halfFrac(id){ return UMB[+id]?0.64:0.5; }
+function bgUrl(k,n){ return "weather/bg/"+k+"-"+n+".webp"; }
+function liaUrl(id){ return "weather/lia/"+id+".webp"; }
+function pose(n){ try{ var p=window.lpBridge&&window.lpBridge.poses; return (p&&(p[n]||p.normal))||""; }catch(e){ return ""; } }
+window.__wxLiaErr=function(i){ i.onerror=null; var f=pose("wave"); if(f){ if(i.closest&&i.closest(".wxb-lia")) i.style.height="92px"; i.src=f; } else i.style.display="none"; };
+function setBg(el,url,pos){ var im=new Image(); im.onload=function(){ if(el&&el.isConnected!==false){ el.style.backgroundImage='url("'+url+'")'; if(pos!=null) el.style.backgroundPosition="center "+pos+"%"; el.classList.add("has-img"); } }; im.src=url; }
+
+/* ---------- Home card (greeting <-> weather) ---------- */
+function cardOk(){ return true; }
+function renderCard(){
+  var c=$("wxCard"); if(!c) return;
+  var D=data(), fresh=!!(D&&age()<MAXOLD), h, kcls="partly", night=false, bg=null, p, lastN=1;
+  if(fresh){
+    var lk=look(D.cur), cd=lk.text; kcls=lk.k; lastN=lk.n; night=lk.night; bg=bgUrl(lk.k,lk.n);
+    h='<div class="wxb-lia"><img alt="" style="height:'+Math.round(92/halfFrac(lk.lia))+'px" src="'+liaUrl(lk.lia)+'" onerror="window.__wxLiaErr(this)"></div>'+
+      '<div class="wxb-txt"><div class="wxb-row"><span class="wxb-t">'+T(D.cur.t)+'</span>'+icon(lk.k,D.cur.day)+'</div>'+
+      '<div class="wxb-cd">'+esc(ctext(cd))+' · '+esc(cname())+'</div>'+
+      '<div class="wxb-sub">'+L("احساس ","Feels ")+T(D.cur.fl)+' · '+L("رطوبت ","Humidity ")+pct(D.cur.rh)+' · '+N(D.cur.w)+L(" کم/س"," km/h")+'</div></div>';
+  } else {
+    var m1, m2;
+    if(!city){ m1=L("آب‌وهوای شهرت رو ببین","See your city's weather"); m2=L("برای انتخاب شهر لمس کن","Tap to pick your city"); kcls="partly"; }
+    else if(loading||inflight){ m1=L("در حال گرفتن آب‌وهوا…","Getting the weather…"); m2=cname(); kcls="cloudy"; }
+    else { m1=L("آب‌وهوا الان گرفته نشد","Weather isn't available right now"); m2=L("اینترنتت رو چک کن، لمس کن تا دوباره امتحان کنیم","Check your connection, tap to try again"); kcls="cloudy"; }
+    p=pose(city?"calm":"wave");
+    h=(p?'<div class="wxb-lia"><img alt="" style="height:92px" src="'+p+'"></div>':'')+
+      '<div class="wxb-txt"><div class="wxb-cd" style="font-size:15px;white-space:normal">'+esc(m1)+'</div><div class="wxb-sub" style="white-space:normal">'+esc(m2)+'</div></div>';
+  }
+  c.className=c.className.replace(/\bwx-k-\w+\b/g,"").replace(/\bwx-night\b/g,"").replace(/\bhas-img\b/g,"").replace(/\s+/g," ").trim();
+  c.classList.add("wx-k-"+kcls); if(night) c.classList.add("wx-night");
+  c.style.backgroundImage=""; c.style.backgroundPosition=""; c.innerHTML=h; if(bg) setBg(c,bg,BARPOS[kcls+"-"+lastN]);
+}
+var gC, wC, shown="g", tm=0, busy=false;
+function homeOn(){ var v=document.querySelector(".view.on"); return !v||v.getAttribute("data-view")==="home"; }
+function setState(el,st){ el.classList.remove("gw-above","gw-below"); if(st) el.classList.add("gw-"+st); el.setAttribute("aria-hidden",st?"true":"false"); }
+function flash(el,st){ el.classList.add("gw-nt"); setState(el,st); void el.offsetWidth; el.classList.remove("gw-nt"); }
+function swap(to){
+  if(busy||to===shown) return; busy=true;
+  var out=shown==="g"?gC:wC, inn=to==="g"?gC:wC;
+  setState(out,"below"); setState(inn,null); shown=to;
+  setTimeout(function(){ flash(out,"above"); busy=false; },800);
+}
+function reset(){ if(!gC||!wC) return; busy=false; shown="g"; flash(gC,null); flash(wC,"above"); }
+function rot(){
+  clearTimeout(tm);
+  if(!gC||!wC) return;
+  var ok=cardOk();
+  if(shown==="w" && (!ok||!homeOn()||document.hidden)){ reset(); }
+  if(!ok) return;
+  tm=setTimeout(function(){
+    if(document.hidden||!homeOn()||sheetOpen){ if(shown==="w") reset(); return rot(); }
+    swap(shown==="g"?"w":"g"); rot();
+  },shown==="g"?SHOW_G:SHOW_W);
+}
+
+/* ---------- sheet ---------- */
+function openWx(){
+  var o=$("wxOverlay"), sh=$("wxSheet"); if(!o||!sh) return;
+  sheetOpen=true; view=city?"main":"city"; o.classList.remove("hidden"); sh.classList.remove("hidden"); render();
+  if(city && age()>FRESH) refresh();
+}
+function closeWx(){
+  var o=$("wxOverlay"), sh=$("wxSheet"); sheetOpen=false;
+  if(o) o.classList.add("hidden"); if(sh) sh.classList.add("hidden"); rot();
+}
+var DAYS_FA=["یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"], DAYS_EN=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+function dayName(iso,i){ if(i===0) return L("امروز","Today"); var p=String(iso).split("-"); var w=new Date(+p[0],+p[1]-1,+p[2]).getDay(); return EN()?DAYS_EN[w]:DAYS_FA[w]; }
+function hm(x){ return dg(x); }
+function pct(x){ return dg(Math.round(x||0))+(EN()?"%":"٪"); }
+function renderMain(){
+  var D=data(), b=$("wxBody");
+  if(!D){
+    if(loading) { b.innerHTML='<div class="wx-sk"></div><div class="wx-msg">'+L("در حال گرفتن آب‌وهوا…","Getting the weather…")+'</div>'; return; }
+    b.innerHTML=(pose("sad")?'<img class="wx-sadl" alt="" src="'+pose("sad")+'">':'')+'<div class="wx-msg">'+L("آب‌وهوا الان گرفته نشد. اینترنتت رو چک کن و دوباره امتحان کن.","Couldn't get the weather. Check your connection and try again.")+'</div><button type="button" class="wx-btn" data-a="rf">'+L("تلاش دوباره","Try again")+'</button><button type="button" class="wx-btn" data-a="city">'+L("تغییر شهر","Change city")+'</button>';
+    return;
+  }
+  var c=D.cur, cd=cond(c.code,c.day), night=!c.day, h="";
+  var lk=look(c);
+  h+='<div class="wx-k-'+cd.k+(night?' wx-night':'')+'" style="display:flex;flex-direction:column;gap:8px">';
+  h+='<div class="wx-hero" id="wxHero" data-k="'+cd.k+'"><div class="wx-top"><button type="button" class="wx-pill" data-a="city">'+PIN+'<span>'+esc(cname())+'</span>'+CHEV+'</button>'+
+     '<button type="button" class="wx-pill wx-rf'+(loading?' spin':'')+'" data-a="rf" aria-label="'+L("بروزرسانی","Refresh")+'">'+RF+'</button></div>'+
+     '<div class="wx-lia"><img alt="" src="'+liaUrl(lk.lia)+'" onerror="window.__wxLiaErr(this)"></div>'+
+     '<div class="wx-main"><div class="wx-big">'+T(c.t)+'</div><div class="wx-cd">'+icon(cd.k,c.day)+'<span>'+esc(ctext(cd))+'</span></div><div class="wx-tip">'+esc(tip(c))+'</div></div></div>';
+  h+='<div class="wx-tiles">'+
+     '<div class="wx-t"><b>'+T(c.fl)+'</b><span>'+L("احساس واقعی","Feels like")+'</span></div>'+
+     '<div class="wx-t"><b>'+pct(c.rh)+'</b><span>'+L("رطوبت","Humidity")+'</span></div>'+
+     '<div class="wx-t"><b>'+N(c.w)+'</b><span>'+L("باد (کم/س)","Wind (km/h)")+'</span></div>'+
+     '<div class="wx-t"><b>'+pct(D.days[0].p)+'</b><span>'+L("احتمال بارش","Rain chance")+'</span></div></div>';
+  h+='<div class="wx-hrs">';
+  D.hrs.forEach(function(x,i){ var k=cond(x.code,x.day).k; h+='<div class="wx-h'+(i===0?' now':'')+'"><small>'+(i===0?L("اکنون","Now"):hm(x.h))+'</small>'+icon(k,x.day)+'<b>'+T(x.t)+'</b></div>'; });
+  h+='</div>';
+  var gmin=Infinity,gmax=-Infinity; D.days.forEach(function(d){ if(d.mn<gmin) gmin=d.mn; if(d.mx>gmax) gmax=d.mx; });
+  var rg=Math.max(1,gmax-gmin);
+  h+='<div class="wx-dl">';
+  D.days.forEach(function(d,i){
+    var k=cond(d.code,1).k, l=((d.mn-gmin)/rg*100).toFixed(1), w=Math.max(6,(d.mx-d.mn)/rg*100).toFixed(1);
+    h+='<div class="wx-d"><div>'+esc(dayName(d.d,i))+(d.p>=30?'<em>💧 '+pct(d.p)+'</em>':'')+'</div>'+icon(k,1)+
+       '<div class="wx-rg"><span>'+T(d.mn)+'</span><div class="wx-rbar"><i style="inset-inline-start:'+l+'%;width:'+w+'%"></i></div><span>'+T(d.mx)+'</span></div></div>';
+  });
+  h+='</div>';
+  var dt=new Date(D.t), hh=dg(("0"+dt.getHours()).slice(-2)+":"+("0"+dt.getMinutes()).slice(-2));
+  h+='<div class="wx-ft"><span>'+L("داده: ","")+'<a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather data by Open-Meteo.com</a></span><span>'+(err?L("اتصال برقرار نشد · ","Offline · "):"")+L("بروزرسانی ","Updated ")+hh+'</span></div>';
+  h+='</div>';
+  b.innerHTML=h;
+  setBg($("wxHero"),bgUrl(lk.k,lk.n));
+}
+var qT=0, qSeq=0;
+function renderCity(){
+  var b=$("wxBody");
+  var h='<input id="wxQ" class="wx-q" type="search" dir="auto" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+L("جستجوی شهر یا روستا…","Search a city or village…")+'">';
+  h+='<button type="button" class="wx-btn" data-a="me">📍 '+L("موقعیت من","My location")+'</button>';
+  h+='<div id="wxRes"></div>';
+  if(city) h+='<button type="button" class="wx-btn" data-a="back">'+L("برگشت","Back")+'</button>';
+  b.innerHTML=h;
+  listCities("");
+}
+function listCities(q){
+  var el=$("wxRes"); if(!el) return;
+  q=String(q||"").trim().toLowerCase();
+  var out=CITIES.map(function(c,i){ return {c:c,i:i}; }).filter(function(o){ return !q||o.c[0].indexOf(q)>-1||o.c[1].toLowerCase().indexOf(q)>-1; });
+  var h=(q?"":'<div class="wx-lbl">'+L("شهرهای پرطرفدار","Popular cities")+'</div>')+'<div class="wx-chips">';
+  out.forEach(function(o){ h+='<button type="button" class="wx-chip" data-a="pick" data-i="'+o.i+'">'+esc(EN()?o.c[1]:o.c[0])+'</button>'; });
+  h+='</div>';
+  if(q && !out.length) h='';
+  el.innerHTML=h+(q&&q.length>=2?'<div id="wxSr"></div>':"");
+  if(q&&q.length>=2){ clearTimeout(qT); var my=++qSeq; qT=setTimeout(function(){ search(q,my); },380); }
+}
+function search(q,my){
+  var el=$("wxSr"); if(!el) return;
+  el.innerHTML='<div class="wx-msg">'+L("در حال جستجو…","Searching…")+'</div>';
+  jget("https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(q)+"&count=8&format=json&language="+(EN()?"en":"fa"),9000).then(function(j){
+    if(my!==qSeq||!$("wxSr")) return;
+    var r=(j&&j.results)||[]; if(!r.length){ $("wxSr").innerHTML='<div class="wx-msg">'+L("چیزی پیدا نشد","Nothing found")+'</div>'; return; }
+    var h='<div class="wx-lbl">'+L("نتیجه‌ها","Results")+'</div><div class="wx-list">';
+    r.forEach(function(x,i){ h+='<button type="button" class="wx-row" data-a="res" data-j="'+i+'"><span>'+esc(x.name)+'</span><small>'+esc([x.admin1,x.country].filter(Boolean).join("، "))+'</small></button>'; });
+    $("wxSr").innerHTML=h+'</div>'; window.__wxRes=r;
+  },function(){ if(my===qSeq&&$("wxSr")) $("wxSr").innerHTML='<div class="wx-msg">'+L("اتصال برقرار نشد","Couldn't connect")+'</div>'; });
+}
+function choose(c){
+  city=c; sv(LSC,JSON.stringify(c)); view="main"; err=false; render(); renderCard(); refresh();
+}
+function render(){
+  if(!sheetOpen) return;
+  var t=document.querySelector("#wxSheet h2"); if(t) t.textContent=L("🌤 آب‌وهوا","🌤 Weather");
+  if(view==="city"||!city) renderCity(); else renderMain();
+}
+function onBody(ev){
+  var t=ev.target.closest?ev.target.closest("[data-a]"):null; if(!t) return;
+  var a=t.getAttribute("data-a");
+  if(a==="city"){ view="city"; render(); }
+  else if(a==="back"){ view="main"; render(); }
+  else if(a==="rf"){ refresh(); }
+  else if(a==="pick"){ var c=CITIES[+t.getAttribute("data-i")]; if(c) choose({n:c[0],e:c[1],la:c[2],lo:c[3]}); }
+  else if(a==="res"){ var r=(window.__wxRes||[])[+t.getAttribute("data-j")]; if(r) choose({n:r.name,e:r.name,la:r.latitude,lo:r.longitude}); }
+  else if(a==="me"){
+    if(!navigator.geolocation){ return; }
+    t.textContent=L("در حال پیدا کردن موقعیت…","Finding your location…");
+    navigator.geolocation.getCurrentPosition(function(p){ choose({n:"موقعیت من",e:"My location",la:+p.coords.latitude.toFixed(3),lo:+p.coords.longitude.toFixed(3)}); },
+      function(){ t.textContent="📍 "+L("اجازه‌ی موقعیت داده نشد؛ شهرت رو بنویس","Location not allowed — type your city"); },{timeout:9000,maximumAge:600000});
+  }
+}
+function init(){
+  gC=$("greetingCard"); wC=$("wxCard"); if(!gC||!wC) return;
+  var gw=$("gwWrap"); if(gw) gw.classList.add("gw-tall");
+  sprite(); renderCard();
+  wC.addEventListener("click",openWx);
+  wC.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openWx(); } });
+  $("wxOverlay").addEventListener("click",closeWx);
+  var cb=$("closeWx"); if(cb) cb.addEventListener("click",closeWx);
+  $("wxBody").addEventListener("click",onBody);
+  $("wxBody").addEventListener("input",function(e){ if(e.target&&e.target.id==="wxQ") listCities(e.target.value); });
+  (window.lpBackHooks=window.lpBackHooks||[]).push(function(o){ if(o.id!=="wxOverlay") return false; if(view==="city"&&city){ view="main"; render(); return true; } return false; });
+  document.addEventListener("visibilitychange",function(){ if(!document.hidden && city && age()>FRESH) refresh(); rot(); });
+  document.addEventListener("lp-lang",function(){ renderCard(); render(); });
+  window.lpWx={open:openWx,close:closeWx,refresh:refresh};
+  rot();
+  setTimeout(function(){ if(city && age()>FRESH) refresh(); },3000);
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
+})();
+</script>
 <script id="lpWnJs">
 (function(){
-var CUR="2026.11.11", KEY="lp_seen_ver";
+var CUR="2026.11.11.3", KEY="lp_seen_ver";
 /* every update adds a new entry at the TOP of this list: v = version (YYYY.MM.DD), i = what is new */
-var LOG=[{v:"2026.11.11",i:["اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد", "بخش آب‌وهوا برداشته شد"]},{v:"2026.11.08",i:["اسم پریود ترکر به پریود یار تغییر کرد", "اپ سریع‌تر بالا میاد", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد"]}];
+var LOG=[{v:"2026.11.11.3",i:["بخش آب‌وهوا برگشت، این بار شیشه‌ای و سبک، با دمای الان و ساعت‌به‌ساعت و پیش‌بینی چند روز بعد", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه، روی عکس‌های پس‌زمینه‌ی قشنگ", "کارت آب‌وهوا هر چند ثانیه از بالا به پایین جای کارت صبح بخیر می‌آد", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن"]},{v:"2026.11.11",i:["اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد", "بخش آب‌وهوا برداشته شد"]},{v:"2026.11.08",i:["اسم پریود ترکر به پریود یار تغییر کرد", "اپ سریع‌تر بالا میاد", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد"]}];
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 var seen=g(KEY); if(seen===CUR) return;
