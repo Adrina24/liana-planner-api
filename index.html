@@ -68,6 +68,7 @@
 <script id="lpWxDictA">Object.assign(window.__LP_EN.d,{"شیشه‌ی مود گرد شد": "The mood jar is round now", "به پریود یار بخش‌های تازه اضافه شد: تست‌ها، انرژی بدن، ورزش و حرکت، آب و نوشیدنی و مراقبت از خودم": "New sections in Period Yar: tests, body energy, exercise and movement, water and drinks, and self-care"});</script>
 <script id="lpWxDictB">Object.assign(window.__LP_EN.d,{"عکس‌ها و لباس‌های آب‌وهوا بعد از اولین دیدن روی گوشی ذخیره می‌شن تا بدون فیلترشکن هم بیان": "Weather pictures and outfits are saved on the phone after you see them once, so they also show without a VPN"});</script>
 <script id="lpWxDictC">Object.assign(window.__LP_EN.d,{"صدای شب صاف برداشته شد و صدای رعد توی هوای رعدوبرقی واضح‌تر شد": "The clear-night sound was removed and thunder is clearer in stormy weather"});</script>
+<script id="lpWxDictD">Object.assign(window.__LP_EN.d,{"آب‌وهوا حالا پیش‌بینی ۱۴ روز آینده رو ذخیره می‌کنه؛ بدون فیلترشکن هم عکس و بک‌گراند مناسب هر ساعت نشون داده می‌شه": "The weather now saves the forecast for the next 14 days; even without a VPN it shows the right photo and background for each hour"});</script>
 <script id="lpWxDict">Object.assign(window.__LP_EN.d,{"کارت آب‌وهوا و کارت صبح بخیر دوباره خودکار عوض می‌شن، و هر وقت خواستی با دست هم می‌تونی جابه‌جاشون کنی": "The weather card and the good morning card switch automatically again, and you can still swipe between them by hand", "دکمه‌ی آب‌وهوا کنار تقویم برگشت و دمای الان رو زیر آیکون نشون می‌ده": "The weather button is back next to the calendar and shows the current temperature under its icon", "صفحه‌ی آب‌وهوا تازه شد، با پس‌زمینه‌ی مات از عکس هوا و کارت‌های رطوبت، یو وی، باد، فشار، طلوع و غروب و کیفیت هوا": "The weather page got a fresh look, with a blurred photo background and cards for humidity, UV, wind, pressure, sunrise and sunset and air quality", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه": "Liana shows up in an outfit that fits the temperature and the weather", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن": "Pick your city from the list or search for it"});</script>
 <script id="lpWxDict4">Object.assign(window.__LP_EN.d,{"اپ بروز شد": "App updated", "این‌ها تازه اضافه یا بهتر شدن": "Here is what's new", "عالیه، بریم": "Great, let's go", "آب‌وهوای کامل با دمای لحظه‌ای، ساعت‌به‌ساعت، ۷ روز آینده و کیفیت هوا؛ با پس‌زمینه‌ی طبیعی و لیانا با لباس مناسب هوا و دما": "Full weather with current temperature, hourly and 7-day forecast and air quality; natural backgrounds and Liana in an outfit that suits the weather and temperature", "جستجوی آب‌وهوای همه‌ی شهرها و روستاها": "Weather search for any city or village", "اسم پریود ترکر به پریود یار تغییر کرد": "The Period tracker was renamed to Period Buddy", "اپ سریع‌تر بالا میاد": "The app opens faster", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد": "English translation of the new sections is complete"});</script>
 <script id="lp-i18n">
@@ -13231,7 +13232,20 @@ var CITIES=[["تهران","Tehran",35.6892,51.389],["مشهد","Mashhad",36.2605
 var city=load(LSC), W=load(LSD), view="main", loading=false, err=false, inflight=null, sheetOpen=false;
 function ckey(){ return city?(Number(city.la).toFixed(2)+","+Number(city.lo).toFixed(2)):""; }
 function cname(){ return city?(EN()?(city.e||city.n):city.n):""; }
-function data(){ return (city&&W&&W.k===ckey()&&W.d)?W.d:null; }
+function wxCityNow(d){ var x=new Date(Date.now()+(d.off||0)*1000), p=function(n){ return (n<10?"0":"")+n; }; return x.getUTCFullYear()+"-"+p(x.getUTCMonth()+1)+"-"+p(x.getUTCDate())+"T"+p(x.getUTCHours()); }
+function wxLive(d){
+  if(!d||!d.fc||!d.fcd||Date.now()-d.t<2400000) return d;
+  var f=d.fc, key=wxCityNow(d), i0=f.ts.indexOf(key); if(i0<0) return d;
+  function g(a,i){ return a&&typeof a[i]==="number"?a[i]:undefined; }
+  var cur={t:g(f.t,i0), fl:g(f.fl,i0), rh:g(f.rh,i0), w:g(f.w,i0), code:g(f.code,i0), day:f.day?(f.day[i0]?1:0):1, p:g(f.p,i0), wd:g(f.wd,i0), uv:g(f.uv,i0)};
+  if(typeof cur.t!=="number"||typeof cur.code!=="number") return d;
+  var hrs=[], days=[], k, i, o={}, z, today=key.slice(0,10);
+  for(k=0;k<24&&i0+k<f.ts.length;k++){ i=i0+k; hrs.push({h:f.ts[i].slice(11,13)+":00", t:f.t[i], code:f.code[i], day:f.day?f.day[i]:1, p:f.pp?f.pp[i]:0}); }
+  for(k=0;k<d.fcd.length&&days.length<5;k++) if(d.fcd[k].d>=today) days.push(d.fcd[k]);
+  if(!hrs.length||!days.length) return d;
+  for(z in d) o[z]=d[z]; o.cur=cur; o.hrs=hrs; o.days=days; o.now=key.slice(11,13)+":00"; o.live=1; return o;
+}
+function data(){ return (city&&W&&W.k===ckey()&&W.d)?wxLive(W.d):null; }
 function age(){ var d=data(); return d?Date.now()-d.t:Infinity; }
 
 /* ---------- conditions ---------- */
@@ -13327,7 +13341,12 @@ function parse(j){
   var days=[]; for(k=0;k<d.time.length&&k<5;k++){ days.push({d:d.time[k], code:d.weather_code[k], mx:d.temperature_2m_max[k], mn:d.temperature_2m_min[k], p:d.precipitation_probability_max?d.precipitation_probability_max[k]:0,
     sr:d.sunrise?String(d.sunrise[k]).slice(11,16):"", ss:d.sunset?String(d.sunset[k]).slice(11,16):"", uvx:d.uv_index_max?d.uv_index_max[k]:undefined}); }
   if(!hrs.length||!days.length) throw new Error("bad data");
-  return {v:2, t:Date.now(), now:String(c.time).slice(11,16), cur:cur, hrs:hrs, days:days};
+  var fc=null, fcd=[], q;
+  if(h.time.length>30&&h.apparent_temperature&&h.relative_humidity_2m&&h.wind_speed_10m){
+    fc={ts:h.time.map(function(x){ return String(x).slice(0,13); }), t:h.temperature_2m, fl:h.apparent_temperature, rh:h.relative_humidity_2m, w:h.wind_speed_10m, wd:h.wind_direction_10m, p:h.pressure_msl, code:h.weather_code, day:h.is_day, pp:h.precipitation_probability, uv:h.uv_index};
+    for(q=0;q<d.time.length;q++) fcd.push({d:d.time[q], code:d.weather_code[q], mx:d.temperature_2m_max[q], mn:d.temperature_2m_min[q], p:d.precipitation_probability_max?d.precipitation_probability_max[q]:0, sr:d.sunrise?String(d.sunrise[q]).slice(11,16):"", ss:d.sunset?String(d.sunset[q]).slice(11,16):"", uvx:d.uv_index_max?d.uv_index_max[q]:undefined});
+  }
+  return {v:3, t:Date.now(), now:String(c.time).slice(11,16), cur:cur, hrs:hrs, days:days, off:+(j.utc_offset_seconds||0), fc:fc, fcd:fcd};
 }
 function refresh(){
   if(!city) return Promise.resolve();
@@ -13336,9 +13355,9 @@ function refresh(){
   var base="latitude="+city.la+"&longitude="+city.lo;
   var urlX="https://api.open-meteo.com/v1/forecast?"+base+
     "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,wind_direction_10m,pressure_msl"+
-    "&hourly=temperature_2m,weather_code,precipitation_probability,is_day,uv_index"+
+    "&hourly=temperature_2m,weather_code,precipitation_probability,is_day,uv_index,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,pressure_msl"+
     "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max"+
-    "&timezone=auto&forecast_days=6&wind_speed_unit=kmh";
+    "&timezone=auto&forecast_days=14&wind_speed_unit=kmh";
   var urlB="https://api.open-meteo.com/v1/forecast?"+base+
     "&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m"+
     "&hourly=temperature_2m,weather_code,precipitation_probability,is_day"+
@@ -13619,7 +13638,7 @@ document.addEventListener("visibilitychange",function(){ if(document.hidden) snd
 function openWx(){
   var o=$("wxOverlay"), sh=$("wxSheet"); if(!o||!sh) return;
   sheetOpen=true; view=city?"main":"city"; if(!muted){ var a0=ac(); if(a0&&a0.state==="suspended") a0.resume(); } o.classList.remove("hidden"); sh.classList.remove("hidden"); render();
-  if(city && (age()>FRESH || (data()&&data().v!==2))) refresh();
+  if(city && (age()>FRESH || (data()&&data().v!==3))) refresh();
 }
 function closeWx(){
   var o=$("wxOverlay"), sh=$("wxSheet"); sheetOpen=false; fxStop(); sndStop();
@@ -13802,20 +13821,22 @@ function init(){
   $("wxBody").addEventListener("click",onBody);
   $("wxBody").addEventListener("input",function(e){ if(e.target&&e.target.id==="wxQ") listCities(e.target.value); });
   (window.lpBackHooks=window.lpBackHooks||[]).push(function(o){ if(o.id!=="wxOverlay") return false; if(view==="city"&&city){ view="main"; render(); return true; } return false; });
-  document.addEventListener("visibilitychange",function(){ if(!document.hidden){ renderTop(); if(city && (age()>FRESH||(data()&&data().v!==2))) refresh(); } });
+  document.addEventListener("visibilitychange",function(){ if(!document.hidden){ renderTop(); if(city && (age()>FRESH||(data()&&data().v!==3))) refresh(); } });
   document.addEventListener("lp-lang",function(){ renderCard(); renderTop(); render(); });
   setInterval(renderTop,60000);
+var lastLiveKey="";
+setInterval(function(){ if(document.hidden||!city) return; var d=data(); if(!d||!d.live) return; var k=d.cur.code+"|"+d.cur.day+"|"+Math.round(d.cur.t); if(k===lastLiveKey) return; lastLiveKey=k; renderCard(); renderTop(); if(sheetOpen&&view==="main") render(); },300000);
   window.lpWx={open:openWx,close:closeWx,refresh:refresh,step:autoStep};
-  setTimeout(function(){ if(city && (age()>FRESH||(data()&&data().v!==2))) refresh(); },3000);
+  setTimeout(function(){ if(city && (age()>FRESH||(data()&&data().v!==3))) refresh(); },3000);
 }
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
 })();
 </script>
 <script id="lpWnJs">
 (function(){
-var CUR="2026.11.15.8", KEY="lp_seen_ver";
+var CUR="2026.11.16", KEY="lp_seen_ver";
 /* every update adds a new entry at the TOP of this list: v = version (YYYY.MM.DD), i = what is new */
-var LOG=[{v:"2026.11.15.8",i:["صدای شب صاف برداشته شد و صدای رعد توی هوای رعدوبرقی واضح‌تر شد"]},{v:"2026.11.15.7",i:["عکس‌ها و لباس‌های آب‌وهوا بعد از اولین دیدن روی گوشی ذخیره می‌شن تا بدون فیلترشکن هم بیان"]},{v:"2026.11.15.6",i:["شیشه‌ی مود گرد شد", "به پریود یار بخش‌های تازه اضافه شد: تست‌ها، انرژی بدن، ورزش و حرکت، آب و نوشیدنی و مراقبت از خودم"]},{v:"2026.11.15.5",i:["انرژی روزانه، زنجیره و ماموریت حالا حرکت‌های دیده‌شدنی‌تری دارن", "آیکون اعلان مثل زنگ می‌لرزه و آیکون پریود یار هم حرکت داره", "ماموریت یک‌دقیقه‌ای حالا یه انیمیشن قشنگ داره", "توی بانک حرکات یوگا با زدن روی هر حرکت، لیانا بزرگ و با توضیحاتش نشون داده می‌شه", "گزارش PDF پریود مرتب‌تر شد و هر بخشش کامل توی یه صفحه می‌مونه", "نوشته‌های آب‌وهوا خواناتر شدن"]},{v:"2026.11.15.3",i:["لیانا بزرگ‌تر شد و رفت سمت راست‌تر؛ دکمه‌های شهر و بروزرسانی بالای صفحه‌ی آب‌وهوا کنار ضربدر اومدن", "پرتوهای نور خورشید نرم‌تر شدن و ابرهای روز حالا دیده می‌شن", "کارت‌ها، نوشته‌ها و ایموجی‌های آب‌وهوا خواناتر شدن", "لباس لیانا توی هوای ۱۵ درجه‌ی آفتابی دیگه چتر نداره؛ چتر فقط برای هوای بارونیه", "دکمه‌ی صدای آب‌وهوا برداشته شد"]},{v:"2026.11.15.2",i:["صفحه‌ی آب‌وهوا حالا عکس پس‌زمینه رو توی کل صفحه نشون می‌ده و کادر دور لیانا برداشته شد", "همه‌ی کارت‌ها و دکمه‌های آب‌وهوا شیشه‌ای مات شدن", "یه هاله‌ی نوری ملایم پشت لیاناست", "انیمیشن بارون، برف، ابر، مه و آفتاب طبیعی‌تر و حرفه‌ای‌تر شدن", "اندازه‌ی لیانا توی بخش یوگا کوچیک‌تر شد"]},{v:"2026.11.15",i:["صفحه‌ی آب‌وهوا طراحی تازه گرفت: دکمه‌های شهر و بروزرسانی بالای کارت اومدن و همه‌ی دکمه‌ها شیشه‌ای شدن", "کارت‌های رطوبت، یو وی، باد و بقیه ریزتر و ظریف‌تر شدن", "لیانا از کادر بیرون اومد و یه درخشش سفید ملایم دورشه", "آب‌وهوا جون گرفت: بارون، برف، رعدوبرق، مه و ستاره‌ها روی عکس حرکت می‌کنن و صدا هم دارن، از بالای صفحه می‌تونی صدا رو قطع کنی", "سایه و خط دور کارت آب‌وهوای صفحه‌ی خانه درست شد", "حرکت ستاره‌ی دنباله‌دار توی کارت شب بخیر درست شد"]},{v:"2026.11.14",i:["اطلاعات پریودت دیگه با همگام‌سازی گم نمی‌شه، هر روز جدا ذخیره و ادغام می‌شه", "بازیابی پشتیبان حالا به اطلاعات فعلی اضافه می‌شه و هیچ‌چیزی پاک نمی‌کنه", "پریود یار برای تأخیر یا نزدیک شدن پریود اخطار و نوتیف می‌ده، و می‌تونی پریودی که از چند روز پیش شروع شده رو هم ثبت کنی", "برای ساعت قرص‌ها یادآور با نوتیف ساخته می‌شه", "دکمه‌هایی که توی تم روز دیده نمی‌شدن خوانا شدن", "کارت صبح بخیر انیمیشن و متن‌های تازه گرفت"]},{v:"2026.11.13",i:["کارت آب‌وهوا و کارت صبح بخیر دوباره خودکار عوض می‌شن، و هر وقت خواستی با دست هم می‌تونی جابه‌جاشون کنی"]},{v:"2026.11.12",i:["دکمه‌ی آب‌وهوا کنار تقویم برگشت و دمای الان رو زیر آیکون نشون می‌ده", "صفحه‌ی آب‌وهوا تازه شد، با پس‌زمینه‌ی مات از عکس هوا و کارت‌های رطوبت، یو وی، باد، فشار، طلوع و غروب و کیفیت هوا", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن"]},{v:"2026.11.11",i:["اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد", "بخش آب‌وهوا برداشته شد"]},{v:"2026.11.08",i:["اسم پریود ترکر به پریود یار تغییر کرد", "اپ سریع‌تر بالا میاد", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد"]}];
+var LOG=[{v:"2026.11.16",i:["آب‌وهوا حالا پیش‌بینی ۱۴ روز آینده رو ذخیره می‌کنه؛ بدون فیلترشکن هم عکس و بک‌گراند مناسب هر ساعت نشون داده می‌شه"]},{v:"2026.11.15.8",i:["صدای شب صاف برداشته شد و صدای رعد توی هوای رعدوبرقی واضح‌تر شد"]},{v:"2026.11.15.7",i:["عکس‌ها و لباس‌های آب‌وهوا بعد از اولین دیدن روی گوشی ذخیره می‌شن تا بدون فیلترشکن هم بیان"]},{v:"2026.11.15.6",i:["شیشه‌ی مود گرد شد", "به پریود یار بخش‌های تازه اضافه شد: تست‌ها، انرژی بدن، ورزش و حرکت، آب و نوشیدنی و مراقبت از خودم"]},{v:"2026.11.15.5",i:["انرژی روزانه، زنجیره و ماموریت حالا حرکت‌های دیده‌شدنی‌تری دارن", "آیکون اعلان مثل زنگ می‌لرزه و آیکون پریود یار هم حرکت داره", "ماموریت یک‌دقیقه‌ای حالا یه انیمیشن قشنگ داره", "توی بانک حرکات یوگا با زدن روی هر حرکت، لیانا بزرگ و با توضیحاتش نشون داده می‌شه", "گزارش PDF پریود مرتب‌تر شد و هر بخشش کامل توی یه صفحه می‌مونه", "نوشته‌های آب‌وهوا خواناتر شدن"]},{v:"2026.11.15.3",i:["لیانا بزرگ‌تر شد و رفت سمت راست‌تر؛ دکمه‌های شهر و بروزرسانی بالای صفحه‌ی آب‌وهوا کنار ضربدر اومدن", "پرتوهای نور خورشید نرم‌تر شدن و ابرهای روز حالا دیده می‌شن", "کارت‌ها، نوشته‌ها و ایموجی‌های آب‌وهوا خواناتر شدن", "لباس لیانا توی هوای ۱۵ درجه‌ی آفتابی دیگه چتر نداره؛ چتر فقط برای هوای بارونیه", "دکمه‌ی صدای آب‌وهوا برداشته شد"]},{v:"2026.11.15.2",i:["صفحه‌ی آب‌وهوا حالا عکس پس‌زمینه رو توی کل صفحه نشون می‌ده و کادر دور لیانا برداشته شد", "همه‌ی کارت‌ها و دکمه‌های آب‌وهوا شیشه‌ای مات شدن", "یه هاله‌ی نوری ملایم پشت لیاناست", "انیمیشن بارون، برف، ابر، مه و آفتاب طبیعی‌تر و حرفه‌ای‌تر شدن", "اندازه‌ی لیانا توی بخش یوگا کوچیک‌تر شد"]},{v:"2026.11.15",i:["صفحه‌ی آب‌وهوا طراحی تازه گرفت: دکمه‌های شهر و بروزرسانی بالای کارت اومدن و همه‌ی دکمه‌ها شیشه‌ای شدن", "کارت‌های رطوبت، یو وی، باد و بقیه ریزتر و ظریف‌تر شدن", "لیانا از کادر بیرون اومد و یه درخشش سفید ملایم دورشه", "آب‌وهوا جون گرفت: بارون، برف، رعدوبرق، مه و ستاره‌ها روی عکس حرکت می‌کنن و صدا هم دارن، از بالای صفحه می‌تونی صدا رو قطع کنی", "سایه و خط دور کارت آب‌وهوای صفحه‌ی خانه درست شد", "حرکت ستاره‌ی دنباله‌دار توی کارت شب بخیر درست شد"]},{v:"2026.11.14",i:["اطلاعات پریودت دیگه با همگام‌سازی گم نمی‌شه، هر روز جدا ذخیره و ادغام می‌شه", "بازیابی پشتیبان حالا به اطلاعات فعلی اضافه می‌شه و هیچ‌چیزی پاک نمی‌کنه", "پریود یار برای تأخیر یا نزدیک شدن پریود اخطار و نوتیف می‌ده، و می‌تونی پریودی که از چند روز پیش شروع شده رو هم ثبت کنی", "برای ساعت قرص‌ها یادآور با نوتیف ساخته می‌شه", "دکمه‌هایی که توی تم روز دیده نمی‌شدن خوانا شدن", "کارت صبح بخیر انیمیشن و متن‌های تازه گرفت"]},{v:"2026.11.13",i:["کارت آب‌وهوا و کارت صبح بخیر دوباره خودکار عوض می‌شن، و هر وقت خواستی با دست هم می‌تونی جابه‌جاشون کنی"]},{v:"2026.11.12",i:["دکمه‌ی آب‌وهوا کنار تقویم برگشت و دمای الان رو زیر آیکون نشون می‌ده", "صفحه‌ی آب‌وهوا تازه شد، با پس‌زمینه‌ی مات از عکس هوا و کارت‌های رطوبت، یو وی، باد، فشار، طلوع و غروب و کیفیت هوا", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن"]},{v:"2026.11.11",i:["اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد", "بخش آب‌وهوا برداشته شد"]},{v:"2026.11.08",i:["اسم پریود ترکر به پریود یار تغییر کرد", "اپ سریع‌تر بالا میاد", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد"]}];
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 var seen=g(KEY); if(seen===CUR) return;
