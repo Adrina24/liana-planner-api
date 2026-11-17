@@ -69,6 +69,7 @@
 <script id="lpWxDictB">Object.assign(window.__LP_EN.d,{"عکس‌ها و لباس‌های آب‌وهوا بعد از اولین دیدن روی گوشی ذخیره می‌شن تا بدون فیلترشکن هم بیان": "Weather pictures and outfits are saved on the phone after you see them once, so they also show without a VPN"});</script>
 <script id="lpWxDictC">Object.assign(window.__LP_EN.d,{"صدای شب صاف برداشته شد و صدای رعد توی هوای رعدوبرقی واضح‌تر شد": "The clear-night sound was removed and thunder is clearer in stormy weather"});</script>
 <script id="lpWxDictD">Object.assign(window.__LP_EN.d,{"آب‌وهوا حالا پیش‌بینی ۱۴ روز آینده رو ذخیره می‌کنه؛ بدون فیلترشکن هم عکس و بک‌گراند مناسب هر ساعت نشون داده می‌شه": "The weather now saves the forecast for the next 14 days; even without a VPN it shows the right photo and background for each hour"});</script>
+<script id="lpWxDictE">Object.assign(window.__LP_EN.d,{"دکمه‌ی «دانلود برای آفلاین» توی تنظیمات، آب‌وهوا و یوگا اضافه شد؛ یه بار با فیلترشکن بزن تا عکس‌ها و صداها روی گوشی بمونن": "A \"Download for offline\" button was added to Settings, Weather and Yoga; tap it once with a VPN so the pictures and sounds stay on your phone", "توی آب‌وهوا بخش «همه‌ی لباس‌های لیانا» اومد؛ روی هر لباس بزن تا بزرگ بشه و ببینی برای چه دما و هوایی‌ه": "The weather page has a new \"All Liana outfits\" section; tap an outfit to enlarge it and see which temperature and weather it is for"});</script>
 <script id="lpWxDict">Object.assign(window.__LP_EN.d,{"کارت آب‌وهوا و کارت صبح بخیر دوباره خودکار عوض می‌شن، و هر وقت خواستی با دست هم می‌تونی جابه‌جاشون کنی": "The weather card and the good morning card switch automatically again, and you can still swipe between them by hand", "دکمه‌ی آب‌وهوا کنار تقویم برگشت و دمای الان رو زیر آیکون نشون می‌ده": "The weather button is back next to the calendar and shows the current temperature under its icon", "صفحه‌ی آب‌وهوا تازه شد، با پس‌زمینه‌ی مات از عکس هوا و کارت‌های رطوبت، یو وی، باد، فشار، طلوع و غروب و کیفیت هوا": "The weather page got a fresh look, with a blurred photo background and cards for humidity, UV, wind, pressure, sunrise and sunset and air quality", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه": "Liana shows up in an outfit that fits the temperature and the weather", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن": "Pick your city from the list or search for it"});</script>
 <script id="lpWxDict4">Object.assign(window.__LP_EN.d,{"اپ بروز شد": "App updated", "این‌ها تازه اضافه یا بهتر شدن": "Here is what's new", "عالیه، بریم": "Great, let's go", "آب‌وهوای کامل با دمای لحظه‌ای، ساعت‌به‌ساعت، ۷ روز آینده و کیفیت هوا؛ با پس‌زمینه‌ی طبیعی و لیانا با لباس مناسب هوا و دما": "Full weather with current temperature, hourly and 7-day forecast and air quality; natural backgrounds and Liana in an outfit that suits the weather and temperature", "جستجوی آب‌وهوای همه‌ی شهرها و روستاها": "Weather search for any city or village", "اسم پریود ترکر به پریود یار تغییر کرد": "The Period tracker was renamed to Period Buddy", "اپ سریع‌تر بالا میاد": "The app opens faster", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد": "English translation of the new sections is complete"});</script>
 <script id="lp-i18n">
@@ -2840,6 +2841,18 @@ html body .bnav#bnav.bn-on button:not(.on):active span{opacity:.7;}
     <label class="bk-auto"><input type="checkbox" id="bkAuto" checked><span>بک‌آپ خودکار هفتگی</span></label>
     <div class="hint bk-msg" id="bkMsg"></div>
   </div>
+  </div>
+
+  <button class="meas-toggle" id="offToggle" style="margin-top:10px;">
+    <span class="lbl"><span style="font-size:18px;margin-left:6px;">⬇️</span><span>دانلود برای آفلاین</span></span>
+    <span class="arrow">▾</span>
+  </button>
+  <div class="theme-box hidden" id="offBox">
+    <div class="hint">یه بار با فیلترشکن بزن؛ بعدش عکس‌ها و صداها روی گوشی می‌مونن و بدون اینترنت هم میان. حجمش ممکنه چند ده مگابایت باشه، بهتره با وای‌فای یا بسته‌ی کافی بزنی. تصویر حرکت‌های ورزشی (بانک حرکات) هر وقت بازشون کنی خودشون ذخیره می‌شن.</div>
+    <div id="ofRows"></div>
+    <button type="button" class="of-all" data-of="all">دانلود همه‌ی موارد</button>
+    <div class="of-bar"><i id="ofBar"></i></div>
+    <div class="hint" id="ofMsg"></div>
   </div>
 
   <button class="meas-toggle" id="pushToggle" style="margin-top:10px;">
@@ -10242,7 +10255,7 @@ check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7
   function rb(){
     if(!bank) return; var box=bank.querySelector(".fp-box"), top=box.scrollTop, pos={}, h;
     curIds().forEach(function(id,i){ pos[id]=i+1; });
-    h='<div class="sm-h"><span>بانک حرکات یوگا</span><button type="button" class="sm-x" data-b="x">✕</button></div><p class="yb-hint">روی هر حرکت بزن تا کامل ببینیش؛ با دکمه‌ی کنارش به برنامه‌ی امروز اضافه یا حذفش کن. شماره‌ها ترتیب حرکت‌ها هستن.</p>';
+    h='<div class="sm-h"><span>بانک حرکات یوگا</span><button type="button" class="sm-x" data-b="x">✕</button></div><p class="yb-hint">روی هر حرکت بزن تا کامل ببینیش؛ با دکمه‌ی کنارش به برنامه‌ی امروز اضافه یا حذفش کن. شماره‌ها ترتیب حرکت‌ها هستن.</p><button type="button" class="of-mini" data-of="yoga,sounds">⬇ دانلود یوگا و صداها برای آفلاین</button>';
     Y.groups.forEach(function(g){
       var ps=Y.poses.filter(function(p){ return p.g===g[0]; }); if(!ps.length) return;
       h+='<div class="yb-t">'+g[1]+'</div>'+ps.map(function(p){ var n=pos[p.id];
@@ -13210,6 +13223,98 @@ body.mode-dark .yp{background:linear-gradient(180deg,#26223d,#171528);}
 .pd-si{width:26px; height:26px; object-fit:contain; vertical-align:middle; margin-inline-end:7px; display:none;}
 .pd-si.ok{display:inline-block;}
 </style>
+<style id="lpCss8">
+.wx-acts{display:flex; gap:8px; flex-wrap:wrap;} .wx-acts .wx-btn{flex:1 1 auto; font-size:13px; padding:10px 12px; border-radius:16px;}
+.of-mini{border:0; border-radius:14px; padding:8px 12px; font:inherit; font-size:12.5px; background:var(--accent); color:#fff; margin:6px 0; cursor:pointer;}
+.of-r{display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid rgba(120,100,220,.12);} .of-r span{flex:1; font-size:13.5px;} .of-r em{font-style:normal; font-size:12px; opacity:.75;} .of-r .of-mini{margin:0;}
+.of-all{width:100%; margin-top:10px; padding:12px; border:0; border-radius:16px; background:var(--accent); color:#fff; font:inherit; font-weight:800; font-size:14px;}
+.of-bar{height:6px; border-radius:6px; background:rgba(120,100,220,.15); overflow:hidden; margin-top:10px;} .of-bar i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s;}
+.wx-gal{position:fixed; inset:0; z-index:9999; display:flex; flex-direction:column; overflow-y:auto; padding:calc(12px + env(safe-area-inset-top)) 14px 28px; background:var(--bg); color:var(--text); animation:ypIn .3s ease;}
+.wxg-h{display:flex; align-items:center; justify-content:space-between; font-size:18px; font-weight:800;}
+.wxg-x{width:38px; height:38px; border-radius:50%; border:0; background:rgba(120,100,220,.14); color:inherit; font-size:15px;}
+.wxg-p{margin:6px 2px 4px; font-size:12.5px; line-height:1.9; color:var(--text-soft);}
+.wxg-t{margin:16px 2px 8px; font-size:15px;} .wxg-t small{display:block; font-weight:400; font-size:12px; color:var(--text-soft); margin-top:2px;}
+.wxg-g{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.wxg-i{border:0; border-radius:16px; background:rgba(120,100,220,.09); padding:6px; display:flex; justify-content:center;}
+.wxg-i img{width:100%; aspect-ratio:3/5; object-fit:contain;}
+.wxg-b{position:fixed; inset:0; z-index:2; display:flex; align-items:center; justify-content:center; background:rgba(15,12,40,.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); animation:ypIn .25s ease;}
+.wxg-bc{display:flex; flex-direction:column; align-items:center; gap:6px; max-width:92vw; text-align:center; color:#fff;}
+.wxg-bc img{max-height:64vh; max-width:88vw; width:auto; object-fit:contain; filter:drop-shadow(0 10px 22px rgba(0,0,0,.45));}
+.wxg-bc b{font-size:19px;} .wxg-bc span{font-size:13.5px; line-height:1.9; opacity:.92;}
+</style>
+<script id="lpOffJs">
+(function(){
+var G={"weather":{"fa":"آب‌وهوا و لباس‌های لیانا","en":"Weather photos and Liana outfits","u":[["weather/bg/clear-1.webp","weather/clear-1.webp"],["weather/bg/clear-2.webp","weather/clear-2.webp"],["weather/bg/clear-3.webp","weather/clear-3.webp"],["weather/bg/partly-1.webp","weather/partly-1.webp"],["weather/bg/partly-2.webp","weather/partly-2.webp"],["weather/bg/partly-3.webp","weather/partly-3.webp"],["weather/bg/cloudy-1.webp","weather/cloudy-1.webp"],["weather/bg/cloudy-2.webp","weather/cloudy-2.webp"],["weather/bg/cloudy-3.webp","weather/cloudy-3.webp"],["weather/bg/fog-1.webp","weather/fog-1.webp"],["weather/bg/fog-2.webp","weather/fog-2.webp"],["weather/bg/fog-3.webp","weather/fog-3.webp"],["weather/bg/rain-1.webp","weather/rain-1.webp"],["weather/bg/rain-2.webp","weather/rain-2.webp"],["weather/bg/rain-3.webp","weather/rain-3.webp"],["weather/bg/storm-1.webp","weather/storm-1.webp"],["weather/bg/storm-2.webp","weather/storm-2.webp"],["weather/bg/storm-3.webp","weather/storm-3.webp"],["weather/bg/snow-1.webp","weather/snow-1.webp"],["weather/bg/snow-2.webp","weather/snow-2.webp"],["weather/bg/snow-3.webp","weather/snow-3.webp"],["weather/bg/clear-night-1.webp","weather/clear-night-1.webp"],["weather/bg/clear-night-2.webp","weather/clear-night-2.webp"],["weather/bg/clear-night-3.webp","weather/clear-night-3.webp"],["weather/bg/partly-night-1.webp","weather/partly-night-1.webp"],["weather/bg/partly-night-2.webp","weather/partly-night-2.webp"],["weather/bg/partly-night-3.webp","weather/partly-night-3.webp"],["weather/bg/cloudy-night-1.webp","weather/cloudy-night-1.webp"],["weather/bg/cloudy-night-2.webp","weather/cloudy-night-2.webp"],["weather/bg/cloudy-night-3.webp","weather/cloudy-night-3.webp"],["weather/bg/fog-night-1.webp","weather/fog-night-1.webp"],["weather/bg/fog-night-2.webp","weather/fog-night-2.webp"],["weather/bg/fog-night-3.webp","weather/fog-night-3.webp"],["weather/bg/rain-night-1.webp","weather/rain-night-1.webp"],["weather/bg/rain-night-2.webp","weather/rain-night-2.webp"],["weather/bg/rain-night-3.webp","weather/rain-night-3.webp"],["weather/bg/storm-night-1.webp","weather/storm-night-1.webp"],["weather/bg/storm-night-2.webp","weather/storm-night-2.webp"],["weather/bg/storm-night-3.webp","weather/storm-night-3.webp"],["weather/bg/snow-night-1.webp","weather/snow-night-1.webp"],["weather/bg/snow-night-2.webp","weather/snow-night-2.webp"],["weather/bg/snow-night-3.webp","weather/snow-night-3.webp"],["weather/lia/07.webp","weather/07.webp"],["weather/lia/08.webp","weather/08.webp"],["weather/lia/09.webp","weather/09.webp"],["weather/lia/10.webp","weather/10.webp"],["weather/lia/50.webp","weather/50.webp"],["weather/lia/51.webp","weather/51.webp"],["weather/lia/53.webp","weather/53.webp"],["weather/lia/54.webp","weather/54.webp"],["weather/lia/55.webp","weather/55.webp"],["weather/lia/56.webp","weather/56.webp"],["weather/lia/57.webp","weather/57.webp"],["weather/lia/58.webp","weather/58.webp"],["weather/lia/59.webp","weather/59.webp"],["weather/lia/02.webp","weather/02.webp"],["weather/lia/03.webp","weather/03.webp"],["weather/lia/04.webp","weather/04.webp"],["weather/lia/05.webp","weather/05.webp"],["weather/lia/06.webp","weather/06.webp"],["weather/lia/26.webp","weather/26.webp"],["weather/lia/27.webp","weather/27.webp"],["weather/lia/28.webp","weather/28.webp"],["weather/lia/29.webp","weather/29.webp"],["weather/lia/30.webp","weather/30.webp"],["weather/lia/52.webp","weather/52.webp"],["weather/lia/21.webp","weather/21.webp"],["weather/lia/22.webp","weather/22.webp"],["weather/lia/11.webp","weather/11.webp"],["weather/lia/12.webp","weather/12.webp"],["weather/lia/13.webp","weather/13.webp"],["weather/lia/14.webp","weather/14.webp"],["weather/lia/23.webp","weather/23.webp"],["weather/lia/24.webp","weather/24.webp"],["weather/lia/25.webp","weather/25.webp"],["weather/lia/31.webp","weather/31.webp"],["weather/lia/32.webp","weather/32.webp"],["weather/lia/33.webp","weather/33.webp"],["weather/lia/34.webp","weather/34.webp"],["weather/lia/18.webp","weather/18.webp"],["weather/lia/20.webp","weather/20.webp"],["weather/lia/15.webp","weather/15.webp"],["weather/lia/16.webp","weather/16.webp"],["weather/lia/17.webp","weather/17.webp"],["weather/lia/19.webp","weather/19.webp"],["weather/lia/35.webp","weather/35.webp"],["weather/lia/40.webp","weather/40.webp"],["weather/lia/41.webp","weather/41.webp"],["weather/lia/42.webp","weather/42.webp"],["weather/lia/43.webp","weather/43.webp"],["weather/lia/36.webp","weather/36.webp"],["weather/lia/37.webp","weather/37.webp"],["weather/lia/38.webp","weather/38.webp"],["weather/lia/39.webp","weather/39.webp"],["weather/lia/47.webp","weather/47.webp"],["weather/lia/48.webp","weather/48.webp"],["weather/lia/49.webp","weather/49.webp"],["weather/lia/60.webp","weather/60.webp"],["weather/lia/61.webp","weather/61.webp"],["weather/lia/44.webp","weather/44.webp"],["weather/lia/45.webp","weather/45.webp"],["weather/lia/46.webp","weather/46.webp"]]},"cards":{"fa":"کارت‌ها و ستاره‌ها","en":"Cards and stars","u":["cards/body-trend-1.webp","cards/body-trend-2.webp","cards/calendar.webp","cards/chat-1.webp","cards/chat-2.webp","cards/chat-3.webp","cards/exercise.webp","cards/fx-calorie.webp","cards/fx-exbank.webp","cards/fx-meal.webp","cards/fx-workout.webp","cards/habits.webp","cards/meal.webp","cards/meds.webp","cards/nutrition.webp","cards/period-1.webp","cards/period-2.webp","cards/period-3.webp","cards/period-4.webp","cards/period-5.webp","cards/period-6.webp","cards/period-7.webp","cards/period-8.webp","cards/reading.webp","cards/reports.webp","cards/sleep.webp","cards/steps.webp","cards/sugar-free.webp","cards/water.webp","cards/weekly.webp","cards/weight-1.webp","cards/weight-2.webp","cards/workout.webp","cards/yoga.webp","Title.webp","star-1.webp","star-2.webp","star-3.webp","star-4.webp","star-5.webp","star-6.webp"]},"yoga":{"fa":"یوگا","en":"Yoga","u":["yoga/belly-breathing.webp","yoga/thumbs/belly-breathing.webp","yoga/alternate-nostril.webp","yoga/thumbs/alternate-nostril.webp","yoga/breathing-478.webp","yoga/thumbs/breathing-478.webp","yoga/body-scan.webp","yoga/thumbs/body-scan.webp","yoga/mountain.webp","yoga/thumbs/mountain.webp","yoga/neck-side-stretch-1.webp","yoga/neck-side-stretch-2.webp","yoga/thumbs/neck-side-stretch.webp","yoga/neck-rolls-1.webp","yoga/neck-rolls-2.webp","yoga/thumbs/neck-rolls.webp","yoga/shoulder-rolls.webp","yoga/thumbs/shoulder-rolls.webp","yoga/clasped-hands-back.webp","yoga/thumbs/clasped-hands-back.webp","yoga/overhead-reach.webp","yoga/thumbs/overhead-reach.webp","yoga/eagle-arms.webp","yoga/thumbs/eagle-arms.webp","yoga/wrist-finger-stretch.webp","yoga/thumbs/wrist-finger-stretch.webp","yoga/seated-chest-opener.webp","yoga/thumbs/seated-chest-opener.webp","yoga/cat-cow-1.webp","yoga/cat-cow-2.webp","yoga/cat-cow-3.webp","yoga/thumbs/cat-cow.webp","yoga/childs-pose.webp","yoga/thumbs/childs-pose.webp","yoga/seated-twist.webp","yoga/thumbs/seated-twist.webp","yoga/forward-fold.webp","yoga/thumbs/forward-fold.webp","yoga/knees-to-chest.webp","yoga/thumbs/knees-to-chest.webp","yoga/supine-twist.webp","yoga/thumbs/supine-twist.webp","yoga/gentle-downward-dog.webp","yoga/thumbs/gentle-downward-dog.webp","yoga/standing-side-bend-1.webp","yoga/standing-side-bend-2.webp","yoga/thumbs/standing-side-bend.webp","yoga/butterfly.webp","yoga/thumbs/butterfly.webp","yoga/legs-up-wall.webp","yoga/thumbs/legs-up-wall.webp","yoga/gentle-bridge.webp","yoga/thumbs/gentle-bridge.webp","yoga/seated-forward-fold.webp","yoga/thumbs/seated-forward-fold.webp","yoga/happy-baby.webp","yoga/thumbs/happy-baby.webp","yoga/low-lunge-1.webp","yoga/low-lunge-2.webp","yoga/thumbs/low-lunge.webp","yoga/savasana-1.webp","yoga/savasana-2.webp","yoga/thumbs/savasana.webp"]},"sounds":{"fa":"صداهای آرامش‌بخش","en":"Calming sounds","u":["sounds/rain.mp3","sounds/thunder.mp3","sounds/waves.mp3","sounds/forest.mp3","sounds/wind.mp3","sounds/stream.mp3","sounds/fire.mp3","sounds/crickets.mp3","sounds/purr.mp3","sounds/heartbeat.mp3","sounds/train.mp3","sounds/cafe.mp3","sounds/white.mp3","sounds/brown.mp3","sounds/bowl.mp3"]},"fonts":{"fa":"فونت‌ها","en":"Fonts","u":["font-kamran-bold.woff","font-kamran-regular.woff","font-koodak-regular.woff","font-lotus-bold.woff","font-lotus-regular.woff","font-mitra-bold.woff","font-mitra-regular.woff","font-nastaliq-regular.woff","font-nazanin-bold.woff","font-nazanin-regular.woff","font-roya-bold.woff","font-roya-regular.woff","font-titr-regular.woff","font-traffic-bold.woff","font-traffic-regular.woff","font-yekan-regular.woff","font-zar-bold.woff","font-zar-regular.woff"]}};
+function T(fa,en){ return document.documentElement.classList.contains("lp-en")?en:fa; }
+function pd(n){ return document.documentElement.classList.contains("lp-en")?String(n):String(n).replace(/\d/g,function(d){ return "۰۱۲۳۴۵۶۷۸۹".charAt(d); }); }
+function $(i){ return document.getElementById(i); }
+var running=false, cancel=false;
+function one(u){
+  var a=typeof u==="string"?[u]:u, i=0;
+  function next(){
+    if(i>=a.length) return Promise.resolve(0);
+    var x=a[i++];
+    return fetch(x).then(function(r){
+      if(r.status===404) return next();
+      if(!r.ok) return 2;
+      var p=Promise.resolve();
+      if(!(navigator.serviceWorker&&navigator.serviceWorker.controller)&&window.caches) p=caches.open("liana-v6").then(function(c){ return c.put(x,r.clone()); }).catch(function(){});
+      return p.then(function(){ return r.arrayBuffer(); }).then(function(){ return 1; });
+    },function(){ return 2; });
+  }
+  return next();
+}
+function saved(u){
+  var a=typeof u==="string"?[u]:u;
+  return caches.match(a[0]).then(function(m){ if(m||!a[1]) return m?1:0; return caches.match(a[1]).then(function(m2){ return m2?1:0; }); });
+}
+function status(){
+  if(!window.caches) return;
+  Object.keys(G).forEach(function(k){
+    Promise.all(G[k].u.map(saved)).then(function(r){ var n=r.reduce(function(s,x){ return s+x; },0), e=$("of-s-"+k); if(e) e.textContent=n?pd(n)+T(" فایل ذخیره شده"," files saved"):""; });
+  });
+}
+function msg(t){ var m=$("ofMsg"); if(m) m.textContent=t; }
+function run(names,btn){
+  if(running){ cancel=true; return Promise.resolve({cancelled:1}); }
+  if(names[0]==="all") names=Object.keys(G);
+  var list=[]; names.forEach(function(n){ if(G[n]) list=list.concat(G[n].u); });
+  if(!list.length) return Promise.resolve({});
+  if(navigator.onLine===false){ msg(T("اینترنت وصل نیست.","No internet connection.")); return Promise.resolve({offline:1}); }
+  running=true; cancel=false;
+  var total=list.length, done=0, ok=0, miss=0, bad=0, idx=0, label=btn?btn.textContent:"";
+  function prog(){
+    var b=$("ofBar"); if(b) b.style.width=Math.round(done*100/total)+"%";
+    if(btn) btn.textContent=btn.classList.contains("of-all")?T("در حال دانلود… ","Downloading… ")+pd(done)+"/"+pd(total)+T(" (برای توقف بزن)"," (tap to stop)"):"⬇ "+pd(done)+"/"+pd(total);
+  }
+  prog();
+  function worker(){
+    if(cancel||idx>=total) return Promise.resolve();
+    var u=list[idx++];
+    return one(u).then(function(r){ if(r===1) ok++; else if(r===0) miss++; else bad++; done++; prog(); return worker(); });
+  }
+  return Promise.all([worker(),worker(),worker(),worker()]).then(function(){
+    running=false; if(btn) btn.textContent=label; var b=$("ofBar"); if(b&&!cancel&&!bad) b.style.width="100%";
+    var t;
+    if(cancel) t=T("متوقف شد.","Stopped.");
+    else if(bad) t=pd(bad)+T(" فایل نیومد؛ فیلترشکن یا اینترنت رو چک کن و دوباره بزن (اونایی که اومدن دوباره دانلود نمی‌شن)."," files did not arrive; check your VPN or connection and tap again (files already saved are not downloaded again).");
+    else t=T("تموم شد ✓ همه‌چیز روی گوشی ذخیره شد.","Done ✓ everything is saved on the phone.")+(miss?" "+pd(miss)+T(" فایل هنوز ساخته نشده (مثلاً عکس‌های شب)."," files are not made yet (for example the night photos)."):"");
+    msg(t); cancel=false; status();
+    return {ok:ok,miss:miss,bad:bad};
+  });
+}
+window.lpOff={run:run,status:status,G:G};
+document.addEventListener("click",function(e){
+  var b=e.target.closest&&e.target.closest("[data-of]"); if(!b) return;
+  e.preventDefault(); run(b.getAttribute("data-of").split(","),b);
+});
+var t=$("offToggle"), box=$("offBox"), rows=$("ofRows");
+if(t&&box&&rows){
+  rows.innerHTML=Object.keys(G).map(function(k){ return '<div class="of-r"><span>'+T(G[k].fa,G[k].en)+'</span><em id="of-s-'+k+'"></em><button type="button" class="of-mini" data-of="'+k+'">'+T("دانلود","Download")+'</button></div>'; }).join("");
+  t.addEventListener("click",function(){ box.classList.toggle("hidden"); t.classList.toggle("open"); if(!box.classList.contains("hidden")) status(); });
+}
+})();
+</script>
 <script id="lpWxJs">
 (function(){
 "use strict";
@@ -13426,6 +13531,35 @@ function wxHydrate(root){
   });
 }
 function liaImg(id,style){ var c=liaCands(id); return '<img alt="" '+(style?'style="'+style+'" ':'')+'src="'+c[0]+'" data-u0="'+c[0]+'" data-alt="'+c.slice(1).join("|")+'" onerror="window.__wxLiaErr(this)">'; }
+var GAL=[
+ ["لباس سرد","Cold weather","۸ درجه و کمتر، یا هوای برفی","8° and below, or snowy weather",P_COLD],
+ ["لباس خنک","Cool weather","۹ تا ۱۶ درجه، هوای بدون بارون","9° to 16°, no rain",P_COOL],
+ ["لباس ملایم","Mild weather","۱۷ تا ۲۴ درجه، هوای بدون بارون","17° to 24°, no rain",P_MILD],
+ ["لباس گرم","Hot weather","۲۵ درجه و بالاتر، هوای بدون بارون","25° and above, no rain",P_HOT],
+ ["بارونی خنک","Cool and rainy","هوای بارونی یا رعدوبرقی، ۱۶ درجه و کمتر","rain or thunderstorm, 16° and below",R_COOL],
+ ["بارونی گرم","Warm and rainy","هوای بارونی یا رعدوبرقی، بالای ۱۶ درجه","rain or thunderstorm, above 16°",R_WARM]];
+/* all Liana outfits in one place; tap one to enlarge it (temperature = feels-like) */
+function wxGalOpen(){
+  var o=document.getElementById("wxGal"); if(o&&o.parentNode) o.parentNode.removeChild(o);
+  o=document.createElement("div"); o.id="wxGal"; o.className="wx-gal";
+  var h='<div class="wxg-h"><b>'+L("لباس‌های لیانا","Liana\'s outfits")+'</b><button type="button" class="wxg-x" data-g="x" aria-label="✕">✕</button></div><p class="wxg-p">'+L("روی هر لباس بزن تا بزرگ بشه و ببینی برای چه دما و چه هوایی‌ه. دما یعنی دمای احساسی.","Tap an outfit to enlarge it and see which temperature and weather it is for. Temperature means feels-like.")+'</p>';
+  GAL.forEach(function(g,gi){
+    h+='<h4 class="wxg-t">'+L(g[0],g[1])+'<small>'+L(g[2],g[3])+'</small></h4><div class="wxg-g">';
+    g[4].forEach(function(id){ h+='<button type="button" class="wxg-i" data-g="'+gi+'" data-id="'+two(id)+'">'+liaImg(two(id)).replace("<img ",'<img loading="lazy" decoding="async" ')+'</button>'; });
+    h+='</div>';
+  });
+  o.innerHTML=h;
+  o.addEventListener("click",function(e){
+    var b=e.target.closest("[data-g]"); if(!b) return; var g=b.getAttribute("data-g");
+    if(g==="x"){ if(o.parentNode) o.parentNode.removeChild(o); return; }
+    if(g==="big"){ var bg=o.querySelector(".wxg-b"); if(bg) bg.parentNode.removeChild(bg); return; }
+    var old=o.querySelector(".wxg-b"); if(old) old.parentNode.removeChild(old);
+    var d=document.createElement("div"), G2=GAL[+g]; d.className="wxg-b"; d.setAttribute("data-g","big");
+    d.innerHTML='<div class="wxg-bc">'+liaImg(b.getAttribute("data-id"))+'<b>'+L(G2[0],G2[1])+'</b><span>'+L("برای ","For ")+L(G2[2],G2[3])+'</span></div>';
+    o.appendChild(d); wxHydrate(d);
+  });
+  document.body.appendChild(o); wxHydrate(o);
+}
 function setBg(el,urls,pos,nc){
   if(typeof urls==="string") urls=[urls]; var i=0;
   (function next(){ if(!el||i>=urls.length) return; var j=i, u=urls[i++], im=new Image(), cu=u;
@@ -13732,6 +13866,7 @@ function renderMain(){
   h+='</div>';
   h+='<div class="wx-gs">'+tiles(D)+'</div>';
   var dt=new Date(D.t), hh=dg(("0"+dt.getHours()).slice(-2)+":"+("0"+dt.getMinutes()).slice(-2));
+  h+='<div class="wx-acts"><button type="button" class="wx-btn" data-a="gal">👗 '+L("همه‌ی لباس‌های لیانا","All Liana outfits")+'</button><button type="button" class="wx-btn" data-of="weather">⬇ '+L("دانلود برای آفلاین","Download for offline")+'</button></div>';
   h+='<div class="wx-ft"><span><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather data by Open-Meteo.com</a></span><span>'+(err?L("اتصال برقرار نشد · ","Offline · "):"")+L("بروزرسانی ","Updated ")+hh+'</span></div>';
   h+='</div>';
   b.innerHTML=h; wxMoveTop(b); wxHydrate(b);
@@ -13784,6 +13919,7 @@ function onBody(ev){
   var t=ev.target.closest?ev.target.closest("[data-a]"):null; if(!t) return;
   var a=t.getAttribute("data-a");
   if(a==="city"){ view="city"; render(); }
+  else if(a==="gal"){ wxGalOpen(); }
   else if(a==="snd"){ muted=!muted; sv("lpWxMute",muted?"1":"0"); if(muted) sndStop(); else { var a1=ac(); if(a1&&a1.state==="suspended") a1.resume(); } render(); }
   else if(a==="back"){ view="main"; render(); }
   else if(a==="rf"){ refresh(); }
@@ -13834,9 +13970,9 @@ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded"
 </script>
 <script id="lpWnJs">
 (function(){
-var CUR="2026.11.16", KEY="lp_seen_ver";
+var CUR="2026.11.16.2", KEY="lp_seen_ver";
 /* every update adds a new entry at the TOP of this list: v = version (YYYY.MM.DD), i = what is new */
-var LOG=[{v:"2026.11.16",i:["آب‌وهوا حالا پیش‌بینی ۱۴ روز آینده رو ذخیره می‌کنه؛ بدون فیلترشکن هم عکس و بک‌گراند مناسب هر ساعت نشون داده می‌شه"]},{v:"2026.11.15.8",i:["صدای شب صاف برداشته شد و صدای رعد توی هوای رعدوبرقی واضح‌تر شد"]},{v:"2026.11.15.7",i:["عکس‌ها و لباس‌های آب‌وهوا بعد از اولین دیدن روی گوشی ذخیره می‌شن تا بدون فیلترشکن هم بیان"]},{v:"2026.11.15.6",i:["شیشه‌ی مود گرد شد", "به پریود یار بخش‌های تازه اضافه شد: تست‌ها، انرژی بدن، ورزش و حرکت، آب و نوشیدنی و مراقبت از خودم"]},{v:"2026.11.15.5",i:["انرژی روزانه، زنجیره و ماموریت حالا حرکت‌های دیده‌شدنی‌تری دارن", "آیکون اعلان مثل زنگ می‌لرزه و آیکون پریود یار هم حرکت داره", "ماموریت یک‌دقیقه‌ای حالا یه انیمیشن قشنگ داره", "توی بانک حرکات یوگا با زدن روی هر حرکت، لیانا بزرگ و با توضیحاتش نشون داده می‌شه", "گزارش PDF پریود مرتب‌تر شد و هر بخشش کامل توی یه صفحه می‌مونه", "نوشته‌های آب‌وهوا خواناتر شدن"]},{v:"2026.11.15.3",i:["لیانا بزرگ‌تر شد و رفت سمت راست‌تر؛ دکمه‌های شهر و بروزرسانی بالای صفحه‌ی آب‌وهوا کنار ضربدر اومدن", "پرتوهای نور خورشید نرم‌تر شدن و ابرهای روز حالا دیده می‌شن", "کارت‌ها، نوشته‌ها و ایموجی‌های آب‌وهوا خواناتر شدن", "لباس لیانا توی هوای ۱۵ درجه‌ی آفتابی دیگه چتر نداره؛ چتر فقط برای هوای بارونیه", "دکمه‌ی صدای آب‌وهوا برداشته شد"]},{v:"2026.11.15.2",i:["صفحه‌ی آب‌وهوا حالا عکس پس‌زمینه رو توی کل صفحه نشون می‌ده و کادر دور لیانا برداشته شد", "همه‌ی کارت‌ها و دکمه‌های آب‌وهوا شیشه‌ای مات شدن", "یه هاله‌ی نوری ملایم پشت لیاناست", "انیمیشن بارون، برف، ابر، مه و آفتاب طبیعی‌تر و حرفه‌ای‌تر شدن", "اندازه‌ی لیانا توی بخش یوگا کوچیک‌تر شد"]},{v:"2026.11.15",i:["صفحه‌ی آب‌وهوا طراحی تازه گرفت: دکمه‌های شهر و بروزرسانی بالای کارت اومدن و همه‌ی دکمه‌ها شیشه‌ای شدن", "کارت‌های رطوبت، یو وی، باد و بقیه ریزتر و ظریف‌تر شدن", "لیانا از کادر بیرون اومد و یه درخشش سفید ملایم دورشه", "آب‌وهوا جون گرفت: بارون، برف، رعدوبرق، مه و ستاره‌ها روی عکس حرکت می‌کنن و صدا هم دارن، از بالای صفحه می‌تونی صدا رو قطع کنی", "سایه و خط دور کارت آب‌وهوای صفحه‌ی خانه درست شد", "حرکت ستاره‌ی دنباله‌دار توی کارت شب بخیر درست شد"]},{v:"2026.11.14",i:["اطلاعات پریودت دیگه با همگام‌سازی گم نمی‌شه، هر روز جدا ذخیره و ادغام می‌شه", "بازیابی پشتیبان حالا به اطلاعات فعلی اضافه می‌شه و هیچ‌چیزی پاک نمی‌کنه", "پریود یار برای تأخیر یا نزدیک شدن پریود اخطار و نوتیف می‌ده، و می‌تونی پریودی که از چند روز پیش شروع شده رو هم ثبت کنی", "برای ساعت قرص‌ها یادآور با نوتیف ساخته می‌شه", "دکمه‌هایی که توی تم روز دیده نمی‌شدن خوانا شدن", "کارت صبح بخیر انیمیشن و متن‌های تازه گرفت"]},{v:"2026.11.13",i:["کارت آب‌وهوا و کارت صبح بخیر دوباره خودکار عوض می‌شن، و هر وقت خواستی با دست هم می‌تونی جابه‌جاشون کنی"]},{v:"2026.11.12",i:["دکمه‌ی آب‌وهوا کنار تقویم برگشت و دمای الان رو زیر آیکون نشون می‌ده", "صفحه‌ی آب‌وهوا تازه شد، با پس‌زمینه‌ی مات از عکس هوا و کارت‌های رطوبت، یو وی، باد، فشار، طلوع و غروب و کیفیت هوا", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن"]},{v:"2026.11.11",i:["اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد", "بخش آب‌وهوا برداشته شد"]},{v:"2026.11.08",i:["اسم پریود ترکر به پریود یار تغییر کرد", "اپ سریع‌تر بالا میاد", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد"]}];
+var LOG=[{v:"2026.11.16.2",i:["دکمه‌ی «دانلود برای آفلاین» توی تنظیمات، آب‌وهوا و یوگا اضافه شد؛ یه بار با فیلترشکن بزن تا عکس‌ها و صداها روی گوشی بمونن", "توی آب‌وهوا بخش «همه‌ی لباس‌های لیانا» اومد؛ روی هر لباس بزن تا بزرگ بشه و ببینی برای چه دما و هوایی‌ه"]},{v:"2026.11.16",i:["آب‌وهوا حالا پیش‌بینی ۱۴ روز آینده رو ذخیره می‌کنه؛ بدون فیلترشکن هم عکس و بک‌گراند مناسب هر ساعت نشون داده می‌شه"]},{v:"2026.11.15.8",i:["صدای شب صاف برداشته شد و صدای رعد توی هوای رعدوبرقی واضح‌تر شد"]},{v:"2026.11.15.7",i:["عکس‌ها و لباس‌های آب‌وهوا بعد از اولین دیدن روی گوشی ذخیره می‌شن تا بدون فیلترشکن هم بیان"]},{v:"2026.11.15.6",i:["شیشه‌ی مود گرد شد", "به پریود یار بخش‌های تازه اضافه شد: تست‌ها، انرژی بدن، ورزش و حرکت، آب و نوشیدنی و مراقبت از خودم"]},{v:"2026.11.15.5",i:["انرژی روزانه، زنجیره و ماموریت حالا حرکت‌های دیده‌شدنی‌تری دارن", "آیکون اعلان مثل زنگ می‌لرزه و آیکون پریود یار هم حرکت داره", "ماموریت یک‌دقیقه‌ای حالا یه انیمیشن قشنگ داره", "توی بانک حرکات یوگا با زدن روی هر حرکت، لیانا بزرگ و با توضیحاتش نشون داده می‌شه", "گزارش PDF پریود مرتب‌تر شد و هر بخشش کامل توی یه صفحه می‌مونه", "نوشته‌های آب‌وهوا خواناتر شدن"]},{v:"2026.11.15.3",i:["لیانا بزرگ‌تر شد و رفت سمت راست‌تر؛ دکمه‌های شهر و بروزرسانی بالای صفحه‌ی آب‌وهوا کنار ضربدر اومدن", "پرتوهای نور خورشید نرم‌تر شدن و ابرهای روز حالا دیده می‌شن", "کارت‌ها، نوشته‌ها و ایموجی‌های آب‌وهوا خواناتر شدن", "لباس لیانا توی هوای ۱۵ درجه‌ی آفتابی دیگه چتر نداره؛ چتر فقط برای هوای بارونیه", "دکمه‌ی صدای آب‌وهوا برداشته شد"]},{v:"2026.11.15.2",i:["صفحه‌ی آب‌وهوا حالا عکس پس‌زمینه رو توی کل صفحه نشون می‌ده و کادر دور لیانا برداشته شد", "همه‌ی کارت‌ها و دکمه‌های آب‌وهوا شیشه‌ای مات شدن", "یه هاله‌ی نوری ملایم پشت لیاناست", "انیمیشن بارون، برف، ابر، مه و آفتاب طبیعی‌تر و حرفه‌ای‌تر شدن", "اندازه‌ی لیانا توی بخش یوگا کوچیک‌تر شد"]},{v:"2026.11.15",i:["صفحه‌ی آب‌وهوا طراحی تازه گرفت: دکمه‌های شهر و بروزرسانی بالای کارت اومدن و همه‌ی دکمه‌ها شیشه‌ای شدن", "کارت‌های رطوبت، یو وی، باد و بقیه ریزتر و ظریف‌تر شدن", "لیانا از کادر بیرون اومد و یه درخشش سفید ملایم دورشه", "آب‌وهوا جون گرفت: بارون، برف، رعدوبرق، مه و ستاره‌ها روی عکس حرکت می‌کنن و صدا هم دارن، از بالای صفحه می‌تونی صدا رو قطع کنی", "سایه و خط دور کارت آب‌وهوای صفحه‌ی خانه درست شد", "حرکت ستاره‌ی دنباله‌دار توی کارت شب بخیر درست شد"]},{v:"2026.11.14",i:["اطلاعات پریودت دیگه با همگام‌سازی گم نمی‌شه، هر روز جدا ذخیره و ادغام می‌شه", "بازیابی پشتیبان حالا به اطلاعات فعلی اضافه می‌شه و هیچ‌چیزی پاک نمی‌کنه", "پریود یار برای تأخیر یا نزدیک شدن پریود اخطار و نوتیف می‌ده، و می‌تونی پریودی که از چند روز پیش شروع شده رو هم ثبت کنی", "برای ساعت قرص‌ها یادآور با نوتیف ساخته می‌شه", "دکمه‌هایی که توی تم روز دیده نمی‌شدن خوانا شدن", "کارت صبح بخیر انیمیشن و متن‌های تازه گرفت"]},{v:"2026.11.13",i:["کارت آب‌وهوا و کارت صبح بخیر دوباره خودکار عوض می‌شن، و هر وقت خواستی با دست هم می‌تونی جابه‌جاشون کنی"]},{v:"2026.11.12",i:["دکمه‌ی آب‌وهوا کنار تقویم برگشت و دمای الان رو زیر آیکون نشون می‌ده", "صفحه‌ی آب‌وهوا تازه شد، با پس‌زمینه‌ی مات از عکس هوا و کارت‌های رطوبت، یو وی، باد، فشار، طلوع و غروب و کیفیت هوا", "لیانا با لباسی که به دما و آب‌وهوا می‌خوره نشون داده می‌شه", "شهرت رو از لیست انتخاب کن یا اسمش رو جستجو کن"]},{v:"2026.11.11",i:["اطلاعات حسابت بین گوشی و سایت درست هماهنگ می‌شه و دیگه چیزی از دست نمی‌ره", "صفحه‌ی باز شدن اپ فونت و پس‌زمینه‌ی قشنگ‌تری گرفت", "راه‌های ارتباط با ما (کانال تلگرام و ایمیل) به تنظیمات اضافه شد", "بخش آب‌وهوا برداشته شد"]},{v:"2026.11.08",i:["اسم پریود ترکر به پریود یار تغییر کرد", "اپ سریع‌تر بالا میاد", "ترجمه‌ی انگلیسی بخش‌های تازه کامل شد"]}];
 function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function s(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 var seen=g(KEY); if(seen===CUR) return;
